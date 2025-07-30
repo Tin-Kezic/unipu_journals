@@ -26,6 +26,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mustache")
 	//implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.jsoup:jsoup:1.15.3")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:2.0.0")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.github.wimdeblauwe:htmx-spring-boot:4.0.1")
