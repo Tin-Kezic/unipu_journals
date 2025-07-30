@@ -1,4 +1,2 @@
 rootProject.name = "journals"
-include("data")
-include("domain")
-include("feature")
+include("data", "domain", "feature")
