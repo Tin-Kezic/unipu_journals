@@ -1,9 +1,9 @@
 CREATE TYPE account_role AS ENUM (
-    'ADMIN',
     'EIC',
     'SECTION_EDITOR',
     'EDITOR',
     'REVIEWER',
+    'CORRESPONDING_AUTHOR',
     'AUTHOR'
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE publication (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     is_hidden bool NOT NULL DEFAULT FALSE,
-    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE eic_on_publication (
@@ -55,12 +55,12 @@ CREATE TABLE eic_on_publication (
 
 CREATE TABLE publication_section (
     id SERIAL PRIMARY KEY,
-    title TEXT,
+    title TEXT NOT NULL,
     description TEXT,
     publication_id INT NOT NULL,
     is_hidden bool NOT NULL DEFAULT FALSE,
-    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
 );
 
 CREATE TABLE section_editor_on_section(
@@ -74,20 +74,20 @@ CREATE TABLE section_editor_on_section(
 CREATE TABLE manuscript (
     id SERIAL PRIMARY KEY,
     author_id INT NOT NULL,
-    category_id INT,
-    current_state manuscript_state,
+    category_id INT NOT NULL,
+    current_state manuscript_state INT NOT NULL,
     publication_section_id INT NOT NULL,
     file_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     round INT NOT NULL DEFAULT 1,
-    clicks INT DEFAULT 0,
-    downloads INT DEFAULT 0,
+    views INT NOT NULL DEFAULT 0,
+    downloads INT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES account(id),
     FOREIGN KEY (category_id) REFERENCES category(id),
     FOREIGN KEY (publication_section_id) REFERENCES publication_section(id)
 );
 
-CREATE TABLE user_role_on_manuscript (
+CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     account_id INT NOT NULL,
@@ -101,9 +101,11 @@ CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     reviewer_id INT NOT NULL,
+    reviewer_comment TEXT,
     reviewer_comment_file_url TEXT NOT NULL,
     author_response_file_url TEXT,
-    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author_comment TEXT,
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP,
     FOREIGN KEY (reviewer_id) REFERENCES account(id),
     FOREIGN KEY (manuscript_id) REFERENCES manuscript(id)
