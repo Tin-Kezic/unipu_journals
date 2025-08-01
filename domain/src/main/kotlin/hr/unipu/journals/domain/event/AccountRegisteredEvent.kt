@@ -1,5 +1,5 @@
 package hr.unipu.journals.domain.event
 
-class UserRegisteredEvent {
+class AccountRegisteredEvent {
     // send email
 }
