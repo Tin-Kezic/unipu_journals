@@ -11,7 +11,7 @@ data class Account(
     val name: String,
     val surname: String,
     val title: String,
-    val email: String, // converts to Email valueObject in domain
+    val email: String, // maps to Email valueObject
     val password: String,
     val affiliation: String,
     val jobType: String,
