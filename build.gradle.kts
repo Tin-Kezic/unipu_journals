@@ -11,10 +11,6 @@ java {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
 dependencies {
 	implementation(project(":data"))
 	implementation(project(":domain"))
