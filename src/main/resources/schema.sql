@@ -78,7 +78,7 @@ CREATE TABLE manuscript (
     publication_section_id INT NOT NULL,
     file_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    round INT NOT NULL DEFAULT 1,
+    round INT NOT NULL DEFAULT 0,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 1,
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
