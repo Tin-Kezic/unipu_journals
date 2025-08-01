@@ -9,7 +9,7 @@ data class Account(
     val id: Long = 0,
     val name: String,
     val surname: String,
-    val title: String,
+    val title: String?,
     val email: String, // maps to Email valueObject
     val password: String,
     val affiliation: String,
