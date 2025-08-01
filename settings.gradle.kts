@@ -1,5 +1,5 @@
 rootProject.name = "journals"
-include("data", "domain", "feature", "data-account")
+include("data", "domain", "feature")
 
 dependencyResolutionManagement {
     versionCatalogs {
