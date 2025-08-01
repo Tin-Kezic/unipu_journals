@@ -1,8 +1,8 @@
 plugins {
-	kotlin("jvm") version "2.2.0"
-	kotlin("plugin.spring") version "2.2.0"
-	id("org.springframework.boot") version "3.5.3"
-	id("io.spring.dependency-management") version "1.1.7"
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.kotlin.spring)
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.dependency.management)
 }
 
 java {
@@ -15,19 +15,22 @@ dependencies {
 	implementation(project(":data"))
 	implementation(project(":domain"))
 	implementation(project(":feature"))
-	implementation("org.springframework.boot:spring-boot-starter-mail")
-	implementation("org.springframework.boot:spring-boot-starter-mustache")
-	//implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.jsoup:jsoup:1.15.3")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("io.github.wimdeblauwe:htmx-spring-boot:4.0.1")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("org.springframework.security:spring-security-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	implementation(libs.spring.boot.starter.mail)
+	implementation(libs.spring.boot.starter.mustache)
+	// implementation(libs.spring.boot.starter.security)
+	implementation(libs.jsoup)
+	implementation(libs.spring.boot.starter.web)
+	implementation(libs.jackson.module.kotlin)
+	implementation(libs.htmx)
+	implementation(libs.kotlin.reflect)
+
+	developmentOnly(libs.spring.boot.devtools)
+
+	testImplementation(libs.spring.boot.starter.test)
+	testImplementation(libs.kotlin.test.junit5)
+	testImplementation(libs.spring.security.test)
+	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {

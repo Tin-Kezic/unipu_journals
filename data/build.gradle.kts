@@ -1,18 +1,21 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.spring") version "2.2.0"
-    id("io.spring.dependency-management") version "1.1.7"
-    id("org.springframework.boot")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.dependency.management)
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-data-ldap")
-    implementation("org.springframework.boot:spring-boot-starter-data-rest")
-    implementation("org.springframework.session:spring-session-jdbc")
-    runtimeOnly("com.h2database:h2")
-    //runtimeOnly("org.postgresql:postgresql")
+
+    implementation(libs.spring.boot.starter.data.jdbc)
+    //implementation(libs.spring.boot.starter.data.ldap)
+    //implementation(libs.spring.boot.starter.data.rest)
+
+    implementation(libs.spring.session.jdbc)
+
+    runtimeOnly(libs.h2)
+    //runtimeOnly(libs.postgresql)
 }
 
 tasks.test {
