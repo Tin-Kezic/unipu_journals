@@ -15,7 +15,8 @@ CREATE TYPE manuscript_state AS ENUM (
     'MAJOR_FIXES',
     'REJECTED',
     'PUBLISHED',
-    'HIDDEN'
+    'HIDDEN',
+    'DRAFT'
 );
 
 CREATE TABLE account (
@@ -25,7 +26,7 @@ CREATE TABLE account (
     title TEXT,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    affiliate TEXT NOT NULL,
+    affiliated TEXT NOT NULL,
     job_type TEXT NOT NULL,
     country TEXT NOT NULL,
     city TEXT NOT NULL,
@@ -41,8 +42,7 @@ CREATE TABLE category (
 CREATE TABLE publication (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    is_hidden bool NOT NULL DEFAULT FALSE,
-    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    is_hidden bool NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE eic_on_publication (
@@ -59,7 +59,6 @@ CREATE TABLE publication_section (
     description TEXT,
     publication_id INT NOT NULL,
     is_hidden bool NOT NULL DEFAULT FALSE,
-    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
 );
 
@@ -91,10 +90,10 @@ CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     account_id INT NOT NULL,
-    m_role account_role NOT NULL,
+    current_role account_role NOT NULL,
     FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION,
     FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE NO ACTION,
-    UNIQUE (manuscript_id, account_id, m_role)
+    UNIQUE (manuscript_id, account_id, current_role)
 );
 
 CREATE TABLE manuscript_review (
