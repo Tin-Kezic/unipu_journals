@@ -50,7 +50,7 @@ CREATE TABLE eic_on_publication (
     publication_id INT NOT NULL,
     eic_id INT NOT NULL,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
-    FOREIGN KEY (eic_id) REFERENCES account(id)
+    FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
 );
 
 CREATE TABLE publication_section (
@@ -67,7 +67,7 @@ CREATE TABLE section_editor_on_section(
     id SERIAL PRIMARY KEY,
     publication_section_id INT NOT NULL,
     section_editor_id INT NOT NULL,
-    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id),
+    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE NO ACTION,
     FOREIGN KEY (section_editor_id) REFERENCES account(id) ON DELETE CASCADE
 );
 
@@ -82,9 +82,9 @@ CREATE TABLE manuscript (
     round INT NOT NULL DEFAULT 1,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (author_id) REFERENCES account(id),
-    FOREIGN KEY (category_id) REFERENCES category(id),
-    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id)
+    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
+    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
 );
 
 CREATE TABLE account_role_on_manuscript (
@@ -92,8 +92,8 @@ CREATE TABLE account_role_on_manuscript (
     manuscript_id INT NOT NULL,
     account_id INT NOT NULL,
     m_role account_role NOT NULL,
-    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id),
-    FOREIGN KEY (account_id) REFERENCES account(id),
+    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION,
+    FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE NO ACTION,
     UNIQUE (manuscript_id, account_id, m_role)
 );
 
@@ -107,6 +107,6 @@ CREATE TABLE manuscript_review (
     author_comment TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP,
-    FOREIGN KEY (reviewer_id) REFERENCES account(id),
-    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id)
+    FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE NO ACTION,
+    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION
 );
