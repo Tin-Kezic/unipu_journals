@@ -5,13 +5,6 @@ plugins {
     id("org.springframework.boot")
 }
 
-group = "hr.unipu"
-version = "0.0.1-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(project(":domain"))
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
