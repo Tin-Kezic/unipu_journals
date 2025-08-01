@@ -1,0 +1,69 @@
+.m3-button {
+    border: none;
+    padding: 0.8rem 8rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.3);
+}
+.m3-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
+.yellow-button {
+    background-color: #ffe08a;
+    color: black;
+}
+.purple-button {
+    background-color: #6b66a1;
+    color: white;
+}
+.outline-button {
+    background-color: transparent;
+    color: black;
+    border: 0.13rem solid black;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    box-shadow: none;
+}
+.red-button {
+    background-color: #cf2c27;
+    color: white;
+    padding: 0.8rem 1rem;
+    box-shadow: none;
+}
+.light-red-button {
+    background-color: #ff8686;
+    padding: 0.8rem 1rem;
+    text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+}
+.green-button {
+    background-color: #7aed80;
+    padding: 0.8rem 1rem;
+    text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+}
+.darkpurple-white-outline-button {
+    background-color: #605c91;
+    color: white;
+    border: 0.1rem solid white;
+    padding: 0.8rem 1rem;
+    box-shadow: none;
+}
+.orange-button {
+    background-color: #ffc284;
+    border: 0.08rem solid #cfc6b4;
+    border-radius: 0.5rem;
+    padding: 0.3rem 3rem;
+    box-shadow: none;
+    font-weight: 600;
+}
+.pale-yellow-button {
+    background-color: #fff8f1;
+    color: #bab2a2;
+    border: 0.1rem solid #bab2a2;
+    box-shadow: none;
+}
+.pale-yellow-button:hover, .pale-yellow-button.selected {
+    background-color: #6b66a1;
+    color: white;
+}
