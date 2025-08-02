@@ -1,6 +1,5 @@
-CREATE TYPE account_role AS ENUM (
+CREATE TYPE manuscript_role AS ENUM (
     'EIC',
-    'SECTION_EDITOR',
     'EDITOR',
     'REVIEWER',
     'CORRESPONDING_AUTHOR',
@@ -90,10 +89,10 @@ CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     account_id INT NOT NULL,
-    current_role account_role NOT NULL,
+    account_role manuscript_role NOT NULL,
     FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION,
     FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE NO ACTION,
-    UNIQUE (manuscript_id, account_id, current_role)
+    UNIQUE (manuscript_id, account_id, account_role)
 );
 
 CREATE TABLE manuscript_review (
@@ -101,7 +100,7 @@ CREATE TABLE manuscript_review (
     manuscript_id INT NOT NULL,
     reviewer_id INT NOT NULL,
     reviewer_comment TEXT,
-    reviewer_comment_file_url TEXT NOT NULL,
+    reviewer_comment_file_url TEXT,
     author_response_file_url TEXT,
     author_comment TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
