@@ -1,3 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1vh 3vw;
+    background-color: #6b66a1;
+    position: sticky;
+    z-index: 10;
+    min-height: 8vh;
+    top: 0;
+    flex-wrap: wrap;
+}
+
+.logo-button {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    max-height: 6vh;
+    color: white;
+    background-color: #6b66a1;
+    border: none;
+    cursor: pointer;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 0.5rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s ease-in-out;
+    max-height: 6vh;
+    flex-wrap: wrap;
+}
+
+nav ul li a:hover {
+    color: #ffe08a;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.search-bar {
+    padding: 1vh 1vw;
+    margin: 0 1vw;
+    border: none;
+    border-radius: 1rem;
+    background-color: white;
+    color: #49454f;
+    font-size: 1rem;
+}
+
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.2);
+}
+
+.fa-solid.fa-magnifying-glass {
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0 1.5vw;
+    color: #49454f;
+    position: absolute;
+    right: .5rem;
+}
+
+.fa-solid.fa-magnifying-glass:active {
+    transform: scale(0.97);
+}
+
+
 .m3-button {
     border: none;
     padding: 0.8rem 8rem;
@@ -50,12 +151,17 @@
     box-shadow: none;
 }
 .orange-button {
-    background-color: #ffc284;
-    border: 0.08rem solid #cfc6b4;
+    background-color: #fff8f1;
+    border: 0.08rem solid #bab2a2;
     border-radius: 0.5rem;
+    color: #bab2a2;
     padding: 0.3rem 3rem;
     box-shadow: none;
     font-weight: 600;
+}
+.orange-button:hover {
+    background-color: #ffc284;
+    color: black;
 }
 .pale-yellow-button {
     background-color: #fff8f1;
@@ -63,7 +169,137 @@
     border: 0.1rem solid #bab2a2;
     box-shadow: none;
 }
-.pale-yellow-button:hover, .pale-yellow-button.selected {
+.pale-yellow-button:hover {
     background-color: #6b66a1;
     color: white;
+}
+
+
+.text-field {
+  position: relative;
+  width: 100%;
+  max-width: 22.5rem;
+  margin: 1.25rem 0;
+}
+.text-field label {
+  position: absolute;
+  top: -0.5rem;
+  left: 0.75rem;
+  font-size: 0.875rem;
+  color: #7e7667;
+  background-color: #fff8f1;
+  padding: 0 0.25rem;
+}
+.text-field input {
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.5rem 0.75rem 0.5rem;
+  font-size: 1rem;
+  background: #fff8f1;
+  border: 1.2px solid #7e7667;
+  border-radius: 0.3rem;
+}
+.text-field input::placeholder {
+  color: #7e7667;
+}
+
+.error-msg {
+    font-size: 0.75rem;
+    color: #cf2c27;
+    margin-top: 0.25rem;
+    display: none;
+}
+.error-msg.show {
+    display: block;
+}
+
+.remove-user-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 15rem;
+    height: 3.5rem;
+    padding: 1rem 0.75rem 0.8rem;
+    font-size: 1rem;
+    background: white;
+    border: 1.3px solid #7e7667;
+    cursor: pointer;
+}
+.remove-user-button:hover {
+    background: #cf2c27;
+    color: white;
+}
+.remove-user-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
+.remove-user-button .fa-user-minus {
+    margin-left: auto; /* Align icon to the right */
+    color: #000;
+    cursor: pointer;
+}
+.remove-user-button .fa-user-minus:hover {
+    color: white;
+}
+
+.pale-yellow-checkbox-button {
+  user-select: none;            /* Prevent text selection */
+}
+.pale-yellow-checkbox-button input {
+  position: absolute;
+  opacity: 0;
+}
+.pale-yellow-checkbox-button .checkbox {
+  width: 9rem;
+  height: 1.7rem;
+  border: 1.3px solid #bab2a2;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bab2a2;
+  font-size: 1rem;
+  background: #fff8f1;
+  cursor: pointer;
+}
+.pale-yellow-checkbox-button input:checked + .checkbox {
+  background: #6b66a1;
+  color: white;
+}
+
+.blue-checkbox {
+    accent-color: #b0c6ff;
+}
+
+.yellow-box {
+  width: 15rem;
+  height: 7rem;
+  background-color: #fff8f1;
+  border: 1.3px solid #bab2a2;
+  border-radius: 0.4rem;
+
+  padding: 0.5rem;
+  text-align: left;
+  overflow-wrap: break-word;
+  overflow: auto;
+  font-weight: bold;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  box-sizing: border-box;
 }
