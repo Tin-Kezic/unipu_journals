@@ -33,8 +33,6 @@ dependencies {
 	// implementation("org.springframework.boot:spring-boot-starter-data-ldap:3.5.3")
 	// implementation("org.springframework.boot:spring-boot-starter-data-rest:3.5.3")
 
-	developmentOnly("org.springframework.boot:spring-boot-devtools:3.5.3")
-
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.3")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
