@@ -18,7 +18,7 @@ java {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
-	// implementation("org.springframework.boot:spring-boot-starter-security:3.5.3")
+	implementation("org.springframework.boot:spring-boot-starter-security:3.5.3")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
 
