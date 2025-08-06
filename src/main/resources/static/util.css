@@ -250,6 +250,7 @@ nav ul li a:hover {
     background: white;
     border: 1.3px solid var(--lightgray);
     cursor: pointer;
+    user-select: none;
 }
 .remove-user-button:hover {
     background: var(--red);
@@ -298,17 +299,31 @@ nav ul li a:hover {
 }
 
 .yellow-box {
-  width: 11rem;
+  width: 14rem;
   height: 7rem;
   background-color: var(--pale-yellow);
   border: 1.3px solid var(--beige);
   border-radius: 0.4rem;
-
+  user-select: none;
   padding: 0.5rem;
   text-align: left;
-  overflow-wrap: break-word; 
+  overflow-wrap: break-word;
   overflow: auto;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+.yellow-box-buttons {
+   margin: auto 0.4rem 0.4rem auto;
+   align-self: flex-end;
+   display:flex;
+   gap: 0.5rem;
+}
+.yellow-box-buttons .m3-button {
+    padding: 0.4rem 0.6rem;
+    width: 3rem;
+    border-radius: 0.3rem;
+    min-height: 2rem;
 }
 
 .overlay {
@@ -336,7 +351,7 @@ nav ul li a:hover {
   visibility: hidden; /* Hidden by default. Visible on click */
   min-width: 13vw;
   background-color: white;
-  color: black; 
+  color: black;
   box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   text-align: center;
   border-radius: 1rem;
@@ -365,7 +380,29 @@ nav ul li a:hover {
   to {bottom: 30px; opacity: 1;}
 }
 
-@-webkit-keyframes fadeout {
+@keyframes fadeout {
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
+}
+
+.sidebar-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 15rem;
+    height: 2.5rem;
+    padding: 1rem 0.75rem 0.8rem;
+    font-size: 1rem;
+    background: white;
+    border: 1.3px solid var(--lightgray);
+    cursor: pointer;
+    user-select: none;
+}
+.sidebar-button:hover {
+    background: var(--purple);
+    color: white;
+}
+.sidebar-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
