@@ -1,3 +1,18 @@
+:root {
+    --red: #cf2c27;
+    --lightred: #ff8686;
+    --orange: #ffc284;
+    --yellow: #ffe08a;
+    --pale-yellow: #fff8f1;
+    --green: #7aed80;
+    --lightblue: #b0c6ff;
+    --darkpurple: #605c91;
+    --purple: #6b66a1;
+    --beige: #bab2a2;
+    --lightgray: #7e7667;
+    --gray: #49454f;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +31,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1vh 3vw;
-    background-color: #6b66a1;
+    background-color: var(--purple);
     position: sticky;
     z-index: 10;
     min-height: 8vh;
@@ -31,7 +46,7 @@ header {
     font-weight: bold;
     max-height: 6vh;
     color: white;
-    background-color: #6b66a1;
+    background-color: var(--purple);
     border: none;
     cursor: pointer;
 }
@@ -59,7 +74,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #ffe08a;
+    color: var(--yellow);
 }
 
 .search-container {
@@ -74,7 +89,7 @@ nav ul li a:hover {
     border: none;
     border-radius: 1rem;
     background-color: white;
-    color: #49454f;
+    color: var(--gray);
     font-size: 1rem;
 }
 
@@ -89,9 +104,9 @@ nav ul li a:hover {
     display: flex;
     align-items: center;
     margin: 0 1.5vw;
-    color: #49454f;
+    color: var(--gray);
     position: absolute;
-    right: .5rem;
+    right: .5rem; 
 }
 
 .fa-solid.fa-magnifying-glass:active {
@@ -112,11 +127,11 @@ nav ul li a:hover {
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .yellow-button {
-    background-color: #ffe08a;
+    background-color: var(--yellow);
     color: black;
 }
 .purple-button {
-    background-color: #6b66a1;
+    background-color: var(--purple);
     color: white;
 }
 .outline-button {
@@ -128,49 +143,60 @@ nav ul li a:hover {
     box-shadow: none;
 }
 .red-button {
-    background-color: #cf2c27;
+    background-color: var(--red);
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
 }
 .light-red-button {
-    background-color: #ff8686;
+    background-color: var(--lightred);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
 .green-button {
-    background-color: #7aed80;
+    background-color: var(--green);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
 .darkpurple-white-outline-button {
-    background-color: #605c91;
+    background-color: var(--darkpurple);
     color: white;
     border: 0.1rem solid white;
     padding: 0.8rem 1rem;
     box-shadow: none;
 }
+.purple-outline-button {
+    background-color: var(--purple);
+    border: 0.1rem solid white;
+    color: white;
+    padding: 0.8rem 1rem;
+    box-shadow: none;
+}
+.purple-outline-button:hover {
+    background-color: var(--darkpurple);
+}
+    
 .orange-button {
-    background-color: #fff8f1;
-    border: 0.08rem solid #bab2a2;
+    background-color: var(--pale-yellow);
+    border: 0.08rem solid var(--beige);
     border-radius: 0.5rem;
-    color: #bab2a2;
+    color: var(--beige);
     padding: 0.3rem 3rem;
     box-shadow: none;
     font-weight: 600;
 }
 .orange-button:hover {
-    background-color: #ffc284;
+    background-color: var(--orange);
     color: black;
 }
 .pale-yellow-button {
-    background-color: #fff8f1;
-    color: #bab2a2;
-    border: 0.1rem solid #bab2a2;
+    background-color: var(--pale-yellow);
+    color: var(--beige);
+    border: 0.1rem solid var(--beige);
     box-shadow: none;
 }
 .pale-yellow-button:hover {
-    background-color: #6b66a1;
+    background-color: var(--purple);
     color: white;
 }
 
@@ -186,8 +212,8 @@ nav ul li a:hover {
   top: -0.5rem;
   left: 0.75rem;
   font-size: 0.875rem;
-  color: #7e7667;
-  background-color: #fff8f1;
+  color: var(--lightgray);
+  background-color: var(--pale-yellow);
   padding: 0 0.25rem;
 }
 .text-field input {
@@ -195,17 +221,17 @@ nav ul li a:hover {
   height: 3.5rem;
   padding: 0.5rem 0.75rem 0.5rem;
   font-size: 1rem;
-  background: #fff8f1;
-  border: 1.2px solid #7e7667;
+  background: var(--pale-yellow);
+  border: 1.2px solid var(--lightgray);
   border-radius: 0.3rem;
 }
 .text-field input::placeholder {
-  color: #7e7667;
+  color: var(--lightgray);
 }
 
 .error-msg {
     font-size: 0.75rem;
-    color: #cf2c27;
+    color: var(--red);
     margin-top: 0.25rem;
     display: none;
 }
@@ -222,11 +248,12 @@ nav ul li a:hover {
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
-    border: 1.3px solid #7e7667;
+    border: 1.3px solid var(--lightgray);
     cursor: pointer;
+    user-select: none;
 }
 .remove-user-button:hover {
-    background: #cf2c27;
+    background: var(--red);
     color: white;
 }
 .remove-user-button:active {
@@ -235,7 +262,7 @@ nav ul li a:hover {
 }
 .remove-user-button .fa-user-minus {
     margin-left: auto; /* Align icon to the right */
-    color: #000;
+    color: black;
     cursor: pointer;
 }
 .remove-user-button .fa-user-minus:hover {
@@ -252,37 +279,51 @@ nav ul li a:hover {
 .pale-yellow-checkbox-button .checkbox {
   width: 9rem;
   height: 1.7rem;
-  border: 1.3px solid #bab2a2;
+  border: 1.3px solid var(--beige);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #bab2a2;
+  color: var(--beige);
   font-size: 1rem;
-  background: #fff8f1;
+  background: var(--pale-yellow);
   cursor: pointer;
 }
 .pale-yellow-checkbox-button input:checked + .checkbox {
-  background: #6b66a1;
+  background: var(--purple);
   color: white;
 }
 
 .blue-checkbox {
-    accent-color: #b0c6ff;
+    accent-color: var(--lightblue);
 }
 
 .yellow-box {
-  width: 15rem;
+  width: 14rem;
   height: 7rem;
-  background-color: #fff8f1;
-  border: 1.3px solid #bab2a2;
+  background-color: var(--pale-yellow);
+  border: 1.3px solid var(--beige);
   border-radius: 0.4rem;
-
+  user-select: none;
   padding: 0.5rem;
   text-align: left;
   overflow-wrap: break-word;
   overflow: auto;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+.yellow-box-buttons {
+   margin: auto 0.4rem 0.4rem auto;
+   align-self: flex-end;
+   display:flex;
+   gap: 0.5rem;
+}
+.yellow-box-buttons .m3-button {
+    padding: 0.4rem 0.6rem;
+    width: 3rem;
+    border-radius: 0.3rem;
+    min-height: 2rem;
 }
 
 .overlay {
@@ -292,14 +333,76 @@ nav ul li a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 20;
 }
 
 .dialog {
-  background: #fff;
+  background: white;
   padding: 1rem;
   border-radius: 0.5rem;
   max-width: 90%;
   max-height: 90vh;
   overflow: auto;
   box-sizing: border-box;
+}
+
+
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 13vw;
+  background-color: white;
+  color: black;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  text-align: center;
+  border-radius: 1rem;
+  padding: 12px;
+  position: fixed;
+  z-index: 1;
+  right: 5%;
+  bottom: 1.8rem;
+}
+
+.fa-circle-check {
+    color: var(--green);
+}
+
+#snackbar.show {
+  visibility: visible;
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+.sidebar-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 15rem;
+    height: 2.5rem;
+    padding: 1rem 0.75rem 0.8rem;
+    font-size: 1rem;
+    background: white;
+    border: 1.3px solid var(--lightgray);
+    cursor: pointer;
+    user-select: none;
+}
+.sidebar-button:hover {
+    background: var(--purple);
+    color: white;
+}
+.sidebar-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
