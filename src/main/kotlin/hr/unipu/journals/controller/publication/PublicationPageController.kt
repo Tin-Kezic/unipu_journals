@@ -24,14 +24,11 @@ class PublicationPageController(private val repository: PublicationRepository) {
         model["publications"] = repository.findAll()
         return "index"
     }
-
     @ResponseBody
     @PostMapping("/save")
-    fun save(@ModelAttribute title : String): ResponseEntity<String> {
+    fun save(@ModelAttribute title: String): ResponseEntity<String> {
         return try {
-            repository.save(
-                Publication(title = sanitize(title))
-            )
+            repository.save(Publication(title = sanitize(title)))
             ResponseEntity.ok().body("account successfully added")
         } catch (_: IllegalArgumentException) {
             ResponseEntity.badRequest().body("Invalid account data. title must be non-null")
@@ -39,7 +36,6 @@ class PublicationPageController(private val repository: PublicationRepository) {
             ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
         }
     }
-
     @ResponseBody
     @PostMapping("/hide-publication/{id}")
     fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
