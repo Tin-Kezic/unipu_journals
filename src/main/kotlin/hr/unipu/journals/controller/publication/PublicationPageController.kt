@@ -42,5 +42,10 @@ class PublicationPageController(private val repository: PublicationRepository) {
 
     @ResponseBody
     @PostMapping("/hide-publication/{id}")
-    fun hidePublication(@PathVariable id: Int) = repository.hidePublication(id)
+    fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
+        return if (repository.existsById(id)) {
+            repository.hidePublication(id)
+            ResponseEntity.ok().body("publication successfully hidden")
+        } else ResponseEntity.badRequest().body("id does not exist")
+    }
 }
