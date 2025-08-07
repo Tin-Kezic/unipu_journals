@@ -12,20 +12,17 @@
     --lightgray: #7e7667;
     --gray: #49454f;
 }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
 }
-
 body {
     background-attachment: scroll;
     background-size: cover;
     background-position: center;
 }
-
 header {
     display: flex;
     justify-content: space-between;
@@ -38,7 +35,6 @@ header {
     top: 0;
     flex-wrap: wrap;
 }
-
 .logo-button {
     display: flex;
     align-items: center;
@@ -50,7 +46,6 @@ header {
     border: none;
     cursor: pointer;
 }
-
 nav ul {
     list-style: none;
     display: flex;
@@ -59,11 +54,9 @@ nav ul {
     gap: 1rem;
     margin: 0;
 }
-
 nav ul li {
     margin: 0 0.5rem;
 }
-
 nav ul li a {
     text-decoration: none;
     color: white;
@@ -72,17 +65,14 @@ nav ul li a {
     max-height: 6vh;
     flex-wrap: wrap;
 }
-
 nav ul li a:hover {
     color: var(--yellow);
 }
-
 .search-container {
     display: flex;
     align-items: center;
     position: relative;
 }
-
 .search-bar {
     padding: 1vh 1vw;
     margin: 0 1vw;
@@ -92,12 +82,10 @@ nav ul li a:hover {
     color: var(--gray);
     font-size: 1rem;
 }
-
 .search-bar:focus {
     outline: none;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.2);
 }
-
 .fa-solid.fa-magnifying-glass {
     font-size: 1rem;
     cursor: pointer;
@@ -108,12 +96,9 @@ nav ul li a:hover {
     position: absolute;
     right: .5rem; 
 }
-
 .fa-solid.fa-magnifying-glass:active {
     transform: scale(0.97);
 }
-
-
 .m3-button {
     border: none;
     padding: 0.8rem 8rem;
@@ -175,7 +160,6 @@ nav ul li a:hover {
 .purple-outline-button:hover {
     background-color: var(--darkpurple);
 }
-    
 .orange-button {
     background-color: var(--pale-yellow);
     border: 0.08rem solid var(--beige);
@@ -199,8 +183,6 @@ nav ul li a:hover {
     background-color: var(--purple);
     color: white;
 }
-
-
 .text-field {
   position: relative;
   width: 100%;
@@ -228,7 +210,6 @@ nav ul li a:hover {
 .text-field input::placeholder {
   color: var(--lightgray);
 }
-
 .error-msg {
     font-size: 0.75rem;
     color: var(--red);
@@ -238,7 +219,6 @@ nav ul li a:hover {
 .error-msg.show {
     display: block;
 }
-
 .remove-user-button {
     display: flex;
     align-items: center;
@@ -268,7 +248,6 @@ nav ul li a:hover {
 .remove-user-button .fa-user-minus:hover {
     color: white;
 }
-
 .pale-yellow-checkbox-button {
   user-select: none;            /* Prevent text selection */
 }
@@ -293,11 +272,9 @@ nav ul li a:hover {
   background: var(--purple);
   color: white;
 }
-
 .blue-checkbox {
     accent-color: var(--lightblue);
 }
-
 .yellow-box {
   width: 14rem;
   height: 7rem;
@@ -325,7 +302,6 @@ nav ul li a:hover {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-
 .overlay {
   position: fixed;
   inset: 0;
@@ -335,7 +311,6 @@ nav ul li a:hover {
   justify-content: center;
   z-index: 20;
 }
-
 .dialog {
   background: white;
   padding: 1rem;
@@ -345,8 +320,6 @@ nav ul li a:hover {
   overflow: auto;
   box-sizing: border-box;
 }
-
-
 #snackbar {
   visibility: hidden; /* Hidden by default. Visible on click */
   min-width: 13vw;
@@ -361,11 +334,9 @@ nav ul li a:hover {
   right: 5%;
   bottom: 1.8rem;
 }
-
 .fa-circle-check {
     color: var(--green);
 }
-
 #snackbar.show {
   visibility: visible;
   /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
@@ -373,18 +344,15 @@ nav ul li a:hover {
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
-
 /* Animations to fade the snackbar in and out */
 @keyframes fadein {
   from {bottom: 0; opacity: 0;}
   to {bottom: 30px; opacity: 1;}
 }
-
 @keyframes fadeout {
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
 }
-
 .sidebar-button {
     display: flex;
     align-items: center;
