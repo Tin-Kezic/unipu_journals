@@ -1,17 +1,15 @@
-package hr.unipu.journals.data.domain.entity
+package hr.unipu.journals.data.entity
 
-import hr.unipu.journals.domain.valueobject.Email
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("account")
+@Table("ACCOUNT")
 data class Account(
-    @Id
-    val id: Int = 0,
+    @Id val id: Int? = null,
     val name: String,
     val surname: String,
     val title: String?,
-    val email: Email,
+    val email: String,
     val password: String,
     val affiliation: String,
     val jobType: String,

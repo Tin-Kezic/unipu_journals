@@ -1,15 +1,15 @@
-package hr.unipu.journals.data.domain.entity
+package hr.unipu.journals.data.entity
 
-import hr.unipu.journals.data.domain.type.AccountRole
+import hr.unipu.journals.data.enumeration.ManuscriptRole
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("account_role_on_manuscript")
 data class AccountRoleOnManuscript(
-    @Id val id: Int,
+    @Id val id: Int? = null,
     val manuscriptId: Int,
-    val accountId: String,
-    @Column("current_account_role")
-    val accountRole: AccountRole
+    val accountId: Int,
+    @Column("current_role")
+    val accountRole: ManuscriptRole
 )
