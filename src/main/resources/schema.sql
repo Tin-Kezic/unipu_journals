@@ -47,7 +47,6 @@ CREATE TABLE eic_on_publication (
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
     FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
 );
-
 CREATE TABLE section (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
