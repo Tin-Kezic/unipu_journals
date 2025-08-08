@@ -22,7 +22,7 @@ class PublicationPageController(private val repository: PublicationRepository) {
     @GetMapping("/all")
     fun findAll(model: Model): String {
         model["publications"] = repository.findAll()
-        return "index"
+        return "publications"
     }
     @ResponseBody
     @PostMapping("/save")

@@ -11,6 +11,11 @@
 
     {{>partial/header}}
 
+    <div hx-get="/api/publication/all" hx-trigger="load" hx-swap="outerHTML">
+        <p>Loading publications...</p>
+    </div>
+
+
     <!--
 <button hx-get="/api/account/all" hx-target="#content" hx-swap="innerHTML">
         Load fragment
