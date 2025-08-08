@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.publication
+package hr.unipu.journals.controller.home
 
 import hr.unipu.journals.data.entity.Publication
 import hr.unipu.journals.data.repository.PublicationRepository

@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.configure
+package hr.unipu.journals.controller
 
 class ConfigureEicOnPublicationPageController {
 }
