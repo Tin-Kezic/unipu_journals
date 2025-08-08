@@ -67,16 +67,15 @@ CREATE TABLE manuscript (
     author_id INT NOT NULL,
     category_id INT NOT NULL,
     current_state manuscript_state NOT NULL,
-    publication_section_id INT NOT NULL,
+    section_id INT NOT NULL,
     file_url TEXT NOT NULL,
-    submission_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     publication_date TIMESTAMP,
-    round INT NOT NULL DEFAULT 1,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
-    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
+    FOREIGN KEY (section_id) REFERENCES section(id) ON DELETE NO ACTION
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
@@ -91,6 +90,7 @@ CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     reviewer_id INT NOT NULL,
+    round INT NOT NULL DEFAULT 1,
     reviewer_comment TEXT,
     reviewer_comment_file_url TEXT,
     author_response_file_url TEXT,
