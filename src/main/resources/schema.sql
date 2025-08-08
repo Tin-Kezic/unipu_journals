@@ -47,12 +47,8 @@ CREATE TABLE eic_on_publication (
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
     FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
 );
-<<<<<<< HEAD
 
 CREATE TABLE section (
-=======
-CREATE TABLE publication_section (
->>>>>>> 9871c9d182ab9b4bc59130af374ec38c196d6c63
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
@@ -74,13 +70,8 @@ CREATE TABLE manuscript (
     current_state manuscript_state NOT NULL,
     publication_section_id INT NOT NULL,
     file_url TEXT NOT NULL,
-<<<<<<< HEAD
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-=======
-    submission_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     publication_date TIMESTAMP,
->>>>>>> 9871c9d182ab9b4bc59130af374ec38c196d6c63
-    round INT NOT NULL DEFAULT 1,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
@@ -100,6 +91,7 @@ CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     reviewer_id INT NOT NULL,
+    round INT NOT NULL DEFAULT 1,
     reviewer_comment TEXT,
     reviewer_comment_file_url TEXT,
     author_response_file_url TEXT,
