@@ -1,15 +1,15 @@
 :root {
     --red: #cf2c27;
-    --lightred: #ff8686;
+    --light-red: #ff8686;
     --orange: #ffc284;
     --yellow: #ffe08a;
     --pale-yellow: #fff8f1;
     --green: #7aed80;
-    --lightblue: #b0c6ff;
-    --darkpurple: #605c91;
+    --light-blue: #b0c6ff;
+    --dark-purple: #605c91;
     --purple: #6b66a1;
     --beige: #bab2a2;
-    --lightgray: #7e7667;
+    --light-gray: #7e7667;
     --gray: #49454f;
 }
 * {
@@ -94,7 +94,7 @@ nav ul li a:hover {
     margin: 0 1.5vw;
     color: var(--gray);
     position: absolute;
-    right: .5rem; 
+    right: .5rem;
 }
 .fa-solid.fa-magnifying-glass:active {
     transform: scale(0.97);
@@ -134,7 +134,7 @@ nav ul li a:hover {
     box-shadow: none;
 }
 .light-red-button {
-    background-color: var(--lightred);
+    background-color: var(--light-red);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
@@ -144,7 +144,7 @@ nav ul li a:hover {
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
 .darkpurple-white-outline-button {
-    background-color: var(--darkpurple);
+    background-color: var(--dark-purple);
     color: white;
     border: 0.1rem solid white;
     padding: 0.8rem 1rem;
@@ -158,7 +158,7 @@ nav ul li a:hover {
     box-shadow: none;
 }
 .purple-outline-button:hover {
-    background-color: var(--darkpurple);
+    background-color: var(--dark-purple);
 }
 .orange-button {
     background-color: var(--pale-yellow);
@@ -194,7 +194,7 @@ nav ul li a:hover {
   top: -0.5rem;
   left: 0.75rem;
   font-size: 0.875rem;
-  color: var(--lightgray);
+  color: var(--light-gray);
   background-color: var(--pale-yellow);
   padding: 0 0.25rem;
 }
@@ -204,11 +204,11 @@ nav ul li a:hover {
   padding: 0.5rem 0.75rem 0.5rem;
   font-size: 1rem;
   background: var(--pale-yellow);
-  border: 1.2px solid var(--lightgray);
+  border: 1.2px solid var(--light-gray);
   border-radius: 0.3rem;
 }
 .text-field input::placeholder {
-  color: var(--lightgray);
+  color: var(--light-gray);
 }
 .error-msg {
     font-size: 0.75rem;
@@ -228,7 +228,7 @@ nav ul li a:hover {
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
-    border: 1.3px solid var(--lightgray);
+    border: 1.3px solid var(--light-gray);
     cursor: pointer;
     user-select: none;
 }
@@ -273,7 +273,7 @@ nav ul li a:hover {
   color: white;
 }
 .blue-checkbox {
-    accent-color: var(--lightblue);
+    accent-color: var(--light-blue);
 }
 .yellow-box {
   width: 14rem;
@@ -354,6 +354,13 @@ nav ul li a:hover {
   to {bottom: 0; opacity: 0;}
 }
 .sidebar-button {
+    user-select: none;
+}
+.sidebar-button input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+.sidebar-button .checkbox {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -362,15 +369,19 @@ nav ul li a:hover {
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
-    border: 1.3px solid var(--lightgray);
+    border: 1.3px solid var(--light-gray);
     cursor: pointer;
     user-select: none;
 }
-.sidebar-button:hover {
+.sidebar-button .checkbox:hover {
     background: var(--purple);
     color: white;
 }
-.sidebar-button:active {
+.sidebar-button .checkbox:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
+.sidebar-button input[type="radio"]:checked + .checkbox {
+    background: var(--purple);
+    color: white;
 }
