@@ -18,6 +18,7 @@ CREATE TYPE manuscript_state AS ENUM (
 );
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
+    is_admin BOOLEAN DEFAULT FALSE,
     name TEXT NOT NULL,
     surname TEXT NOT NULL,
     title TEXT,
@@ -36,7 +37,7 @@ CREATE TABLE category (
 );
 CREATE TABLE publication (
     id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    title TEXT UNIQUE NOT NULL,
     is_hidden bool NOT NULL DEFAULT FALSE
 );
 CREATE TABLE eic_on_publication (
@@ -46,7 +47,7 @@ CREATE TABLE eic_on_publication (
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
     FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
 );
-CREATE TABLE publication_section (
+CREATE TABLE section (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
@@ -95,7 +96,7 @@ CREATE TABLE manuscript_review (
     author_response_file_url TEXT,
     author_comment TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    author_response_date TIMESTAMP,
+    author_response_date TIMESTAMP NOT NULL,
     FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE NO ACTION,
     FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION
 );
