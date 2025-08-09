@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
-@RequestMapping("/api/publication")
 class PublicationPageController(private val repository: PublicationRepository) {
 
-    @GetMapping("/all")
+    @GetMapping("/")
     fun findAll(model: Model): String {
         model["publications"] = repository.findAll()
-        return "publications"
+        return "home/publication-page"
     }
+
     @ResponseBody
     @PostMapping("/save")
     fun save(@ModelAttribute title: String): ResponseEntity<String> {

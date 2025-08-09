@@ -11,9 +11,3 @@ class JournalsApplication
 fun main(args: Array<String>) {
 	runApplication<JournalsApplication>(*args)
 }
-
-@Controller
-class Home {
-	@GetMapping("/")
-	fun home() = "/home/publication-page"
-}
