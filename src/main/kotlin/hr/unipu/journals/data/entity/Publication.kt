@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("publication")
 data class Publication(
-    @Id val id: Int? = null,
+    @Id val id: Int,
     val title: String,
-    val isHidden: Boolean = false,
+    val isHidden: Boolean,
 )

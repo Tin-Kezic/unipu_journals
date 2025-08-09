@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Table("manuscript_review")
 data class ManuscriptReview(
-    @Id val id: Int? = null,
+    @Id val id: Int,
     val manuscriptId: Int,
     val reviewerId: Int,
     val round: Int,

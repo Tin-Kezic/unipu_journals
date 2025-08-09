@@ -1,6 +1,5 @@
 package hr.unipu.journals.controller.home
 
-import hr.unipu.journals.data.entity.Publication
 import hr.unipu.journals.data.repository.PublicationRepository
 import hr.unipu.journals.usecase.sanitize
 import org.springframework.dao.OptimisticLockingFailureException
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
@@ -23,7 +21,6 @@ class PublicationPageController(private val repository: PublicationRepository) {
         model["publications"] = repository.all()
         return "home/publication-page"
     }
-
     @ResponseBody
     @PostMapping("/api/publication/insert")
     fun insert(@ModelAttribute title: String): ResponseEntity<String> {

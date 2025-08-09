@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Table("manuscript")
 data class Manuscript(
-    @Id val id: Int? = null,
+    @Id val id: Int,
     val authorId: Int,
     val categoryId: Int,
     @Column("current_state")

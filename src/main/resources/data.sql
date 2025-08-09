@@ -1,4 +1,3 @@
--- Insert accounts (10 users)
 INSERT INTO account (name, surname, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
 VALUES
 ('Alice', 'Smith', 'Dr.', 'alice.smith@example.com', 'hashedpassword1', 'University A', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
@@ -12,7 +11,6 @@ VALUES
 ('Ian', 'Walker', 'Mr.', 'ian.walker@example.com', 'hashedpassword9', 'University I', 'Reviewer', 'Australia', 'Sydney', '5 George St', '2000', FALSE),
 ('Julia', 'Lee', 'Ms.', 'julia.lee@example.com', 'hashedpassword10', 'University J', 'Author', 'Japan', 'Tokyo', '8 Chiyoda', '100-0001', FALSE);
 
--- Insert categories
 INSERT INTO category (name)
 VALUES
 ('Computer Science'),
@@ -21,7 +19,6 @@ VALUES
 ('Mathematics'),
 ('Chemistry');
 
--- Insert publications
 INSERT INTO publication (title, is_hidden)
 VALUES
 ('Journal of AI Research', FALSE),
@@ -30,7 +27,6 @@ VALUES
 ('Advanced Mathematics Review', FALSE),
 ('Chemical Discoveries', FALSE);
 
--- Insert EICs on publications
 INSERT INTO eic_on_publication (publication_id, eic_id)
 VALUES
 (1, 1),
@@ -39,7 +35,6 @@ VALUES
 (4, 8),
 (5, 1);
 
--- Insert publication sections
 INSERT INTO publication_section (title, description, publication_id, is_hidden)
 VALUES
 ('Machine Learning', 'ML research and techniques', 1, FALSE),
@@ -48,7 +43,6 @@ VALUES
 ('Algebra', 'Algebraic structures and systems', 4, FALSE),
 ('Organic Chemistry', 'Organic molecules and reactions', 5, FALSE);
 
--- Insert section editors
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id)
 VALUES
 (1, 2),
@@ -57,7 +51,6 @@ VALUES
 (4, 7),
 (5, 2);
 
--- Insert manuscripts (10 entries)
 INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads)
 VALUES
 (4, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3),
@@ -71,67 +64,48 @@ VALUES
 (5, 4, 'AWAITING_INITIAL_EDITOR_REVIEW', 4, 'http://example.com/ms9.pdf', CURRENT_TIMESTAMP, NULL, 8, 2),
 (10, 5, 'AWAITING_INITIAL_EIC_REVIEW', 5, 'http://example.com/ms10.pdf', CURRENT_TIMESTAMP, NULL, 6, 1);
 
--- Insert account roles on manuscripts
+
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
 VALUES
--- Manuscript 1
+
 (1, 4, 'AUTHOR'),
 (1, 4, 'CORRESPONDING_AUTHOR'),
 (1, 1, 'EIC'),
 (1, 2, 'EDITOR'),
 (1, 3, 'REVIEWER'),
-
--- Manuscript 2
 (2, 4, 'AUTHOR'),
 (2, 2, 'EDITOR'),
 (2, 6, 'REVIEWER'),
-
--- Manuscript 3
 (3, 5, 'AUTHOR'),
 (3, 1, 'EIC'),
 (3, 7, 'EDITOR'),
 (3, 6, 'REVIEWER'),
 (3, 9, 'REVIEWER'),
-
--- Manuscript 4
 (4, 10, 'AUTHOR'),
 (4, 8, 'EIC'),
 (4, 7, 'EDITOR'),
 (4, 9, 'REVIEWER'),
-
--- Manuscript 5
 (5, 10, 'AUTHOR'),
 (5, 1, 'EIC'),
 (5, 2, 'EDITOR'),
 (5, 6, 'REVIEWER'),
-
--- Manuscript 6
 (6, 4, 'AUTHOR'),
 (6, 2, 'EDITOR'),
 (6, 3, 'REVIEWER'),
-
--- Manuscript 7
 (7, 5, 'AUTHOR'),
 (7, 1, 'EIC'),
 (7, 2, 'EDITOR'),
-
--- Manuscript 8
 (8, 10, 'AUTHOR'),
 (8, 7, 'EDITOR'),
-
--- Manuscript 9
 (9, 5, 'AUTHOR'),
 (9, 8, 'EIC'),
 (9, 7, 'EDITOR'),
 (9, 9, 'REVIEWER'),
-
--- Manuscript 10
 (10, 10, 'AUTHOR'),
 (10, 1, 'EIC'),
 (10, 2, 'EDITOR'),
 (10, 3, 'REVIEWER');
 
--- Insert manuscript reviews (10 reviews total)
 INSERT INTO manuscript_review (
     manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url,
     author_response_file_url, author_comment, review_date, author_response_date
@@ -142,4 +116,4 @@ VALUES
 (3, 6, 1, 'Interesting results.', 'http://example.com/rev3.pdf', 'http://example.com/res3.pdf', 'Added extra details.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, 9, 1, 'Check figures for accuracy.', 'http://example.com/rev4.pdf', 'http://example.com/res4.pdf', 'Updated figures.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (4, 9, 1, 'Needs major restructuring.', 'http://example.com/rev5.pdf', 'http://example.com/res5.pdf', 'Will restructure.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 6, 1, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'http://example.com/res6.pdf', 'Fixed typos.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(5, 6, 1, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'http://example.com/res6.pdf', 'Fixed typos.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
