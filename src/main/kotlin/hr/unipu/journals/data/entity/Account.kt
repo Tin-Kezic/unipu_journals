@@ -17,4 +17,5 @@ data class Account(
     val city: String,
     val address: String,
     val zipCode: String,
+    val isAdmin: Boolean,
 )

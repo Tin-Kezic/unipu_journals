@@ -18,7 +18,6 @@ CREATE TYPE manuscript_state AS ENUM (
 );
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
-    is_admin BOOLEAN DEFAULT FALSE,
     name TEXT NOT NULL,
     surname TEXT NOT NULL,
     title TEXT,
@@ -29,7 +28,8 @@ CREATE TABLE account (
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     address TEXT NOT NULL,
-    zip_code TEXT NOT NULL
+    zip_code TEXT NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE
 );
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE eic_on_publication (
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
     FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
 );
-CREATE TABLE section (
+CREATE TABLE publication_section (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
@@ -75,7 +75,8 @@ CREATE TABLE manuscript (
     downloads INT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
-    FOREIGN KEY (section_id) REFERENCES section(id) ON DELETE NO ACTION
+    FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
+
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,

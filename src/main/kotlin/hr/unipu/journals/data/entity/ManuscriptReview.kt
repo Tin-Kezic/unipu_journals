@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 data class ManuscriptReview(
     @Id val id: Int? = null,
     val manuscriptId: Int,
+    val reviewerId: Int,
     val round: Int,
-    val reviewer: Int,
     val reviewerComment: String?,
     val reviewerCommentFileUrl: String?,
     val authorResponse: String?,

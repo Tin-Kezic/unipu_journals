@@ -10,12 +10,13 @@
 </head>
 <body>
 
-    {{>partial/header}}
+    {{>util/header}}
 
-    <div hx-get="/api/publication/all" hx-trigger="load" hx-swap="outerHTML">
-        <p>Loading publications...</p>
-    </div>
-
+    {{#publications}}
+        <div class="yellow-box">
+            <p class="yellow-box-text">{{title}}</p>
+        </div>
+    {{/publications}}
 
     <!--
 <button hx-get="/api/account/all" hx-target="#content" hx-swap="innerHTML">

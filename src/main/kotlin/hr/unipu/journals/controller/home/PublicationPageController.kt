@@ -20,15 +20,15 @@ class PublicationPageController(private val repository: PublicationRepository) {
 
     @GetMapping("/")
     fun findAll(model: Model): String {
-        model["publications"] = repository.findAll()
+        model["publications"] = repository.all()
         return "home/publication-page"
     }
 
     @ResponseBody
-    @PostMapping("/save")
-    fun save(@ModelAttribute title: String): ResponseEntity<String> {
+    @PostMapping("/api/publication/insert")
+    fun insert(@ModelAttribute title: String): ResponseEntity<String> {
         return try {
-            repository.save(Publication(title = sanitize(title)))
+            repository.insertPublication(sanitize(title))
             ResponseEntity.ok().body("account successfully added")
         } catch (_: IllegalArgumentException) {
             ResponseEntity.badRequest().body("Invalid account data. title must be non-null")
@@ -37,7 +37,7 @@ class PublicationPageController(private val repository: PublicationRepository) {
         }
     }
     @ResponseBody
-    @PostMapping("/hide-publication/{id}")
+    @PostMapping("/api/publication/hide/{id}")
     fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
         return if (repository.existsById(id)) {
             repository.hidePublication(id)
