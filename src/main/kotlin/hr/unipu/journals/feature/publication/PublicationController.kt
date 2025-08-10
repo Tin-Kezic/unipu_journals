@@ -30,7 +30,7 @@ class PublicationController(private val repository: PublicationRepository) {
     @PutMapping("/hide/{publicationId}")
     fun hidePublication(@PathVariable publicationId: Int): ResponseEntity<String> {
         return if (repository.existsById(publicationId)) {
-            repository.hide(publicationId)
+            repository.updateHidden(publicationId, true)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
