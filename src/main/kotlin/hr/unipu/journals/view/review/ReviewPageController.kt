@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.review
+package hr.unipu.journals.view.review
 
 class ReviewPageController {
 }

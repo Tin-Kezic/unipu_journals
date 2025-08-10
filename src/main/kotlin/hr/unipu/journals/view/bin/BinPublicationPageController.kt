@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.bin
+package hr.unipu.journals.view.bin
 
 class BinPublicationPageController {
 }

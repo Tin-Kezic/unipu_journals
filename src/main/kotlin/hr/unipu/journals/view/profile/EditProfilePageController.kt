@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.profile
+package hr.unipu.journals.view.profile
 
 class EditProfilePageController {
 }

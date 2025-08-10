@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.archive
+package hr.unipu.journals.view.archive
 
 class ArchiveManuscriptPageController {
 }

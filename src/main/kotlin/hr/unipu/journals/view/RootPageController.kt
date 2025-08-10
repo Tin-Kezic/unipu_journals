@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view
+package hr.unipu.journals.view
 
 class RootPageController {
 }

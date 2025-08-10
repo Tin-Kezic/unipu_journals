@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.old
+package hr.unipu.journals.feature.account_role_on_manuscript
 
 import org.springframework.web.bind.annotation.RestController
 
