@@ -9,6 +9,7 @@
     --dark-purple: #605c91;
     --purple: #6b66a1;
     --beige: #bab2a2;
+    --very-light-gray: #e8e1d9;
     --light-gray: #7e7667;
     --gray: #49454f;
 }
@@ -289,6 +290,11 @@ nav ul li a:hover {
   font-weight: bold;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+}
+.yellow-box:hover {
+    background-color: var(--very-light-gray);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .yellow-box-buttons {
    margin: auto 0.4rem 0.4rem auto;
