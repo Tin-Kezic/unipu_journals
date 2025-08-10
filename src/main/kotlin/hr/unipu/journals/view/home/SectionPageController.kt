@@ -1,23 +1,24 @@
 package hr.unipu.journals.controller.view.home
 
 import hr.unipu.journals.feature.publication.PublicationRepository
-import hr.unipu.journals.feature.section.PublicationSectionRepository
+import hr.unipu.journals.feature.section.SectionRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/publication/{id}")
+@RequestMapping("/publication/")
 class SectionPageController(
     private val publicationRepository: PublicationRepository,
-    private val publicationSectionRepository: PublicationSectionRepository
+    private val sectionRepository: SectionRepository
 ) {
-    @GetMapping("/")
-    fun findAll(model: Model): String {
+    @GetMapping("/{id}")
+    fun findAll(@PathVariable id: Int, model: Model): String {
         model["publications"] = publicationRepository.all()
-        model["sections"] = publicationSectionRepository.all()
+        model["sections"] = sectionRepository.findById(id)
         return "home/section-page"
     }
 }
