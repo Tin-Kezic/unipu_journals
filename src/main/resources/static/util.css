@@ -69,6 +69,9 @@ nav ul li a {
 nav ul li a:hover {
     color: var(--yellow);
 }
+nav ul li a:active {
+    text-decoration: underline;
+}
 .search-container {
     display: flex;
     align-items: center;
@@ -185,31 +188,31 @@ nav ul li a:hover {
     color: white;
 }
 .text-field {
-  position: relative;
-  width: 100%;
-  max-width: 22.5rem;
-  margin: 1.25rem 0;
+    position: relative;
+    width: 100%;
+    max-width: 22.5rem;
+    margin: 1.25rem 0;
 }
 .text-field label {
-  position: absolute;
-  top: -0.5rem;
-  left: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--light-gray);
-  background-color: var(--pale-yellow);
-  padding: 0 0.25rem;
+    position: absolute;
+    top: -0.5rem;
+    left: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--light-gray);
+    background-color: var(--pale-yellow);
+    padding: 0 0.25rem;
 }
 .text-field input {
-  width: 100%;
-  height: 3.5rem;
-  padding: 0.5rem 0.75rem 0.5rem;
-  font-size: 1rem;
-  background: var(--pale-yellow);
-  border: 1.2px solid var(--light-gray);
-  border-radius: 0.3rem;
+    width: 100%;
+    height: 3.5rem;
+    padding: 0.5rem 0.75rem 0.5rem;
+    font-size: 1rem;
+    background: var(--pale-yellow);
+    border: 1.2px solid var(--light-gray);
+    border-radius: 0.3rem;
 }
 .text-field input::placeholder {
-  color: var(--light-gray);
+    color: var(--light-gray);
 }
 .error-msg {
     font-size: 0.75rem;
@@ -250,57 +253,61 @@ nav ul li a:hover {
     color: white;
 }
 .pale-yellow-checkbox-button {
-  user-select: none;            /* Prevent text selection */
+    user-select: none;            /* Prevent text selection */
 }
 .pale-yellow-checkbox-button input {
-  position: absolute;
-  opacity: 0;
+    position: absolute;
+    opacity: 0;
 }
 .pale-yellow-checkbox-button .checkbox {
-  width: 9rem;
-  height: 1.7rem;
-  border: 1.3px solid var(--beige);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--beige);
-  font-size: 1rem;
-  background: var(--pale-yellow);
-  cursor: pointer;
+    width: 9rem;
+    height: 1.7rem;
+    border: 1.3px solid var(--beige);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--beige);
+    font-size: 1rem;
+    background: var(--pale-yellow);
+    cursor: pointer;
 }
 .pale-yellow-checkbox-button input:checked + .checkbox {
-  background: var(--purple);
-  color: white;
+    background: var(--purple);
+    color: white;
 }
 .blue-checkbox {
     accent-color: var(--light-blue);
 }
 .yellow-box {
-  width: 14rem;
-  height: 7rem;
-  background-color: var(--pale-yellow);
-  border: 1.3px solid var(--beige);
-  border-radius: 0.4rem;
-  user-select: none;
-  padding: 0.5rem;
-  text-align: left;
-  overflow-wrap: break-word;
-  overflow: auto;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
+    width: 14rem;
+    height: 7rem;
+    background-color: var(--pale-yellow);
+    border: 1.3px solid var(--beige);
+    border-radius: 0.4rem;
+    user-select: none;
+    padding: 0.5rem;
+    text-align: left;
+    overflow-wrap: break-word;
+    overflow: auto;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
 }
 .yellow-box:hover {
     background-color: var(--very-light-gray);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
+.no-hover:hover {
+    background-color: var(--pale-yellow);
+    box-shadow: none;
+}
 .yellow-box-buttons {
-   margin: auto 0.4rem 0.4rem auto;
-   align-self: flex-end;
-   display:flex;
-   gap: 0.5rem;
+    margin: auto 0.4rem 0.4rem auto;
+    align-self: flex-end;
+    display:flex;
+    gap: 0.5rem;
 }
 .yellow-box-buttons .m3-button {
     padding: 0.4rem 0.6rem;
@@ -309,55 +316,55 @@ nav ul li a:hover {
     min-height: 2rem;
 }
 .overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
 }
 .dialog {
-  background: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  max-width: 90%;
-  max-height: 90vh;
-  overflow: auto;
-  box-sizing: border-box;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+    box-sizing: border-box;
 }
 #snackbar {
-  visibility: hidden; /* Hidden by default. Visible on click */
-  min-width: 13vw;
-  background-color: white;
-  color: black;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  text-align: center;
-  border-radius: 1rem;
-  padding: 12px;
-  position: fixed;
-  z-index: 1;
-  right: 5%;
-  bottom: 1.8rem;
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 13vw;
+    background-color: white;
+    color: black;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    text-align: center;
+    border-radius: 1rem;
+    padding: 12px;
+    position: fixed;
+    z-index: 1;
+    right: 5%;
+    bottom: 1.8rem;
 }
 .fa-circle-check {
     color: var(--green);
 }
 #snackbar.show {
-  visibility: visible;
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-  However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 /* Animations to fade the snackbar in and out */
 @keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
 }
 @keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
 }
 .sidebar-button {
     user-select: none;
