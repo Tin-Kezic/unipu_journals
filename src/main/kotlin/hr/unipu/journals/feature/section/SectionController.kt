@@ -1,6 +1,5 @@
 package hr.unipu.journals.controller.old
 
-import hr.unipu.journals.feature.section.PublicationSectionRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.usecase.sanitize
 import org.springframework.dao.OptimisticLockingFailureException
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/publication/{id}")
+@RequestMapping("/api/publication/{publication_id}")
 class SectionController(private val repository: SectionRepository) {
 
     @PostMapping("/insert")
@@ -35,8 +34,9 @@ class SectionController(private val repository: SectionRepository) {
         return ResponseEntity.ok().body("title successfully updated")
     }
 
-    @PutMapping("/hide/{id}")
+    @PutMapping("/hide/{section_id}")
     fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
+
         return if (repository.existsById(id)) {
             repository.hide(id)
             ResponseEntity.ok().body("publication successfully hidden")
