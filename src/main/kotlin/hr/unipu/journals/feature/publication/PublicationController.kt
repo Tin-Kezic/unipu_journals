@@ -1,6 +1,5 @@
-package hr.unipu.journals.controller.old
+package hr.unipu.journals.feature.publication
 
-import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.usecase.sanitize
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.http.ResponseEntity
@@ -26,14 +25,12 @@ class PublicationController(private val repository: PublicationRepository) {
             ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
         }
     }
-
     @PutMapping("/update")
     fun update(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         if(!repository.existsById(id)) return ResponseEntity.badRequest().body("publication with id: $id does not exist")
         repository.update(id, title)
         return ResponseEntity.ok().body("title successfully updated")
     }
-
     @PutMapping("/hide/{id}")
     fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
         return if (repository.existsById(id)) {

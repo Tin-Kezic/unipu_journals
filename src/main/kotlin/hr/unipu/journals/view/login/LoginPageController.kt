@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.login
+package hr.unipu.journals.view.login
 
 class LoginPageController {
 }

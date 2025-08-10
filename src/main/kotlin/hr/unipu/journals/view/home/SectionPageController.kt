@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.home
+package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
@@ -15,7 +15,7 @@ class SectionPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository
 ) {
-    @GetMapping("/{id}")
+    @GetMapping("/{publication_id}")
     fun findAll(@PathVariable id: Int, model: Model): String {
         model["publications"] = publicationRepository.all()
         model["sections"] = sectionRepository.findById(id)

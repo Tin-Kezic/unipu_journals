@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.view.submit
+package hr.unipu.journals.view.submit
 
 class SubmitPageController {
 }
