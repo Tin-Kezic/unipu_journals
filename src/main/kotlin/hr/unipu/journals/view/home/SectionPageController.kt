@@ -17,8 +17,8 @@ class SectionPageController(
 ) {
     @GetMapping("/{publication_id}")
     fun findAll(@PathVariable id: Int, model: Model): String {
-        model["publications"] = publicationRepository.all()
-        model["sections"] = sectionRepository.findById(id)
+        model["publications-sidebar"] = publicationRepository.all()
+        model["sections"] = sectionRepository.findByPublicationId(id)
         return "home/section-page"
     }
 }
