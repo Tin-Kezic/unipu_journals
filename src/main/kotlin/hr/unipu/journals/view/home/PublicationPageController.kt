@@ -21,24 +21,4 @@ class PublicationPageController(private val repository: PublicationRepository) {
         model["publications"] = repository.all()
         return "home/publication-page"
     }
-    @ResponseBody
-    @PostMapping("/api/publication/insert")
-    fun insert(@ModelAttribute title: String): ResponseEntity<String> {
-        return try {
-            repository.insert(sanitize(title))
-            ResponseEntity.ok().body("account successfully added")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. title must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
-        }
-    }
-    @ResponseBody
-    @PostMapping("/api/publication/hide/{id}")
-    fun hidePublication(@PathVariable id: Int): ResponseEntity<String> {
-        return if (repository.existsById(id)) {
-            repository.hide(id)
-            ResponseEntity.ok().body("publication successfully hidden")
-        } else ResponseEntity.badRequest().body("id does not exist")
-    }
 }
