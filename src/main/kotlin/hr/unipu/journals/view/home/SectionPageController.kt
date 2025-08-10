@@ -14,7 +14,6 @@ class SectionPageController(
     private val publicationRepository: PublicationRepository,
     private val publicationSectionRepository: PublicationSectionRepository
 ) {
-
     @GetMapping("/")
     fun findAll(model: Model): String {
         model["publications"] = publicationRepository.all()
