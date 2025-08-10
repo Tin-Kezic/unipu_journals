@@ -7,7 +7,7 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 private const val PUBLICATION_SECTION = "publication_section"
-interface PublicationSectionRepository: Repository<Section, Int> {
+interface SectionRepository: Repository<Section, Int> {
 
     // view
     @Query("SELECT * FROM $PUBLICATION_SECTION")

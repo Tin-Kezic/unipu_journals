@@ -1,6 +1,7 @@
 package hr.unipu.journals.controller.old
 
 import hr.unipu.journals.feature.section.PublicationSectionRepository
+import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.usecase.sanitize
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.http.ResponseEntity
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/publication/{id}")
-class PublicationSectionController(private val repository: PublicationSectionRepository) {
+@RequestMapping("/api/publication/{id}")
+class SectionController(private val repository: SectionRepository) {
 
     @PostMapping("/insert")
     fun insert(@ModelAttribute title: String): ResponseEntity<String> {
