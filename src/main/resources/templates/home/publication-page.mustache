@@ -12,13 +12,17 @@
 
     {{>util/header}}
 
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin-top: 2rem; margin-left: 1.5rem;">publishings</h1>
+
+    <div style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem 1rem 1.5rem;">
     {{#publications}}
         <div class="yellow-box" id="{id}">
             <p class="yellow-box-text">{{title}}</p>
             <a href="/publication/{id}">navigate</a>
         </div>
     {{/publications}}
-    
+    </div>
+
 
     <!--
 <button hx-get="/api/account/all" hx-target="#content" hx-swap="innerHTML">
