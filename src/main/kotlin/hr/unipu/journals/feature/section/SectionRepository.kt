@@ -7,42 +7,45 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 private const val PUBLICATION_SECTION = "publication_section"
+private const val ID = "id"
 private const val TITLE = "title"
 private const val DESCRIPTION = "description"
+private const val PUBLICATION_ID = "publication_id"
+private const val IS_HIDDEN = "is_hidden"
 
 
 interface SectionRepository: Repository<Section, Int> {
     // view
-    @Query("SELECT * FROM $PUBLICATION_SECTION")
-    fun all(): List<Publication>
-
-    @Query("SELECT * FROM $PUBLICATION_SECTION WHERE publication_id = :id")
-    fun findByPublicationId(@Param("id") id: Int): Publication
+    @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID")
+    fun allByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): Publication
 
     // REST
     @Modifying
-    @Query("INSERT INTO $PUBLICATION_SECTION (title, description, publication_id) VALUES (:title, :description, :publicationId)")
+    @Query("""
+        INSERT INTO $PUBLICATION_SECTION ($TITLE, $DESCRIPTION, $PUBLICATION_ID)
+        VALUES (:$TITLE, :$DESCRIPTION, :$PUBLICATION_ID)
+    """)
     fun insert(
-        @Param("title") title: String,
-        @Param("description") description: String,
-        @Param("publicationId") publicationId: Int,
+        @Param(TITLE) title: String,
+        @Param(DESCRIPTION) description: String,
+        @Param(PUBLICATION_ID) publicationId: Int,
     )
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET title = :title WHERE id = :id")
-    fun updateTitle(@Param("id") id: Int, @Param("title") title: String)
+    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE WHERE $ID = :$ID")
+    fun updateTitle(@Param(ID) id: Int, @Param(TITLE) title: String)
 
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET title = :title WHERE id = :id")
-    fun updateDescription(@Param("id") id: Int, @Param("title") title: String)
+    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE WHERE $ID = :$ID")
+    fun updateDescription(@Param(ID) id: Int, @Param(TITLE) title: String)
 
-    @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION_SECTION WHERE id = :id)")
-    fun existsById(@Param("id") id: Int): Boolean
-
-    @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET is_hidden = TRUE where id = :id")
-    fun hide(@Param("id") id: Int)
+    @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION_SECTION WHERE $ID = :$ID)")
+    fun existsById(@Param(ID) id: Int): Boolean
 
     @Modifying
-    @Query("DELETE FROM $PUBLICATION_SECTION WHERE id = :id")
-    fun delete(@Param("id") id: Int)
+    @Query("UPDATE $PUBLICATION_SECTION SET $IS_HIDDEN = :is_hidden WHERE $ID = :$ID")
+    fun updateHidden(@Param(ID) id: Int, @Param("is_hidden") isHidden: Boolean)
+
+    @Modifying
+    @Query("DELETE FROM $PUBLICATION_SECTION WHERE $ID = :$ID")
+    fun delete(@Param(ID) id: Int)
 }

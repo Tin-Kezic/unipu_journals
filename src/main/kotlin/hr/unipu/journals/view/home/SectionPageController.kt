@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/publication/")
+@RequestMapping("/publication")
 class SectionPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository
 ) {
-    @GetMapping("/{publication_id}")
-    fun findAll(@PathVariable id: Int, model: Model): String {
+    @GetMapping("/{publicationId}")
+    fun findAll(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.all()
-        model["sections"] = sectionRepository.findByPublicationId(id)
+        model["sections"] = sectionRepository.allByPublicationId(publicationId)
         return "home/section-page"
     }
 }

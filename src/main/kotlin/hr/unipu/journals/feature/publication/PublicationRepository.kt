@@ -22,14 +22,14 @@ interface PublicationRepository: Repository<Publication, Int> {
 
     @Modifying
     @Query("UPDATE $PUBLICATION SET $TITLE = :$TITLE WHERE $ID = :$ID")
-    fun updateTitle(@Param(ID) id: Int, @Param("title") title: String)
+    fun updateTitle(@Param(ID) id: Int, @Param(TITLE) title: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION WHERE $ID = :$ID)")
     fun existsById(@Param(ID) id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = TRUE where $ID = :$ID")
-    fun hide(@Param(ID) id: Int)
+    @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :is_hidden WHERE $ID = :$ID")
+    fun updateHidden(@Param(ID) id: Int, @Param("is_hidden") isHidden: Boolean)
 
     @Modifying
     @Query("DELETE FROM $PUBLICATION WHERE $ID = :$ID")
