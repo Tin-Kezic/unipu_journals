@@ -1,18 +1,5 @@
-package hr.unipu.journals.controller.old
+package hr.unipu.journals.feature.account
 
-import hr.unipu.journals.feature.account.Account
-import hr.unipu.journals.feature.account.AccountRepository
-import hr.unipu.journals.usecase.hashPassword
-import hr.unipu.journals.usecase.sanitize
-import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
 /*
 @RestController
 @RequestMapping("/api/account")
