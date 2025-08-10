@@ -13,10 +13,12 @@
     {{>util/header}}
 
     {{#publications}}
-        <div class="yellow-box">
+        <div class="yellow-box" id="{id}">
             <p class="yellow-box-text">{{title}}</p>
+            <a href="/publication/{id}">navigate</a>
         </div>
     {{/publications}}
+    
 
     <!--
 <button hx-get="/api/account/all" hx-target="#content" hx-swap="innerHTML">
