@@ -13,39 +13,36 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/publication/")
 class SectionController(private val repository: SectionRepository) {
-
     @PostMapping("{publicationId}/insert")
     fun insert(
         @PathVariable publicationId: Int,
-        @ModelAttribute title: String
+        @ModelAttribute title: String,
+        @ModelAttribute description: String
     ): ResponseEntity<String> {
-        return try {
-            repository.insert(sanitize(title))
+        return if(title.isNotEmpty()) {
+            repository.insert(
+                title = sanitize(title),
+                description = sanitize(description),
+                publicationId = publicationId,
+            )
             ResponseEntity.ok().body("account successfully added")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. title must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
-        }
+        } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("{publicationId}/update/{sectionId}")
+    @PutMapping("{publicationId}/update-title-and-description")
     fun update(
-        @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
-        @ModelAttribute title: String
+        @ModelAttribute title: String,
+        @ModelAttribute description: String
     ): ResponseEntity<String> {
-        if(!repository.existsById(sectionId)) return ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
-        repository.update(sectionId, title)
-        return ResponseEntity.ok().body("title successfully updated")
+        return if (repository.existsById(sectionId)) {
+            repository.updateTitleAndDescription(sectionId, title, description)
+            ResponseEntity.ok().body("title successfully updated")
+        } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
     }
     @PutMapping("{publicationId}/hide/{section_id}")
-    fun hidePublication(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
-    ): ResponseEntity<String> {
-
+    fun hidePublication(@PathVariable sectionId: Int): ResponseEntity<String> {
         return if (repository.existsById(sectionId)) {
-            repository.hide(sectionId)
+            repository.updateHidden(sectionId, true)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
