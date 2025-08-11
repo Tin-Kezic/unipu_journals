@@ -11,7 +11,7 @@ class AccountController(private val repository: AccountRepository) {
             surname = sanitize(account.surname),
             title = sanitize(account.title),
             email = sanitize(account.email),
-            password = hashPassword(account.password),
+            password = BCryptPasswordEncoder().encode(password)
             affiliation = sanitize(account.affiliation),
             jobType = sanitize(account.jobType),
             country = sanitize(account.country),
