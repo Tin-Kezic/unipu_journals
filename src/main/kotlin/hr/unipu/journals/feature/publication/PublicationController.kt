@@ -1,6 +1,7 @@
 package hr.unipu.journals.feature.publication
 
-import hr.unipu.journals.usecase.sanitize
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,14 +17,14 @@ class PublicationController(private val repository: PublicationRepository) {
     @PostMapping("/insert-publication")
     fun insert(@ModelAttribute title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
-            repository.insert(sanitize(title))
+            repository.insert(Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok().body("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/update-publication-title")
     fun update(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
-            repository.updateTitle(id, title)
+            repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok().body("title successfully updated")
         } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
     }

@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.section
 
-import hr.unipu.journals.usecase.sanitize
-import org.springframework.dao.OptimisticLockingFailureException
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,8 +22,8 @@ class SectionController(private val repository: SectionRepository) {
     ): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(
-                title = sanitize(title),
-                description = sanitize(description),
+                title = Jsoup.clean(title, Safelist.none()),
+                description = Jsoup.clean(description, Safelist.relaxed()),
                 publicationId = publicationId,
             )
             ResponseEntity.ok().body("account successfully added")
