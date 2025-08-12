@@ -28,7 +28,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
         AND $MANUSCRIPT.$CURRENT_STATE = 'PUBLISHED'
-        """)
+    """)
     fun allPublished(): List<Publication>
 
     @Query("""
