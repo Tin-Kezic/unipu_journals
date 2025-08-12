@@ -41,7 +41,14 @@ interface PublicationRepository: Repository<Publication, Int> {
     """)
     fun allArchived(): List<Publication>
 
-    @Query("SELECT * FROM $PUBLICATION")
+    @Query("""
+        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
+        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
+        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
+        WHERE $PUBLICATION.$IS_HIDDEN = TRUE
+        OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
+        AND $MANUSCRIPT.$CURRENT_STATE = 'HIDDEN'
+    """)
     fun allHidden(): List<Publication>
 
     // REST
