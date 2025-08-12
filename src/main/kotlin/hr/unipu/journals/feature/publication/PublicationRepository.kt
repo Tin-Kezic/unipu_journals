@@ -47,7 +47,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION.$IS_HIDDEN = TRUE
         OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
-        AND $MANUSCRIPT.$CURRENT_STATE = 'HIDDEN'
+        OR $MANUSCRIPT.$CURRENT_STATE = 'HIDDEN'
     """)
     fun allHidden(): List<Publication>
 
