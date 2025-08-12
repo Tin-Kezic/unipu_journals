@@ -11,8 +11,9 @@ CREATE TYPE manuscript_state AS ENUM (
     'AWAITING_REVIEWER_REVIEW',
     'MINOR_FIXES',
     'MAJOR_FIXES',
-    'REJECTED',
     'PUBLISHED',
+    'REJECTED',
+    'ARCHIVED',
     'HIDDEN',
     'DRAFT'
 );
