@@ -12,65 +12,24 @@ private const val IS_HIDDEN = "is_hidden"
 
 // publication_section
 private const val PUBLICATION_SECTION = "publication_section"
+private const val PUBLICATION_ID = "publication_id"
 
 // manuscript
 private const val MANUSCRIPT = "manuscript"
+private const val SECTION_ID = "section_id"
 private const val CURRENT_STATE = "current_state"
 
 interface PublicationRepository: Repository<Publication, Int> {
 
-    /*
-    SELECT p.*
-FROM publications p
-WHERE p.is_visible = TRUE
-  AND EXISTS (
-      SELECT 1
-      FROM sections s
-      JOIN manuscripts m ON m.section_id = s.id
-      WHERE s.publication_id = p.id
-        AND s.is_visible = TRUE
-        AND m.state = 'published'
-  );
-
-     */
-
-    // view
     @Query("""
-        SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE
-        AND EXISTS (SELECT 1 FROM $PUBLICATION_SECTION
-        WHERE $IS_HIDDEN = FALSE AND EXISTS (SELECT 1 FROM
-        $MANUSCRIPT WHERE $CURRENT_STATE = 'PUBLISHED'))
+        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
+        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
+        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
+        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $MANUSCRIPT.$CURRENT_STATE = 'PUBLISHED'
         """)
     fun allPublished(): List<Publication>
-    /*
-    SELECT p.*
-    /*
-    i
-    SELECT p.*
-FROM publications p
-WHERE p.is_visible = TRUE
-  AND EXISTS (
-      SELECT 1
-      FROM sections s
-      JOIN manuscripts m ON m.section_id = s.id
-      WHERE s.publication_id = p.id
-        AND s.is_visible = TRUE
-        AND m.state = 'published'
-  );
-
-     */
-FROM publications p
-WHERE p.is_visible = TRUE
-  AND EXISTS (
-      SELECT 1
-      FROM sections s
-      JOIN manuscripts m ON m.section_id = s.id
-      WHERE s.publication_id = p.id
-        AND s.is_visible = TRUE
-        AND m.state = 'published'
-  );
-
-     */
 
     @Query("SELECT * FROM $PUBLICATION")
     fun allArchived(): List<Publication>
