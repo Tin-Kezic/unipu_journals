@@ -1,4 +1,4 @@
-package hr.unipu.journals.security
+package hr.unipu.journals
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
