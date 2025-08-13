@@ -15,11 +15,10 @@ private const val IS_HIDDEN = "is_hidden"
 
 
 interface SectionRepository: Repository<Section, Int> {
-    // view
+
     @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID")
     fun allByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): Publication
 
-    // REST
     @Modifying
     @Query("""
         INSERT INTO $PUBLICATION_SECTION ($TITLE, $DESCRIPTION, $PUBLICATION_ID)
