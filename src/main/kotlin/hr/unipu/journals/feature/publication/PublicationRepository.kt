@@ -21,7 +21,6 @@ private const val CURRENT_STATE = "current_state"
 
 interface PublicationRepository: Repository<Publication, Int> {
 
-    // view
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
         JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
@@ -52,7 +51,6 @@ interface PublicationRepository: Repository<Publication, Int> {
     """)
     fun allHidden(): List<Publication>
 
-    // REST
     @Modifying
     @Query("INSERT INTO $PUBLICATION ($TITLE) VALUES (:$TITLE)")
     fun insert(@Param(TITLE) title: String)
