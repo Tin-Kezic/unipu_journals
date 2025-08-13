@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -41,9 +42,12 @@ class SectionController(private val repository: SectionRepository) {
         } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
     }
     @PutMapping("{publicationId}/hide/{section_id}")
-    fun hidePublication(@PathVariable sectionId: Int): ResponseEntity<String> {
+    fun hidePublication(
+        @PathVariable sectionId: Int,
+        @RequestParam isHidden: Boolean
+    ): ResponseEntity<String> {
         return if (repository.existsById(sectionId)) {
-            repository.updateHidden(sectionId, true)
+            repository.updateHidden(sectionId, isHidden)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
