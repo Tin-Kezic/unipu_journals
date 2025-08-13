@@ -10,6 +10,8 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class SecurityConfig {
 
+    // make root in-memory user
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
