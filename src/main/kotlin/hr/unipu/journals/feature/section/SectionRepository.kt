@@ -41,8 +41,8 @@ interface SectionRepository: Repository<Section, Int> {
     fun existsById(@Param(ID) id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $IS_HIDDEN = :is_hidden WHERE $ID = :$ID")
-    fun updateHidden(@Param(ID) id: Int, @Param("is_hidden") isHidden: Boolean)
+    @Query("UPDATE $PUBLICATION_SECTION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")
+    fun updateHidden(@Param(ID) id: Int, @Param(IS_HIDDEN) isHidden: Boolean)
 
     @Modifying
     @Query("DELETE FROM $PUBLICATION_SECTION WHERE $ID = :$ID")
