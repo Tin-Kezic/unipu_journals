@@ -77,7 +77,6 @@ CREATE TABLE manuscript (
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
     FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
-
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
