@@ -1,4 +1,4 @@
-package hr.unipu.journals.view
+package hr.unipu.journals.view.home
 
 class ManuscriptDetailsPageController {
 }
