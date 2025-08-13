@@ -29,11 +29,6 @@ dependencies {
 	// implementation("org.springframework.session:spring-session-jdbc:3.2.1")
 	// implementation("org.springframework.boot:spring-boot-starter-data-ldap:3.5.3")
 	// implementation("org.springframework.boot:spring-boot-starter-data-rest:3.5.3")
-
-	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.3")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
-	testImplementation("org.springframework.security:spring-security-test:6.0.3")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.3")
 }
 kotlin {
 	compilerOptions {
