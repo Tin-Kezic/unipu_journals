@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/publication")
 class PublicationController(private val repository: PublicationRepository) {
 
-    @PostMapping("/insert-publication")
+    @PostMapping("/insert")
     fun insert(@ModelAttribute title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok().body("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("/update-publication-title")
+    @PutMapping("/update")
     fun update(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
             repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
@@ -29,9 +30,12 @@ class PublicationController(private val repository: PublicationRepository) {
         } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
     }
     @PutMapping("/hide/{publicationId}")
-    fun hidePublication(@PathVariable publicationId: Int): ResponseEntity<String> {
+    fun hide(
+        @PathVariable publicationId: Int,
+        @RequestParam isHidden: Boolean
+    ): ResponseEntity<String> {
         return if (repository.existsById(publicationId)) {
-            repository.updateHidden(publicationId, true)
+            repository.updateHidden(publicationId, isHidden)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }

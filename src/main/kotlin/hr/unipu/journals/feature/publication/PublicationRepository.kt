@@ -21,6 +21,7 @@ private const val CURRENT_STATE = "current_state"
 
 interface PublicationRepository: Repository<Publication, Int> {
 
+    // view
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
         JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
