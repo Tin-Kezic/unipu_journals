@@ -4,17 +4,14 @@ plugins {
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
-
 repositories {
 	mavenCentral()
 }
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(24)
 	}
 }
-
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
@@ -38,13 +35,11 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.3")
 }
-
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
 	}
 }
-
 tasks.test {
 	useJUnitPlatform()
 }
