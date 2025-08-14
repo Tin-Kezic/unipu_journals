@@ -78,6 +78,7 @@ nav ul li a:active {
 }
 .search-bar {
     padding: 1vh 1vw;
+    padding-right: 2.25rem;
     margin: 0 1vw;
     border: none;
     border-radius: 1rem;
@@ -92,12 +93,12 @@ nav ul li a:active {
 .fa-solid.fa-magnifying-glass {
     font-size: 1rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     margin: 0 1.5vw;
     color: var(--gray);
     position: absolute;
-    right: .5rem;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .fa-solid.fa-magnifying-glass:active {
     transform: scale(0.97);
