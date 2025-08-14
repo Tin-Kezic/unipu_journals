@@ -8,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 class CustomUserDetailsService(
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val roleContextService: RoleContextService
 ): UserDetailsService {
     override fun loadUserByUsername(email: String): UserDetails {
         if(!accountRepository.emailExists(email)) throw UsernameNotFoundException("$email not found")
