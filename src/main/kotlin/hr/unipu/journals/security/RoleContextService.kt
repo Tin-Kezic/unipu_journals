@@ -1,9 +1,7 @@
 package hr.unipu.journals.security
 
-import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
-import hr.unipu.journals.feature.manuscript_review.ManuscriptReviewRepository
 import hr.unipu.journals.feature.section_editor_on_section.SectionEditorOnSectionRepository
 import org.springframework.stereotype.Service
 
