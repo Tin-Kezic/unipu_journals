@@ -11,5 +11,5 @@ private const val PUBLICATION_ID = "publication_id"
 private const val EIC_ID = "eic_id"
 interface EicOnPublicationRepository: Repository<EicOnPublication, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $EIC_ON_PUBLICATION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $EIC_ID = :$EIC_ID")
-    fun isEicOnPublication(@Param(PUBLICATION_ID) publicationId: Int, @Param(EIC_ID) eicId: Int): Boolean
+    fun isEicOnPublication(@Param(EIC_ID) eicId: Int, @Param(PUBLICATION_ID) publicationId: Int): Boolean
 }
