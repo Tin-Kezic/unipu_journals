@@ -16,30 +16,30 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
         AND $ACCOUNT_ROLE = 'EIC'
     """)
-    fun isEicOnManuscript(@Param(ACCOUNT_ID) eicId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isEicOnManuscript(@Param(ACCOUNT_ID) eicId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
     @Query("""
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
         AND $ACCOUNT_ROLE = 'EDITOR'
     """)
-    fun isEditorOnManuscript(@Param(ACCOUNT_ID) editorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isEditorOnManuscript(@Param(ACCOUNT_ID) editorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
     @Query("""
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
         AND $ACCOUNT_ROLE = 'REVIEWER'
     """)
-    fun isReviewerOnManuscript(@Param(ACCOUNT_ID) reviewerId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isReviewerOnManuscript(@Param(ACCOUNT_ID) reviewerId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
     @Query("""
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
         AND $ACCOUNT_ROLE = 'CORRESPONDING_AUTHOR'
     """)
-    fun isCorrespondingAuthorOnManuscript(@Param(ACCOUNT_ID) correspondingAuthorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isCorrespondingAuthorOnManuscript(@Param(ACCOUNT_ID) correspondingAuthorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
     @Query("""
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
         AND $ACCOUNT_ROLE = 'AUTHOR'
     """)
-    fun isAuthorOnManuscript(@Param(ACCOUNT_ID) authorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isAuthorOnManuscript(@Param(ACCOUNT_ID) authorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
 }
 

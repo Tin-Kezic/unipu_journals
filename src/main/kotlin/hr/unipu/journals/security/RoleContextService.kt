@@ -18,22 +18,22 @@ class RoleContextService(
     fun isEiCOnPublication(eicId: Int, publicationId: Int): Boolean {
         return eicOnPublicationRepository.isEicOnPublication(eicId, publicationId)
     }
-    fun isEicOnManuscript(eicId: Int, manuscriptId: Int) {
+    fun isEicOnManuscript(eicId: Int, manuscriptId: Int): Boolean {
         return accountRoleOnManuscriptRepository.isEicOnManuscript(eicId, manuscriptId)
     }
-    fun isSectionEditorOnSection(sectionEditorId: Int, sectionId: Int) {
+    fun isSectionEditorOnSection(sectionEditorId: Int, sectionId: Int): Boolean {
         return sectionEditorOnSectionRepository.isSectionEditorOnSection(sectionEditorId, sectionId)
     }
-    fun isEditorOnManuscript(editorId: Int, manuscriptId: Int) {
+    fun isEditorOnManuscript(editorId: Int, manuscriptId: Int): Boolean {
         return accountRoleOnManuscriptRepository.isEditorOnManuscript(editorId, manuscriptId)
     }
-    fun isReviewerOnManuscript(reviewId: Int, manuscriptId: Int) {
+    fun isReviewerOnManuscript(reviewId: Int, manuscriptId: Int): Boolean {
         return accountRoleOnManuscriptRepository.isReviewerOnManuscript(reviewId, manuscriptId)
     }
-    fun isCorrespondingAuthorOnManuscript(correspondingAuthorId: Int, manuscriptId: Int) {
+    fun isCorrespondingAuthorOnManuscript(correspondingAuthorId: Int, manuscriptId: Int): Boolean {
         return accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(correspondingAuthorId, manuscriptId)
     }
-    fun isAuthorOnManuscript(authorId: Int, manuscriptId: Int) {
+    fun isAuthorOnManuscript(authorId: Int, manuscriptId: Int): Boolean {
         return accountRoleOnManuscriptRepository.isAuthorOnManuscript(authorId, manuscriptId)
     }
 }

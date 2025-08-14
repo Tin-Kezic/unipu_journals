@@ -10,5 +10,5 @@ private const val PUBLICATION_SECTION_ID = "publication_section_id"
 private const val SECTION_EDITOR_ID = "section_editor_id"
 interface SectionEditorOnSectionRepository: Repository<SectionEditorOnSection, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $SECTION_EDITOR_ON_SECTION WHERE $SECTION_EDITOR_ID = :$SECTION_EDITOR_ID AND $PUBLICATION_SECTION_ID = :$PUBLICATION_SECTION_ID")
-    fun isSectionEditorOnSection(@Param(SECTION_EDITOR_ID) sectionEditorId: Int, @Param(PUBLICATION_SECTION_ID) sectionId: Int)
+    fun isSectionEditorOnSection(@Param(SECTION_EDITOR_ID) sectionEditorId: Int, @Param(PUBLICATION_SECTION_ID) sectionId: Int): Boolean
 }
