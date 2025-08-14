@@ -10,24 +10,22 @@
 
 <body>
 
-{{>util/header}}
+    {{>util/header}}
 
-<h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
-    publications
-</h1>
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
+        publications
+    </h1>
 
-
-<div style="display: flex; align-items: flex-start;">
-    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        {{#publications-sidebar}}
-        <label class="sidebar-button">
-            <input type="radio" name="sidebar-filter"/>
-            <span class="checkbox">{{title}}</span>
-        </label>
-        {{/publications-sidebar}}
+    <div style="display: flex; align-items: flex-start;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+            {{#publications-sidebar}}
+            <label class="sidebar-button">
+                <input type="radio" name="sidebar-filter"/>
+                <span class="checkbox">{{title}}</span>
+            </label>
+            {{/publications-sidebar}}
+        </div>
     </div>
-</div>
-
 
     <div style="
         flex: 1;
