@@ -21,10 +21,19 @@ class RoleContextService(
     fun isEicOnManuscript(eicId: Int, manuscriptId: Int) {
         return accountRoleOnManuscriptRepository.isEicOnManuscript(eicId, manuscriptId)
     }
-    fun isSectionEditorOnSection() {}
-    fun isEditorOnManuscript() {}
-    fun isReviewerOnManuscript() {}
-    fun isCorrespondingAuthorOnManuscript() {}
-    fun isAuthorOnManuscript() {}
-
+    fun isSectionEditorOnSection(sectionEditorId: Int, sectionId: Int) {
+        return sectionEditorOnSectionRepository.isSectionEditorOnSection(sectionEditorId, sectionId)
+    }
+    fun isEditorOnManuscript(editorId: Int, manuscriptId: Int) {
+        return accountRoleOnManuscriptRepository.isEditorOnManuscript(editorId, manuscriptId)
+    }
+    fun isReviewerOnManuscript(reviewId: Int, manuscriptId: Int) {
+        return accountRoleOnManuscriptRepository.isReviewerOnManuscript(reviewId, manuscriptId)
+    }
+    fun isCorrespondingAuthorOnManuscript(correspondingAuthorId: Int, manuscriptId: Int) {
+        return accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(correspondingAuthorId, manuscriptId)
+    }
+    fun isAuthorOnManuscript(authorId: Int, manuscriptId: Int) {
+        return accountRoleOnManuscriptRepository.isAuthorOnManuscript(authorId, manuscriptId)
+    }
 }
