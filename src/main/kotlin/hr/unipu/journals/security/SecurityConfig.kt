@@ -10,7 +10,13 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class SecurityConfig {
 
-    // make root in-memory user
+    @Bean
+    fun root(): UserDetailsService = InMemoryUserDetailsManager(User
+        .withUsername("@root")
+        .password("d49764c083bc63ec091ac23711316de034ab62d188e02e1f2c11455c2b99d8d8")
+        .roles(ROOT)
+        .build()
+    )
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
