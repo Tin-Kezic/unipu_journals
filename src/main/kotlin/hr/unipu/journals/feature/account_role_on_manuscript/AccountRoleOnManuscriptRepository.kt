@@ -12,6 +12,6 @@ private const val ACCOUNT_ID = "account_id"
 private const val ACCOUNT_ROLE = "account_role"
 interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID")
-    fun isEicOnManuscript(@Param(ACCOUNT_ID) eicId: Id, @Param(MANUSCRIPT_ID) manuscriptId: Int)
+    fun isEicOnManuscript(@Param(ACCOUNT_ID) eicId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int)
 }
 
