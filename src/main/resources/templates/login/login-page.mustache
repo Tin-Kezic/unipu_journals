@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="util.css" />
+</head>
+<body style="align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100vh;">
+
+<h1 style="font-size: 3.5rem; margin-top: -10rem;">Unipu Journals</h1>
+<p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem;">University of Pula academic journals</p>
+
+
+
+<div style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <p style="font-size: 1.8rem; margin-top: 2rem; align-self: flex-start;">Login</p>
+    <form style="width: 100%;">
+        <div class="text-field">
+            <label for="email">email</label>
+            <input type="email" required>
+        </div>
+        <div class="text-field">
+            <label for="password">Password</label>
+            <input type="password" required>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <button class="m3-button yellow-button" type="submit">Login</button>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-top: 0.8rem; width: 100%;">
+            <a style="color: var(--blue); text-decoration: none;" href="/forgot">Forgot your password?</a>
+            <a style="color: var(--blue); text-decoration: none;" href="/register">Register</a>
+        </div>
+        <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
+            Incorrect email or password.
+        </p>
+    </form>
+</div>
+
+</body>
+
+<style>
+    .text-field input {
+        background-color: white;
+    }
+</style>
+</html>
