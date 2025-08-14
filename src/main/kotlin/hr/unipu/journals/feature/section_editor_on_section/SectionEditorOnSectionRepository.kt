@@ -1,6 +1,8 @@
 package hr.unipu.journals.feature.section_editor_on_section
 
+import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
+import org.springframework.data.repository.query.Param
 
 private const val SECTION_EDITOR_ON_SECTION = "section_editor_on_section"
 private const val ID = "id"
