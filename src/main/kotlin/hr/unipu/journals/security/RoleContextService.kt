@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class RoleContextService(
-    private val accountRepository: AccountRepository,
     private val eicOnPublicationRepository: EicOnPublicationRepository,
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val manuscriptReviewRepository: ManuscriptReviewRepository
 ) {
     fun isEiCOnPublication(eicId: Int, publicationId: Int): Boolean {
         return eicOnPublicationRepository.isEicOnPublication(eicId, publicationId)
