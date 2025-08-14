@@ -15,7 +15,6 @@ class RoleContextService(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val manuscriptReviewRepository: ManuscriptReviewRepository
 ) {
-    fun isAdmin(accountId: Int) = accountRepository.isAdmin(accountId)
     fun isEiCOnPublication(publicationId: Int, eicId: Int): Boolean {
         return eicOnPublicationRepository.isEicOnPublication(publicationId, eicId)
     }
