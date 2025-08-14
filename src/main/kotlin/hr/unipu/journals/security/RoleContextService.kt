@@ -18,7 +18,9 @@ class RoleContextService(
     fun isEiCOnPublication(eicId: Int, publicationId: Int): Boolean {
         return eicOnPublicationRepository.isEicOnPublication(eicId, publicationId)
     }
-    fun isEicOnManuscript() {}
+    fun isEicOnManuscript(eicId: Int, manuscriptId: Int) {
+        return accountRoleOnManuscriptRepository.isEicOnManuscript(eicId, manuscriptId)
+    }
     fun isSectionEditorOnSection() {}
     fun isEditorOnManuscript() {}
     fun isReviewerOnManuscript() {}
