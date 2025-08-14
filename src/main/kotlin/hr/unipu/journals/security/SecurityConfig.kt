@@ -1,9 +1,13 @@
 package hr.unipu.journals.security
 
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
@@ -25,10 +29,10 @@ class SecurityConfig {
             .headers { it.frameOptions { frame -> frame.disable() } }
             .authorizeHttpRequests { it
                 .requestMatchers("h2-console/**").permitAll() // comment out in production
-                .requestMatchers("/root").hasRole("ROOT")
+                .requestMatchers("/root").hasRole(ROOT)
                 .requestMatchers(
                     "/publication/{publicationId}/configure-eic-on-publication",
-                ).hasRole("ADMIN")
+                ).hasRole(ADMIN)
                 .requestMatchers(
                     "/", "/util.css", "/htmx.min.js",
                     "/publication", // publication-page
