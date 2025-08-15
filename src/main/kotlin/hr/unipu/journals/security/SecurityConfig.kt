@@ -25,6 +25,13 @@ class SecurityConfig {
         .roles(ROOT)
         .build()
     )
+    /*
+    during development if something goes wrong and the website randomly redirects to /login or throws AccessDeniedException
+    comment out the .formLogin, .logout, .sessionManagement, .userDetailsService and .authorizeHttpRequest and replace them with:
+    .authorizeHttpRequests {
+        it.requestMatchers("/**").permitAll().anyRequest().permitAll()
+    }.build()
+    */*/
     @Bean
     fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain = http
         .csrf { it.disable() } // Required to use the H2 console, comment out in production
