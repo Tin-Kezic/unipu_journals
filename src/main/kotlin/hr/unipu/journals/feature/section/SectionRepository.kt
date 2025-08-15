@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.section
 
-import hr.unipu.journals.feature.publication.Publication
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -16,11 +15,11 @@ private const val IS_HIDDEN = "is_hidden"
 
 interface SectionRepository: Repository<Section, Int> {
 
-    @Query("SELECT title from $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun titleById(@Param(ID) sectionId: Int)
+    @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
+    fun titleById(@Param(ID) sectionId: Int): String
 
     @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID")
-    fun allByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): Publication
+    fun allByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
 
     @Modifying
     @Query("""

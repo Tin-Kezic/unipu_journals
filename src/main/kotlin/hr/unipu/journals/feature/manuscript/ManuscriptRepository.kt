@@ -17,5 +17,5 @@ private const val VIEWS = "views"
 private const val DOWNLOADS = "downloads"
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID")
-    fun allBySectionId(@Param(SECTION_ID) sectionId: Int)
+    fun allBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 }
