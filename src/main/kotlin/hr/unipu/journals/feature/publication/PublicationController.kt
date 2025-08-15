@@ -23,14 +23,14 @@ class PublicationController(private val repository: PublicationRepository) {
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/update")
-    fun update(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
+    fun updateTitle(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
             repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok().body("title successfully updated")
         } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
     }
     @PutMapping("/hide/{publicationId}")
-    fun hide(
+    fun updateHidden(
         @PathVariable publicationId: Int,
         @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {

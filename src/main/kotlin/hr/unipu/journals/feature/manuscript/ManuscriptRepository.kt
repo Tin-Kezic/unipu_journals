@@ -13,4 +13,6 @@ private const val SUBMISSION_DATE = "submission_date"
 private const val PUBLICATION_DATE = "publication_date"
 private const val VIEWS = "views"
 private const val DOWNLOADS = "downloads"
-interface ManuscriptRepository: Repository<Manuscript, Int>
+interface ManuscriptRepository: Repository<Manuscript, Int> {
+    
+}
