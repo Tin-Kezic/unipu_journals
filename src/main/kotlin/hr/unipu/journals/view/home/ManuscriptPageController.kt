@@ -15,14 +15,14 @@ class ManuscriptPageController(
     private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository
 ) {
-    @GetMapping("/{publicationId}/{sectionId}")
+    @GetMapping("/{publicationId}/section/{sectionId}")
     fun all(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         model: Model
     ): String {
         model["sections-sidebar"] = sectionRepository.allByPublicationId(publicationId)
-        //model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId)
+        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId)
         model["title"] = sectionRepository.titleById(sectionId)
         return "home/manuscript-page"
     }
