@@ -19,7 +19,15 @@ private const val MANUSCRIPT = "manuscript"
 private const val SECTION_ID = "section_id"
 private const val CURRENT_STATE = "current_state"
 
+// manuscript-state
+private const val PUBLISHED = "'PUBLISHED'"
+private const val ARCHIVED = "'ARCHIVED'"
+private const val HIDDEN = "'HIDDEN'"
+
 interface PublicationRepository: Repository<Publication, Int> {
+
+    @Query("SELECT $TITLE FROM $PUBLICATION WHERE ")
+    fun titleById(@Param(ID) id: Int)
 
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
@@ -27,7 +35,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = 'PUBLISHED'
+        AND $MANUSCRIPT.$CURRENT_STATE = $PUBLISHED
     """)
     fun allPublished(): List<Publication>
 
@@ -37,7 +45,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = 'ARCHIVED'
+        AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
     """)
     fun allArchived(): List<Publication>
 
@@ -47,7 +55,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION.$IS_HIDDEN = TRUE
         OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
-        OR $MANUSCRIPT.$CURRENT_STATE = 'HIDDEN'
+        OR $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
     """)
     fun allHidden(): List<Publication>
 
