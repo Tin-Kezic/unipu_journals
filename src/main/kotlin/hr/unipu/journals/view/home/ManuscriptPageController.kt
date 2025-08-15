@@ -1,4 +1,28 @@
 package hr.unipu.journals.view.home
 
-class ManuscriptPageController {
+import hr.unipu.journals.feature.manuscript.ManuscriptRepository
+import hr.unipu.journals.feature.section.SectionRepository
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+
+@Controller
+@RequestMapping("/publication")
+class ManuscriptPageController(
+    private val sectionRepository: SectionRepository,
+    private val manuscriptRepository: ManuscriptRepository
+) {
+    @GetMapping("/{publicationId}/{sectionId}")
+    fun findAll(
+        @PathVariable publicationId: Int,
+        @PathVariable sectionId: Int,
+        model: Model
+    ): String {
+        model["sections-sidebar"] = sectionRepository.allByPublicationId(publicationId)
+        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId)
+        return "home/manuscript-page"
+    }
 }

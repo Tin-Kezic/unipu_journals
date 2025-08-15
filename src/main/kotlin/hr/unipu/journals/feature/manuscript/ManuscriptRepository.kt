@@ -1,6 +1,8 @@
 package hr.unipu.journals.feature.manuscript
 
+import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
+import org.springframework.data.repository.query.Param
 
 private const val MANUSCRIPT = "manuscript"
 private const val ID = "id"
@@ -14,5 +16,6 @@ private const val PUBLICATION_DATE = "publication_date"
 private const val VIEWS = "views"
 private const val DOWNLOADS = "downloads"
 interface ManuscriptRepository: Repository<Manuscript, Int> {
-    
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID")
+    fun allBySectionId(@Param(SECTION_ID) sectionId: Int)
 }
