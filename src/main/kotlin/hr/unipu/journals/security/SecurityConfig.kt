@@ -28,7 +28,11 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain = http
         .csrf { it.disable() } // Required to use the H2 console, comment out in production
-        .headers { it.frameOptions { frame -> frame.disable() } }
+        .headers { it.frameOptions { frame -> frame.disable() } } // also for H2, comment out in production
+        .authorizeHttpRequests {
+            it.requestMatchers("/**").permitAll().anyRequest().permitAll()
+        }.build()
+        /*
         .formLogin {
             it.loginPage("/login")
                 .defaultSuccessUrl("/", true)
@@ -96,4 +100,6 @@ class SecurityConfig {
             ).permitAll()
             .anyRequest().authenticated()
         }.build()
+         */
+         */
 }

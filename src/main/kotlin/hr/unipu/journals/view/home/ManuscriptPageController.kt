@@ -16,7 +16,7 @@ class ManuscriptPageController(
     private val manuscriptRepository: ManuscriptRepository
 ) {
     @GetMapping("/{publicationId}/{sectionId}")
-    fun findAll(
+    fun all(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         model: Model
