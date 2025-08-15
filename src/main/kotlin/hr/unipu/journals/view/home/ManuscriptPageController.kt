@@ -23,6 +23,7 @@ class ManuscriptPageController(
     ): String {
         model["sections-sidebar"] = sectionRepository.allByPublicationId(publicationId)
         model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId)
+        model["title"] = sectionRepository.titleById(sectionId)
         return "home/manuscript-page"
     }
 }
