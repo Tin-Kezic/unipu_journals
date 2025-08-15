@@ -1,11 +1,15 @@
 package hr.unipu.journals.security
 
+import hr.unipu.journals.feature.account.AccountRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
@@ -20,9 +24,31 @@ class SecurityConfig {
         .build()
     )
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain = http
+    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain = http
         .csrf { it.disable() } // Required to use the H2 console, comment out in production
         .headers { it.frameOptions { frame -> frame.disable() } }
+        .formLogin {
+            it.loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        }
+        .logout { it
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/")
+            .deleteCookies("JSESSIONID")
+            .invalidateHttpSession(true)
+        }
+        .sessionManagement { it
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            .invalidSessionUrl("/login?expired")
+            //.maximumSessions(1)
+            //.expiredUrl("/login?expired")
+        }
+        .userDetailsService { email ->
+            if(!accountRepository.emailExists(email)) throw UsernameNotFoundException("$email not found")
+            val account = accountRepository.byEmail(email)
+            SecurityUser(account, if(account.isAdmin) listOf(SimpleGrantedAuthority(ADMIN)) else emptyList())
+        }
         .authorizeHttpRequests { it
             .requestMatchers("h2-console/**").permitAll() // comment out in production
             .requestMatchers("/root").hasRole(ROOT)
