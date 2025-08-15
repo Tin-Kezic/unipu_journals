@@ -27,7 +27,7 @@ private const val HIDDEN = "'HIDDEN'"
 interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
-    fun titleById(@Param(ID) id: Int)
+    fun titleById(@Param(ID) id: Int): String
 
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
