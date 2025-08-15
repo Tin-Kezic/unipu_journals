@@ -399,3 +399,29 @@ nav ul li a:active {
     background: var(--purple);
     color: white;
 }
+.authors {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    margin-top: 0.2rem;
+}
+.authors button {
+    font-weight: 100;
+    background-color: inherit;
+    border: none;
+    width: fit-content;
+}
+.authors button:hover {
+    color: var(--blue);
+    cursor: pointer;
+}
+.authors button + button::before {
+    content: ",";
+    font-weight: 100;
+    margin-right: 0.25rem;
+}
+.authors button:last-child::before {
+    content: "and";
+    font-weight: 100;
+    margin: 0 0.25rem;
+}
