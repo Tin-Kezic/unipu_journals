@@ -63,10 +63,6 @@ class SecurityConfig {
             .requestMatchers("/root").hasRole(ROOT)
             .requestMatchers(
                 "/publication/{publicationId}/configure-eic-on-publication",
-                "/hidden",
-                "/hidden/{publicationId}",
-                "/hidden/{publicationId}/{sectionId}",
-                "/hidden/{publicationId}/{sectionId}/{manuscriptId}",
             ).hasRole(ADMIN)
             .requestMatchers(
                 "/eic-initial-review",
