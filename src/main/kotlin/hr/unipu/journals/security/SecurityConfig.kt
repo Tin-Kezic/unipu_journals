@@ -73,6 +73,10 @@ class SecurityConfig {
                 "/technical-processing-page"
             ).hasAnyRole(EIC, ADMIN)
             .requestMatchers(
+                "/hidden",
+                "/hidden/{publicationId}",
+                "/hidden/{publicationId}/{sectionId}",
+                "/hidden/{publicationId}/{sectionId}/{manuscriptId}",
                 "/review-round-initialization",
                 "/manage-manuscript-under-review",
             ).hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)
