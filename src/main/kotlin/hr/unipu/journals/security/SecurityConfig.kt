@@ -20,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig {
     @Bean
     fun root(): UserDetailsService = InMemoryUserDetailsManager(User
-        .withUsername("@root")
+        .withUsername("root@unipu.hr")
         .password("d49764c083bc63ec091ac23711316de034ab62d188e02e1f2c11455c2b99d8d8")
         .roles(ROOT)
         .build()
@@ -36,10 +36,6 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain = http
         .csrf { it.disable() } // Required to use the H2 console, comment out in production
         .headers { it.frameOptions { frame -> frame.disable() } } // also for H2, comment out in production
-        .authorizeHttpRequests {
-            it.requestMatchers("/**").permitAll().anyRequest().permitAll()
-        }.build()
-        /*
         .formLogin {
             it.loginPage("/login")
                 .defaultSuccessUrl("/", true)
@@ -107,6 +103,4 @@ class SecurityConfig {
             ).permitAll()
             .anyRequest().authenticated()
         }.build()
-         */
-         */
 }
