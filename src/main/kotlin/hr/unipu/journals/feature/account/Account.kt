@@ -6,8 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("ACCOUNT")
 data class Account(
     @Id val id: Int,
-    val name: String,
-    val surname: String,
+    val fullName: String,
     val title: String?,
     val email: String,
     val password: String,
