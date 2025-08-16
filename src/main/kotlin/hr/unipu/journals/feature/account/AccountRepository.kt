@@ -7,8 +7,7 @@ import org.springframework.data.repository.query.Param
 
 private const val ACCOUNT = "account"
 private const val ID = "id"
-private const val NAME = "name"
-private const val SURNAME = "surname"
+private const val FULL_NAME = "full_name"
 private const val TITLE = "title"
 private const val EMAIL = "email"
 private const val PASSWORD = "password"
