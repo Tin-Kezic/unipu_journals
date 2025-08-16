@@ -21,7 +21,7 @@ class SecurityConfig {
     @Bean
     fun root(): UserDetailsService = InMemoryUserDetailsManager(User
         .withUsername("root@unipu.hr")
-        .password("d49764c083bc63ec091ac23711316de034ab62d188e02e1f2c11455c2b99d8d8")
+        .password("{noop}root") // {noop} for development store Bcrypt in production
         .roles(ROOT)
         .build()
     )
