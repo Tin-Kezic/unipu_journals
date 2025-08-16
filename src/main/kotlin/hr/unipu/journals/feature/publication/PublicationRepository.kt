@@ -71,8 +71,8 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun existsById(@Param(ID) id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :is_hidden WHERE $ID = :$ID")
-    fun updateHidden(@Param(ID) id: Int, @Param("is_hidden") isHidden: Boolean)
+    @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")
+    fun updateHidden(@Param(ID) id: Int, @Param(IS_HIDDEN) isHidden: Boolean)
 
     @Modifying
     @Query("DELETE FROM $PUBLICATION WHERE $ID = :$ID")
