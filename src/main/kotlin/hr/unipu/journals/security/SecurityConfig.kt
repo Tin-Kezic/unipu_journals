@@ -91,7 +91,7 @@ class SecurityConfig {
             )
             .hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER,EDITOR,SECTION_EDITOR, EIC, ADMIN)
             .requestMatchers(
-                "/", "/util.css", "/htmx.min.js", "/font.min.js", "/header",
+                "/", "/util.css", "/htmx.min.js", "/header",
                 "/publication", // publication-page
                 "/publication/{publicationId}", // section-page
                 "/publication/{publicationId}/{sectionId}", // manuscript-page
