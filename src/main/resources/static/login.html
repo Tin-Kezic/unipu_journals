@@ -22,23 +22,23 @@
     <form style="width: 100%;">
         <div class="text-field">
             <label for="email">email</label>
-            <input type="email" required>
+            <input id="email" type="email" required>
         </div>
         <div class="text-field">
             <label for="password">Password</label>
-            <input type="password" required>
+            <input id="password" type="password" required>
         </div>
         <div style="display: flex; justify-content: center;">
             <button class="m3-button yellow-button" type="submit">Login</button>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-top: 0.8rem; width: 100%;">
-            <a style="color: var(--blue); text-decoration: none;" href="/forgot">Forgot your password?</a>
-            <a style="color: var(--blue); text-decoration: none;" href="/register">Register</a>
-        </div>
-        <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
-            Incorrect email or password.
-        </p>
     </form>
+    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-top: 0.8rem; width: 100%;">
+        <a style="color: var(--blue); text-decoration: none;" href="forgot.html">Forgot your password?</a>
+        <a style="color: var(--blue); text-decoration: none;" href="register.html">Register</a>
+    </div>
+    <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
+        Incorrect email or password.
+    </p>
 </div>
 
 </body>
