@@ -37,7 +37,7 @@ class SecurityConfig {
         .csrf { it.disable() } // Required to use the H2 console, comment out in production
         .headers { it.frameOptions { frame -> frame.disable() } } // also for H2, comment out in production
         .formLogin {
-            it.loginPage("/login")
+            it.loginPage("/login.html")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
         }
@@ -87,7 +87,7 @@ class SecurityConfig {
             )
             .hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
             .requestMatchers(
-                "/", "/util.css", "/htmx.min.js", "/header",
+                "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
                 "/publication", // publication-page
                 "/publication/{publicationId}", // section-page
                 "/publication/{publicationId}/{sectionId}", // manuscript-page
@@ -96,8 +96,8 @@ class SecurityConfig {
                 "/archive/{publicationId}",
                 "/archive/{publicationId}/{sectionId}",
                 "/archive/{publicationId}/{sectionId}/{manuscriptId}",
-                "/login",
-                "/register",
+                "/login.html",
+                "/register.html",
                 "/contact",
                 "/coming-soon"
             ).permitAll()
