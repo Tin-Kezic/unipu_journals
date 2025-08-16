@@ -90,7 +90,7 @@ INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
 (10, 3, 'REVIEWER');
 INSERT INTO manuscript_review (
     manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url,
-    author_response_file_url, author_comment, review_date, author_response_date
+    author_response_file_url, author_response, review_date, author_response_date
 ) VALUES
 (1, 3, 1, 'Excellent study with clear methodology.', 'http://example.com/rev1.pdf', 'http://example.com/res1.pdf', 'Thank you!', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, 6, 1, 'Needs clarification in methods.', 'http://example.com/rev2.pdf', 'http://example.com/res2.pdf', 'Clarified section 2.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -1909,7 +1909,7 @@ VALUES
 (139, 143, 'REVIEWER'),
 (4, 47, 'AUTHOR'),
 (191, 14, 'REVIEWER');
-INSERT INTO manuscript_review (manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url, author_response_file_url, author_comment, review_date, author_response_date)
+INSERT INTO manuscript_review (manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url, author_response_file_url, author_response, review_date, author_response_date)
 VALUES
 (31, 16, 3, 'Reviewer comment 1', 'http://files.example.com/review_comment1.pdf', 'http://files.example.com/author_response1.pdf', 'Author comment 1', '2021-07-21 06:41:55', '2021-07-26 06:41:55'),
 (149, 53, 2, 'Reviewer comment 2', 'http://files.example.com/review_comment2.pdf', 'http://files.example.com/author_response2.pdf', 'Author comment 2', '2024-03-11 07:05:16', '2024-03-16 07:05:16'),
