@@ -85,7 +85,7 @@ class SecurityConfig {
                 "/profile/{profileId}",
                 "/profile/{profileId}/edit"
             )
-            .hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER,EDITOR,SECTION_EDITOR, EIC, ADMIN)
+            .hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
             .requestMatchers(
                 "/", "/util.css", "/htmx.min.js", "/header",
                 "/publication", // publication-page
