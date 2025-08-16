@@ -93,7 +93,7 @@ CREATE TABLE manuscript_review (
     round INT NOT NULL DEFAULT 1,
     reviewer_comment TEXT,
     reviewer_comment_file_url TEXT,
-    author_comment TEXT,
+    author_response TEXT,
     author_response_file_url TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP NOT NULL,
