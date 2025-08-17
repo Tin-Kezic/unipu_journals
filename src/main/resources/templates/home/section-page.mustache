@@ -19,9 +19,9 @@
 <div style="display: flex; align-items: flex-start;">
     <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
         {{#publications-sidebar}}
-            <a href="/section/{{id}}" style="text-decoration: none; color: inherit;">
+            <a href="/publication/{{publicationId}}" style="text-decoration: none; color: inherit;">
                 <label class="sidebar-button">
-                    <input type="radio" id="section-{{id}}" name="sidebar-filter"/>
+                    <input type="radio" name="sidebar-filter"/>
                     <span class="checkbox">{{title}}</span>
                 </label>
             </a>
@@ -38,7 +38,7 @@
         margin: 0 1.5rem 1rem 1.5rem;
       ">
         {{#sections}}
-            <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+            <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
                 <div class="yellow-box">
                     <p class="yellow-box-text">{{title}}</p>
                 </div>
