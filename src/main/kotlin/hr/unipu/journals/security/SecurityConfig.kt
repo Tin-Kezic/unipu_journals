@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.config.annotation.web.invoke
 
 @Configuration
 @EnableWebSecurity
@@ -29,81 +30,74 @@ class SecurityConfig {
     )
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
-    /*
-    during development if something goes wrong and the website randomly redirects to /login or throws AccessDeniedException
-    comment out the .formLogin, .logout, .sessionManagement, .userDetailsService and .authorizeHttpRequest and replace them with:
-    .authorizeHttpRequests {
-        it.requestMatchers("/**").permitAll().anyRequest().permitAll()
-    }.build()
-    */*/
+
     @Bean
-    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain = http
-        .csrf { it.disable() } // Required to use the H2 console, comment out in production
-        .headers { it.frameOptions { frame -> frame.disable() } } // also for H2, comment out in production
-        .formLogin {
-            it.loginPage("/login.html")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
+    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository) {
+        http {
+            csrf { disable() } // comment out in production
+            headers { frameOptions { disable() } } // comment out in production
+            formLogin {
+                loginPage = "/login.html"
+                defaultSuccessUrl("/", true)
+                permitAll()
+            }
+            logout {
+                logoutUrl = "/logout"
+                logoutSuccessUrl = "/"
+                deleteCookies("JSESSIONID")
+                invalidateHttpSession = true
+            }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
+                invalidSessionUrl = "/login.html?invalid"
+            }
+            /*
+            UserDetailsService { email ->
+                if(!accountRepository.emailExists(email)) throw UsernameNotFoundException("$email not found")
+                val account = accountRepository.byEmail(email)
+                SecurityUser(account, if(account.isAdmin) listOf(SimpleGrantedAuthority(ADMIN)) else emptyList())
+            }
+             */
+            authorizeHttpRequests {
+                authorize("h2-console/**", permitAll) // comment out in production
+                authorize("/root", hasRole(ROOT))
+                authorize("/publication/{publicationId}/configure-eic-on-publication", hasRole(ADMIN))
+                listOf(
+                    "/eic-initial-review",
+                    "/technical-processing-page"
+                ).forEach { authorize(it, hasAnyRole(EIC, ADMIN)) }
+                listOf(
+                    "/hidden",
+                    "/hidden/publication/{publicationId}",
+                    "/hidden/publication/{publicationId}/section/{sectionId}",
+                    "/hidden/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/review-round-initialization",
+                    "/manage-manuscript-under-review",
+                ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                listOf(
+                    "/review",
+                    "/pending-review"
+                ).forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                listOf(
+                    "/submit",
+                    "/profile/{profileId}",
+                    "/profile/{profileId}/edit"
+                ).forEach { authorize(it, hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                listOf(
+                    "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
+                    "/publication/{publicationId}",
+                    "/publication/{publicationId}/section/{sectionId}",
+                    "/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/archive",
+                    "/archive/publication/{publicationId}",
+                    "/archive/publication/{publicationId}/section/{sectionId}",
+                    "/archive/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/login.html",
+                    "/register.html",
+                    "/contact",
+                    "/coming-soon"
+                ).forEach { authorize(it, permitAll) }
+            }
         }
-        .logout { it
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/")
-            .deleteCookies("JSESSIONID")
-            .invalidateHttpSession(true)
-        }
-        .sessionManagement { it
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .invalidSessionUrl("/login?expired")
-            //.maximumSessions(1)
-            //.expiredUrl("/login?expired")
-        }
-        .userDetailsService { email ->
-            if(!accountRepository.emailExists(email)) throw UsernameNotFoundException("$email not found")
-            val account = accountRepository.byEmail(email)
-            SecurityUser(account, if(account.isAdmin) listOf(SimpleGrantedAuthority(ADMIN)) else emptyList())
-        }
-        .authorizeHttpRequests { it
-            .requestMatchers("h2-console/**").permitAll() // comment out in production
-            .requestMatchers("/root").hasRole(ROOT)
-            .requestMatchers(
-                "/publication/{publicationId}/configure-eic-on-publication",
-            ).hasRole(ADMIN)
-            .requestMatchers(
-                "/eic-initial-review",
-                "/technical-processing-page"
-            ).hasAnyRole(EIC, ADMIN)
-            .requestMatchers(
-                "/hidden",
-                "/hidden/{publicationId}",
-                "/hidden/{publicationId}/{sectionId}",
-                "/hidden/{publicationId}/{sectionId}/{manuscriptId}",
-                "/review-round-initialization",
-                "/manage-manuscript-under-review",
-            ).hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)
-            .requestMatchers(
-                "/review",
-                "/pending-review"
-            ).hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
-            .requestMatchers(
-                "/submit",
-                "/profile/{profileId}",
-                "/profile/{profileId}/edit"
-            ).hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
-            .requestMatchers(
-                "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
-                "/publication", // publication-page
-                "/publication/{publicationId}", // section-page
-                "/publication/{publicationId}/{sectionId}", // manuscript-page
-                "/publication/{publicationId}/{sectionId}/{manuscriptId}", // manuscript-detail
-                "/archive",
-                "/archive/{publicationId}",
-                "/archive/{publicationId}/{sectionId}",
-                "/archive/{publicationId}/{sectionId}/{manuscriptId}",
-                "/login.html",
-                "/register.html",
-                "/contact",
-                "/coming-soon"
-            ).permitAll()
-            .anyRequest().authenticated()
-        }.build()
+    }
 }
