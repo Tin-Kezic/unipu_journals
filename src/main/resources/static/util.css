@@ -357,26 +357,20 @@ nav ul li a:active {
     visibility: visible;
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
+    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
 }
 /* Animations to fade the snackbar in and out */
-@keyframes fadein {
+@keyframes fade-in {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
-@keyframes fadeout {
+@keyframes fade-out {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
 .sidebar-button {
     user-select: none;
-}
-.sidebar-button input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
 }
 .sidebar-button .checkbox {
     display: flex;
@@ -399,7 +393,7 @@ nav ul li a:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
-.sidebar-button input[type="radio"]:checked + .checkbox {
+.sidebar-button + .checkbox {
     background: var(--purple);
     color: white;
 }
