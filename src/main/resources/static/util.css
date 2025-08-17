@@ -80,7 +80,7 @@ nav ul li a:active {
 .search-bar {
     padding: 1vh 1vw;
     padding-right: 2.25rem;
-    margin: 0 1vw;
+    margin: 0 auto;
     border: none;
     border-radius: 1rem;
     background-color: white;

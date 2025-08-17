@@ -13,12 +13,28 @@
     </nav>
 
     <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Search...">
+        <label>
+            <input type="text" class="search-bar" placeholder="Search...">
+        </label>
         <i class="fa-solid fa-magnifying-glass"></i>
     </div>
 
     <button class="m3-button purple-outline-button" style="border: none; padding: 0.1rem 0.5rem;">
         Marko Markić
+        <br>
         <span style="color: lightgrey">dr.sc.</span>
     </button>
 </header>
+
+<style>
+    @media (max-width: 1008px) {
+        .logo-button, .search-container, .m3-button.purple-outline-button {
+            order: 1;
+        }
+        nav {
+            order: 2;
+            flex:100%;
+            margin-top: 0.5rem;
+        }
+    }
+</style>
