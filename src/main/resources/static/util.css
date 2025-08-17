@@ -259,6 +259,8 @@ nav ul li a:active {
 .pale-yellow-checkbox-button input {
     position: absolute;
     opacity: 0;
+    width: 0;
+    height: 0;
 }
 .pale-yellow-checkbox-button .checkbox {
     width: 9rem;
@@ -373,6 +375,8 @@ nav ul li a:active {
 .sidebar-button input[type="radio"] {
     position: absolute;
     opacity: 0;
+    width: 0;
+    height: 0;
 }
 .sidebar-button .checkbox {
     display: flex;
