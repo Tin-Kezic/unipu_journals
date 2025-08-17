@@ -11,6 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
@@ -25,6 +27,8 @@ class SecurityConfig {
         .roles(ROOT)
         .build()
     )
+    @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
     /*
     during development if something goes wrong and the website randomly redirects to /login or throws AccessDeniedException
     comment out the .formLogin, .logout, .sessionManagement, .userDetailsService and .authorizeHttpRequest and replace them with:
@@ -84,8 +88,7 @@ class SecurityConfig {
                 "/submit",
                 "/profile/{profileId}",
                 "/profile/{profileId}/edit"
-            )
-            .hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
+            ).hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)
             .requestMatchers(
                 "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
                 "/publication", // publication-page
