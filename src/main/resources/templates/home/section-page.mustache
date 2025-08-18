@@ -11,37 +11,42 @@
 
 {{>util/header}}
 
-<h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
-    publications
-</h1>
+<main>
+    <main>
+        <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
+            publications
+        </h1>
 
-<div style="display: flex; align-items: flex-start;">
-    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        {{#publications-sidebar}}
-            <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
-                <label class="sidebar-button">
-                    <span class="checkbox">{{title}}</span>
-                </label>
-            </a>
-        {{/publications-sidebar}}
-    </div>
+        <div style="display: flex; align-items: flex-start;">
+            <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+                {{#publications-sidebar}}
+                    <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+                        <label class="sidebar-button">
+                            <span class="checkbox">{{title}}</span>
+                        </label>
+                    </a>
+                {{/publications-sidebar}}
+            </aside>
 
-    <div style="
-        flex: 1;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 1rem;
-        margin: 0 1.5rem 1rem 1.5rem;
-      ">
-        {{#sections}}
-            <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
-                <div class="yellow-box">
-                    <p class="yellow-box-text">{{title}}</p>
-                </div>
-            </a>
-        {{/sections}}
-    </div>
-</div>
+            <section style="
+                flex: 1;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                gap: 1rem;
+                margin: 0 1.5rem 1rem 1.5rem;
+              ">
+                {{#sections}}
+                    <article>
+                        <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
+                            <div class="yellow-box">
+                                <p class="yellow-box-text">{{title}}</p>
+                            </div>
+                        </a>
+                    </article>
+                {{/sections}}
+            </section>
+        </div>
+    </main>
 </body>
 </html>

@@ -9,15 +9,16 @@
 </head>
 
 <body>
-
 {{>util/header}}
 
-<h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
-    Acoustics
-</h1>
+<section>
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
+        Acoustics
+    </h1>
+</section>
 
 <div class="layout"style="display: flex; align-items: flex-start;">
-    <div class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
         <label class="sidebar-button">
             <input type="radio"/>
             <span class="checkbox">Archaeoacoustics</span>
@@ -26,9 +27,9 @@
             <input type="radio"/>
             <span class="checkbox">Acoustic Ecology</span>
         </label>
-    </div>
+    </aside>
 
-    <div class="main-content" style="
+    <section class="main-content" style="
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -39,7 +40,7 @@
         overflow: hidden;
     ">
 
-        <div class="yellow-box no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
+        <article class="yellow-box no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
             <p class="yellow-box-text">
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
@@ -47,10 +48,12 @@
 
                 (this window supports html parsing)
             </p>
-            <button class="m3-button purple-button" style="box-shadow: none; margin-left: auto; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
-        </div>
+            <footer>
+                <button class="m3-button purple-button" style="box-shadow: none; margin-left: auto; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+            </footer>
+        </article>
 
-        <div class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
             <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
             <div class="authors" style="display: flex; flex-wrap: wrap;">
@@ -61,12 +64,12 @@
 
             <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
             <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <div class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
+            <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
                 <button class="m3-button outline-button" style="width: auto; border-radius: 10rem;">Hide</button>
                 <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
-            </div>
-        </div>
-    </div>
+            </footer>
+        </article>
+    </section>
 </div>
 </body>
 
