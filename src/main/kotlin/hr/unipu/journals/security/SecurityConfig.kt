@@ -85,5 +85,6 @@ class SecurityConfig {
                 authorize(anyRequest, permitAll)
             }
         }
+        return http.build()
     }
 }
