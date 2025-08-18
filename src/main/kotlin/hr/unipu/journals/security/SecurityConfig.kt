@@ -24,7 +24,7 @@ class SecurityConfig {
     @Bean
     fun root(): UserDetailsService = InMemoryUserDetailsManager(User
         .withUsername("root@unipu.hr")
-        .password("\$2a\$10\$LhUA0WM5.Q.8KqmokG9.Pe6t76UIzeM1M7kGFX99X7HYve19jQ2iS") // abc
+        .password($$"$2a$10$LhUA0WM5.Q.8KqmokG9.Pe6t76UIzeM1M7kGFX99X7HYve19jQ2iS") // abc
         .roles(ROOT)
         .build()
     )
