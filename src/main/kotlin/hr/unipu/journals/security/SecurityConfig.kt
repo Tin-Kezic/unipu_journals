@@ -32,7 +32,7 @@ class SecurityConfig {
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository) {
+    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain {
         http {
             csrf { disable() } // comment out in production
             headers { frameOptions { disable() } } // comment out in production
