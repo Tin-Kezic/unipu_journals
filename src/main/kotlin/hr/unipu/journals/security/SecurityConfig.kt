@@ -41,8 +41,7 @@ class SecurityConfig {
                 defaultSuccessUrl("/", true)
                 permitAll()
             }
-            logout {
-                logoutUrl = "/logout"
+            logout { // default: logoutUrl = "/logout"
                 logoutSuccessUrl = "/"
                 deleteCookies("JSESSIONID")
                 invalidateHttpSession = true
