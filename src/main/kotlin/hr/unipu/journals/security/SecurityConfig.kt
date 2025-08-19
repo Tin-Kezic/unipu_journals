@@ -46,7 +46,7 @@ class SecurityConfig {
             }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
-                invalidSessionUrl = "/login.html?invalid"
+                invalidSessionUrl = "/login.html?invalidSession"
             }
             /*
             UserDetailsService { email ->
