@@ -14,19 +14,26 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.core.userdetails.UserDetails
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig {
     @Bean
-    fun root(): UserDetailsService = InMemoryUserDetailsManager(User
-        .withUsername("root@unipu.hr")
-        .password("\$2a\$10\$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy")
-        .roles(ROOT)
-        .build()
+    fun root(): UserDetailsService = InMemoryUserDetailsManager(
+        listOf<UserDetails>(
+            User
+                .withUsername("root@unipu.hr")
+                .password("\$2a\$10\$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy") // replace with actual bcrypt password in production
+                .roles(ROOT)
+                .build(),
+            User // comment out in production
+                .withUsername("admin@unipu.hr")
+                .password("\$2a\$10\$RcMJcymGto39rp7ys9PSdu3taGabj.26v2MRdWFSQ3FtY2O1Nw1Yy")
+                .roles(ADMIN)
+                .build(),
+        )
     )
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
