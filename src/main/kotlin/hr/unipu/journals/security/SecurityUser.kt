@@ -1,5 +1,5 @@
 package hr.unipu.journals.security
-
+/*
 import hr.unipu.journals.feature.account.Account
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -15,3 +15,4 @@ class SecurityUser(
     val isAdmin get() = account.isAdmin
 
 }
+ */
