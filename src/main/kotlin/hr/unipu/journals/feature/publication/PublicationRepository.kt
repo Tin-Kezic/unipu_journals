@@ -20,7 +20,6 @@ private const val SECTION_ID = "section_id"
 private const val CURRENT_STATE = "current_state"
 
 // manuscript-state
-private const val PUBLISHED = "'PUBLISHED'"
 private const val ARCHIVED = "'ARCHIVED'"
 private const val HIDDEN = "'HIDDEN'"
 
