@@ -17,8 +17,8 @@ class SectionPageController(
     //private val authorizationService: AuthorizationService
 ) {
     @GetMapping("/{publicationId}")
-    //@PreAuthorize("@authorizationService.isRoot()")
-    fun findAll(@PathVariable publicationId: Int, model: Model): String {
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
+    fun page(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.allPublished()
         model["sections"] = sectionRepository.allByPublicationId(publicationId)
         return "home/section-page"
