@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class RootPageController() {
     @GetMapping("/root")
-    fun all() = "configure/root-page"
+    fun page() = "configure/root-page"
 }
