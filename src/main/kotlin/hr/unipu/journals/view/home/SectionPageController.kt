@@ -21,7 +21,7 @@ class SectionPageController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.allPublished()
-        model["sections"] = sectionRepository.allByPublicationId(publicationId)
+        model["sections"] = sectionRepository.allPublishedByPublicationId(publicationId)
         return "home/section-page"
     }
 }
