@@ -42,7 +42,7 @@ class SectionController(private val repository: SectionRepository) {
         } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
     }
     @PutMapping("{publicationId}/hide/{section_id}")
-    fun hidePublication(
+    fun updateHidden(
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {
