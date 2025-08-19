@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 class SectionPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
-    //private val authorizationService: AuthorizationService
 ) {
     @GetMapping("/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
