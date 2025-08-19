@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/publication")
 class SectionPageController(
     private val publicationRepository: PublicationRepository,
-    private val sectionRepository: SectionRepository
+    private val sectionRepository: SectionRepository,
+    //private val authorizationService: AuthorizationService
 ) {
     @GetMapping("/{publicationId}")
+    //@PreAuthorize("@authorizationService.isRoot()")
     fun findAll(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.allPublished()
         model["sections"] = sectionRepository.allByPublicationId(publicationId)

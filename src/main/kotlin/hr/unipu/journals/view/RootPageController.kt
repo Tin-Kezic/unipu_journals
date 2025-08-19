@@ -1,4 +1,10 @@
 package hr.unipu.journals.view
 
-class RootPageController {
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+
+@Controller
+class RootPageController() {
+    @GetMapping("/root")
+    fun all() = "configure/root-page"
 }

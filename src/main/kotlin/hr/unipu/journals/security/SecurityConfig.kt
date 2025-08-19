@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +24,7 @@ class SecurityConfig {
     @Bean
     fun root(): UserDetailsService = InMemoryUserDetailsManager(User
         .withUsername("root@unipu.hr")
-        .password($$"$2a$10$LhUA0WM5.Q.8KqmokG9.Pe6t76UIzeM1M7kGFX99X7HYve19jQ2iS") // abc
+        .password("\$2a\$10\$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy")
         .roles(ROOT)
         .build()
     )
@@ -30,13 +32,15 @@ class SecurityConfig {
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity, accountRepository: AccountRepository): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity/*, accountRepository: AccountRepository*/): SecurityFilterChain {
         http {
             csrf { disable() } // comment out in production
             headers { frameOptions { disable() } } // comment out in production
             formLogin {
                 loginPage = "/login.html"
+                loginProcessingUrl = "/login"
                 defaultSuccessUrl("/", true)
+                failureUrl = "/login.html?failure"
                 permitAll()
             }
             logout { // default: logoutUrl = "/logout"
@@ -80,6 +84,23 @@ class SecurityConfig {
                     "/profile/{profileId}",
                     "/profile/{profileId}/edit"
                 ).forEach { authorize(it, hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                /*
+                listOf(
+                    "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
+                    "/publication/{publicationId}",
+                    "/publication/{publicationId}/section/{sectionId}",
+                    "/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/archive",
+                    "/archive/publication/{publicationId}",
+                    "/archive/publication/{publicationId}/section/{sectionId}",
+                    "/archive/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/login.html",
+                    "/register.html",
+                    "/contact",
+                    "/coming-soon",
+                    "/login"
+                ).forEach { authorize(it, permitAll) }
+                */
                 authorize(anyRequest, permitAll)
             }
         }

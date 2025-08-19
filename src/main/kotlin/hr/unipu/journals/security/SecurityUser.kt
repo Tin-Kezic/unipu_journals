@@ -11,4 +11,7 @@ class SecurityUser(
     override fun getAuthorities() = authority
     override fun getPassword() = account.password
     override fun getUsername() = account.email
+    val id get() = account.id
+    val isAdmin get() = account.isAdmin
+
 }
