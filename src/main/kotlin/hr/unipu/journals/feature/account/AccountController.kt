@@ -52,16 +52,4 @@ class AccountController(private val repository: AccountRepository) {
             ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
         }
     }
-    @ResponseBody
-    @PostMapping("/delete")
-    fun delete(@ModelAttribute account: Account): ResponseEntity<String> {
-        return try {
-            repository.delete(account)
-            ResponseEntity.ok().body("account deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
 }
