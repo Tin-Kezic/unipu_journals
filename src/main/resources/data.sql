@@ -5,7 +5,6 @@ VALUES (
     '$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC',
     '-', '-', '-', '-', '-', '-', false
 );
-
 INSERT INTO account (full_name, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
 VALUES (
     'admin',
