@@ -70,13 +70,6 @@ class SecurityConfig {
                 sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
                 invalidSessionUrl = "/login.html?invalidSession"
             }
-            /*
-            UserDetailsService { email ->
-                if(!accountRepository.emailExists(email)) throw UsernameNotFoundException("$email not found")
-                val account = accountRepository.byEmail(email)
-                SecurityUser(account, if(account.isAdmin) listOf(SimpleGrantedAuthority(ADMIN)) else emptyList())
-            }
-             */
             authorizeHttpRequests {
                 authorize("h2-console/**", permitAll) // comment out in production
                 authorize("/root", hasRole(ROOT))
