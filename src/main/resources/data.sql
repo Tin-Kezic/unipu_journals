@@ -14,16 +14,16 @@ VALUES (
     '-', '-', '-', '-', '-', '-', false
 );
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin) VALUES
-('Alice', 'Dr.', 'alice.smith@example.com', 'hashedpassword1', 'University A', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
-('Bob', 'Prof.', 'bob.johnson@example.com', 'hashedpassword2', 'University B', 'Editor', 'USA', 'Los Angeles', '456 Elm St', '90001', FALSE),
-('Charlie', 'Dr.', 'charlie.williams@example.com', 'hashedpassword3', 'Institute C', 'Reviewer', 'UK', 'London', '789 Oak St', 'SW1A 1AA', FALSE),
-('Diana', 'Ms.', 'diana.brown@example.com', 'hashedpassword4', 'University D', 'Author', 'Canada', 'Toronto', '101 Maple St', 'M5H 2N2', FALSE),
-('Edward', 'Dr.', 'edward.miller@example.com', 'hashedpassword5', 'University E', 'Author', 'Germany', 'Berlin', '15 Hauptstrasse', '10115', FALSE),
-('Fiona', 'Dr.', 'fiona.davis@example.com', 'hashedpassword6', 'University F', 'Reviewer', 'France', 'Paris', '25 Rue Lafayette', '75009', FALSE),
-('George', 'Prof.', 'george.clark@example.com', 'hashedpassword7', 'University G', 'Editor', 'Italy', 'Rome', '10 Via Roma', '00100', FALSE),
-('Hannah', 'Dr.', 'hannah.lopez@example.com', 'hashedpassword8', 'University H', 'Professor', 'Spain', 'Madrid', '20 Calle Mayor', '28013', FALSE),
-('Ian', 'Mr.', 'ian.walker@example.com', 'hashedpassword9', 'University I', 'Reviewer', 'Australia', 'Sydney', '5 George St', '2000', FALSE),
-('Julia', 'Ms.', 'julia.lee@example.com', 'hashedpassword10', 'University J', 'Author', 'Japan', 'Tokyo', '8 Chiyoda', '100-0001', FALSE);
+('Alice', 'Dr.', 'alice.smith@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University A', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
+('Bob', 'Prof.', 'bob.johnson@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University B', 'Editor', 'USA', 'Los Angeles', '456 Elm St', '90001', FALSE),
+('Charlie', 'Dr.', 'charlie.williams@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'Institute C', 'Reviewer', 'UK', 'London', '789 Oak St', 'SW1A 1AA', FALSE),
+('Diana', 'Ms.', 'diana.brown@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University D', 'Author', 'Canada', 'Toronto', '101 Maple St', 'M5H 2N2', FALSE),
+('Edward', 'Dr.', 'edward.miller@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University E', 'Author', 'Germany', 'Berlin', '15 Hauptstrasse', '10115', FALSE),
+('Fiona', 'Dr.', 'fiona.davis@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University F', 'Reviewer', 'France', 'Paris', '25 Rue Lafayette', '75009', FALSE),
+('George', 'Prof.', 'george.clark@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University G', 'Editor', 'Italy', 'Rome', '10 Via Roma', '00100', FALSE),
+('Hannah', 'Dr.', 'hannah.lopez@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University H', 'Professor', 'Spain', 'Madrid', '20 Calle Mayor', '28013', FALSE),
+('Ian', 'Mr.', 'ian.walker@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University I', 'Reviewer', 'Australia', 'Sydney', '5 George St', '2000', FALSE),
+('Julia', 'Ms.', 'julia.lee@example.com', '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy', 'University J', 'Author', 'Japan', 'Tokyo', '8 Chiyoda', '100-0001', FALSE);
 INSERT INTO category (name) VALUES
 ('Computer Science'),
 ('Biology'),
