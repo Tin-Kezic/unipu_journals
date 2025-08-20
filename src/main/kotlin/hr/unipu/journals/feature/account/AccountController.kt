@@ -44,28 +44,6 @@ class AccountController(private val repository: AccountRepository) {
             ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
         }
     }
-    /*
-    @GetMapping("/{id}/{template}")
-    fun findById(@PathVariable id: Int, model: Model): String {
-        val account = repository.findById(id).orElse(null) // change later cause mustache crashes on null
-        model["account"] = account
-        return "partial/account"
-    }
-     */
-    /*
-    @GetMapping("/all")
-    fun findAll(model: Model, ): String {
-        model["accounts"] = repository.findAll()
-        return "partial/accounts"
-    }
-    @PostMapping("/findAllById")
-    fun findAllById(@ModelAttribute ids: List<Int>, model: Model): String {
-        val found = repository.findAllById(ids)
-        model["accounts"] = found
-        return "partial/accounts"
-    }
-     */
-
     @ResponseBody
     @PostMapping("/deleteById/{id}")
     fun deleteById(@PathVariable id: Int) {
