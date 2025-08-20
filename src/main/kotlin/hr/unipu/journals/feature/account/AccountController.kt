@@ -89,8 +89,4 @@ class AccountController(private val repository: AccountRepository) {
             ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
         }
     }
-
-    @ResponseBody
-    @PostMapping("/deleteAll")
-    fun deleteAll() = repository.deleteAll()
 }
