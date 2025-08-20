@@ -83,4 +83,3 @@ class AccountController(private val repository: AccountRepository) {
     @PostMapping("/deleteAll")
     fun deleteAll() = repository.deleteAll()
 }
- */
