@@ -27,6 +27,7 @@ class AccountController(private val repository: AccountRepository) {
         @ModelAttribute title: String,
         @ModelAttribute email: String,
         @ModelAttribute password: String,
+        @ModelAttribute passwordConfirmation: String,
         @ModelAttribute affiliation: String,
         @ModelAttribute jobType: String,
         @ModelAttribute country: String,
