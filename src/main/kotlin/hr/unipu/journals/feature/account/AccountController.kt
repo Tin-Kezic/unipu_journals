@@ -44,19 +44,6 @@ class AccountController(private val repository: AccountRepository) {
             ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
         }
     }
-    @ResponseBody
-    @PostMapping("/saveAll")
-    fun saveAll(@ModelAttribute accounts: List<Account>): ResponseEntity<String> {
-        return try {
-            val sanitizedAccounts = accounts.map { processAccount(it) }
-            repository.saveAll(sanitizedAccounts)
-            ResponseEntity.ok().body("accounts successfully saved")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. All fields must be non-null. Provided: $accounts")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
     /*
     @GetMapping("/{id}/{template}")
     fun findById(@PathVariable id: Int, model: Model): String {
