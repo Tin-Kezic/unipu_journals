@@ -5,21 +5,6 @@ package hr.unipu.journals.feature.account
 @RequestMapping("/api/account")
 class AccountController(private val repository: AccountRepository) {
 
-    private fun processAccount(account: Account): Account {
-        return account.copy(
-            name = sanitize(account.name),
-            surname = sanitize(account.surname),
-            title = sanitize(account.title),
-            email = sanitize(account.email),
-            password = BCryptPasswordEncoder().encode(password)
-            affiliation = sanitize(account.affiliation),
-            jobType = sanitize(account.jobType),
-            country = sanitize(account.country),
-            city = sanitize(account.city),
-            address = sanitize(account.address),
-            zipCode = sanitize(account.zipCode)
-        )
-    }
     @ResponseBody
     @PostMapping("/save")
     fun save(
