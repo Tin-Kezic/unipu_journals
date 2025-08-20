@@ -34,20 +34,18 @@ private const val AUTHOR = "AUTHOR"
 @EnableMethodSecurity
 class SecurityConfig {
     @Bean
-    fun root(): UserDetailsService = InMemoryUserDetailsManager(
-        listOf<UserDetails>(
-            User
-                .withUsername("root@unipu.hr")
-                .password("\$2a\$10\$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy") // replace with actual bcrypt password in production
-                .roles(ROOT)
-                .build(),
-            User // comment out in production
-                .withUsername("admin@unipu.hr")
-                .password("\$2a\$10\$RcMJcymGto39rp7ys9PSdu3taGabj.26v2MRdWFSQ3FtY2O1Nw1Yy")
-                .roles(ADMIN)
-                .build(),
-        )
-    )
+    fun userDetailsService(accountRepository: AccountRepository): UserDetailsService {
+        return UserDetailsService { email ->
+            val account = accountRepository.byEmail(email) ?: throw UsernameNotFoundException("User with email $email not found")
+            if (account.email == "root@unipu.hr") {
+                User(account.email, account.password, listOf(SimpleGrantedAuthority(ROLE_ROOT)))
+            } else {
+                val authorities = mutableListOf<GrantedAuthority>()
+                if (account.isAdmin) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
+                User(account.email, account.password, authorities)
+            }
+        }
+    }
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
