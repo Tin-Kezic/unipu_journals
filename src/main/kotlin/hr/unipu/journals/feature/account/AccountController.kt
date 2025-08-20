@@ -1,6 +1,17 @@
 package hr.unipu.journals.feature.account
 
-/*
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
+import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
+
 @RestController
 @RequestMapping("/api/account")
 class AccountController(private val repository: AccountRepository) {
