@@ -65,13 +65,6 @@ class AccountController(private val repository: AccountRepository) {
         return "partial/account"
     }
      */
-    @ResponseBody
-    @GetMapping("/exists/{id}")
-    fun existsById(@PathVariable id: Int): Boolean {
-        return try {
-            repository.existsById(id)
-        } catch (_: IllegalArgumentException) { false }
-    }
     /*
     @GetMapping("/all")
     fun findAll(model: Model, ): String {
