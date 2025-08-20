@@ -20,7 +20,7 @@ CREATE TYPE manuscript_state AS ENUM (
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
     full_name TEXT NOT NULL,
-    title TEXT,
+    title TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     affiliation TEXT NOT NULL,
