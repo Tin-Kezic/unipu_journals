@@ -78,9 +78,6 @@ class AccountController(private val repository: AccountRepository) {
         return "partial/accounts"
     }
      */
-    @ResponseBody
-    @GetMapping("/count")
-    fun count() = repository.count()
 
     @ResponseBody
     @PostMapping("/deleteById/{id}")
