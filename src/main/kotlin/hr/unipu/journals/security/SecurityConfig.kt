@@ -14,7 +14,20 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UsernameNotFoundException
+
+private const val ROLE_ROOT = "ROLE_ROOT"
+private const val ROLE_ADMIN = "ROLE_ADMIN"
+private const val ROOT = "ROOT"
+private const val ADMIN = "ADMIN"
+private const val EIC = "EIC"
+private const val SECTION_EDITOR = "SECTION_EDITOR"
+private const val EDITOR = "EDITOR"
+private const val REVIEWER = "REVIEWER"
+private const val CORRESPONDING_AUTHOR = "CORRESPONDING_AUTHOR"
+private const val AUTHOR = "AUTHOR"
 
 @Configuration
 @EnableWebSecurity
