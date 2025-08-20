@@ -102,23 +102,6 @@ class SecurityConfig {
                     "/profile/{profileId}",
                     "/profile/{profileId}/edit"
                 ).forEach { authorize(it, hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
-                /*
-                listOf(
-                    "/", "/util.css", "/htmx.min.js", "/header", "/favicon.ico",
-                    "/publication/{publicationId}",
-                    "/publication/{publicationId}/section/{sectionId}",
-                    "/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
-                    "/archive",
-                    "/archive/publication/{publicationId}",
-                    "/archive/publication/{publicationId}/section/{sectionId}",
-                    "/archive/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
-                    "/login.html",
-                    "/register.html",
-                    "/contact",
-                    "/coming-soon",
-                    "/login"
-                ).forEach { authorize(it, permitAll) }
-                */
                 authorize(anyRequest, permitAll)
             }
         }
