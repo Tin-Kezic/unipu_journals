@@ -1,3 +1,18 @@
+INSERT INTO account (full_name, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
+VALUES (
+    'root',
+    'root@unipu.hr',
+    '$2a$10$rEygfn5AFuDbSFDQasv/h.xf2YptMtlhap8sD7vyIQwS4bj39XOzy',
+    '-', '-', '-', '-', '-', '-', false
+);
+
+INSERT INTO account (full_name, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
+VALUES (
+    'admin',
+    'admin@unipu.hr',
+    '$2a$10$RcMJcymGto39rp7ys9PSdu3taGabj.26v2MRdWFSQ3FtY2O1Nw1Yy',
+    '-', '-', '-', '-', '-', '-', false
+);
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin) VALUES
 ('Alice', 'Dr.', 'alice.smith@example.com', 'hashedpassword1', 'University A', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
 ('Bob', 'Prof.', 'bob.johnson@example.com', 'hashedpassword2', 'University B', 'Editor', 'USA', 'Los Angeles', '456 Elm St', '90001', FALSE),
