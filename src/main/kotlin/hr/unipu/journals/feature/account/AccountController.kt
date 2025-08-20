@@ -23,8 +23,7 @@ class AccountController(private val repository: AccountRepository) {
     @ResponseBody
     @PostMapping("/save")
     fun save(
-        @ModelAttribute name: String,
-        @ModelAttribute surname: String,
+        @ModelAttribute fullName: String,
         @ModelAttribute title: String,
         @ModelAttribute email: String,
         @ModelAttribute password: String,
