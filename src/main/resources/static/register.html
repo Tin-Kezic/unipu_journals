@@ -17,59 +17,61 @@
 <h1 style="font-size: 3.5rem;">Unipu Journals</h1>
 <p style="font-size: 1.3rem; color: var(--light-gray);">University of Pula academic journals</p>
 
-<main style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;" hx-post="/api/account/insert">
+<main style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
     <section>
-        <form style="width: 100%;">
+        <form style="width: 100%;" hx-post="/api/account/insert" hx-target="#error" hx-swap="innerHTML" hx-trigger="submit">
             <div class="text-field">
-                <label for="name">full name</label>
-                <input id="name" type="text" required>
+                <label for="fullName">full name</label>
+                <input id="fullName" name="fullName" type="text" required autofocus>
             </div>
             <div class="text-field">
                 <label for="title">title</label>
-                <input id="title" type="text" required>
+                <input id="title" name="title" type="text" required>
             </div>
             <div class="text-field">
                 <label for="email">email</label>
-                <input id="email" type="email" required>
+                <input id="email" name="email" type="email" required>
                 <span class="error-msg" style="float:right; text-decoration: underline;">email already in use | invalid email</span>
             </div>
             <div class="text-field">
                 <label for="password">password</label>
-                <input id="password" type="password" required>
+                <input id="password" name="password" type="password" required>
             </div>
             <div class="text-field">
-                <label for="repeat">repeat password</label>
-                <input id="repeat" type="password" required>
+                <label for="passwordConfirmation">repeat password</label>
+                <input id="passwordConfirmation" name="passwordConfirmation" type="password" required>
                 <span class="error-msg" style="float:right; text-decoration: underline;">password doesn't match</span>
             </div>
             <div class="text-field">
                 <label for="affiliation">affiliation</label>
-                <input id="affiliation" type="text" required>
+                <input id="affiliation" name="affiliation" type="text" required>
             </div>
             <div class="text-field">
-                <label for="job">job type</label>
-                <input id="job" type="text" required>
+                <label for="jobType">job type</label>
+                <input id="jobType" name="jobType" type="text" required>
             </div>
             <div class="text-field">
                 <label for="country">country</label>
-                <input id="country" type="text" required>
+                <input id="country" name="country" type="text" required>
             </div>
             <div class="text-field">
                 <label for="city">city</label>
-                <input id="city" type="text" required>
+                <input id="city" name="city" type="text" required>
             </div>
             <div class="text-field">
                 <label for="address">address</label>
-                <input id="address" type="text" required>
+                <input id="address" name="address" type="text" required>
             </div>
             <div class="text-field">
-                <label for="zipcode">zipcode</label>
-                <input id="zipcode" type="text" required>
+                <label for="zipCode">zipcode</label>
+                <input id="zipCode" name="zipCode" type="text" required>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <button class="m3-button yellow-button" type="submit">Register</button>
             </div>
         </form>
-        <div style="display: flex; justify-content: center;">
-            <button class="m3-button yellow-button" type="submit">Register</button>
-        </div>
+        <div id="error" style="color:red; font-weight:bold;"></div>
+
     </section>
 </main>
 </body>
