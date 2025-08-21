@@ -5,7 +5,6 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
-
 private const val ACCOUNT = "account"
 private const val ID = "id"
 private const val FULL_NAME = "full_name"
