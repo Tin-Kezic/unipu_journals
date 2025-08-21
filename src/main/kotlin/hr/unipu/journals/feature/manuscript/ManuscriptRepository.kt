@@ -22,6 +22,9 @@ private const val ARCHIVED = "'ARCHIVED'"
 private const val HIDDEN = "'HIDDEN'"
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $ID = :$ID")
+    fun byId(@Param(ID) manuscriptId: Int)
+
     @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED")
     fun allPublishedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
