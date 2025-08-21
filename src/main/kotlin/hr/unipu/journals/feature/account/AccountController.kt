@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/account")
-class AccountController(private val repository: AccountRepository) {
-
-    @PostMapping("/save")
-    fun save(
+class AccountController(
+    private val repository: AccountRepository,
+    private val passwordEncoder: PasswordEncoder
+) {
+    @PostMapping("/insert")
+    fun insert(
         @ModelAttribute fullName: String,
         @ModelAttribute title: String,
         @ModelAttribute email: String,
