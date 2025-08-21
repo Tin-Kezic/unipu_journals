@@ -67,10 +67,11 @@ class SecurityConfig {
             }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
-                invalidSessionUrl = "/login.html?invalidSession"
+                invalidSessionUrl = "/" // comment out in production, disabled security for development
+                //invalidSessionUrl = "/login.html?invalidSession"
             }
             authorizeHttpRequests {
-                authorize("h2-console/**", permitAll) // comment out in production
+                authorize(anyRequest, permitAll) // comment out in production, disabled security for development
                 authorize("/root", hasRole(ROOT))
                 authorize("/publication/{publicationId}/configure-eic-on-publication", hasRole(ADMIN))
                 listOf(
