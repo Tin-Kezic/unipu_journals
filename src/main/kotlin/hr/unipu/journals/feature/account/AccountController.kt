@@ -32,14 +32,21 @@ class AccountController(
         @ModelAttribute address: String,
         @ModelAttribute zipcode: String,
     ): ResponseEntity<String> {
-        return try {
-            repository.save(processAccount(account))
-            ResponseEntity.ok().body("account ${account.name} ${account.surname} successfully saved")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. All fields must be non-null. Provided: $account")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
-        }
+        if (password != passwordConfirmation) return ResponseEntity.badRequest().body("password_mismatch")
+        if (repository.emailExists(email)) return ResponseEntity.badRequest().body("email_taken")
+        repository.insert(
+            fullName = Jsoup.clean(fullName, Safelist.none()),
+            title = Jsoup.clean(title, Safelist.none()),
+            email = Jsoup.clean(email, Safelist.none()),
+            password = passwordEncoder.encode(password),
+            affiliation = Jsoup.clean(affiliation, Safelist.none()),
+            jobType = Jsoup.clean(jobType, Safelist.none()),
+            country = Jsoup.clean(country, Safelist.none()),
+            city = Jsoup.clean(city, Safelist.none()),
+            address = Jsoup.clean(address, Safelist.none()),
+            zipCode = Jsoup.clean(zipcode, Safelist.none())
+        )
+        return ResponseEntity.ok().body("account successfully registered")
     }
     @PostMapping("/delete/{id}")
     fun delete(@PathVariable id: Int) {
