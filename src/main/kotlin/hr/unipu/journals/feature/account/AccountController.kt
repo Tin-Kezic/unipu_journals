@@ -44,7 +44,7 @@ class AccountController(
     @PostMapping("/delete/{id}")
     fun delete(@PathVariable id: Int) {
         try {
-            repository.deleteById(id)
+            //repository.deleteById(id)
             ResponseEntity.ok().body("account deleted successfully")
         } catch (_: IllegalArgumentException) {
             ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
