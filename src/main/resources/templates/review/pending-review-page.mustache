@@ -18,14 +18,14 @@
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
-    <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        {{#publications-sidebar}}
-            <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
-                <label class="sidebar-button">
-                    <span class="checkbox">{{title}}</span>
-                </label>
-            </a>
-        {{/publications-sidebar}}
+    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        <label class="sidebar-button">
+            <span class="checkbox">Archaeoacoustics</span>
+        </label>
+        <label class="sidebar-button">
+
+            <span class="checkbox">Acoustic Ecology</span>
+        </label>
     </aside>
 
     <section class="main-content" style="
@@ -39,81 +39,79 @@
         overflow: hidden;
         margin-top: -2.7rem;
     ">
-        <section>
-            <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
-            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-                <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
-                <div class="authors" style="display: flex; flex-wrap: wrap;">
-                    <button>Rashmi Kariganuru Bheemarao1</button>
-                    <button>Hassan Sadashiva Guruprasad1</button>
-                    <button>Shambhavi Bangalore Ravi2</button>
-                </div>
+        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
-                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-                <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                    <button class="m3-button purple-button" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0; box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
-                </footer>
-            </article>
+            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                <button>Rashmi Kariganuru Bheemarao1</button>
+                <button>Hassan Sadashiva Guruprasad1</button>
+                <button>Shambhavi Bangalore Ravi2</button>
+            </div>
 
-            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-                <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
+            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+            <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
+                <button class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
+            </footer>
+        </article>
 
-                <div class="authors" style="display: flex; flex-wrap: wrap;">
-                    <button>Rashmi Kariganuru Bheemarao1</button>
-                    <button>Hassan Sadashiva Guruprasad1</button>
-                    <button>Shambhavi Bangalore Ravi2</button>
-                </div>
+        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
-                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-                <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                    <button class="m3-button purple-button" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0; box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
-                </footer>
-            </article>
-        </section>
+            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                <button>Rashmi Kariganuru Bheemarao1</button>
+                <button>Hassan Sadashiva Guruprasad1</button>
+                <button>Shambhavi Bangalore Ravi2</button>
+            </div>
+
+            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
+            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+            <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                <button class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
+            </footer>
+        </article>
 
         <br>
 
-        <section>
-            <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
+        <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
-            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-                <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
-                <div class="authors" style="display: flex; flex-wrap: wrap;">
-                    <button>Rashmi Kariganuru Bheemarao1</button>
-                    <button>Hassan Sadashiva Guruprasad1</button>
-                    <button>Shambhavi Bangalore Ravi2</button>
-                </div>
+            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                <button>Rashmi Kariganuru Bheemarao1</button>
+                <button>Hassan Sadashiva Guruprasad1</button>
+                <button>Shambhavi Bangalore Ravi2</button>
+            </div>
 
-                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-                <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                    <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
-                    <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
-                </footer>
-            </article>
+            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
+            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+            <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
+                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
+            </footer>
+        </article>
 
-            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-                <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
-                <div class="authors" style="display: flex; flex-wrap: wrap;">
-                    <button>Rashmi Kariganuru Bheemarao1</button>
-                    <button>Hassan Sadashiva Guruprasad1</button>
-                    <button>Shambhavi Bangalore Ravi2</button>
-                </div>
+            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                <button>Rashmi Kariganuru Bheemarao1</button>
+                <button>Hassan Sadashiva Guruprasad1</button>
+                <button>Shambhavi Bangalore Ravi2</button>
+            </div>
 
-                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-                <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                    <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
-                    <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
-                </footer>
-            </article>
-        </section>
+            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
+            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+            <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; ">
+                <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
+                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
+            </footer>
+        </article>
+
     </section>
 </div>
 </body>
@@ -123,7 +121,6 @@
         display: flex;
         gap: 0.5rem;
         margin-left: 1rem;
-        margin-top: 0.5rem;
     }
 
     .yellow-box-buttons button {
@@ -176,7 +173,6 @@
             flex-direction: column !important;
             gap: 0.3rem;
             margin-left: 0 !important;
-            margin-top: 0.3rem;
         }
 
         .yellow-box-buttons button {
