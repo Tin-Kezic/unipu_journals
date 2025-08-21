@@ -13,19 +13,17 @@
 
 <section>
     <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1.5rem; user-select: none;">
-        Publishings to review
+        Publications to review
     </h1>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        <label class="sidebar-button">
-            <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-
-            <span class="checkbox">Acoustic Ecology</span>
-        </label>
+        {{#publications-sidebar}}
+            <label class="sidebar-button">
+                <span class="checkbox">{{title}}</span>
+            </label>
+        {{/publications-sidebar}}
     </aside>
 
     <section class="main-content" style="
