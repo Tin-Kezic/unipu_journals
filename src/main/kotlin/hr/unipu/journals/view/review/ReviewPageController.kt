@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 @Controller
 @RequestMapping("/review")
 class ReviewPageController() {
-    @GetMapping("/{manuscriptId}")
+    @GetMapping("/{manuscriptReviewId}")
     fun page() = "review/review-page"
 }
