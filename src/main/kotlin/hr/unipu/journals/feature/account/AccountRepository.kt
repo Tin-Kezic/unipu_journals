@@ -33,7 +33,7 @@ interface AccountRepository: Repository<Account, Int> {
         VALUES
         (:$FULL_NAME, :$TITLE, :$EMAIL, :$PASSWORD, :$AFFILIATION, :$JOB_TYPE, :$COUNTRY, :$CITY, :$ADDRESS, :$ZIP_CODE)
     """)
-    fun save(
+    fun insert(
         @Param(FULL_NAME) fullName: String,
         @Param(TITLE) title: String,
         @Param(EMAIL) email: String,
