@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/review")
 class PendingReviewPageController() {
-    @GetMapping("/pending")
+    @GetMapping("/review")
     fun page() = "review/pending-review-page"
 }
