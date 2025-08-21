@@ -2,8 +2,6 @@ package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ROOT
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -18,7 +16,6 @@ class SectionPageController(
     private val sectionRepository: SectionRepository,
 ) {
     @GetMapping("/{publicationId}")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.allPublished()
         model["sections"] = sectionRepository.allPublishedByPublicationId(publicationId)
