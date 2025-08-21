@@ -87,6 +87,7 @@ class SecurityConfig {
                 ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
                 listOf(
                     "/review",
+                    "/review/{manuscriptReviewId}",
                     "/pending-review"
                 ).forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
                 listOf(
