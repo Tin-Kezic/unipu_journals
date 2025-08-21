@@ -1,13 +1,13 @@
-INSERT INTO account (full_name, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
+INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
 VALUES (
-    'root',
+    'root', '-',
     'root@unipu.hr',
     '$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC',
     '-', '-', '-', '-', '-', '-', false
 );
-INSERT INTO account (full_name, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
+INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin)
 VALUES (
-    'admin',
+    'admin', '-',
     'admin@unipu.hr',
     '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC',
     '-', '-', '-', '-', '-', '-', false
