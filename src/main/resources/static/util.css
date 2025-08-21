@@ -5,6 +5,7 @@
     --yellow: #ffe08a;
     --pale-yellow: #fff8f1;
     --green: #7aed80;
+    --dark-blue: #152e60;
     --blue: #407cff;
     --light-blue: #b0c6ff;
     --dark-purple: #605c91;
@@ -13,6 +14,7 @@
     --very-light-gray: #e8e1d9;
     --light-gray: #7e7667;
     --gray: #49454f;
+    --checkbox-gray: #c5c6d0;
 }
 * {
     margin: 0;
@@ -80,7 +82,7 @@ nav ul li a:active {
 .search-bar {
     padding: 1vh 1vw;
     padding-right: 2.25rem;
-    margin: 0 auto;
+    margin: 0 1vw;
     border: none;
     border-radius: 1rem;
     background-color: white;
@@ -94,7 +96,7 @@ nav ul li a:active {
 .fa-solid.fa-magnifying-glass {
     font-size: 1rem;
     cursor: pointer;
-    margin: 0 1.5vw;
+    margin: 0 auto;
     color: var(--gray);
     position: absolute;
     right: 1.5rem;
@@ -178,6 +180,10 @@ nav ul li a:active {
     background-color: var(--orange);
     color: black;
 }
+.orange-button:active {
+    background-color: var(--orange);
+    color: black;
+}
 .pale-yellow-button {
     background-color: var(--pale-yellow);
     color: var(--beige);
@@ -228,8 +234,8 @@ nav ul li a:active {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 15rem;
-    height: 3.5rem;
+    width: 20rem;
+    height: 2.8rem;
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
@@ -280,7 +286,30 @@ nav ul li a:active {
     color: white;
 }
 .blue-checkbox {
-    accent-color: var(--light-blue);
+    appearance: none;
+    -webkit-appearance: none; /* Za Safari */
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--checkbox-gray);
+    border-radius: 0.1rem;
+    cursor: pointer;
+    position: relative;
+    margin: 0.1rem;
+}
+.blue-checkbox:checked {
+    background-color: var(--light-blue);
+    border-color: var(--light-blue);
+}
+.blue-checkbox:checked::after {
+    content: "";
+    position: absolute;
+    width: 0.2rem;
+    height: 0.5rem;
+    border: solid var(--dark-blue);
+    border-width: 0 0.15rem 0.15rem 0;
+    transform: rotate(45deg);
+    left: 0.23rem;
+    bottom: 0.12rem;
 }
 .yellow-box {
     width: 14rem;
@@ -357,20 +386,26 @@ nav ul li a:active {
     visibility: visible;
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
-    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 /* Animations to fade the snackbar in and out */
-@keyframes fade-in {
+@keyframes fadein {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
-@keyframes fade-out {
+@keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
 .sidebar-button {
     user-select: none;
+}
+.sidebar-button input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 .sidebar-button .checkbox {
     display: flex;
@@ -393,7 +428,7 @@ nav ul li a:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
-.sidebar-button + .checkbox {
+.sidebar-button input[type="radio"]:checked + .checkbox {
     background: var(--purple);
     color: white;
 }
@@ -422,4 +457,31 @@ nav ul li a:active {
     content: "and";
     font-weight: 100;
     margin: 0 0.25rem;
+}
+.pdf-container {
+    border: 1px solid black;
+    padding: 0.1rem;
+    margin-top: 0.5rem;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    gap: 0.5rem;
+    color: var(--blue);
+}
+.pdf-remove-button {
+    background-color: inherit;
+    color: var(--red);
+    border: 2px solid var(--red);
+    border-radius: 0.2rem;
+    cursor: pointer;
+    user-select: none;
+    height: 1rem;
+    width: 1rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+    margin-top: 0.1rem;
+    margin-right: 0.1rem;
 }

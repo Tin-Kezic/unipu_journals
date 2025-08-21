@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Review Page</title>
+
+    <link rel="stylesheet" href="/util.css" />
+
+</head>
+
+
+<body>
+{{>util/header}}
+
+<div class="content">
+    <aside>
+        <section class="yellow-box review-reports" style="padding-block: 2.4rem; margin-bottom: 0.9rem;">
+            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 1</button>
+            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 2</button>
+            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 3</button>
+        </section>
+
+        <section class="yellow-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem;">
+                <p>Review report 1</p>
+                <p>21.7.2025.</p>
+            </div>
+            <p>state: Minor</p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>Reviewer's comment</p>
+                <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
+                    <a href="#">AnnouncementFlyer.pdf</a>
+                </div>
+            </div>
+
+            <section class="yellow-box" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
+                Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+                In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+                In practical terms, acoustics... more
+            </section>
+
+            <br>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p>Author's reply</p>
+                <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
+                    <a href="#">AnnouncementFlyer.pdf</a>
+                </div>
+            </div>
+
+            <section class="yellow-box " style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
+                Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+                In practical terms, acoustics is essential in a wide range of fields... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+                In practical terms, acoustics is essential in a wide range o fields... more
+            </section>
+
+            <button class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
+        </section>
+    </aside>
+
+    <main>
+        <form>
+            <section class="yellow-box article-box" style="padding: 0.8rem; min-height: 9.5rem; max-height: 9.5rem;">
+                <article>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                        <div>
+                            <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                            <p>Rashmi Kariganuru Bheemarao1, Hassan Sadashiva Guruprasad1 and Shambhavi Bangalore Ravi2</p>
+                            <p>Submitted: 9 June 2025       ID: <publishing_key>-<section_key>-<increasing_6digit_id></p>
+                            <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                        </div>
+                        <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
+                    </div>
+                </article>
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 2rem; margin-top: -2rem;">Manage</button>
+                </div>
+            </section>
+
+            <fieldset style="border: none;">
+                <section class="Recommendations">
+                    <p><b>Recommendations for Authors</b> (will be shown to authors)</p>
+                    <p class="recommendations-description">Answers to the following questions do not replace any specific comments made for authors. Please give further details in the "comments for authors” box below.</p>
+
+                    <br>
+
+                    <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
+                        <div class="yellow-box rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100;">
+                            <table class="rating-table">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="padding-left: 0.2rem;">1</th>
+                                    <th style="padding-left: 0.3rem;">2</th>
+                                    <th style="padding-left: 0.3rem;">3</th>
+                                    <th style="padding-left: 0.3rem;">4</th>
+                                    <th style="padding-left: 0.3rem;">5</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Novelty</td>
+                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Significance</td>
+                                    <td><input type="radio" class="blue-checkbox" name="significance" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="significance" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="significance" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="significance" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="significance" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Technical Quality</td>
+                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Clarity</td>
+                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Methodology</td>
+                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Relevance to the Publication</td>
+                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Language Quality</td>
+                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Overall Mark</td>
+                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="1"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="2"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="3"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="4"></td>
+                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="5"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="yellow-box" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 42rem; padding-inline: 1rem; font-weight: 100;">
+                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; margin-top: 0.5rem; gap: 1rem;">
+                                <p style="flex: 1;">Does the introduction provide sufficient background and include all relevant references?</p>
+                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                                    <input type="radio" id="intro-yes"   name="intro" value="yes">
+                                    <label for="intro-yes" class="checkbox">Yes</label>
+
+                                    <input type="radio" id="intro-impr" name="intro" value="improved">
+                                    <label for="intro-impr" class="checkbox">Can be improved</label>
+
+                                    <input type="radio" id="intro-must" name="intro" value="must">
+                                    <label for="intro-must" class="checkbox">Must be improved</label>
+                                </div>
+                            </div>
+
+                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
+                                <p style="flex: 1;">Is the research design appropriate?</p>
+                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                                    <input type="radio" id="design-yes"   name="design" value="yes">
+                                    <label for="design-yes" class="checkbox">Yes</label>
+
+                                    <input type="radio" id="design-impr" name="design" value="improved">
+                                    <label for="design-impr" class="checkbox">Can be improved</label>
+
+                                    <input type="radio" id="design-must" name="design" value="must">
+                                    <label for="design-must" class="checkbox">Must be improved</label>
+                                </div>
+                            </div>
+
+                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
+                                <p style="flex: 1;">Are the methods adequately described?</p>
+                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                                    <input type="radio" id="methods-yes"   name="methods" value="yes">
+                                    <label for="methods-yes" class="checkbox">Yes</label>
+
+                                    <input type="radio" id="methods-impr" name="methods" value="improved">
+                                    <label for="methods-impr" class="checkbox">Can be improved</label>
+
+                                    <input type="radio" id="methods-must" name="methods" value="must">
+                                    <label for="methods-must" class="checkbox">Must be improved</label>
+                                </div>
+                            </div>
+
+                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
+                                <p style="flex: 1;">Are the results clearly presented?</p>
+                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                                    <input type="radio" id="results-yes"   name="results" value="yes">
+                                    <label for="results-yes" class="checkbox">Yes</label>
+
+                                    <input type="radio" id="results-impr" name="results" value="improved">
+                                    <label for="results-impr" class="checkbox">Can be improved</label>
+
+                                    <input type="radio" id="results-must" name="results" value="must">
+                                    <label for="results-must" class="checkbox">Must be improved</label>
+                                </div>
+                            </div>
+
+                            <div class="check-question" style="display: flex; align-items: center; gap: 1rem;">
+                                <p style="flex: 1;">Are the conclusions supported by the results?</p>
+                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                                    <input type="radio" id="conclusions-yes"   name="conclusions" value="yes">
+                                    <label for="conclusions-yes" class="checkbox">Yes</label>
+
+                                    <input type="radio" id="conclusions-impr" name="conclusions" value="improved">
+                                    <label for="conclusions-impr" class="checkbox">Can be improved</label>
+
+                                    <input type="radio" id="conclusions-must" name="conclusions" value="must">
+                                    <label for="conclusions-must" class="checkbox">Must be improved</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.8rem;">
+                        <p><b>Recommendation</b></p>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button type="button" class="m3-button orange-button">Accept</button>
+                            <button type="button" class="m3-button orange-button">Minor</button>
+                            <button type="button" class="m3-button orange-button">Major</button>
+                            <button type="button" class="m3-button orange-button">Reject</button>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <section class="comments-section">
+                        <p style="margin-top: 0.5rem; font-weight: bold;">Comments and suggestions for author</p>
+
+                        <div class="text-field" style="max-width: none;">
+                            <label for="comment">Reviewers comment</label>
+                            <textarea id="comment" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 5rem; align-items: flex-start; margin-top: -0.5rem;">
+                            <div style="flex: 1;">
+                                <div class="yellow-box" style="padding: 0.7rem 1.5rem; font-weight: 100;">
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <span>Do you have any conflict of interest regarding this manuscript?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="conflict_interest" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="conflict_interest" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <span>Did you detect plagiarism?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="plagiarism" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="plagiarism" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <span>Did you detect inappropriate use of LLM tools?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="llm_used" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="llm_used" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <span>Did you detect inappropriate self-citations by the authors?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="self_citation" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="self_citation" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <span>Are the references appropriate and relevant?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="references" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="references" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span>Do you have any other ethical concerns?</span>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="ethical_concerns" value="yes">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                                            </label>
+                                            <label class="pale-yellow-checkbox-button">
+                                                <input type="radio" name="ethical_concerns" value="no">
+                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                                <button type="submit" class="m3-button outline-button" style="color: var(--purple); border-color: var(--purple); padding: 1rem 8rem;">Upload file</button>
+
+                                <div class="pdf-container" style="padding-inline: 0.2rem; gap: 10.8rem;">
+                                    <a href="#">PDF-document.pdf</a>
+                                    <button class="pdf-remove-button">-</button>
+                                </div>
+
+                                <button class="m3-button purple-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
+                                <button class="m3-button yellow-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem;">Submit Review</button>
+                            </div>
+                        </div>
+                    </section>
+            </fieldset>
+        </form>
+    </main>
+</body>
+</div>
+
+<style>
+    .content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    aside {
+        flex: 0 0 300px;
+    }
+    main {
+        flex: 1;
+        padding-inline: 2rem;
+    }
+    .yellow-box {
+        width: auto !important;
+        height: auto !important;
+        margin-bottom: 1rem;
+    }
+    aside .yellow-box {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        font-weight: 100;
+    }
+    .yellow-box:hover {
+        background-color: var(--pale-yellow);
+    }
+    .rating-table td:first-child { /* td is table data */
+        text-align: right;
+        padding-right: 1rem;
+    }
+    .rating-table td, .rating-table th {
+        padding: 0.1rem 0.4rem;
+    }
+    .rating-table th {
+        padding-left: 0.8rem;
+        text-align: center;
+    }
+    header {
+        padding: 0.5rem 1rem;
+    }
+    .pale-yellow-checkbox-button {
+        width: fit-content;
+    }
+    .pale-yellow-checkbox-button .checkbox {
+        width: fit-content;
+        white-space: nowrap;
+        padding: 0.2rem 0.5rem;
+    }
+    .download-button:hover {
+        background-color: var(--very-light-gray);
+        color: var(--dark-purple) !important;
+    }
+    .orange-button:hover {
+        background-color: var(--orange);
+    }
+    .orange-button:active {
+        background-color: var(--orange);
+    }
+    .orange-button:nth-child(1):hover,
+    .orange-button:nth-child(1):active {
+        background-color: var(--green) !important;
+        color: black;
+    }
+    .orange-button:nth-child(2):hover,
+    .orange-button:nth-child(2):active {
+        background-color: var(--yellow) !important;
+        color: black !important;
+    }
+    .orange-button:nth-child(4):hover,
+    .orange-button:nth-child(4):active {
+        background-color: var(--light-red) !important;
+        color: black;
+    }
+
+    @media screen and (max-width: 1300px) {
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
+        .yellow-box .article {
+            width: 96vw !important;
+            max-width: 100vw !important;
+        }
+        aside {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        main {
+            margin-left: -2rem;
+        }
+        .recommendations-description {
+            width: 96vw !important;
+            max-width: 100vw !important;
+        }
+        .recommendations-tables {
+            flex-direction: column !important;
+            gap: 1rem !important;
+        }
+        .rating-table-container {
+            width: 100% !important;
+            min-width: auto !important;
+            max-width: 27rem !important;
+        }
+        .check-question {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.5rem !important;
+        }
+        .check-question p {
+            white-space: normal !important;
+            max-width: 100% !important;
+        }
+        .pale-yellow-checkbox-button {
+            align-self: flex-start !important;
+        }
+        .recommendations-tables .yellow-box:last-child {
+            width: 100% !important;
+            max-width: 87vw !important;
+            min-width: auto !important;
+        }
+        .orange-button {
+            padding-inline: 1.5rem !important;
+            font-size: clamp(0.7rem, 2vw, 1rem) !important;
+            white-space: nowrap;
+            min-width: 0;
+        }
+        .comments-section > div:last-child {
+            gap: 1rem !important;
+        }
+        .yellow-box .article-box {
+            order: 1;
+            width: 96vw !important;
+            max-width: 100vw !important;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+</html>
