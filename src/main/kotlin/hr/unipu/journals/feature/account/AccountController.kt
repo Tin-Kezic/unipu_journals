@@ -39,7 +39,6 @@ class AccountController(private val repository: AccountRepository) {
             ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
         }
     }
-    @ResponseBody
     @PostMapping("/deleteById/{id}")
     fun deleteById(@PathVariable id: Int) {
         try {
