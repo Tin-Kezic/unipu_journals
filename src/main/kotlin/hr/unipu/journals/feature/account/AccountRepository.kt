@@ -27,6 +27,7 @@ interface AccountRepository: Repository<Account, Int> {
     @Query("SELECT * FROM $ACCOUNT WHERE $EMAIL = :$EMAIL")
     fun byEmail(@Param(EMAIL) email: String): Account?
 
+    @Modifying
     @Query("""
         INSERT INTO $ACCOUNT
         ($FULL_NAME, $TITLE, $EMAIL, $PASSWORD, $AFFILIATION, $JOB_TYPE, $COUNTRY, $CITY, $ADDRESS, $ZIP_CODE)
