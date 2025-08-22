@@ -19,7 +19,6 @@ class AccountController(
 ) {
     @PostMapping("/insert")
     fun insert(@ModelAttribute request: RegisterRequestDTO): ResponseEntity<String> {
-
         if (request.password != request.passwordConfirmation) return ResponseEntity.badRequest().body("password mismatch")
         if (repository.emailExists(request.email)) return ResponseEntity.badRequest().body("email taken")
         repository.insert(
