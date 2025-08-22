@@ -33,7 +33,7 @@ private const val AUTHOR = "AUTHOR"
 @EnableMethodSecurity
 class SecurityConfig {
     @Bean
-    fun userDetailsService(accountRepository: AccountRepository): UserDetailsService {
+    fun userDetailsService(accountRepository: AccountRepository, adminRepository: AdminRepository): UserDetailsService {
         return UserDetailsService { email ->
             val account = accountRepository.byEmail(email) ?: throw UsernameNotFoundException("User with email $email not found")
             if (account.email == "root@unipu.hr") {
