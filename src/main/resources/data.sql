@@ -12,7 +12,7 @@ VALUES (
     '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC',
     '-', '-', '-', '-', '-', '-'
 );
-INSERT INTO admin (email) VALUES ('admin@unipu.hr')
+INSERT INTO admin (email) VALUES ('admin@unipu.hr');
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code) VALUES
 ('Alice', 'Dr.', 'alice.smith@example.com', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University A', 'Professor', 'USA', 'New York', '123 Main St', '10001'),
 ('Bob', 'Prof.', 'bob.johnson@example.com', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University B', 'Editor', 'USA', 'Los Angeles', '456 Elm St', '90001'),
