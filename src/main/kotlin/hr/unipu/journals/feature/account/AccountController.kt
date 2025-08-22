@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.account
-
+/*
+import hr.unipu.journals.view.register.RegisterRequestDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
@@ -43,3 +44,4 @@ class AccountController(
         } else ResponseEntity.badRequest().body("ID does not exist")
     }
 }
+ */
