@@ -30,6 +30,11 @@ CREATE TABLE account (
     address TEXT NOT NULL,
     zip_code TEXT NOT NULL
 );
+CREATE TABLE ADMIN (
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    is_admin BOOLEAN DEFAULT FALSE
+)
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
