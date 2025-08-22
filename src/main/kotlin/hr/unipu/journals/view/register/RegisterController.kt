@@ -15,8 +15,35 @@ class RegisterController(
 ) {
     @PostMapping("/register")
     fun insert(@ModelAttribute request: RegisterRequestDTO): String {
-        if (request.password != request.passwordConfirmation) return "redirect:/register.html?password-mismatch"
-        if (accountRepository.emailExists(request.email)) return "redirect:/register.html?email-taken"
+        var errors = ""
+        if(accountRepository.emailExists(request.email)) errors += "&email-taken"
+        if(request.password != request.passwordConfirmation) errors += "&password-mismatch"
+        if(errors.isNotEmpty())
+            return "redirect:/register.html?$errors" +
+                    "&fullName=${request.fullName}" +
+                    "&title=${request.title}" +
+                    "&email=${request.email}" +
+                    "&affiliation=${request.affiliation}" +
+                    "&jobType=${request.jobType}" +
+                    "&country=${request.country}" +
+                    "&city=${request.city}" +
+                    "&address=${request.address}" +
+                    "&zipCode=${request.zipCode}"
+            /*
+        if (request.password != request.passwordConfirmation)
+
+        if (accountRepository.emailExists(request.email))
+            return "redirect:/register.html?email-taken"
+                    "&fullName=${request.fullName}" +
+                    "&title=${request.title}" +
+                    "&email=${request.email}" +
+                    "&affiliation=${request.affiliation}" +
+                    "&jobType=${request.jobType}" +
+                    "&country=${request.country}" +
+                    "&city=${request.city}" +
+                    "&address=${request.address}" +
+                    "&zipCode=${request.zipCode}"
+             */
         accountRepository.insert(
             fullName = Jsoup.clean(request.fullName, Safelist.none()),
             title = Jsoup.clean(request.title, Safelist.none()),

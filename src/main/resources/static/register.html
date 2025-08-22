@@ -72,13 +72,24 @@
 </main>
 </body>
 <script>
-    const params = new URLSearchParams(window.location.search);
-    if(params.has('email-taken')) {
-        document.getElementById('email-taken').style.display = 'inline-block';
-    }
-    if(params.has('password-mismatch')) {
+    const param = new URLSearchParams(window.location.search);
+    if(param.has('password-mismatch')) {
         document.getElementById('password-mismatch').style.display = 'inline-block';
+        document.getElementById('password').focus()
     }
+    if(param.has('email-taken')) {
+        document.getElementById('email-taken').style.display = 'inline-block';
+        document.getElementById('email').focus()
+    }
+    document.getElementById('fullName').value = param.get('fullName') || ''
+    document.getElementById('title').value = param.get('title') || ''
+    document.getElementById('email').value = param.get('email') || ''
+    document.getElementById('affiliation').value = param.get('affiliation') || ''
+    document.getElementById('jobType').value = param.get('jobType') || ''
+    document.getElementById('country').value = param.get('country') || ''
+    document.getElementById('city').value = param.get('city') || ''
+    document.getElementById('address').value = param.get('address') || ''
+    document.getElementById('zipCode').value = param.get('zipCode') || ''
 </script>
 <style>
     .text-field input {
