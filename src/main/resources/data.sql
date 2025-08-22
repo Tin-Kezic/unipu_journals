@@ -10,7 +10,7 @@ VALUES (
     'admin', '-',
     'admin@unipu.hr',
     '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC',
-    '-', '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-', '-'
 );
 INSERT INTO admin (email) VALUES ('admin@unipu.hr')
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code) VALUES
