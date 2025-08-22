@@ -33,7 +33,7 @@ CREATE TABLE account (
 CREATE TABLE admin(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
-    FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION,
+    FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION
 )
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
