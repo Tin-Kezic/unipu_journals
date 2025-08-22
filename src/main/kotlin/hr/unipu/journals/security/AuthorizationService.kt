@@ -36,7 +36,7 @@ class AuthorizationService(
     private val account get() = accountRepository.byEmail(user().username) ?: throw IllegalStateException("email ${user().username} does not exist")
 
     fun isRoot(): Boolean = user().username == "root@unipu.hr"
-    fun isAdmin(): Boolean = account.isAdmin
+    fun isAdmin(): Boolean = adminRepository.isAdmin(account.email)
     fun isEicOnPublication(publicationId: Int) = eicOnPublicationRepository.isEicOnPublication(account.id, publicationId)
     fun isEicOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isEicOnManuscript(account.id, manuscriptId)
     fun isSectionEditorOnSection(sectionId: Int) = sectionEditorOnSectionRepository.isSectionEditorOnSection(account.id, sectionId)
