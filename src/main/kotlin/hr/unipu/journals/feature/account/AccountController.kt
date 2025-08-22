@@ -5,6 +5,7 @@ import org.jsoup.safety.Safelist
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -36,15 +37,11 @@ class AccountController(
         )
         return ResponseEntity.ok().body("account successfully registered")
     }
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        try {
-            //repository.deleteById(id)
+        return if(repository.idExists(id)) {
+            repository.delete(id)
             ResponseEntity.ok().body("account deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
+        } else ResponseEntity.badRequest().body("ID does not exist")
     }
 }
