@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/publication/")
-class SectionController(private val repository: SectionRepository) {
+class SectionController(private val sectionRepository: SectionRepository) {
 
     @PostMapping("{publicationId}/insert")
     fun insert(
@@ -22,7 +22,7 @@ class SectionController(private val repository: SectionRepository) {
         @ModelAttribute description: String
     ): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
-            repository.insert(
+            sectionRepository.insert(
                 title = Jsoup.clean(title, Safelist.none()),
                 description = Jsoup.clean(description, Safelist.relaxed()),
                 publicationId = publicationId,
@@ -36,8 +36,8 @@ class SectionController(private val repository: SectionRepository) {
         @ModelAttribute title: String,
         @ModelAttribute description: String
     ): ResponseEntity<String> {
-        return if (repository.existsById(sectionId)) {
-            repository.updateTitleAndDescription(sectionId, title, description)
+        return if (sectionRepository.existsById(sectionId)) {
+            sectionRepository.updateTitleAndDescription(sectionId, title, description)
             ResponseEntity.ok().body("title successfully updated")
         } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
     }
@@ -46,8 +46,8 @@ class SectionController(private val repository: SectionRepository) {
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {
-        return if (repository.existsById(sectionId)) {
-            repository.updateHidden(sectionId, isHidden)
+        return if (sectionRepository.existsById(sectionId)) {
+            sectionRepository.updateHidden(sectionId, isHidden)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
