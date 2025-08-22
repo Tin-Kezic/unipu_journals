@@ -8,6 +8,6 @@ private const val ADMIN = "admin"
 private const val ID = "id"
 private const val EMAIL = "email"
 interface AdminRepository: Repository<Admin, Int> {
-    @Query("SELECT EXISTS (SELECT 1 FROM $ADMIN WHERE $EMAIL = :$EMAIL")
+    @Query("SELECT EXISTS (SELECT 1 FROM $ADMIN WHERE $EMAIL = :$EMAIL)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 }
