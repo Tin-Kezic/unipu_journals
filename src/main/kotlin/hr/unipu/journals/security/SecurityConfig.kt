@@ -40,7 +40,7 @@ class SecurityConfig {
                 User(account.email, account.password, listOf(SimpleGrantedAuthority(ROLE_ROOT)))
             } else {
                 val authorities = mutableListOf<GrantedAuthority>()
-                if (account.isAdmin) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
+                if (adminRepository.isAdmin(account.email)) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
                 User(account.email, account.password, authorities)
             }
         }
