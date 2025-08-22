@@ -17,7 +17,6 @@ private const val COUNTRY = "country"
 private const val CITY = "city"
 private const val ADDRESS = "address"
 private const val ZIP_CODE = "zip_code"
-private const val IS_ADMIN = "is_admin"
 
 interface AccountRepository: Repository<Account, Int> {
 
