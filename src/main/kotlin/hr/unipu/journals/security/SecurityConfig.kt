@@ -1,6 +1,7 @@
 package hr.unipu.journals.security
 
 import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.admin.AdminRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
