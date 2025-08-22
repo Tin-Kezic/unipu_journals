@@ -30,7 +30,7 @@ CREATE TABLE account (
     address TEXT NOT NULL,
     zip_code TEXT NOT NULL
 );
-CREATE TABLE ADMIN (
+CREATE TABLE admin(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     is_admin BOOLEAN DEFAULT FALSE
