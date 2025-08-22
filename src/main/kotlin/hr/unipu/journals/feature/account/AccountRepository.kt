@@ -21,7 +21,7 @@ private const val ZIP_CODE = "zip_code"
 interface AccountRepository: Repository<Account, Int> {
 
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $ID = :$ID)")
-    fun idExists(@Param(ID) id: String): Boolean
+    fun idExists(@Param(ID) id: Int): Boolean
 
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL)")
     fun emailExists(@Param(EMAIL) email: String): Boolean
