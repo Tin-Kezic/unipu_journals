@@ -33,7 +33,8 @@ CREATE TABLE account (
 CREATE TABLE admin(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
-    is_admin BOOLEAN DEFAULT FALSE
+    is_admin BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION,
 )
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
