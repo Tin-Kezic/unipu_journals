@@ -37,7 +37,7 @@ class AccountController(
         return ResponseEntity.ok().body("account successfully registered")
     }
     @PostMapping("/delete/{id}")
-    fun delete(@PathVariable id: Int) {
+    fun delete(@PathVariable id: Int): ResponseEntity<String> {
         try {
             //repository.deleteById(id)
             ResponseEntity.ok().body("account deleted successfully")
