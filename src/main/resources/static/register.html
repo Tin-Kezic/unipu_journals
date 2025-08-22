@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link href="/util.css" rel="stylesheet"/>
-    <script src="/htmx.min.js"></script>
 </head>
 
 <body style="align-items: center;
@@ -18,7 +17,7 @@
 
 <main style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
     <section>
-        <form style="width: 100%;" method="post" action="/api/account/insert">
+        <form style="width: 100%;" method="post" action="/register">
             <div class="text-field">
                 <label for="fullName">full name</label>
                 <input id="fullName" name="fullName" type="text" required autofocus>
@@ -26,20 +25,20 @@
             <div class="text-field">
                 <label for="title">title</label>
                 <input id="title" name="title" type="text" required>
+                <span id="email-taken" class="error-msg" style="float:right; text-decoration: underline;">email already in use</span>
             </div>
             <div class="text-field">
                 <label for="email">email</label>
                 <input id="email" name="email" type="email" required>
-                <span id="email-taken" class="error-msg" style="float:right; text-decoration: underline;">email already in use</span>
             </div>
             <div class="text-field">
                 <label for="password">password</label>
                 <input id="password" name="password" type="password" required>
+                <span id="password-mismatch" class="error-msg" style="float:right; text-decoration: underline;">password doesn't match</span>
             </div>
             <div class="text-field">
                 <label for="passwordConfirmation">repeat password</label>
                 <input id="passwordConfirmation" name="passwordConfirmation" type="password" required>
-                <span id="password-mismatch" class="error-msg" style="float:right; text-decoration: underline;">password doesn't match</span>
             </div>
             <div class="text-field">
                 <label for="affiliation">affiliation</label>
@@ -72,7 +71,15 @@
     </section>
 </main>
 </body>
-
+<script>
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('email-taken')) {
+        document.getElementById('email-taken').style.display = 'inline-block';
+    }
+    if(params.has('password-mismatch')) {
+        document.getElementById('password-mismatch').style.display = 'inline-block';
+    }
+</script>
 <style>
     .text-field input {
         background-color: white;
