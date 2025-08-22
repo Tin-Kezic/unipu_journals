@@ -21,6 +21,7 @@ const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "@authorizationService
 @Service
 class AuthorizationService(
     private val accountRepository: AccountRepository,
+    private val adminRepository: AdminRepository,
     private val eicOnPublicationRepository: EicOnPublicationRepository,
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
