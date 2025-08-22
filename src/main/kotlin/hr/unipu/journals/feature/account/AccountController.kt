@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/account")
 class AccountController(
-    private val repository: AccountRepository,
+    private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
     @PostMapping("/insert")
     fun insert(@ModelAttribute request: RegisterRequestDTO): ResponseEntity<String> {
         if (request.password != request.passwordConfirmation) return ResponseEntity.badRequest().body("password mismatch")
-        if (repository.emailExists(request.email)) return ResponseEntity.badRequest().body("email taken")
-        repository.insert(
+        if (accountRepository.emailExists(request.email)) return ResponseEntity.badRequest().body("email taken")
+        accountRepository.insert(
             fullName = Jsoup.clean(request.fullName, Safelist.none()),
             title = Jsoup.clean(request.title, Safelist.none()),
             email = Jsoup.clean(request.email, Safelist.none()),
@@ -37,8 +37,8 @@ class AccountController(
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        return if(repository.idExists(id)) {
-            repository.delete(id)
+        return if(accountRepository.idExists(id)) {
+            accountRepository.delete(id)
             ResponseEntity.ok().body("account deleted successfully")
         } else ResponseEntity.badRequest().body("ID does not exist")
     }
