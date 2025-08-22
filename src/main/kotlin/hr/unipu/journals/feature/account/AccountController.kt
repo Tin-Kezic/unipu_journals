@@ -18,32 +18,21 @@ class AccountController(
     private val passwordEncoder: PasswordEncoder
 ) {
     @PostMapping("/insert")
-    fun insert(
-        @ModelAttribute fullName: String,
-        @ModelAttribute title: String,
-        @ModelAttribute email: String,
-        @ModelAttribute password: String,
-        @ModelAttribute passwordConfirmation: String,
-        @ModelAttribute affiliation: String,
-        @ModelAttribute jobType: String,
-        @ModelAttribute country: String,
-        @ModelAttribute city: String,
-        @ModelAttribute address: String,
-        @ModelAttribute zipcode: String,
-    ): ResponseEntity<String> {
-        if (password != passwordConfirmation) return ResponseEntity.badRequest().body("password_mismatch")
-        if (repository.emailExists(email)) return ResponseEntity.badRequest().body("email_taken")
+    fun insert(@ModelAttribute request: RegisterRequestDTO): ResponseEntity<String> {
+
+        if (request.password != request.passwordConfirmation) return ResponseEntity.badRequest().body("password mismatch")
+        if (repository.emailExists(request.email)) return ResponseEntity.badRequest().body("email taken")
         repository.insert(
-            fullName = Jsoup.clean(fullName, Safelist.none()),
-            title = Jsoup.clean(title, Safelist.none()),
-            email = Jsoup.clean(email, Safelist.none()),
-            password = passwordEncoder.encode(password),
-            affiliation = Jsoup.clean(affiliation, Safelist.none()),
-            jobType = Jsoup.clean(jobType, Safelist.none()),
-            country = Jsoup.clean(country, Safelist.none()),
-            city = Jsoup.clean(city, Safelist.none()),
-            address = Jsoup.clean(address, Safelist.none()),
-            zipCode = Jsoup.clean(zipcode, Safelist.none())
+            fullName = Jsoup.clean(request.fullName, Safelist.none()),
+            title = Jsoup.clean(request.title, Safelist.none()),
+            email = Jsoup.clean(request.email, Safelist.none()),
+            password = passwordEncoder.encode(request.password),
+            affiliation = Jsoup.clean(request.affiliation, Safelist.none()),
+            jobType = Jsoup.clean(request.jobType, Safelist.none()),
+            country = Jsoup.clean(request.country, Safelist.none()),
+            city = Jsoup.clean(request.city, Safelist.none()),
+            address = Jsoup.clean(request.address, Safelist.none()),
+            zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
         return ResponseEntity.ok().body("account successfully registered")
     }
