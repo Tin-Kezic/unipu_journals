@@ -28,8 +28,7 @@ CREATE TABLE account (
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     address TEXT NOT NULL,
-    zip_code TEXT NOT NULL,
-    is_admin BOOLEAN DEFAULT FALSE
+    zip_code TEXT NOT NULL
 );
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
