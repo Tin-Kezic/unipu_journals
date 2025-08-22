@@ -2,7 +2,6 @@ package hr.unipu.journals.feature.account
 
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
-import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.DeleteMapping
