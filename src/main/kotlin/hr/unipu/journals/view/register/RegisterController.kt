@@ -29,6 +29,6 @@ class RegisterController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return "redirect:/"
+        return "redirect:/login.html"
     }
 }
