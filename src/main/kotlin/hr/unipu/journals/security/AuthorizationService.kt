@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "$AUTHORIZATION_SERVICE_IS_ADMIN || @authorizationService.isEicOnPublication(#publicationId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublication(#publicationId)"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT = "@authorizationService.isEicOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "$AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION || @authorizationService.isSectionEditorOnSection(#sectionId)"
-const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "$AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION || @authorizationService.isEditorOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT = "$AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT || @authorizationService.isReviewerOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT = "$AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT || @authorizationService.isCorrespondingAuthorOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "$AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT || @authorizationService.isAuthorOnManuscript(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "@authorizationService.isSectionEditorOnSection(#sectionId)"
+const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "@authorizationService.isEditorOnManuscript(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT = "@authorizationService.isReviewerOnManuscript(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isCorrespondingAuthorOnManuscript(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isAuthorOnManuscript(#manuscriptId)"
 
 @Service
 class AuthorizationService(

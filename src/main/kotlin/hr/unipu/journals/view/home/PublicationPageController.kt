@@ -14,12 +14,18 @@ class PublicationPageController(
 ) {
     @GetMapping("/")
     fun page(model: Model): String {
-        val allPublished = publicationRepository.allPublished()
-        val (assigned, other) = allPublished.partition { authorizationService.isEicOnPublication(it.id) }
-        model["publications"] = allPublished
-        model["eicAssignedPublications"] = assigned
-        model["other"] = other
-        model["isAdmin"] = authorizationService.isAdmin()
+        val isAdmin = authorizationService.isAdmin()
+        model["isAdmin"] = isAdmin
+        model["publications"] = publicationRepository.allPublished().map { publication ->
+            val isEic = authorizationService.isEicOnPublication(publication.id)
+            PublicationDTO(
+                id = publication.id,
+                title = publication.title,
+                canHide = isAdmin || isEic,
+                canEdit = isAdmin || isEic,
+                isEic = isEic
+            )
+        }.sortedByDescending { it.isEic }
         return "home/publication-page"
     }
 }
