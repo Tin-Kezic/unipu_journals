@@ -1,8 +1,10 @@
 package hr.unipu.journals.feature.publication
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,7 +24,8 @@ class PublicationController(private val repository: PublicationRepository) {
             ResponseEntity.ok().body("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("/update")
+    @PutMapping("/update-title/{publicationId}")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION)
     fun updateTitle(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
             repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
