@@ -27,12 +27,8 @@
             <div class="yellow-box" id="{{id}}">
                 <p class="yellow-box-text">{{title}}</p>
                 <div class="yellow-box-buttons">
-                    {{#canHide}}
-                        <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                    {{/canHide}}
-                    {{#canEdit}}
-                        <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
-                    {{/canEdit}}
+                    {{#canHide}}<button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>{{/canHide}}
+                    {{#canEdit}}<button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>{{/canEdit}}
                 </div>
             </div>
         </a>
