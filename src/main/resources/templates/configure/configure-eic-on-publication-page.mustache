@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Configure EiC On Publication Page</title>
+    <link href="/util.css" rel="stylesheet"/>
+    <script src="/htmx.min.js"></script>
+</head>
+
+<body style="margin-left: 3rem; margin-top: 2rem;">
+
+<div class="header" style="margin: 1.5rem 0 0 1.5rem;">
+    <h1 style="font-size: 3.5rem; align-self: flex-start;">Unipu Journals</h1>
+    <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Add EiC to [publishing name]</p>
+</div>
+
+<main style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 1rem 2rem 0 2rem; display: flex; flex-direction: column;">
+    <section>
+        <h2 style="font-weight: normal;">EiCs</h2>
+        <div style="display:flex; align-items:center; gap: 0.5rem;">
+            <div class="text-field">
+                <label for="newReviewer">EiC mail</label>
+                <input type="email" placeholder="email@unipu.hr">
+            </div>
+            <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap;">+ Add</button>
+        </div>
+    </section>
+
+    <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem;">
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemailfakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@gmail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            user1@unipu.hr
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+        <button class="remove-user-button">
+            fakemail@fakemail.com
+            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+        </button>
+    </section>
+</main>
+</body>
+
+<style>
+    .text-field input {
+        background-color: white;
+    }
+
+    @media (max-width: 1300px) {
+        .users-list {
+            grid-template-columns: 1fr 1fr 1fr !important;
+        }
+    }
+    @media (max-width: 800px) {
+        .users-list {
+            grid-template-columns: 1fr 1fr !important;
+        }
+
+        .main-container {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            margin-left: 2rem !important;
+        }
+    }
+    @media (max-width: 600px) {
+        .users-list {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+</html>

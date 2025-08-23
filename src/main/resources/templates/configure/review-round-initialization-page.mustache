@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Pending Reviews Page</title>
+    <title>Review Round Initialization Page</title>
     <link href="/util.css" rel="stylesheet"/>
     <script src="/htmx.min.js"></script>
 </head>
@@ -47,7 +47,7 @@
         </div>
     </section>
 
-    <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem;">
+    <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem; margin-left: 3rem;">
         <button class="remove-user-button">
             fakemail@gmail.com
             <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
@@ -149,6 +149,7 @@
     @media (max-width: 1300px) {
         .users-list {
             grid-template-columns: 1fr 1fr 1fr !important;
+            margin-left: 0 !important;
         }
     }
     @media (max-width: 800px) {
