@@ -1,5 +1,6 @@
 package hr.unipu.journals.security
 
+import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.admin.AdminRepository
@@ -27,22 +28,25 @@ class AuthorizationService(
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
 ) {
-    private fun user(): User {
+    private val user get(): User? {
         val authentication = SecurityContextHolder.getContext().authentication
             ?: throw IllegalStateException("No authentication found in security context")
+
+        if(authentication.principal == "anonymousUser") return null
 
         return authentication.principal as? User
             ?: throw IllegalStateException("Principal is not an instance of User, principal: ${authentication.principal}")
     }
-    private val account get() = accountRepository.byEmail(user().username) ?: throw IllegalStateException("email ${user().username} does not exist")
+    private val account get(): Account? = user?.let { accountRepository.byEmail(it.username) } // ?: throw IllegalStateException("email ${it.username} does not exist") // maybe add to logs
 
-    fun isRoot(): Boolean = user().username == "root@unipu.hr"
-    fun isAdmin(): Boolean = adminRepository.isAdmin(account.email)
-    fun isEicOnPublication(publicationId: Int) = eicOnPublicationRepository.isEicOnPublication(account.id, publicationId)
-    fun isEicOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isEicOnManuscript(account.id, manuscriptId)
-    fun isSectionEditorOnSection(sectionId: Int) = sectionEditorOnSectionRepository.isSectionEditorOnSection(account.id, sectionId)
-    fun isEditorOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isEditorOnManuscript(account.id, manuscriptId)
-    fun isReviewerOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isReviewerOnManuscript(account.id, manuscriptId)
-    fun isCorrespondingAuthorOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(account.id, manuscriptId)
-    fun isAuthorOnManuscript(manuscriptId: Int) = accountRoleOnManuscriptRepository.isAuthorOnManuscript(account.id, manuscriptId)
+    fun isRoot(): Boolean = user?.username == "root@unipu.hr"
+    fun isAdmin(): Boolean = account?.let { adminRepository.isAdmin(it.email) } ?: false
+    fun isEicOnPublication(publicationId: Int): Boolean = account?.id?.let { eicOnPublicationRepository.isEicOnPublication(it, publicationId) } ?: false
+    fun isEicOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
+    fun isSectionEditorOnSection(sectionId: Int): Boolean = account?.id?.let { sectionEditorOnSectionRepository.isSectionEditorOnSection(it, sectionId) } ?: false
+    fun isEditorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEditorOnManuscript(it, manuscriptId) } ?: false
+    fun isReviewerOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isReviewerOnManuscript(it, manuscriptId) } ?: false
+    fun isCorrespondingAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it, manuscriptId) } ?: false
+    fun isAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isAuthorOnManuscript(it, manuscriptId) } ?: false
+
 }
