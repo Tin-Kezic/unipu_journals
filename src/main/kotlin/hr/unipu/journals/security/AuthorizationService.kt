@@ -48,5 +48,4 @@ class AuthorizationService(
     fun isReviewerOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isReviewerOnManuscript(it, manuscriptId) } ?: false
     fun isCorrespondingAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it, manuscriptId) } ?: false
     fun isAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isAuthorOnManuscript(it, manuscriptId) } ?: false
-
 }
