@@ -7,10 +7,10 @@ import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class PublicationPageController(private val repository: PublicationRepository) {
+class PublicationPageController(private val publicationRepository: PublicationRepository) {
     @GetMapping("/")
     fun page(model: Model): String {
-        model["publications"] = repository.allPublished()
+        model["publications"] = publicationRepository.allPublished()
         return "home/publication-page"
     }
 }
