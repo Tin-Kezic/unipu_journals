@@ -33,6 +33,7 @@ class PublicationController(private val repository: PublicationRepository) {
         } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
     }
     @PutMapping("/hide/{publicationId}")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION)
     fun updateHidden(
         @PathVariable publicationId: Int,
         @RequestParam isHidden: Boolean
