@@ -22,17 +22,39 @@
 </div>
 
 <section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
-{{#publications}}
-    <a href="/publication/{{id}}" style="text-decoration: none; color: black; cursor: pointer;">
-        <div class="yellow-box" id="{{id}}">
-            <p class="yellow-box-text">{{title}}</p>
-            <div class="yellow-box-buttons">
-                <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
-            </div>
-        </div>
-    </a>
-{{/publications}}
+    {{#isAdmin}}
+        {{#publications}}
+            <a href="/publication/{{id}}" style="text-decoration: none; color: black; cursor: pointer;">
+                <div class="yellow-box" id="{{id}}">
+                    <p class="yellow-box-text">{{title}}</p>
+                    <div class="yellow-box-buttons">
+                        <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
+                        <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
+                    </div>
+                </div>
+            </a>
+        {{/publications}}
+    {{/isAdmin}}
+    {{^isAdmin}}
+        {{#eicAssignedPublications}}
+            <a href="/publication/{{id}}" style="text-decoration: none; color: black; cursor: pointer;">
+                <div class="yellow-box" id="{{id}}">
+                    <p class="yellow-box-text">{{title}}</p>
+                    <div class="yellow-box-buttons">
+                        <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
+                        <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
+                    </div>
+                </div>
+            </a>
+        {{/eicAssignedPublications}}
+        {{#publications}}
+            <a href="/publication/{{id}}" style="text-decoration: none; color: black; cursor: pointer;">
+                <div class="yellow-box" id="{{id}}">
+                    <p class="yellow-box-text">{{title}}</p>
+                </div>
+            </a>
+        {{/publications}}
+    {{/isAdmin}}
 </section>
 
     <!--

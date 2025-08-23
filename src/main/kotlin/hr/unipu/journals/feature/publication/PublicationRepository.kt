@@ -23,6 +23,10 @@ private const val CURRENT_STATE = "current_state"
 private const val ARCHIVED = "'ARCHIVED'"
 private const val HIDDEN = "'HIDDEN'"
 
+// eic-on-publication
+private const val EIC_ON_PUBLICATION = "eic_on_publication"
+private const val EIC_ID = "eic_id"
+
 interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
