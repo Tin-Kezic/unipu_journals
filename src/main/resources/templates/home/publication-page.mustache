@@ -16,7 +16,9 @@
     <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
         publications
     </h1>
-    <button class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add publication</button>
+    {{#isAdmin}}
+        <button class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add publication</button>
+    {{/isAdmin}}
 </div>
 
 <section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
