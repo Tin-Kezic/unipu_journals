@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublication(#publicationId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublication(#publicationId) || @authorizationService.isAdmin()"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT = "@authorizationService.isEicOnManuscript(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "@authorizationService.isSectionEditorOnSection(#sectionId)"
 const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "@authorizationService.isEditorOnManuscript(#manuscriptId)"
