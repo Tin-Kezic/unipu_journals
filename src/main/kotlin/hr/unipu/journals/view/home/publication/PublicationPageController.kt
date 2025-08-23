@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home
+package hr.unipu.journals.view.home.publication
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService

@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home
+package hr.unipu.journals.view.home.publication
 
 data class PublicationDTO (
     val id: Int,
