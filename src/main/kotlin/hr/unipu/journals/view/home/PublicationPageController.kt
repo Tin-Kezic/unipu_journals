@@ -15,6 +15,7 @@ class PublicationPageController(
     @GetMapping("/")
     fun page(model: Model): String {
         model["publications"] = publicationRepository.allPublished()
+        model["isAdmin"] = authorizationService.isAdmin()
         return "home/publication-page"
     }
 }
