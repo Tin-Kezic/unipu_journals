@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.publication
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class PublicationController(private val repository: PublicationRepository) {
 
     @PostMapping("/insert")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun insert(@ModelAttribute title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(Jsoup.clean(title, Safelist.none()))
