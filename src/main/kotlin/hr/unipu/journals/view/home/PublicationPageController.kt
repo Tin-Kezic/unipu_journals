@@ -14,9 +14,11 @@ class PublicationPageController(
 ) {
     @GetMapping("/")
     fun page(model: Model): String {
-        val (assigned, other) = publicationRepository.allPublished().partition { authorizationService.isEicOnPublication(it.id) }
+        val allPublished = publicationRepository.allPublished()
+        val (assigned, other) = allPublished.partition { authorizationService.isEicOnPublication(it.id) }
+        model["publications"] = allPublished
         model["eicAssignedPublications"] = assigned
-        model["publications"] = other
+        model["other"] = other
         model["isAdmin"] = authorizationService.isAdmin()
         return "home/publication-page"
     }
