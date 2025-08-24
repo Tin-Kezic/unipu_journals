@@ -26,6 +26,9 @@ interface SectionRepository: Repository<Section, Int> {
     @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
     fun title(@Param(ID) sectionId: Int): String
 
+    @Query("SELECT $DESCRIPTION from $PUBLICATION_SECTION WHERE $ID = :$ID")
+    fun description(@Param(ID) sectionId: Int): String
+
     @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $IS_HIDDEN = FALSE")
     fun allPublishedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
 
