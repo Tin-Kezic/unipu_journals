@@ -1,7 +1,6 @@
 package hr.unipu.journals.security
 
 import hr.unipu.journals.feature.account.AccountRepository
-import hr.unipu.journals.feature.admin.AdminRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -34,14 +33,14 @@ private const val AUTHOR = "AUTHOR"
 @EnableMethodSecurity
 class SecurityConfig {
     @Bean
-    fun userDetailsService(accountRepository: AccountRepository, adminRepository: AdminRepository): UserDetailsService {
+    fun userDetailsService(accountRepository: AccountRepository): UserDetailsService {
         return UserDetailsService { email ->
             val account = accountRepository.byEmail(email) ?: throw UsernameNotFoundException("User with email $email not found")
             if (account.email == "root@unipu.hr") {
                 User(account.email, account.password, listOf(SimpleGrantedAuthority(ROLE_ROOT)))
             } else {
                 val authorities = mutableListOf<GrantedAuthority>()
-                if (adminRepository.isAdmin(account.email)) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
+                if (account.isAdmin) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
                 User(account.email, account.password, authorities)
             }
         }
