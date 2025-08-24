@@ -57,7 +57,7 @@ class SecurityConfig {
             formLogin {
                 loginPage = "/login.html"
                 loginProcessingUrl = "/login"
-                defaultSuccessUrl("/", true)
+                defaultSuccessUrl("/", false)
                 failureUrl = "/login.html?failure"
                 permitAll()
             }
