@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublication(#publicationId)"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT = "@authorizationService.isEicOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "@authorizationService.isSectionEditorOnSection(#sectionId)"
-const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "@authorizationService.isEditorOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT = "@authorizationService.isReviewerOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isCorrespondingAuthorOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isAuthorOnManuscript(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublicationOrSuperiorOrSuperior(#publicationId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT = "@authorizationService.isEicOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "@authorizationService.isSectionEditorOnSectionOrSuperior(#sectionId)"
+const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "@authorizationService.isEditorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT = "@authorizationService.isReviewerOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isCorrespondingAuthorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isAuthorOnManuscriptOrSuperior(#manuscriptId)"
 
 @Service
 class AuthorizationService(
@@ -41,11 +41,41 @@ class AuthorizationService(
 
     fun isRoot(): Boolean = user?.username == "root@unipu.hr"
     fun isAdmin(): Boolean = account?.let { adminRepository.isAdmin(it.email) } ?: false
-    fun isEicOnPublication(publicationId: Int): Boolean = account?.id?.let { eicOnPublicationRepository.isEicOnPublication(it, publicationId) } ?: false
-    fun isEicOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
-    fun isSectionEditorOnSection(sectionId: Int): Boolean = account?.id?.let { sectionEditorOnSectionRepository.isSectionEditorOnSection(it, sectionId) } ?: false
-    fun isEditorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEditorOnManuscript(it, manuscriptId) } ?: false
-    fun isReviewerOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isReviewerOnManuscript(it, manuscriptId) } ?: false
-    fun isCorrespondingAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it, manuscriptId) } ?: false
-    fun isAuthorOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isAuthorOnManuscript(it, manuscriptId) } ?: false
+    fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
+        eicOnPublicationRepository.isEicOnPublication(it.id, publicationId) || adminRepository.isAdmin(it.email)
+    } ?: false
+    fun isEicOnManuscriptOrSuperior(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
+    fun isSectionEditorOnSectionOrSuperior(publicationId: Int, sectionId: Int): Boolean = account?.let {
+        sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || adminRepository.isAdmin(it.email)
+    } ?: false
+    fun isEditorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
+        accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+                || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || adminRepository.isAdmin(it.email)
+    } ?: false
+    fun isReviewerOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
+        accountRoleOnManuscriptRepository.isReviewerOnManuscript(it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+                || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || adminRepository.isAdmin(it.email)
+    } ?: false
+    fun isCorrespondingAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
+        accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+                || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || adminRepository.isAdmin(it.email)
+    } ?: false
+    fun isAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
+        accountRoleOnManuscriptRepository.isAuthorOnManuscript(it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+                || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || adminRepository.isAdmin(it.email)
+    } ?: false
 }
