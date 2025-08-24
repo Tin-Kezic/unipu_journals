@@ -38,7 +38,8 @@ CREATE TABLE account (
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     address TEXT NOT NULL,
-    zip_code TEXT NOT NULL
+    zip_code TEXT NOT NULL,
+    is_admin BOOL NOT NULL DEFAULT FALSE
 );
 CREATE TABLE admin(
     id SERIAL PRIMARY KEY,
