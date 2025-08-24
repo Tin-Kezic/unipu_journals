@@ -24,7 +24,7 @@ private const val HIDDEN = "'HIDDEN'"
 interface SectionRepository: Repository<Section, Int> {
 
     @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun titleById(@Param(ID) sectionId: Int): String
+    fun title(@Param(ID) sectionId: Int): String
 
     @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $IS_HIDDEN = FALSE")
     fun allPublishedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
