@@ -68,7 +68,7 @@ class SecurityConfig {
             }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
-                invalidSessionUrl = "/" // comment out in production, disabled security for development
+                invalidSessionUrl = "/"
                 invalidSessionUrl = "/login.html?invalidSession"
             }
             authorizeHttpRequests {
