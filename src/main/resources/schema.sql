@@ -71,7 +71,7 @@ CREATE TABLE publication_section (
     title TEXT NOT NULL,
     description TEXT,
     publication_id INT NOT NULL,
-    is_hidden bool NOT NULL DEFAULT FALSE,
+    is_hidden BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
 );
 CREATE TABLE section_editor_on_section(
