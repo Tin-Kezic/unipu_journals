@@ -36,7 +36,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
         @ModelAttribute title: String,
         @ModelAttribute description: String
     ): ResponseEntity<String> {
-        return if (sectionRepository.existsById(sectionId)) {
+        return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateTitleAndDescription(sectionId, title, description)
             ResponseEntity.ok().body("title successfully updated")
         } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
@@ -46,7 +46,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {
-        return if (sectionRepository.existsById(sectionId)) {
+        return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateHidden(sectionId, isHidden)
             ResponseEntity.ok().body("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
