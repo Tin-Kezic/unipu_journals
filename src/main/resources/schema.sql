@@ -57,7 +57,7 @@ CREATE TABLE category (
 CREATE TABLE publication (
     id SERIAL PRIMARY KEY,
     title TEXT UNIQUE NOT NULL,
-    is_hidden bool NOT NULL DEFAULT FALSE
+    is_hidden BOOL NOT NULL DEFAULT FALSE
 );
 CREATE TABLE eic_on_publication (
     id SERIAL PRIMARY KEY,
