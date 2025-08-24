@@ -17,12 +17,12 @@ class PendingReviewPageController(
     fun all(model: Model): String {
         model["publications-sidebar"] = publicationRepository.allUnderReview()
         model["manuscripts"] = manuscriptRepository.allUnderReview()
-        return "home/section-page"
+        return "review/pending-review-page"
     }
     @GetMapping("review/from-publication/{publicationId}")
     fun underPublication(@PathVariable publicationId: Int, model: Model): String {
         model["publications-sidebar"] = publicationRepository.allPublished()
         model["sections"] = manuscriptRepository.allUnderReviewByPublication(publicationId)
-        return "home/section-page"
+        return "review/pending-review-page"
     }
 }
