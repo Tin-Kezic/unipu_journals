@@ -17,7 +17,7 @@ class PublicationPageController(
         val isAdmin = authorizationService.isAdmin()
         model["isAdmin"] = isAdmin
         model["publications"] = publicationRepository.allPublished().map { publication ->
-            val isEic = authorizationService.isEicOnPublication(publication.id)
+            val isEic = authorizationService.isEicOnPublicationOrSuperior(publication.id)
             PublicationDTO(
                 id = publication.id,
                 title = publication.title,
