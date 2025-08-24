@@ -7,6 +7,14 @@
 
     <link rel="stylesheet" href="/util.css" />
 </head>
+
+<script>
+    function showOverlayAndDialog() {
+        document.querySelector('.overlay').classList.add('active');
+        document.querySelector('.dialog').classList.add('active');
+    }
+</script>
+
 <body>
 {{>util/header}}
 
@@ -36,6 +44,7 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... more
+                <button onclick="showOverlayAndDialog()">more</button>
             </section>
 
             <br>
@@ -374,6 +383,21 @@
     </main>
 </div>
 </body>
+
+<div class="overlay">
+    <div class="dialog" style="width: 90vw; height: 90vh;">
+        <div class="text-field">
+            <label for="reviewers-comment">Reviewers comment</label>
+            <textarea id="reviewers-comment" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button" style="padding-inline: 1.8rem; background-color: var(--purple);">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     .content {
