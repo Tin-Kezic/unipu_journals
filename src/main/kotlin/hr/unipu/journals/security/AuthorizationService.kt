@@ -40,7 +40,8 @@ class AuthorizationService(
     fun isRoot(): Boolean = user?.username == "root@unipu.hr"
     fun isAdmin(): Boolean =  account?.isAdmin ?: false
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
-        eicOnPublicationRepository.isEicOnPublication(it.id, publicationId) //|| adminRepository.isAdmin(it.email)
+        eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || it.isAdmin
     } ?: false
     fun isEicOnManuscriptOrSuperior(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
     fun isSectionEditorOnSectionOrSuperior(publicationId: Int, sectionId: Int): Boolean = account?.let {
