@@ -20,8 +20,16 @@ private const val SECTION_ID = "section_id"
 private const val CURRENT_STATE = "current_state"
 
 // manuscript-state
-private const val ARCHIVED = "'ARCHIVED'"
+private const val AWAITING_INITIAL_EIC_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW'"
+private const val AWAITING_INITIAL_EDITOR_REVIEW = "'AWAITING_INITIAL_EDITOR_REVIEW'"
+private const val AWAITING_REVIEWER_REVIEW = "'AWAITING_REVIEWER_REVIEW'"
+private const val MINOR_FIXES = "'MINOR_FIXES'"
+private const val MAJOR_FIXES = "'MAJOR_FIXES'"
+private const val REJECTED = "'REJECTED'"
+private const val PUBLISHED = "'PUBLISHED'"
 private const val HIDDEN = "'HIDDEN'"
+private const val DRAFT = "'DRAFT'"
+private const val ARCHIVED = "'ARCHIVED'"
 
 // eic-on-publication
 private const val EIC_ON_PUBLICATION = "eic_on_publication"
@@ -64,6 +72,20 @@ interface PublicationRepository: Repository<Publication, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
     """)
     fun allHidden(): List<Publication>
+
+    @Query("""
+        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
+        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
+        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
+        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EIC_REVIEW
+        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EDITOR_REVIEW
+        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
+        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
+        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+    """)
+    fun allUnderReview(): List<Publication>
 
     @Modifying
     @Query("INSERT INTO $PUBLICATION ($TITLE) VALUES (:$TITLE)")
