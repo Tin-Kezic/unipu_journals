@@ -44,7 +44,7 @@ CREATE TABLE account (
 CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
-    FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION
+    target invitation_target NOT NULL
 );
 CREATE TABLE contact (
     id SERIAL PRIMARY KEY CHECK (id = 1),
