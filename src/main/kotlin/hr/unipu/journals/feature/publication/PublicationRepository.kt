@@ -85,7 +85,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
     """)
-    fun allUnderReview()
+    fun allUnderReview(): List<Publication>
 
     @Modifying
     @Query("INSERT INTO $PUBLICATION ($TITLE) VALUES (:$TITLE)")
