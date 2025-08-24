@@ -41,7 +41,7 @@ CREATE TABLE account (
     zip_code TEXT NOT NULL,
     is_admin BOOL NOT NULL DEFAULT FALSE
 );
-CREATE TABLE admin(
+CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION
