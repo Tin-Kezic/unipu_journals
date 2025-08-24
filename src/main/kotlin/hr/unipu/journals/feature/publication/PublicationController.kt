@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.publication
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
@@ -27,7 +27,7 @@ class PublicationController(private val repository: PublicationRepository) {
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/update-title/{publicationId}")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateTitle(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
             repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
@@ -35,7 +35,7 @@ class PublicationController(private val repository: PublicationRepository) {
         } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
     }
     @PutMapping("/hide/{publicationId}")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateHidden(
         @PathVariable publicationId: Int,
         @RequestParam isHidden: Boolean

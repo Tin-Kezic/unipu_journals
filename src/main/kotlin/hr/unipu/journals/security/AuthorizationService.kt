@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION = "@authorizationService.isEicOnPublicationOrSuperiorOrSuperior(#publicationId)"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT = "@authorizationService.isEicOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION = "@authorizationService.isSectionEditorOnSectionOrSuperior(#sectionId)"
-const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT = "@authorizationService.isEditorOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT = "@authorizationService.isReviewerOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isCorrespondingAuthorOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT = "@authorizationService.isAuthorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperiorOrSuperior(#publicationId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEicOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@authorizationService.isSectionEditorOnSectionOrSuperior(#sectionId)"
+const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrSuperior(#manuscriptId)"
 
 @Service
 class AuthorizationService(
