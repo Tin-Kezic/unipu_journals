@@ -36,8 +36,8 @@ CREATE TABLE admin(
     FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION
 );
 CREATE TABLE contact (
-    id SERIAL PRIMARY KEY,
-    description TEXT UNIQUE NOT NULL
+    id SERIAL PRIMARY KEY CHECK (id = 1),
+    description TEXT NOT NULL
 )
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
