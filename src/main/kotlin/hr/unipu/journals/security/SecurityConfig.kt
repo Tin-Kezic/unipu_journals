@@ -94,7 +94,7 @@ class SecurityConfig {
                     "/submit",
                     "/profile/{profileId}",
                     "/profile/{profileId}/edit"
-                ).forEach { authorize(it, hasAnyRole(AUTHOR, CORRESPONDING_AUTHOR, REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                ).forEach { authorize(it, authenticated) }
                 authorize(anyRequest, permitAll)
             }
         }
