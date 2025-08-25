@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="util.css"/>
 </head>
 
+<script>
+    function showOverlayAndDialog() {
+        document.querySelector('.overlay').classList.add('active');
+        document.querySelector('.dialog').classList.add('active');
+    }
+
+    function hideOverlayAndDialog() {
+        document.querySelector('.overlay').classList.remove('active');
+        document.querySelector('.dialog').classList.remove('active');
+    }
+</script>
+
 <body>
 <div class="wrapper" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; height: 100vh; width: 100vw; gap: 10vw; margin-inline: 1rem;">
 
@@ -53,7 +65,7 @@
         </section>
 
         <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
-            <button class="remove-user-button">
+            <button class="remove-user-button" onclick="showOverlayAndDialog()">
                 fakemail@gmail.com
                 <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
             </button>
@@ -141,6 +153,19 @@
     </main>
 </div>
 </body>
+
+<div class="overlay">
+    <div class="dialog">
+        <p>Remove admin <b>user1@unipu.hr?</b></p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     .text-field input {
