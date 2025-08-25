@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class HeaderController(private val authorizationService: AuthorizationService) {
 
-    @GetMapping("/api/authentication/user")
+    @GetMapping("/header/profile")
     fun user(model: Model): String {
         val account = authorizationService.account ?: return "util/partial/login-button"
         model["id"] = account.id
