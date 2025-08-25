@@ -103,9 +103,6 @@ nav ul li a:active {
     top: 50%;
     transform: translateY(-50%);
 }
-.fa-solid.fa-magnifying-glass:active {
-    transform: scale(0.97);
-}
 .m3-button {
     border: none;
     padding: 0.8rem 8rem;
