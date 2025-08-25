@@ -7,22 +7,19 @@
     <link href="/util.css" rel="stylesheet"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="/htmx.min.js"></script>
+    <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
+    </script>
 </head>
-
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
-
 {{>util/header}}
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
@@ -36,15 +33,18 @@
 
 <section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
-        <a href="/publication/{{id}}" style="text-decoration: none; color: black; cursor: pointer;">
-            <div class="yellow-box" id="{{id}}">
-                <p class="yellow-box-text">{{title}}</p>
-                <div class="yellow-box-buttons">
-                    {{#canHide}}<button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>{{/canHide}}
-                    {{#canEdit}}<button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>{{/canEdit}}
-                </div>
+        <div
+            id="{{id}}"
+            class="yellow-box"
+            onclick="window.location='/publication/{{id}}'"
+            style="text-decoration: none; color: black; cursor: pointer;"
+        >
+            <p class="yellow-box-text">{{title}}</p>
+            <div class="yellow-box-buttons">
+                {{#canHide}}<button onclick="event.stopPropagation()" class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>{{/canHide}}
+                {{#canEdit}}<button onclick="event.stopPropagation()" class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>{{/canEdit}}
             </div>
-        </a>
+        </div>
     {{/publications}}
 </section>
 

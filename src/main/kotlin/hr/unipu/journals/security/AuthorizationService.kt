@@ -3,7 +3,6 @@ package hr.unipu.journals.security
 import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.admin.AdminRepository
 import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section_editor_on_section.SectionEditorOnSectionRepository
 import org.springframework.security.core.context.SecurityContextHolder
@@ -23,7 +22,6 @@ const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authoriz
 @Service
 class AuthorizationService(
     private val accountRepository: AccountRepository,
-    private val adminRepository: AdminRepository,
     private val eicOnPublicationRepository: EicOnPublicationRepository,
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
@@ -40,35 +38,36 @@ class AuthorizationService(
     private val account get(): Account? = user?.let { accountRepository.byEmail(it.username) } // ?: throw IllegalStateException("email ${it.username} does not exist") // maybe add to logs
 
     fun isRoot(): Boolean = user?.username == "root@unipu.hr"
-    fun isAdmin(): Boolean = account?.let { adminRepository.isAdmin(it.email) } ?: false
+    fun isAdmin(): Boolean =  account?.isAdmin ?: false
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
-        eicOnPublicationRepository.isEicOnPublication(it.id, publicationId) || adminRepository.isAdmin(it.email)
+        eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+                || it.isAdmin
     } ?: false
     fun isEicOnManuscriptOrSuperior(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
     fun isSectionEditorOnSectionOrSuperior(publicationId: Int, sectionId: Int): Boolean = account?.let {
         sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
-                || adminRepository.isAdmin(it.email)
+                || it.isAdmin
     } ?: false
     fun isEditorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
         accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
-                || adminRepository.isAdmin(it.email)
+                || it.isAdmin
     } ?: false
     fun isReviewerOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
         accountRoleOnManuscriptRepository.isReviewerOnManuscript(it.id, manuscriptId)
                 || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
-                || adminRepository.isAdmin(it.email)
+                || it.isAdmin
     } ?: false
     fun isCorrespondingAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
         accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it.id, manuscriptId)
                 || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
-                || adminRepository.isAdmin(it.email)
+                || it.isAdmin
     } ?: false
     fun isAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
         accountRoleOnManuscriptRepository.isAuthorOnManuscript(it.id, manuscriptId)
@@ -76,6 +75,6 @@ class AuthorizationService(
                 || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
-                || adminRepository.isAdmin(it.email)
+                || it.isAdmin
     } ?: false
 }

@@ -17,6 +17,14 @@ CREATE TYPE manuscript_state AS ENUM (
     'HIDDEN',
     'DRAFT'
 );
+CREATE TYPE invitation_target AS ENUM (
+    'ADMIN',
+    'EIC_ON_PUBLICATION',
+    'EIC_ON_MANUSCRIPT',
+    'SECTION_EDITOR_ON_SECTION',
+    'EDITOR_ON_MANUSCRIPT',
+    'REVIEWER_ON_MANUSCRIPT'
+);
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
     full_name TEXT NOT NULL,
@@ -28,12 +36,13 @@ CREATE TABLE account (
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     address TEXT NOT NULL,
-    zip_code TEXT NOT NULL
+    zip_code TEXT NOT NULL,
+    is_admin BOOL NOT NULL DEFAULT FALSE
 );
-CREATE TABLE admin(
+CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
-    FOREIGN KEY (email) REFERENCES account(email) ON DELETE NO ACTION
+    target invitation_target NOT NULL
 );
 CREATE TABLE contact (
     id SERIAL PRIMARY KEY CHECK (id = 1),
@@ -46,7 +55,7 @@ CREATE TABLE category (
 CREATE TABLE publication (
     id SERIAL PRIMARY KEY,
     title TEXT UNIQUE NOT NULL,
-    is_hidden bool NOT NULL DEFAULT FALSE
+    is_hidden BOOL NOT NULL DEFAULT FALSE
 );
 CREATE TABLE eic_on_publication (
     id SERIAL PRIMARY KEY,
@@ -60,7 +69,7 @@ CREATE TABLE publication_section (
     title TEXT NOT NULL,
     description TEXT,
     publication_id INT NOT NULL,
-    is_hidden bool NOT NULL DEFAULT FALSE,
+    is_hidden BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
 );
 CREATE TABLE section_editor_on_section(
