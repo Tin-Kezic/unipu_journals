@@ -7,22 +7,19 @@
     <link href="/util.css" rel="stylesheet"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="/htmx.min.js"></script>
+    <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
+    </script>
 </head>
-
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
-
 {{>util/header}}
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
