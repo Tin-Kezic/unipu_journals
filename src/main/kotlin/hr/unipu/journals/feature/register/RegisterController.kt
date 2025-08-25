@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.register
+package hr.unipu.journals.feature.register
 
 import hr.unipu.journals.feature.account.AccountRepository
 import org.jsoup.Jsoup

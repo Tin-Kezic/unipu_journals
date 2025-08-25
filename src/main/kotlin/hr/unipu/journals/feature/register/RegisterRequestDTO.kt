@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.register
+package hr.unipu.journals.feature.register
 
 data class RegisterRequestDTO(
     val fullName: String,
