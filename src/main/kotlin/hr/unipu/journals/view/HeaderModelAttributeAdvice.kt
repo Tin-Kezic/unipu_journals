@@ -26,6 +26,8 @@ import org.springframework.ui.set
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ModelAttribute
 
+// Because @ModelAttribute methods in @ControllerAdvice execute before every handler,
+// limit usage to controllers whose handlers render views with headers.
 @ControllerAdvice(assignableTypes = [
     ArchiveManuscriptPageController::class,
     ArchivePublicationPageController::class,
