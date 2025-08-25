@@ -7,6 +7,19 @@
 
     <link rel="stylesheet" href="/util.css" />
 </head>
+
+<script>
+    function showOverlayAndDialog() {
+        document.querySelector('.overlay').classList.add('active');
+        document.querySelector('.dialog').classList.add('active');
+    }
+
+    function hideOverlayAndDialog() {
+        document.querySelector('.overlay').classList.remove('active');
+        document.querySelector('.dialog').classList.remove('active');
+    }
+</script>
+
 <body>
 {{>util/header}}
 
@@ -36,6 +49,7 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... more
+                <button onclick="showOverlayAndDialog()">more</button>
             </section>
 
             <br>
@@ -363,7 +377,7 @@
                                     <button class="pdf-remove-button">-</button>
                                 </div>
 
-                                <button class="m3-button purple-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
+                                <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
                                 <button class="m3-button yellow-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem;" type="submit">Submit Review</button>
                             </div>
                         </div>
@@ -374,6 +388,31 @@
     </main>
 </div>
 </body>
+
+<div class="overlay">
+    <div class="dialog" style="padding-inline: 2rem;">
+        <p style="text-align: center;">Editor's recommendation</p>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="m3-button orange-button" style="width:9rem;">Reject</button>
+        </div>
+        <br>
+        <br>
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Accept</button>
+            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Minor</button>
+            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Major</button>
+            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Reject</button>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button outline-button">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     .content {
