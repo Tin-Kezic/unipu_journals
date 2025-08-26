@@ -1,8 +1,10 @@
 package hr.unipu.journals.feature.invite
 
 import hr.unipu.journals.feature.account.Account
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
+import org.springframework.data.repository.query.Param
 
 private const val INVITE = "invite"
 private const val ID = "id"
@@ -22,6 +24,10 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
+
+    @Modifying
+    @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET")
+    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
     @Query("SELECT * FROM $INVITE WHERE $TARGET = $ADMIN")
     fun allAdmin(): List<Account>
