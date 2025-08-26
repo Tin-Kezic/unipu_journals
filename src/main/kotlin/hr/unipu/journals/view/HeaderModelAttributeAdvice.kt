@@ -4,7 +4,6 @@ import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.archive.ArchiveManuscriptPageController
 import hr.unipu.journals.view.archive.ArchivePublicationPageController
 import hr.unipu.journals.view.archive.ArchiveSectionPageController
-import hr.unipu.journals.view.contact.ContactPageController
 import hr.unipu.journals.view.hidden.HiddenManuscriptPageController
 import hr.unipu.journals.view.hidden.HiddenPublicationPageController
 import hr.unipu.journals.view.hidden.HiddenSectionPageController

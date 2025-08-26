@@ -44,10 +44,6 @@ CREATE TABLE invite(
     email TEXT NOT NULL UNIQUE,
     target invitation_target NOT NULL
 );
-CREATE TABLE contact (
-    id SERIAL PRIMARY KEY CHECK (id = 1),
-    description TEXT NOT NULL
-);
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
