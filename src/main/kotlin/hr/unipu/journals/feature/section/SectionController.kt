@@ -33,8 +33,8 @@ class SectionController(private val sectionRepository: SectionRepository) {
     @PutMapping("{publicationId}/update-title-and-description")
     fun update(
         @PathVariable sectionId: Int,
-        @ModelAttribute title: String,
-        @ModelAttribute description: String
+        @RequestParam title: String,
+        @RequestParam description: String
     ): ResponseEntity<String> {
         return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateTitleAndDescription(sectionId, title, description)
