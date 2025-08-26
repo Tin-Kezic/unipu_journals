@@ -19,6 +19,10 @@ private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
 
 interface InviteRepository: Repository<Invite, Int> {
+
+    @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
+    fun isAdmin(@Param(EMAIL) email: String): Boolean
+
     @Query("SELECT * FROM $INVITE WHERE $TARGET = $ADMIN")
     fun allAdmin(): List<Account>
 }
