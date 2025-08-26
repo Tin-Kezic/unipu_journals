@@ -42,7 +42,7 @@ class PublicationController(private val repository: PublicationRepository) {
     ): ResponseEntity<String> {
         return if (repository.existsById(publicationId)) {
             repository.updateHidden(publicationId, isHidden)
-            ResponseEntity.ok().body("publication successfully hidden")
+            ResponseEntity.ok("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
 }
