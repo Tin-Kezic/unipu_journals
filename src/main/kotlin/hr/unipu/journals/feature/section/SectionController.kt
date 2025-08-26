@@ -48,7 +48,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
     ): ResponseEntity<String> {
         return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateHidden(sectionId, isHidden)
-            ResponseEntity.ok().body("publication successfully hidden")
+            ResponseEntity.ok("publication successfully hidden")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
 }
