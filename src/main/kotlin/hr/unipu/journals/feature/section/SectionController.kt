@@ -27,7 +27,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
                 description = Jsoup.clean(description, Safelist.relaxed()),
                 publicationId = publicationId,
             )
-            ResponseEntity.ok().body("account successfully added")
+            ResponseEntity.ok("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("{publicationId}/update-title-and-description")
