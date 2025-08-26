@@ -50,17 +50,18 @@
 
 <div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Publication name:</p>
-        <div class="text-field">
-            <label for="publication"></label>
-            <input type="text">
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: white; background-color: var(--purple);">Add</button>
+        <p>Publication title:</p>
+        <form method="post" action="/api/publication/insert">
+            <div class="text-field">
+                <input  type="text" name="title">
             </div>
-        </div>
+            <div style="display: flex; justify-content: space-between">
+                <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+                <div style="display: flex; justify-content: flex-end">
+                    <button type="submit" class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: white; background-color: var(--purple);">Add</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
