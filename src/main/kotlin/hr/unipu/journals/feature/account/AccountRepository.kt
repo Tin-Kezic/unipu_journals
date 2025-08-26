@@ -56,7 +56,6 @@ interface AccountRepository: Repository<Account, Int> {
         @Param(ADDRESS) address: String,
         @Param(ZIP_CODE) zipCode: String,
     )
-
     @Modifying
     @Query("DELETE FROM $ACCOUNT WHERE $ID = :$ID")
     fun delete(@Param(ID) id: Int)
