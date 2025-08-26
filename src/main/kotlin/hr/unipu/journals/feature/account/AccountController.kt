@@ -40,7 +40,7 @@ class AccountController(
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
         return if(accountRepository.idExists(id)) {
             accountRepository.delete(id)
-            ResponseEntity.ok().body("account deleted successfully")
+            ResponseEntity.ok("account deleted successfully")
         } else ResponseEntity.badRequest().body("ID does not exist")
     }
 }
