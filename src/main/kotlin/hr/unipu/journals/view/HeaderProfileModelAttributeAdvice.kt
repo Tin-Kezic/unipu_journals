@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
     SubmitPageController::class,
     TechnicalProcessingPageController::class,
 ])
-class HeaderModelAttributeAdvice(private val authorizationService: AuthorizationService) {
+class HeaderProfileModelAttributeAdvice(private val authorizationService: AuthorizationService) {
 
     @ModelAttribute
     fun user(model: Model) {
