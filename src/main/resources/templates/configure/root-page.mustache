@@ -6,12 +6,16 @@
     <title>Root</title>
 
     <link rel="stylesheet" href="util.css"/>
+    <script src="/htmx.min.js"></script>
 </head>
 
 <script>
-    function showOverlayAndDialog() {
+    function showOverlayAndDialog(email) {
         document.querySelector('.overlay').classList.add('active');
         document.querySelector('.dialog').classList.add('active');
+
+        document.getElementById('revoke-admin-privileges-for-email').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+        document.getElementById('confirm-revoke-admin-button').setAttribute('hx-delete', `/root/revoke-admin?email=${encodeURIComponent(email)}`)
     }
     function hideOverlayAndDialog() {
         document.querySelector('.overlay').classList.remove('active');
@@ -27,18 +31,18 @@
         <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Root page</p>
 
         <div style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center;">Change password</p>
-            <form style="width: 100%;">
+            <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center;">Update password</p>
+            <form method="post" action="/root/update-password" style="width: 100%;">
                 <div class="text-field">
                     <label>password</label>
-                    <input type="password" required>
+                    <input name="password" type="password" required>
                 </div>
                 <div class="text-field">
                     <label>repeat password</label>
-                    <input type="password" required>
+                    <input name="passwordConfirmation" type="password" required>
                 </div>
                 <div style="display: flex; justify-content: center;">
-                    <button class="m3-button yellow-button" type="submit">Login</button>
+                    <button type="submit" class="m3-button yellow-button">Update</button>
                 </div>
                 <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
                     Incorrect email or password.
@@ -64,7 +68,7 @@
         <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
             {{#admins}}
                 <!-- return a 204 for no swap-->
-                <button hx-delete="/api/root/remove-admin" class="remove-user-button" onclick="showOverlayAndDialog()">
+                <button class="remove-user-button" onclick="showOverlayAndDialog('{{email}}')">
                     {{email}}
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white"><path d="M640-520v-80h240v80H640Zm-280 40q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/></svg>
                 </button>
@@ -76,12 +80,12 @@
 
 <div class="overlay">
     <div class="dialog">
-        <p>Remove admin <b>user1@unipu.hr?</b></p>
+        <p id="revoke-admin-privileges-for-email">Revoke admin privileges for <b>USERNAME</b></p>
         <br>
         <div style="display: flex; justify-content: space-between">
             <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button red-button">Remove</button>
+                <button id="confirm-revoke-admin-button" class="m3-button red-button">Remove</button>
             </div>
         </div>
     </div>
