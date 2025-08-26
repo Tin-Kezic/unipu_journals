@@ -23,7 +23,7 @@ class PublicationController(private val repository: PublicationRepository) {
     fun insert(@RequestParam title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(Jsoup.clean(title, Safelist.none()))
-            ResponseEntity.ok().body("account successfully added")
+            ResponseEntity.ok("publication successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/update-title/{publicationId}")
