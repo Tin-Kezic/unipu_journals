@@ -22,7 +22,7 @@ private const val IS_ADMIN = "IS_ADMIN"
 interface AccountRepository: Repository<Account, Int> {
 
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL AND $IS_ADMIN = TRUE)")
-    fun isAdmin(@Param(EMAIL) email: String)
+    fun isAdmin(@Param(EMAIL) email: String): Boolean
 
     @Modifying
     @Query("UPDATE $ACCOUNT SET $PASSWORD = :$PASSWORD WHERE $EMAIL = 'root@unipu.hr'")
