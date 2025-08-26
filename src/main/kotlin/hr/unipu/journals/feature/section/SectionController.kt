@@ -18,8 +18,8 @@ class SectionController(private val sectionRepository: SectionRepository) {
     @PostMapping("{publicationId}/insert")
     fun insert(
         @PathVariable publicationId: Int,
-        @ModelAttribute title: String,
-        @ModelAttribute description: String
+        @RequestParam title: String,
+        @RequestParam description: String
     ): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             sectionRepository.insert(
