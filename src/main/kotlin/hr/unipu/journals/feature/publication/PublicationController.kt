@@ -28,7 +28,7 @@ class PublicationController(private val repository: PublicationRepository) {
     }
     @PutMapping("/update-title/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateTitle(@ModelAttribute id: Int, @ModelAttribute title: String): ResponseEntity<String> {
+    fun updateTitle(@RequestParam id: Int, @RequestParam title: String): ResponseEntity<String> {
         return if(repository.existsById(id)) {
             repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok("title successfully updated")
