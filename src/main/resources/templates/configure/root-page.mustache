@@ -30,11 +30,11 @@
             <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center;">Change password</p>
             <form style="width: 100%;">
                 <div class="text-field">
-                    <label for="password">password</label>
+                    <label>password</label>
                     <input type="password" required>
                 </div>
                 <div class="text-field">
-                    <label for="repeat">repeat password</label>
+                    <label>repeat password</label>
                     <input type="password" required>
                 </div>
                 <div style="display: flex; justify-content: center;">
@@ -53,13 +53,15 @@
     <main style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
         <section>
             <h2 style="font-weight: normal;">Admins</h2>
-            <div style="display:flex; align-items:center; gap: 0.5rem;">
-                <div class="text-field">
-                    <label for="newAdmin">admin mail</label>
-                    <input type="email" placeholder="email@unipu.hr">
+            <form>
+                <div style="display:flex; align-items:center; gap: 0.5rem;">
+                        <div class="text-field">
+                            <label>admin mail</label>
+                            <input name="email" type="email" placeholder="email@unipu.hr">
+                        </div>
+                        <button type="submit" class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap;">+ Add</button>
                 </div>
-                <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap;">+ Add</button>
-            </div>
+            </form>
         </section>
 
         <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
