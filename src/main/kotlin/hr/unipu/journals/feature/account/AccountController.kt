@@ -34,7 +34,7 @@ class AccountController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return ResponseEntity.ok().body("account successfully registered")
+        return ResponseEntity.ok("account successfully registered")
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
