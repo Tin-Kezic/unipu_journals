@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class RootPageController(authorizationService: AuthorizationService) {
+class RootPageController() {
     @GetMapping("/root")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page() = "configure/root-page"
