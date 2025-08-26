@@ -20,7 +20,7 @@ class PublicationController(private val repository: PublicationRepository) {
 
     @PostMapping("/insert")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
-    fun insert(@ModelAttribute title: String): ResponseEntity<String> {
+    fun insert(@RequestParam title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok().body("account successfully added")
