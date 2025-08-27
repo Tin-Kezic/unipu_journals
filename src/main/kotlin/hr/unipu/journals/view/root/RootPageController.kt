@@ -41,7 +41,7 @@ class RootPageController(
     @PostMapping("/add-admin")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun addAdmin(@RequestParam email: String): ResponseEntity<String> {
-        if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, false)
+        if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, true)
         else inviteRepository.insert(email, InvitationTarget.ADMIN)
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
