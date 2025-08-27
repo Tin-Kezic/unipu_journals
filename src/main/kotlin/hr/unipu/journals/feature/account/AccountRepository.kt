@@ -24,6 +24,7 @@ interface AccountRepository: Repository<Account, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL AND $IS_ADMIN = TRUE)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 
+    @Modifying
     @Query("UPDATE $ACCOUNT SET $IS_ADMIN = :$IS_ADMIN WHERE $EMAIL = :$EMAIL")
     fun updateIsAdmin(@Param(EMAIL) email: String, @Param(IS_ADMIN) isAdmin: Boolean)
 
