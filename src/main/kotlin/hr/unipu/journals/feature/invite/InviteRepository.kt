@@ -21,6 +21,7 @@ private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
 interface InviteRepository: Repository<Invite, Int> {
 
+    @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET) VALUES (:$EMAIL, :$TARGET)")
     fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
