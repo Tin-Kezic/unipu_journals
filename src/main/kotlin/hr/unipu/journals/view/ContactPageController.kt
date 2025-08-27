@@ -8,5 +8,5 @@ private var description = ""
 @Controller
 class ContactPageController() {
     @GetMapping("/contact")
-    fun page() = "placeholder.html"
+    fun page() = "contact/contact"
 }
