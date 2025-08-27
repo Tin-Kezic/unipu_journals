@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Profile Page</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=check_circle" />
+    <link rel="stylesheet" href="/util.css" />
+</head>
+
+<body>
+{{>util/header}}
+
+<div class="wrapper" style="display: flex; flex-direction: row; gap: 3rem; margin-inline: 2rem; margin-block: 1rem;">
+    <aside style="margin-inline: 2rem; margin-top: 30vh;">
+        <p style="font-size: 2rem; font-weight: lighter;">Marko Markić</p>
+        <br>
+        <button class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 4rem;">Edit profile</button>
+    </aside>
+
+    <main>
+        <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem;">
+            <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Submitted manuscripts</button>
+            <p style="font-size: 2rem; font-weight: lighter;">|</p>
+            <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
+        </div>
+
+        <div class="manuscript-containeryellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.3rem; justify-content: flex-end; margin-left: 0.3rem; margin-top: 1.5rem;">
+                        <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
+                        <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+</div>
+</body>
+</html>
+
+<style>
+    .manuscript-button:active {
+        text-decoration: underline;
+    }
+    .manuscript-container:hover {
+        background-color: var(--very-light-gray) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .manuscript-containeryellow:hover {
+        background-color: var(--orange) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 800px) {
+        .manuscript-container {
+            max-height: 40vh !important;
+        }
+        .manuscript-containeryellow {
+            max-height: 40vh !important;
+        }
+        .wrapper {
+            flex-direction: column !important;
+            margin-inline: 1rem !important;
+            gap: 1rem !important;
+        }
+        .wrapper aside {
+            margin-top: 1rem !important;
+        }
+    }
+</style>
