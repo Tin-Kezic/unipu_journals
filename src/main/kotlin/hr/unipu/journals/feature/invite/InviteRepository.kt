@@ -33,5 +33,5 @@ interface InviteRepository: Repository<Invite, Int> {
     fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
     @Query("SELECT * FROM $INVITE WHERE $TARGET = $ADMIN")
-    fun allAdmin(): List<Account>
+    fun allAdmin(): List<Invite>
 }
