@@ -103,13 +103,11 @@
     }
     function handleRemoveResponse(event) {
         const email = document.getElementById('revoke-admin-email').value;
-        if (event.detail.successful) {
-            // Remove the specific admin button from the DOM
+        if (event.detail.successful) { // Remove admin from DOM
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
             if (button) button.remove();
             hideOverlayAndDialog();
-        } else {
-            // Show error message from server response
+        } else { // error
             const errorMessage = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
             document.getElementById('error-message').textContent = errorMessage;
             document.getElementById('error-message').style.display = 'block';
@@ -127,8 +125,6 @@
                 newButton.className = 'remove-user-button';
                 newButton.dataset.email = email;
                 newButton.onclick = () => showOverlayAndDialog(email);
-
-                // Set button content
                 newButton.innerHTML = `
                     ${email}
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white">

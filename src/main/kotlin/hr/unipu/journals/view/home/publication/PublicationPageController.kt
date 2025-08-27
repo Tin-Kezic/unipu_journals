@@ -24,7 +24,7 @@ class PublicationPageController(
                 canEdit = isEicOrSuperior,
                 isEic = isEicOrSuperior
             )
-        }.sortedWith(compareByDescending<PublicationDTO> { it.isEic }.thenByDescending { it.id })
+        }.sortedByDescending { it.isEic }
         return "home/publication-page"
     }
 }
