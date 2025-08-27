@@ -60,8 +60,10 @@
         <p id="revoke-admin-privileges-for-email"></p>
         <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
         <br>
-        <form id="revoke-admin-form" hx-delete="/root/revoke-admin" hx-swap="none" hx-on::after-request="handleRemoveResponse(event)">
-            <input type="hidden" name="email" id="revoke-admin-email">
+        <form id="revoke-admin-form"
+              hx-delete="/root/revoke-admin"
+              hx-swap="none"
+              hx-on::after-request="handleRemoveResponse(event)">
             <div style="display: flex; justify-content: space-between">
                 <button type="button" class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
                 <div style="display: flex; justify-content: flex-end">
@@ -89,28 +91,32 @@
     }
 </style>
 <script>
+    const form = document.getElementById('revoke-admin-form')
+    const overlay = document.querySelector('.overlay')
+    const dialog = document.querySelector('.dialog')
+    const errorMessageParagraph = document.getElementById('error-message')
     function showOverlayAndDialog(email) {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
+        overlay.classList.add('active');
+        dialog.classList.add('active');
         document.getElementById('revoke-admin-privileges-for-email').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
-        document.getElementById('revoke-admin-email').value = email;
-        document.getElementById('error-message').style.display = 'none'; // Reset error message
-        htmx.process(document.getElementById('revoke-admin-form'));
+        errorMessageParagraph.style.display = 'none'; // Reset error message
+
+        form.setAttribute('hx-vals', JSON.stringify({ email }));
+        htmx.process(form);
     }
     function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
+        overlay.classList.remove('active');
+        dialog.classList.remove('active');
     }
     function handleRemoveResponse(event) {
-        const email = document.getElementById('revoke-admin-email').value;
+        const email = JSON.parse(form.getAttribute('hx-vals') || '{}').email;
         if (event.detail.successful) { // Remove admin from DOM
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
             if (button) button.remove();
             hideOverlayAndDialog();
         } else { // error
-            const errorMessage = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
-            document.getElementById('error-message').textContent = errorMessage;
-            document.getElementById('error-message').style.display = 'block';
+            errorMessageParagraph.textContent = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
+            errorMessageParagraph.style.display = 'block';
         }
     }
     function handleAddAdminResponse(event) {
