@@ -38,6 +38,14 @@ class RootPageController(
         return "redirect:/root?successfully-updated-password"
     }
 
+    @PostMapping("/add-admin")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
+    fun addAdmin(@RequestParam email: String): ResponseEntity<String> {
+        if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, false)
+        else inviteRepository.revoke(email, InvitationTarget.ADMIN)
+        return ResponseEntity.ok("Successfully added admin privileges to $email")
+    }
+
     @DeleteMapping("/revoke-admin")
     fun revokeAdmin(@RequestParam email: String): ResponseEntity<String> {
         if(accountRepository.isAdmin(email)) accountRepository.updateIsAdmin(email, false)
