@@ -19,8 +19,10 @@ private const val SECTION_EDITOR_ON_SECTION = "'SECTION_EDITOR_ON_SECTION'"
 private const val EDITOR_ON_MANUSCRIPT = "'EDITOR_ON_MANUSCRIPT'"
 private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
-
 interface InviteRepository: Repository<Invite, Int> {
+
+    @Query("INSERT INTO $INVITE ($EMAIL, $TARGET) VALUES (:$EMAIL, :$TARGET)")
+    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
