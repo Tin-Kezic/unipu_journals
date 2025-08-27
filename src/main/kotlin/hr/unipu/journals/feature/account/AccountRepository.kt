@@ -41,8 +41,8 @@ interface AccountRepository: Repository<Account, Int> {
     @Query("SELECT * FROM $ACCOUNT WHERE $EMAIL = :$EMAIL")
     fun byEmail(@Param(EMAIL) email: String): Account?
 
-    @Query("SELECT * FROM $ACCOUNT WHERE $IS_ADMIN = TRUE")
-    fun allAdmin(): List<Account>
+    @Query("SELECT $EMAIL FROM $ACCOUNT WHERE $IS_ADMIN = TRUE")
+    fun allAdminEmails(): List<String>
 
     @Modifying
     @Query("""
