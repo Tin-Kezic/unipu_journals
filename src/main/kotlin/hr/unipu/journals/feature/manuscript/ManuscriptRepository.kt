@@ -42,13 +42,13 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("SELECT * FROM $MANUSCRIPT WHERE $ID = :$ID")
     fun byId(@Param(ID) manuscriptId: Int): Manuscript
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED ORDER BY $ID DESC")
     fun allPublishedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $ARCHIVED")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $ARCHIVED ORDER BY $ID DESC")
     fun allArchivedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $HIDDEN")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $HIDDEN ORDER BY $ID DESC")
     fun allHiddenBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
     @Query("""
@@ -62,6 +62,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+        ORDER BY $MANUSCRIPT.$ID DESC
     """)
     fun allUnderReview(): List<Manuscript>
 
@@ -76,8 +77,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
-        
         AND $PUBLICATION.$ID = :$ID
+        ORDER BY $MANUSCRIPT.$ID DESC
     """)
     fun allUnderReviewByPublication(@Param(ID) publicationId: Int): List<Manuscript>
 }

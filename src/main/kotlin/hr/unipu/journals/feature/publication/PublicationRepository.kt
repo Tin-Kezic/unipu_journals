@@ -50,7 +50,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         AND $MANUSCRIPT.$CURRENT_STATE = $PUBLISHED
     """)
      */
-    @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE")
+    @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE ORDER BY $ID DESC")
     fun allPublished(): List<Publication>
 
     @Query("""
@@ -60,6 +60,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
         AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allArchived(): List<Publication>
 
@@ -70,6 +71,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE $PUBLICATION.$IS_HIDDEN = TRUE
         OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
         OR $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allHidden(): List<Publication>
 
@@ -84,6 +86,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allUnderReview(): List<Publication>
 
