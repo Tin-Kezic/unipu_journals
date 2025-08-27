@@ -21,6 +21,7 @@ private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
 interface InviteRepository: Repository<Invite, Int> {
 
+    @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET) VALUES (:$EMAIL, :$TARGET)")
     fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
@@ -31,6 +32,6 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET")
     fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
 
-    @Query("SELECT * FROM $INVITE WHERE $TARGET = $ADMIN")
-    fun allAdmin(): List<Account>
+    @Query("SELECT $EMAIL FROM $INVITE WHERE $TARGET = $ADMIN")
+    fun allAdminEmails(): List<String>
 }

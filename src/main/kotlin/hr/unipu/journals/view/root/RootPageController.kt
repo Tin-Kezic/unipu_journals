@@ -26,7 +26,7 @@ class RootPageController(
     @GetMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(model: Model): String {
-        model["admins"] = (accountRepository.allAdmin() + inviteRepository.allAdmin()).map { account -> AdminDTO(account.id, account.email) }
+        model["admin-emails"] = accountRepository.allAdminEmails() + inviteRepository.allAdminEmails()
         return "configure/root-page"
     }
 
@@ -41,8 +41,8 @@ class RootPageController(
     @PostMapping("/add-admin")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun addAdmin(@RequestParam email: String): ResponseEntity<String> {
-        if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, false)
-        else inviteRepository.revoke(email, InvitationTarget.ADMIN)
+        if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, true)
+        else inviteRepository.insert(email, InvitationTarget.ADMIN)
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
 
