@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="/util.css" />
 
     <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
         function showSnackbar() {
             var x = document.getElementById("snackbar");
             x.className = "show";
@@ -110,8 +119,21 @@
         <div class="pdf-container" style="background-color:white;">AnnouncementFlyer.pdf <button class="pdf-remove-button">-</button></div>
         <div class="pdf-container" style="background-color:white;">AnnouncementFlyer.pdf <button class="pdf-remove-button">-</button></div>
         <div class="pdf-container" style="background-color:white; margin-bottom: 1rem;">AnnouncementFlyer.pdf <button class="pdf-remove-button">-</button></div>
-        <button type="submit" class="m3-button yellow-button" onclick="showSnackbar()">Submit</button>
+        <button type="submit" class="m3-button yellow-button" onclick="showSnackbar(); showOverlayAndDialog();">Submit</button>
     </form>
+</div>
+
+<div class="overlay">
+    <div class="dialog" style="width: 25rem;">
+        <p>Submit <b>KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and WOrd Embedding Techniques</b>?</p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button" style="background-color: var(--yellow); color: black;">Submit</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="snackbar"><span class="material-symbols-outlined" style="color: var(--green)">check_circle</span> Successfully submitted</div>
