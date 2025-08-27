@@ -108,8 +108,7 @@
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
             if (button) button.remove();
             hideOverlayAndDialog();
-        } else {
-            // Show error message from server response
+        } else { // error
             const errorMessage = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
             document.getElementById('error-message').textContent = errorMessage;
             document.getElementById('error-message').style.display = 'block';
