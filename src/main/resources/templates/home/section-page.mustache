@@ -67,7 +67,7 @@
     </div>
 </main>
 
-<div class="overlay">
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Section name:</p>
         <div class="text-field">
@@ -106,7 +106,7 @@
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
             <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
             <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">hide</button>
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);">hide</button>
             </div>
         </div>
     </div>

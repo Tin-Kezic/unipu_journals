@@ -48,7 +48,7 @@
     {{/publications}}
 </section>
 
-<div class="overlay">
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Publication title:</p>
         <form method="post" action="/api/publication/insert">
@@ -65,6 +65,34 @@
     </div>
 </div>
 
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <p>Update publication name</p>
+        <div class="text-field">
+            <label for="section"></label>
+            <input type="text">
+        </div>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <p>Hide publication <b>Acoustic signal processing</b>?</p>
+        <br>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);">hide</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--
 <button hx-get="/api/account/all" hx-target="#content" hx-swap="innerHTML">
     Load fragment
