@@ -103,8 +103,7 @@
     }
     function handleRemoveResponse(event) {
         const email = document.getElementById('revoke-admin-email').value;
-        if (event.detail.successful) {
-            // Remove the specific admin button from the DOM
+        if (event.detail.successful) { // Remove admin from DOM
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
             if (button) button.remove();
             hideOverlayAndDialog();
