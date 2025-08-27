@@ -37,10 +37,7 @@ class PublicationController(private val repository: PublicationRepository) {
     }
     @PutMapping("/hide/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateHidden(
-        @PathVariable publicationId: Int,
-        @RequestParam isHidden: Boolean
-    ): ResponseEntity<String> {
+    fun updateHidden(@PathVariable publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
         return if (repository.existsById(publicationId)) {
             repository.updateHidden(publicationId, isHidden)
             ResponseEntity.ok("publication successfully hidden")
