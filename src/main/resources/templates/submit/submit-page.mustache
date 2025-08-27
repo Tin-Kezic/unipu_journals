@@ -18,6 +18,7 @@
             document.querySelector('.overlay').classList.remove('active');
             document.querySelector('.dialog').classList.remove('active');
         }
+
         function showSnackbar() {
             var x = document.getElementById("snackbar");
             x.className = "show";
@@ -46,7 +47,7 @@
                 <p>Hello World!</p>
             </div>
         </div>
-        <button class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem;">Edit</button>
+        <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem;">Edit</button>
         <div class="dropdown" style="width: 12rem;">
             <div style="display: flex; justify-content: space-between; width: 12rem; height: 2.7rem; padding: 0.7rem 0.75rem 0.5rem; font-size: 1rem; background: var(--pale-yellow); border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
                 <span>Publication</span><span>▼</span>
@@ -124,13 +125,60 @@
 </div>
 
 <div class="overlay">
-    <div class="dialog" style="width: 25rem;">
+    <div class="dialog" style="width: 25rem;" onclick="if (event.target === this) hideOverlayAndDialog()">
         <p>Submit <b>KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and WOrd Embedding Techniques</b>?</p>
         <br>
         <div style="display: flex; justify-content: space-between">
             <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button red-button" style="background-color: var(--yellow); color: black;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="width: 50rem;">
+        <div style="display: flex; flex-direction: row; gap: 1rem; align-items: center; text-wrap: nowrap;">
+            <p style="padding-left: 3rem;">Add article type</p>
+            <div class="text-field" style="width: 22rem;">
+                <label for="article"></label>
+                <input type="text" required>
+            </div>
+            <button style="background-color: var(--purple); color: white; border-radius: 0.5rem; border: none; padding: 0.87rem 1rem;">+ Add</button>
+        </div>
+        <br>
+        <section class="article-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem 0.3rem; justify-content: center; max-width: 42rem; margin: 0 auto;">
+            <button class="remove-user-button">
+                Journal
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+            <button class="remove-user-button">
+                Article
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+            <button class="remove-user-button">
+                Journal
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+            <button class="remove-user-button">
+                Journal
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+            <button class="remove-user-button">
+                Journal
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+            <button class="remove-user-button">
+                Journal
+                <p style="color: white; font-weight: bold;">—</p>
+            </button>
+        </section>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button" style="background-color: var(--yellow); color: black;">Rename</button>
             </div>
         </div>
     </div>
@@ -191,15 +239,19 @@
         min-width: 2.5rem;
         padding: 0.3rem 0.5rem;
     }
+
     @media (max-width: 480px) {
         .author-container .m3-button {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
         }
     }
-    .m3-button.purple-button.corresponding-author:active {
-        background-color: var(--purple) !important;
-        color: white !important;
+
+    @media (max-width: 768px) {
+        .article-list {
+            grid-template-columns: 1fr !important;
+            justify-items: center;
+        }
     }
 </style>
 </html>
