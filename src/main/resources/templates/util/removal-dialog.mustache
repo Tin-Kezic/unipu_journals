@@ -1,0 +1,37 @@
+<div class="overlay" onclick="dialogClose()">
+    <div class="dialog">
+        <p id="dialog-message"></p>
+        <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
+        <br>
+        <form id="dialog-form"
+              hx-swap="none"
+              hx-on::after-request="dialogPositive(event)">
+            <div style="display: flex; justify-content: space-between">
+                <button type="button" class="m3-button outline-button">Cancel</button>
+                <div style="display: flex; justify-content: flex-end">
+                    <button class="m3-button red-button">Remove</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const form = document.getElementById('dialog-form')
+    const overlay = document.querySelector('.overlay')
+    const dialog = document.querySelector('.dialog')
+    const errorMessageParagraph = document.getElementById('error-message')
+
+    window.form
+    window.overlay
+    window.dialog
+    window.errorMessageParagraph
+
+    function dialogOpen(email) {
+        overlay.classList.add('active');
+        dialog.classList.add('active');
+    }
+    function dialogClose() {
+        overlay.classList.remove('active');
+        dialog.classList.remove('active');
+    }
+</script>

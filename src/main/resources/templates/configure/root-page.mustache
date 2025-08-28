@@ -52,24 +52,7 @@
         </section>
     </main>
 </div>
-<div class="overlay" onclick="hideOverlayAndDialog()">
-    <div class="dialog">
-        <p id="dialog-message"></p>
-        <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
-        <br>
-        <form id="dialog-form"
-              hx-delete="/root/revoke-admin"
-              hx-swap="none"
-              hx-on::after-request="handleRemoveResponse(event)">
-            <div style="display: flex; justify-content: space-between">
-                <button type="button" class="m3-button outline-button">Cancel</button>
-                <div style="display: flex; justify-content: flex-end">
-                    <button class="m3-button red-button">Remove</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+{{>util/removal-dialog}}
 </body>
 <style>
     .text-field input {
@@ -88,10 +71,14 @@
     }
 </style>
 <script>
-    const form = document.getElementById('dialog-form')
-    const overlay = document.querySelector('.overlay')
-    const dialog = document.querySelector('.dialog')
-    const errorMessageParagraph = document.getElementById('error-message')
+    function dialogOnOpen(email) {
+        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+        errorMessageParagraph.style.display = 'none'; // Reset error message
+
+        form.setAttribute('hx-vals', JSON.stringify({ email }));
+        form.setAttribute('hx-delete', '/root/revoke-admin');
+        htmx.process(form);
+    }
     function showOverlayAndDialog(email) {
         overlay.classList.add('active');
         dialog.classList.add('active');
@@ -101,11 +88,7 @@
         form.setAttribute('hx-vals', JSON.stringify({ email }));
         htmx.process(form);
     }
-    function hideOverlayAndDialog() {
-        overlay.classList.remove('active');
-        dialog.classList.remove('active');
-    }
-    function handleRemoveResponse(event) {
+    function dialogPositive(event) {
         const email = JSON.parse(form.getAttribute('hx-vals') || '{}').email;
         if (event.detail.successful) { // Remove admin from DOM
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
