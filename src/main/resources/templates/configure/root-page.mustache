@@ -137,8 +137,7 @@
                 const adminList = document.getElementById('admin-list');
                 adminList.appendChild(newButton);
 
-                // Clear the input field
-                emailInput.value = '';
+                emailInput.value = ''; // clear input field
             }
         } else { // error
             const errorMessage = event.detail.xhr.responseText || 'Failed to add admin.';
