@@ -65,7 +65,7 @@
               hx-swap="none"
               hx-on::after-request="handleRemoveResponse(event)">
             <div style="display: flex; justify-content: space-between">
-                <button type="button" class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+                <button type="button" class="m3-button outline-button">Cancel</button>
                 <div style="display: flex; justify-content: flex-end">
                     <button type="submit" class="m3-button red-button">Remove</button>
                 </div>
@@ -113,7 +113,6 @@
         if (event.detail.successful) { // Remove admin from DOM
             const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
             if (button) button.remove();
-            hideOverlayAndDialog();
         } else { // error
             errorMessageParagraph.textContent = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
             errorMessageParagraph.style.display = 'block';
