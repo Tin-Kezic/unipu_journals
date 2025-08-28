@@ -57,10 +57,10 @@
 </div>
 <div class="overlay" onclick="hideOverlayAndDialog()">
     <div class="dialog">
-        <p id="revoke-admin-privileges-for-email"></p>
+        <p id="dialog-message"></p>
         <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
         <br>
-        <form id="revoke-admin-form"
+        <form id="dialog-form"
               hx-delete="/root/revoke-admin"
               hx-swap="none"
               hx-on::after-request="handleRemoveResponse(event)">
@@ -91,14 +91,14 @@
     }
 </style>
 <script>
-    const form = document.getElementById('revoke-admin-form')
+    const form = document.getElementById('dialog-form')
     const overlay = document.querySelector('.overlay')
     const dialog = document.querySelector('.dialog')
     const errorMessageParagraph = document.getElementById('error-message')
     function showOverlayAndDialog(email) {
         overlay.classList.add('active');
         dialog.classList.add('active');
-        document.getElementById('revoke-admin-privileges-for-email').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
         errorMessageParagraph.style.display = 'none'; // Reset error message
 
         form.setAttribute('hx-vals', JSON.stringify({ email }));
