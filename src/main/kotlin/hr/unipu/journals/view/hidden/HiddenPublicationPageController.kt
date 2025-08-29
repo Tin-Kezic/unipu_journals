@@ -9,7 +9,7 @@ import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class PublicationPageController(
+class HiddenPublicationPageController(
     private val publicationRepository: PublicationRepository,
     private val authorizationService: AuthorizationService
 ) {
