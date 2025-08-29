@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="/util.css" rel="stylesheet"/>
+    <script src="/htmx.min.js"></script>
+    <title>Section Archive</title>
+</head>
+
+<script>
+    function showOverlayAndDialog() {
+        document.querySelector('.overlay').classList.add('active');
+        document.querySelector('.dialog').classList.add('active');
+    }
+
+    function hideOverlayAndDialog() {
+        document.querySelector('.overlay').classList.remove('active');
+        document.querySelector('.dialog').classList.remove('active');
+    }
+</script>
+
+<body>
+{{>util/header}}
+
+<main>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+            publications
+        </h1>
+    </div>
+
+    <div style="display: flex; align-items: flex-start;">
+        <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+            {{#publications-sidebar}}
+                <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+                    <label class="sidebar-button">
+                        <span class="checkbox">{{title}}</span>
+                    </label>
+                </a>
+            {{/publications-sidebar}}
+        </aside>
+
+        <section style="
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 1rem;
+            margin: 0 1.5rem 1rem 1.5rem;
+          ">
+            {{#sections}}
+                <article>
+                    <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
+                        <div class="yellow-box">
+                            <p class="yellow-box-text">{{title}}</p>
+                            <div class="yellow-box-buttons">
+                                <button class="m3-button red-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
+                                <button class="m3-button outline-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            {{/sections}}
+        </section>
+    </div>
+</main>
+
+<div class="overlay">
+    <div class="dialog">
+        <p>Permanently delete <b>Archeoacoustics</b> section?</p>
+        <p>It contains <b>5</b> manuscripts:</p>
+        <br>
+        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p></b>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay">
+    <div class="dialog">
+        <p>Restore <b>Archaeoacoustics</b> section?</p>
+        <p>It contains <b>5</b> manuscripts:</p>
+        <br>
+        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p>
+            <p>KSWN (Kannada SentiWordNet): Developing a Sentiment
+                Lexicon for Kannada using Translation and Word Embedding
+                Techniques</p></b>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
