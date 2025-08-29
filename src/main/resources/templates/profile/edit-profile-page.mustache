@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="/util.css" rel="stylesheet"/>
+</head>
+
+<body style="align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;">
+
+<main style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <section>
+        <form style="width: 100%;" method="post" action="/register">
+            <div class="text-field">
+                <label>full name </label>
+                <input name="fullName" type="text" required autofocus>
+            </div>
+            <div class="text-field">
+                <label>title</label>
+                <input name="title" type="text" required>
+                <span id="email-taken" class="error-msg" style="float:right; text-decoration: underline;">email already in use</span>
+            </div>
+            <div class="text-field">
+                <label>email</label>
+                <input name="email" type="email" required>
+            </div>
+            <div class="text-field">
+                <label>password</label>
+                <input name="password" type="password" required>
+                <span id="password-mismatch" class="error-msg" style="float:right; text-decoration: underline;">password doesn't match</span>
+            </div>
+            <div class="text-field">
+                <label>repeat password</label>
+                <input name="passwordConfirmation" type="password" required>
+            </div>
+            <div class="text-field">
+                <label>affiliation</label>
+                <input name="affiliation" type="text" required>
+            </div>
+            <div class="text-field">
+                <label>job type</label>
+                <input name="jobType" type="text" required>
+            </div>
+            <div class="text-field">
+                <label>country</label>
+                <input name="country" type="text" required>
+            </div>
+            <div class="text-field">
+                <label>city</label>
+                <input name="city" type="text" required>
+            </div>
+            <div class="text-field">
+                <label>address</label>
+                <input name="address" type="text" required>
+            </div>
+            <div class="text-field">
+                <label>zipcode</label>
+                <input name="zipCode" type="text" required>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <button class="m3-button yellow-button">Update</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+<script>
+    const param = new URLSearchParams(window.location.search);
+    if(param.has('password-mismatch')) {
+        document.getElementById('password-mismatch').style.display = 'inline-block';
+        document.getElementById('password').focus()
+    }
+    if(param.has('email-taken')) {
+        document.getElementById('email-taken').style.display = 'inline-block';
+        document.getElementById('email').focus()
+    }
+    document.getElementById('fullName').value = param.get('fullName') || ''
+    document.getElementById('title').value = param.get('title') || ''
+    document.getElementById('email').value = param.get('email') || ''
+    document.getElementById('affiliation').value = param.get('affiliation') || ''
+    document.getElementById('jobType').value = param.get('jobType') || ''
+    document.getElementById('country').value = param.get('country') || ''
+    document.getElementById('city').value = param.get('city') || ''
+    document.getElementById('address').value = param.get('address') || ''
+    document.getElementById('zipCode').value = param.get('zipCode') || ''
+</script>
+<style>
+    .text-field input {
+        background-color: white;
+    }
+</style>
+</html>
