@@ -6,16 +6,34 @@
     <title>Manuscript Archive</title>
     <link href="/util.css" rel="stylesheet"/>
     <script src="/htmx.min.js"></script>
+
+    <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
+    </script>
 </head>
 
 <body>
 {{>util/header}}
 
-<section>
-    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-        Acoustics
-    </h1>
-</section>
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <section>
+        <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
+            Acoustics
+        </h1>
+    </section>
+
+    <footer style="display: flex; justify-content: flex-end;">
+        <button class="m3-button yellow-button" onclick="showOverlayAndDialog()" style="box-shadow: none; margin-block: 1rem; padding-inline: 1rem; padding-block: 0.4rem; border-radius: 7px; margin-right: 1rem;">+ Add Section editor</button>
+    </footer>
+</div>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
@@ -23,7 +41,6 @@
             <span class="checkbox">Archaeoacoustics</span>
         </label>
         <label class="sidebar-button">
-
             <span class="checkbox">Acoustic Ecology</span>
         </label>
     </aside>
@@ -54,6 +71,21 @@
             </footer>
         </article>
     </section>
+</div>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <p>Add section editor</p>
+        <div class="text-field">
+            <input name="email" type="email">
+        </div>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: black; background-color: var(--yellow);">Add</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 
