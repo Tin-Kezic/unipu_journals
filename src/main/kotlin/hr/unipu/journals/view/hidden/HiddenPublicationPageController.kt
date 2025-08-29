@@ -1,10 +1,30 @@
 package hr.unipu.journals.view.hidden
 
+import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.home.publication.PublicationDTO
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class HiddenPublicationPageController() {
+class PublicationPageController(
+    private val publicationRepository: PublicationRepository,
+    private val authorizationService: AuthorizationService
+) {
     @GetMapping("/hidden")
-    fun page() = "placeholder.html"
+    fun page(model: Model): String {
+        model["publications"] = publicationRepository.allPublished().map { publication ->
+            val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+            PublicationDTO(
+                id = publication.id,
+                title = publication.title,
+                canHide = isEicOrSuperior,
+                canEdit = isEicOrSuperior,
+                isEic = isEicOrSuperior
+            )
+        }.sortedByDescending { it.isEic }
+        return "hidden/hidden-publication-page"
+    }
 }
