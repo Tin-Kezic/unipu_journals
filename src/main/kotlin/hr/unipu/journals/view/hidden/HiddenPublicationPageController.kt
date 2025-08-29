@@ -15,7 +15,7 @@ class HiddenPublicationPageController(
 ) {
     @GetMapping("/hidden")
     fun page(model: Model): String {
-        model["publications"] = publicationRepository.allArchived().map { publication ->
+        model["publications"] = publicationRepository.allHidden().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
             PublicationDTO(
                 id = publication.id,
