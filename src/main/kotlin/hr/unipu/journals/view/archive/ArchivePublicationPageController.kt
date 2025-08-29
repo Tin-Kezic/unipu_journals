@@ -13,7 +13,7 @@ class ArchivePublicationPageController(
     private val publicationRepository: PublicationRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @GetMapping("/hidden")
+    @GetMapping("/archive")
     fun page(model: Model): String {
         model["publications"] = publicationRepository.allArchived().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
