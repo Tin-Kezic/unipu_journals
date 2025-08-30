@@ -40,6 +40,9 @@ interface PublicationRepository: Repository<Publication, Int> {
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
     fun titleById(@Param(ID) id: Int): String
 
+    @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
+    fun byTitle(@Param(TITLE) title: String): Publication
+
     /*
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
