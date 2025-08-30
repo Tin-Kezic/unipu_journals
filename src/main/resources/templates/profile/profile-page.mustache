@@ -12,11 +12,40 @@
 <body>
 {{>util/header}}
 
-<div class="wrapper" style="display: flex; flex-direction: row; gap: 3rem; margin-inline: 2rem; margin-block: 1rem;">
-    <aside style="margin-inline: 2rem; margin-top: 30vh;">
-        <p style="font-size: 2rem; font-weight: lighter;">Marko Markić</p>
+<div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
+    <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
+        <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">Marko Markić</p>
         <br>
-        <button class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 4rem;">Edit profile</button>
+        <button class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem;">Edit profile</button>
+        <br><br><br><br>
+        <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center;">
+            <div class="dropdown sort" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Most recent</span>
+                </div>
+                <div class="dropdown-content">
+                    <p>Most recent</p>
+                    <p>Oldest</p>
+                    <p>Alphabetically</p>
+                    <p>Views</p>
+                    <p>Downloads</p>
+                </div>
+            </div>
+
+            <div class="dropdown filter" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Filter</span>
+                </div>
+                <div class="dropdown-content" style="text-wrap: nowrap;">
+                    <p>All</p>
+                    <p>Rejected</p>
+                    <p style="padding-left: 0.3rem;">Incomplete submission</p>
+                    <p>Under processing</p>
+                    <p>Published</p>
+                    <p>Archived</p>
+                </div>
+            </div>
+        </div>
     </aside>
 
     <main>
@@ -132,6 +161,40 @@
     .manuscript-containeryellow:hover {
         background-color: var(--orange) !important;
         box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        width: 11rem;
+        box-shadow: 0px 8px 8px rgba(0,0,0,0.1);
+        z-index: 1;
+        border: 1.5px solid var(--purple);
+        border-radius: 0.3rem;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropdown-content p {
+        display: block;
+        width: 100%;
+        padding: 0.7rem 1rem;
+        margin-top: -3px;
+        box-sizing: border-box;
+        transition: background 0.2s;
+        border-bottom: 1.5px solid var(--purple);
+    }
+    .dropdown-content p:hover {
+        background-color: #ebe9ff;
+        cursor: pointer;
+        border-top: 1.5px solid var(--purple);
+    }
+    .dropdown.sort .dropdown-content p {
+        padding-block: 0.95rem;
     }
 
     @media (max-width: 800px) {
