@@ -27,18 +27,6 @@ body {
     background-size: cover;
     background-position: center;
 }
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1vh 3vw;
-    background-color: var(--purple);
-    position: sticky;
-    z-index: 10;
-    min-height: 8vh;
-    top: 0;
-    flex-wrap: wrap;
-}
 .logo-button {
     display: flex;
     align-items: center;
