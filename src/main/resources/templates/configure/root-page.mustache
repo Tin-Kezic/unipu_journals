@@ -98,13 +98,13 @@
             alert(error.message)
         }
     });
-    function dialogOpen(email) {
+    function dialogOnOpen(email) {
         document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
         currentEmail = email
         dialog.showModal();
     }
     document.querySelectorAll('.remove-user-button').forEach(button => {
-        button.addEventListener('click', () => dialogOpen(button.dataset.email));
+        button.addEventListener('click', () => dialogOnOpen(button.dataset.email));
     });
     document.getElementById('add-admin-form').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -116,7 +116,7 @@
             const newButton = document.createElement('button');
             newButton.className = 'remove-user-button';
             newButton.dataset.email = email;
-            newButton.onclick = () => dialogOpen(email);
+            newButton.onclick = () => dialogOnOpen(email);
             newButton.innerHTML = `
                 ${email}
                 <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white">
