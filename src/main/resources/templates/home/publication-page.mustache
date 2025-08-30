@@ -53,8 +53,8 @@
                         onclick="event.stopPropagation()"
                         data-type="edit-button"
                         data-id="{{id}}"
-                        class="m3-button red-button"
-                        style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;"
+                        class="m3-button yello-button"
+                        style="font-size: 0.8rem; width: 3.8rem;"
                     >Edit</button>
                 {{/canEdit}}
             </div>
@@ -75,8 +75,8 @@
             <input type="text" name="title">
         </div>
         <div style="display: flex; justify-content: space-between">
-            <button id="dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button type="submit" class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: white; background-color: var(--purple);">Add</button>
+            <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
         </div>
     </form>
 </dialog>
@@ -89,8 +89,8 @@
     <p id="update-publication-title-dialog-message"></p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button id="dialog-negative" class="m3-button outline-button">Cancel</button>
-        <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
+        <button id="update-publication-title-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="update-publication-title-dialog-positive" class="m3-button yellow-button" style="box-shadow: none; padding-inline: 0.8rem;">Rename</button>
     </div>
 </dialog>
 <dialog id="hide-publication-dialog" closedby="any" style="
