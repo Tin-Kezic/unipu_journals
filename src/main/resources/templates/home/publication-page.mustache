@@ -147,7 +147,7 @@
                     style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
                 >Edit</button>
             </div>`;
-            document.getElementById('publications').appendChild(newPublication);
+            document.getElementById('publications').prepend(newPublication);
             publicationTitleInput.value = '';
             insertPublicationDialog.close();
         } catch(error) { alert(error.message); }
