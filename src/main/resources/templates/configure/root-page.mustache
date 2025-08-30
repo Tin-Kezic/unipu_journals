@@ -8,66 +8,63 @@
     <script src="/htmx.min.js"></script>
 </head>
 <body>
-<main class="wrapper" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; height: 100vh; width: 100vw; gap: 10vw; margin-inline: 1rem;">
-    <section style="max-width: 28rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-width: 22rem; padding-top: 4rem;">
-        <h1 style="font-size: 3.5rem; align-self: flex-start;">Unipu Journals</h1>
-        <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Root page</p>
-        <div style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center;">Update password</p>
-            <form method="post" action="/root/update-password" style="width: 100%;">
-                <div class="text-field">
-                    <label>password</label>
-                    <input name="password" type="password" required>
-                </div>
-                <div class="text-field">
-                    <label>repeat password</label>
-                    <input name="passwordConfirmation" type="password" required>
-                </div>
-                <div style="display: flex; justify-content: center;">
-                    <button class="m3-button yellow-button">Update</button>
-                </div>
-                <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
-                    Incorrect email or password.
-                </p>
-            </form>
-        </div>
-    </section>
-    <div style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
-        <section>
-            <h2 style="font-weight: normal;">Admins</h2>
-            <form hx-post="/root/add-admin" hx-swap="none" hx-on::after-request="handleAddAdminResponse(event)">
-                <div style="display:flex; align-items:center; gap: 0.5rem;">
+    <main class="wrapper" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; height: 100vh; width: 100vw; gap: 10vw; margin-inline: 1rem;">
+        <section style="max-width: 28rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-width: 22rem; padding-top: 4rem;">
+            <h1 style="font-size: 3.5rem; align-self: flex-start;">Unipu Journals</h1>
+            <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Root page</p>
+            <div style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center;">Update password</p>
+                <form method="post" action="/root/update-password" style="width: 100%;">
                     <div class="text-field">
-                        <label>admin mail</label>
-                        <input name="email" type="email" placeholder="email@unipu.hr">
+                        <label>password</label>
+                        <input name="password" type="password" required>
                     </div>
-                    <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap;">+ Add</button>
-                </div>
-            </form>
-        </section>
-        <section id="admin-list" class="users-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
-            {{#admin-emails}}
-                {{>configure/partial/role-email-button}}
-            {{/admin-emails}}
-        </section>
-    </div>
-</main>
-<dialog
-    id="dialog"
-    closedby="any"
->
-    <p id="dialog-message"></p>
-    <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
-    <br>
-    <form id="dialog-form">
-        <div style="display: flex; justify-content: space-between">
-            <button value="cancel" formmethod="dialog" class="m3-button outline-button">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button id="dialogPositive" class="m3-button red-button">Remove</button>
+                    <div class="text-field">
+                        <label>repeat password</label>
+                        <input name="passwordConfirmation" type="password" required>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <button class="m3-button yellow-button">Update</button>
+                    </div>
+                    <p style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
+                        Incorrect email or password.
+                    </p>
+                </form>
             </div>
+        </section>
+        <div style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
+            <section>
+                <h2 style="font-weight: normal;">Admins</h2>
+                <form hx-post="/root/add-admin" hx-swap="none" hx-on::after-request="handleAddAdminResponse(event)">
+                    <div style="display:flex; align-items:center; gap: 0.5rem;">
+                        <div class="text-field">
+                            <label>admin mail</label>
+                            <input name="email" type="email" placeholder="email@unipu.hr">
+                        </div>
+                        <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap;">+ Add</button>
+                    </div>
+                </form>
+            </section>
+            <section id="admin-list" class="users-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+                {{#admin-emails}}
+                    {{>configure/partial/role-email-button}}
+                {{/admin-emails}}
+            </section>
         </div>
-    </form>
-</dialog>
+    </main>
+    <dialog id="dialog" closedby="any" style="
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto; position: absolute;
+        padding: 1.5rem;
+        border: none; border-radius: 0.5rem;
+    ">
+        <p id="dialog-message"></p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button id="dialog-negative" class="m3-button outline-button">Cancel</button>
+            <button id="dialog-positive" class="m3-button red-button">Remove</button>
+        </div>
+    </dialog>
 </body>
 <style>
     .text-field input {
@@ -87,38 +84,29 @@
 </style>
 <script>
     const dialog = document.getElementById("dialog");
-    const form = document.getElementById('dialog-form')
-    const dialogMessage = document.getElementById('dialog-message')
-    const errorMessageParagraph = document.getElementById('error-message')
-    function dialogOpen(email) {
-        dialog.showModal();
-        document.getElementById('dialog-message').innerHTML =
-        `Revoke admin privileges for <b>${email}</b>`;
-        errorMessageParagraph.style.display = 'none'; // Reset error message
+    let currentEmail = null
 
-        form.setAttribute('hx-vals', JSON.stringify({ email }));
-        form.setAttribute('hx-delete', '/root/revoke-admin');
-        htmx.process(form);
+    document.getElementById('dialog-negative').addEventListener('click', () => dialog.close())
+    document.getElementById('dialog-positive').addEventListener('click', async () => {
+        try {
+            const response = await fetch(`/root/revoke-admin?email=${encodeURIComponent(currentEmail)}`, { method: 'DELETE' });
+            if(!response.ok) throw new Error('failed to delete item')
+            const button = document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`);
+            if (button) button.remove();
+            dialog.close()
+        } catch(error) {
+            console.error('Error:', error.message)
+            alert(error.message)
+        }
+    });
+    function dialogOpen(email) {
+        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+        currentEmail = email
+        dialog.showModal();
     }
     document.querySelectorAll('.remove-user-button').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const email = event.target.dataset.email
-            dialogMessage.innerHTML = `Revoke admin privileges for <b>${email}</b>`;
-            form.setAttribute('hx-vals', JSON.stringify({ email }));
-            form.setAttribute('hx-delete', '/root/revoke-admin');
-            dialog.showModal();
-        });
+        button.addEventListener('click', () => dialogOpen(button.dataset.email));
     });
-    function dialogPositive(event) {
-        const email = JSON.parse(form.getAttribute('hx-vals') || '{}').email;
-        if (event.detail.successful) { // Remove admin from DOM
-            const button = document.querySelector(`.remove-user-button[data-email="${email}"]`);
-            if (button) button.remove();
-        } else { // error
-            errorMessageParagraph.textContent = event.detail.xhr.responseText || 'Failed to revoke admin privileges.';
-            errorMessageParagraph.style.display = 'block';
-        }
-    }
     function handleAddAdminResponse(event) {
         if (event.detail.successful) {
             // Extract email from the form input
@@ -129,7 +117,7 @@
                 const newButton = document.createElement('button');
                 newButton.className = 'remove-user-button';
                 newButton.dataset.email = email;
-                newButton.onclick = dialogOpen(email);
+                newButton.onclick = () => dialogOpen(email);
                 newButton.innerHTML = `
                     ${email}
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white">
@@ -143,10 +131,7 @@
 
                 emailInput.value = ''; // clear input field
             }
-        } else { // error
-            const errorMessage = event.detail.xhr.responseText || 'Failed to add admin.';
-            alert(errorMessage);
-        }
+        } else alert(event.detail.xhr.responseText || 'Failed to add admin.');
     }
 </script>
 </html>
