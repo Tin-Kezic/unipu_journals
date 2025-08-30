@@ -283,7 +283,7 @@ nav ul li a:active {
 }
 .blue-checkbox {
     appearance: none;
-    -webkit-appearance: none; /* Za Safari */
+    -webkit-appearance: none; /* for Safari */
     width: 1rem;
     height: 1rem;
     border: 2px solid var(--checkbox-gray);
