@@ -135,7 +135,7 @@ nav ul li a:active {
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
-.darkpurple-white-outline-button {
+.dark-purple-white-outline-button {
     background-color: var(--dark-purple);
     color: white;
     border: 0.1rem solid white;
