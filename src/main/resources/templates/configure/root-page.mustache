@@ -8,7 +8,7 @@
     <script src="/htmx.min.js"></script>
 </head>
 <body>
-<div class="wrapper" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; height: 100vh; width: 100vw; gap: 10vw; margin-inline: 1rem;">
+<main class="wrapper" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; height: 100vh; width: 100vw; gap: 10vw; margin-inline: 1rem;">
     <section style="max-width: 28rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-width: 22rem; padding-top: 4rem;">
         <h1 style="font-size: 3.5rem; align-self: flex-start;">Unipu Journals</h1>
         <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Root page</p>
@@ -32,7 +32,7 @@
             </form>
         </div>
     </section>
-    <main style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
+    <div style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
         <section>
             <h2 style="font-weight: normal;">Admins</h2>
             <form hx-post="/root/add-admin" hx-swap="none" hx-on::after-request="handleAddAdminResponse(event)">
@@ -50,9 +50,24 @@
                 {{>configure/partial/role-email-button}}
             {{/admin-emails}}
         </section>
-    </main>
-</div>
-{{>util/removal-dialog}}
+    </div>
+</main>
+<dialog
+    id="dialog"
+    closedby="any"
+>
+    <p id="dialog-message"></p>
+    <p id="error-message" style="color: var(--red); display: none; margin-top: 1rem;"></p>
+    <br>
+    <form id="dialog-form">
+        <div style="display: flex; justify-content: space-between">
+            <button value="cancel" formmethod="dialog" class="m3-button outline-button">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button id="dialogPositive" class="m3-button red-button">Remove</button>
+            </div>
+        </div>
+    </form>
+</dialog>
 </body>
 <style>
     .text-field input {
@@ -71,23 +86,29 @@
     }
 </style>
 <script>
-    function dialogOnOpen(email) {
-        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+    const dialog = document.getElementById("dialog");
+    const form = document.getElementById('dialog-form')
+    const dialogMessage = document.getElementById('dialog-message')
+    const errorMessageParagraph = document.getElementById('error-message')
+    function dialogOpen(email) {
+        dialog.showModal();
+        document.getElementById('dialog-message').innerHTML =
+        `Revoke admin privileges for <b>${email}</b>`;
         errorMessageParagraph.style.display = 'none'; // Reset error message
 
         form.setAttribute('hx-vals', JSON.stringify({ email }));
         form.setAttribute('hx-delete', '/root/revoke-admin');
         htmx.process(form);
     }
-    function showOverlayAndDialog(email) {
-        overlay.classList.add('active');
-        dialog.classList.add('active');
-        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
-        errorMessageParagraph.style.display = 'none'; // Reset error message
-
-        form.setAttribute('hx-vals', JSON.stringify({ email }));
-        htmx.process(form);
-    }
+    document.querySelectorAll('.remove-user-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const email = event.target.dataset.email
+            dialogMessage.innerHTML = `Revoke admin privileges for <b>${email}</b>`;
+            form.setAttribute('hx-vals', JSON.stringify({ email }));
+            form.setAttribute('hx-delete', '/root/revoke-admin');
+            dialog.showModal();
+        });
+    });
     function dialogPositive(event) {
         const email = JSON.parse(form.getAttribute('hx-vals') || '{}').email;
         if (event.detail.successful) { // Remove admin from DOM
