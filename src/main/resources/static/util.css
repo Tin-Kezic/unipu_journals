@@ -343,32 +343,6 @@ nav ul li a:active {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-.overlay {
-    visibility: hidden;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-}
-.overlay.active {
-    visibility: visible;
-}
-.dialog {
-    visibility: hidden;
-    background: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-    box-sizing: border-box;
-}
-.dialog.active {
-    visibility: visible;
-}
 #snackbar {
     display: flex;
     align-items: center;
