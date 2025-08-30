@@ -256,7 +256,7 @@ nav ul li a:active {
     color: white;
 }
 .pale-yellow-checkbox-button {
-    user-select: none;            /* Prevent text selection */
+    user-select: none; /* Prevent text selection */
 }
 .pale-yellow-checkbox-button input {
     position: absolute;
