@@ -114,6 +114,7 @@
     }
 </style>
 <script>
+    {{#isAdmin}}
     const insertPublicationDialog = document.getElementById('insert-publication-dialog');
     document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
     document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
@@ -152,6 +153,7 @@
             insertPublicationDialog.close();
         } catch(error) { alert(error.message); }
     });
+    {{/isAdmin}}
     document.getElementById('add-admin-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const emailInput = document.querySelector('input[name="email"]');
