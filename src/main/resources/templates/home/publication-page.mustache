@@ -20,9 +20,10 @@
     {{/isAdmin}}
 </div>
 
-<section id="publications" style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+<section id="publications" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
         <div
+            data-id="{{id}}"
             class="yellow-box"
             style="cursor: pointer;"
             onclick="window.location='/publication/{{id}}'"
@@ -100,7 +101,7 @@
     <br>
     <div style="display: flex; justify-content: space-between">
         <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
-        <button id="hide-publication-dialog-positive" class="m3-button red-button">Remove</button>
+        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
     </div>
 </dialog>
 </body>
@@ -152,14 +153,20 @@
 
     function updatePublicationTitleDialogOpen(id) {
     }
-    function onHideButton() {
-        hidePublicationDialog.showModal()
-    }
-    hideButtons.forEach(button => { button.addEventListener('click', () => onHideButton(button)); });
-    function dialogOpen(email) {
-        document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
-        currentEmail = email
-        dialog.showModal();
-    }
+    let currentId = null;
+    hideButtons.forEach(button => { button.addEventListener('click', () => {
+        document.getElementById('hide-publication-dialog-message').innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+        currentId = button.dataset.id;
+        hidePublicationDialog.showModal();
+    }); });
+
+    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
+    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/hide?publicationId=${currentId}&isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide publication'); return; }
+        const publication = document.querySelector(`div[data-id="${currentId}"]`);
+        if(publication) publication.remove();
+        hidePublicationDialog.close();
+    });
 </script>
 </html>
