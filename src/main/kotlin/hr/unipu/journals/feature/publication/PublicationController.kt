@@ -20,10 +20,10 @@ class PublicationController(private val repository: PublicationRepository) {
 
     @PostMapping("/insert")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
-    fun insert(@RequestParam title: String): ResponseEntity<Any> {
+    fun insert(@RequestParam title: String): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             repository.insert(Jsoup.clean(title, Safelist.none()))
-            ResponseEntity.ok(repository.byTitle(title))
+            ResponseEntity.ok("publication successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/update-title")
