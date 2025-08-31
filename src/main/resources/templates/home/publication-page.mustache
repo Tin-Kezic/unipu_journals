@@ -117,7 +117,7 @@
     document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
     document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const publicationTitleInput = document.querySelector('input[name=title]');
+        const publicationTitleInput = document.querySelector('input[name=insert-publication-dialog-input]');
         const publicationTitle = publicationTitleInput.value;
         try {
             const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
