@@ -10,9 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -46,7 +46,7 @@ class RootPageController(
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
 
-    @DeleteMapping("/revoke-admin")
+    @PutMapping("/revoke-admin")
     fun revokeAdmin(@RequestParam email: String): ResponseEntity<String> {
         if(accountRepository.isAdmin(email)) accountRepository.updateIsAdmin(email, false)
         else if (inviteRepository.isAdmin(email)) inviteRepository.revoke(email, InvitationTarget.ADMIN)
