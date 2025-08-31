@@ -142,7 +142,7 @@
                 data-type="edit-button"
                 data-id="${data.id}"
                 class="m3-button yellow-button"
-                onclick="onEditButton()"
+                onclick="onEditButton(${data.id}, ${data.title})"
                 style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
             >Edit</button>
         </div>`;
@@ -157,13 +157,13 @@
     const editButtons = document.querySelectorAll('button[data-type="edit-button"]');
     let currentUpdatePublicationTitle = null
     let currentUpdatePublicationId = document.getElementById('update-publication-title-dialog-message')
-    function onEditButton(button) {
-        updatePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
-        currentUpdatePublicationId = button.dataset.id;
-        currentUpdatePublicationTitle = button.dataset.title;
+    function onEditButton(id, title) {
+        updatePublicationTitleDialogMessage.innerHTML = `edit title of <b>${title}</b>`;
+        currentUpdatePublicationId = id;
+        currentUpdatePublicationTitle = title;
         updatePublicationTitleDialog.showModal();
     }
-    editButtons.forEach(button => { button.addEventListener('click', () => onEditButton(button)); });
+    editButtons.forEach(button => { button.addEventListener('click', () => onEditButton(button.dataset.id, button.dataset.title)); });
     document.getElementById('update-publication-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
     document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -183,7 +183,7 @@
 
     function updatePublicationTitleDialogOpen(id) {
     }
-    function onHideButton(button) {
+    function onHideButton() {
         hidePublicationDialog.showModal()
     }
     hideButtons.forEach(button => { button.addEventListener('click', () => onHideButton(button)); });
