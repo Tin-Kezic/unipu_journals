@@ -33,7 +33,6 @@ class PublicationController(private val repository: PublicationRepository) {
             repository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok("title successfully updated")
         } else ResponseEntity.badRequest().body("publication with id: $publicationId does not exist")
-
     }
     @PutMapping("/hide")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
