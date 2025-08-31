@@ -28,16 +28,16 @@ class PublicationController(private val repository: PublicationRepository) {
     }
     @PutMapping("/update-title")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
+    fun updateTitle(@RequestParam publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
         return if(repository.existsById(publicationId)) {
             repository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok("title successfully updated")
         } else ResponseEntity.badRequest().body("publication with id: $publicationId does not exist")
 
     }
-    @PutMapping("/hide/{publicationId}")
+    @PutMapping("/hide")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateHidden(@PathVariable publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
+    fun updateHidden(@RequestParam publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
         return if (repository.existsById(publicationId)) {
             repository.updateHidden(publicationId, isHidden)
             ResponseEntity.ok("publication successfully hidden")
