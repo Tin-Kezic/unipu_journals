@@ -119,117 +119,78 @@
         event.preventDefault();
         const publicationTitleInput = document.querySelector('input[name=insert-publication-dialog-input]');
         const publicationTitle = publicationTitleInput.value;
-        try {
-            const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
-            if(!response.ok) throw new Error('failed to add publication');
-            const data = await response.json();
-            const newPublication = document.createElement('div');
-            newPublication.addEventListener('click', () => window.location = `/publication/${data.id}`);
-            newPublication.className = 'yellow-box';
-            newPublication.style = 'cursor: pointer;'
-            newPublication.innerHTML = `
-            <p class="yellow-box-text">${data.title}</p>
-            <div class="yellow-box-buttons">
-                <button
-                    onclick="event.stopPropagation()"
-                    data-type="hide-button"
-                    data-id="${data.id}"
-                    class="m3-button purple-button"
-                    style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-                >Hide</button>
-                <button
-                    onclick="event.stopPropagation()"
-                    data-type="edit-button"
-                    data-id="${data.id}"
-                    class="m3-button yellow-button"
-                    style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-                >Edit</button>
-            </div>`;
-            document.getElementById('publications').prepend(newPublication);
-            publicationTitleInput.value = '';
-            insertPublicationDialog.close();
-        } catch(error) { alert(error.message); }
+        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        if(!response.ok) { alert('failed to add publication'); return; }
+        const data = await response.json();
+        const newPublication = document.createElement('div');
+        newPublication.addEventListener('click', () => window.location = `/publication/${data.id}`);
+        newPublication.className = 'yellow-box';
+        newPublication.style = 'cursor: pointer;'
+        newPublication.innerHTML = `
+        <p class="yellow-box-text">${data.title}</p>
+        <div class="yellow-box-buttons">
+            <button
+                onclick="event.stopPropagation()"
+                data-type="hide-button"
+                data-id="${data.id}"
+                class="m3-button purple-button"
+                onclick="onHideButton()"
+                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+            >Hide</button>
+            <button
+                onclick="event.stopPropagation()"
+                data-type="edit-button"
+                data-id="${data.id}"
+                class="m3-button yellow-button"
+                onclick="onEditButton()"
+                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+            >Edit</button>
+        </div>`;
+        document.getElementById('publications').prepend(newPublication);
+        publicationTitleInput.value = '';
+        insertPublicationDialog.close();
     });
     {{/isAdmin}}
-    document.getElementById('add-admin-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const emailInput = document.querySelector('input[name="email"]');
-        const email = emailInput.value;
-        try {
-            const response = await fetch(`/root/add-admin?email=${encodeURIComponent(email)}`, { method: 'POST' });
-            if(!response.ok || !email) throw new Error('failed to add admin');
-            const newButton = document.createElement('button');
-            newButton.className = 'remove-user-button';
-            newButton.dataset.email = email;
-            newButton.onclick = () => dialogOpen(email);
-            newButton.innerHTML = `
-                ${email}
-                <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white">
-                    <path d="M640-520v-80h240v80H640Zm-280 40q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/>
-                </svg>
-            `;
-            // Append to admin list
-            document.getElementById('admin-list').appendChild(newButton);
 
-            emailInput.value = ''; // clear input field
-
-        } catch(error) { alert(error.message); }
-    });
     const updatePublicationTitleDialog = document.getElementById('update-publication-title-dialog');
+    const updatePublicationTitleDialogMessage = document.getElementById('update-publication-title-dialog-message');
+    const editButtons = document.querySelectorAll('button[data-type="edit-button"]');
+    let currentUpdatePublicationTitle = null
+    let currentUpdatePublicationId = document.getElementById('update-publication-title-dialog-message')
+    function onEditButton(button) {
+        updatePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
+        currentUpdatePublicationId = button.dataset.id;
+        currentUpdatePublicationTitle = button.dataset.title;
+        updatePublicationTitleDialog.showModal();
+    }
+    editButtons.forEach(button => { button.addEventListener('click', () => onEditButton(button)); });
+    document.getElementById('update-publication-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
+    document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const publicationTitleInput = document.querySelector('input[name="update-publication-title-dialog-input"]');
+        const newPublicationTitle = publicationTitleInput.value;
+        const response = await fetch(`/api/publication/update-title?publicationId=${currentUpdatePublicationId}&title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to update publication title'); return; }
+        Array.from(document.querySelectorAll('p'))
+            .find(p => p.innerHTML == currentUpdatePublicationTitle)
+            .innerHTML = newPublicationTitle;
+        publicationTitleInput.value = '';
+        updatePublicationTitleDialog.close();
+    });
+
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
     const hideButtons = document.querySelectorAll('button[data-type="hide-button"]');
-    const editButtons = document.querySelectorAll('button[data-type="edit-button"]');
 
     function updatePublicationTitleDialogOpen(id) {
     }
-
-    hideButtons.forEach(button => {
-        button.addEventListener('click', () => hidePublicationDialog.showModal());
-    });
-    editButtons.forEach(button => {
-        button.addEventListener('click', () => updatePublicationTitleDialog.showModal());
-    });
-
-
-    let currentId = null
-
-    document.getElementById('dialog-negative').addEventListener('click', () => dialog.close())
-    document.getElementById('dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/root/revoke-admin?email=${encodeURIComponent(currentEmail)}`, { method: 'DELETE' });
-        if(!response.ok) { alert('failed to delete item'); return; }
-        const button = document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`);
-        if (button) button.remove();
-        dialog.close()
-    });
+    function onHideButton(button) {
+        hidePublicationDialog.showModal()
+    }
+    hideButtons.forEach(button => { button.addEventListener('click', () => onHideButton(button)); });
     function dialogOpen(email) {
         document.getElementById('dialog-message').innerHTML = `Revoke admin privileges for <b>${email}</b>`;
         currentEmail = email
         dialog.showModal();
     }
-    document.querySelectorAll('.remove-user-button').forEach(button => {
-        button.addEventListener('click', () => dialogOpen(button.dataset.email));
-    });
-    document.getElementById('add-admin-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const emailInput = document.querySelector('input[name="email"]');
-        const email = emailInput.value;
-        const response = await fetch(`/root/add-admin?email=${encodeURIComponent(email)}`, { method: 'POST' })
-        if(!response.ok || !email) { alert('failed to add admin'); return; }
-        const newButton = document.createElement('button');
-        newButton.className = 'remove-user-button';
-        newButton.dataset.email = email;
-        newButton.onclick = () => dialogOpen(email);
-        newButton.innerHTML = `
-            ${email}
-            <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="24px" fill="white">
-                <path d="M640-520v-80h240v80H640Zm-280 40q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/>
-            </svg>
-        `;
-        // Append to admin list
-        const adminList = document.getElementById('admin-list');
-        adminList.appendChild(newButton);
-
-        emailInput.value = ''; // clear input field
-    });
 </script>
 </html>
