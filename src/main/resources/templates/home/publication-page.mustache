@@ -121,34 +121,7 @@
         const publicationTitle = publicationTitleInput.value;
         const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
         if(!response.ok) { alert('failed to add publication'); return; }
-        const data = await response.json();
-        const newPublication = document.createElement('div');
-        newPublication.addEventListener('click', () => window.location = `/publication/${data.id}`);
-        newPublication.className = 'yellow-box';
-        newPublication.style = 'cursor: pointer;'
-        newPublication.innerHTML = `
-        <p class="yellow-box-text">${data.title}</p>
-        <div class="yellow-box-buttons">
-            <button
-                onclick="event.stopPropagation()"
-                data-type="hide-button"
-                data-id="${data.id}"
-                class="m3-button purple-button"
-                onclick="onHideButton()"
-                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-            >Hide</button>
-            <button
-                onclick="event.stopPropagation()"
-                data-type="edit-button"
-                data-id="${data.id}"
-                class="m3-button yellow-button"
-                onclick="onEditButton(${data.id}, ${data.title})"
-                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-            >Edit</button>
-        </div>`;
-        document.getElementById('publications').prepend(newPublication);
-        publicationTitleInput.value = '';
-        insertPublicationDialog.close();
+        location.reload(true);
     });
     {{/isAdmin}}
 
@@ -171,11 +144,7 @@
         const newPublicationTitle = publicationTitleInput.value;
         const response = await fetch(`/api/publication/update-title?publicationId=${currentUpdatePublicationId}&title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update publication title'); return; }
-        Array.from(document.querySelectorAll('p'))
-            .find(p => p.innerHTML == currentUpdatePublicationTitle)
-            .innerHTML = newPublicationTitle;
-        publicationTitleInput.value = '';
-        updatePublicationTitleDialog.close();
+        location.reload(true);
     });
 
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
