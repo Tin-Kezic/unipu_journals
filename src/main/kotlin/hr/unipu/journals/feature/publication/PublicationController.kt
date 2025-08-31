@@ -26,7 +26,7 @@ class PublicationController(private val repository: PublicationRepository) {
             ResponseEntity.ok(repository.byTitle(title))
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("/update-title/{publicationId}")
+    @PutMapping("/update-title")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
         return if(repository.existsById(publicationId)) {
