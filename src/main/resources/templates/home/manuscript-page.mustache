@@ -6,38 +6,25 @@
     <title>Manuscript Page</title>
     <link href="/util.css" rel="stylesheet"/>
     <script src="/htmx.min.js"></script>
-
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
-
 <body>
 {{>util/header}}
 
 <section>
     <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-        Acoustics
+        {{title}}
     </h1>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
-    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        <label class="sidebar-button">
-            <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-
-            <span class="checkbox">Acoustic Ecology</span>
-        </label>
+    <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        {{#sections-sidebar}}
+            <a href="/section/{{id}}" style="text-decoration: none; color: inherit;">
+                <label class="sidebar-button">
+                    <span class="checkbox">{{title}}</span>
+                </label>
+            </a>
+        {{/sections-sidebar}}
     </aside>
 
     <section class="main-content" style="
