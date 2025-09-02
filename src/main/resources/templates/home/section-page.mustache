@@ -7,39 +7,28 @@
     <script src="/htmx.min.js"></script>
     <title>Section Page</title>
 </head>
-
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
 {{>util/header}}
 
 <main>
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
         <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
-            publications
+            sections
         </h1>
-        <button class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;" onclick="showOverlayAndDialog()">+ Add section</button>
+        {{#isAdmin}}
+            <button id="add-section" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add section</button>
+        {{/isAdmin}}
     </div>
 
     <div style="display: flex; align-items: flex-start;">
         <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-            {{#publications-sidebar}}
-                <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+            {{#sections-sidebar}}
+                <a href="/section/{{id}}" style="text-decoration: none; color: inherit;">
                     <label class="sidebar-button">
                         <span class="checkbox">{{title}}</span>
                     </label>
                 </a>
-            {{/publications-sidebar}}
+            {{/sections-sidebar}}
         </aside>
 
         <section style="
@@ -52,12 +41,30 @@
           ">
             {{#sections}}
                 <article>
-                    <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
+                    <a href="/section/{{sectionId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
                         <div class="yellow-box">
                             <p class="yellow-box-text">{{title}}</p>
                             <div class="yellow-box-buttons">
-                                <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                                <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
+                                {{#canHide}}
+                                    <button
+                                            onclick="event.stopPropagation()"
+                                            data-type="hide-button"
+                                            data-id="{{id}}"
+                                            data-title="{{title}}"
+                                            class="m3-button purple-button"
+                                            style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+                                    >Hide</button>
+                                {{/canHide}}
+                                {{#canEdit}}
+                                    <button
+                                            onclick="event.stopPropagation()"
+                                            data-type="edit-button"
+                                            data-id="{{id}}"
+                                            data-title="{{title}}"
+                                            class="m3-button red-button"
+                                            style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;"
+                                    >Edit</button>
+                                {{/canEdit}}
                             </div>
                         </div>
                     </a>
@@ -67,66 +74,156 @@
     </div>
 </main>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Section name:</p>
+<dialog id="insert-section-dialog" closedby="any" style="
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto; position: absolute;
+        padding: 1.5rem;
+        border: none; border-radius: 0.5rem;
+    ">
+    <p id="insert-section-dialog-message">Section name:</p>
+    <form id="insert-section-dialog-form">
         <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
+            <label>section</label>
+            <input type="text" name="insert-section-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <button id="insert-section-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: white; background-color: var(--purple);">Add</button>
             </div>
         </div>
-    </div>
-</div>
+    </form>
+</dialog>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Update section name</p>
+<dialog id="update-section-title-dialog" closedby="any" style="
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto; position: absolute;
+        padding: 1.5rem;
+        border: none; border-radius: 0.5rem;
+    ">
+    <p id="update-section-title-dialog-message"></p>
+    <form id="update-section-title-dialog-form">
         <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
+            <label>section</label>
+            <input type="text" name="update-section-title-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <button id="update-section-title-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">&nbsp&nbsp Rename &nbsp&nbsp</button>
             </div>
         </div>
-    </div>
-</div>
+    </form>
+</dialog>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Hide section <b>Acoustic signal processing</b>?</p>
-        <br>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);">hide</button>
-            </div>
+<dialog id="hide-section-dialog" closedby="any" style="
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto; position: absolute;
+        padding: 1.5rem;
+        border: none; border-radius: 0.5rem;
+    ">
+    <p id="hide-section-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between; gap: 1rem;">
+        <button id="hide-section-dialog-negative" class="m3-button outline-button" type="button">cancel</button>
+        <div style="display: flex; justify-content: flex-end">
+            <button id="hide-section-dialog-positive" class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);" type="button">hide</button>
         </div>
     </div>
-</div>
+</dialog>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Add EiC</p>
+
+<dialog id="insert-eic-dialog" closedby="any" style="
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto; position: absolute;
+        padding: 1.5rem;
+        border: none; border-radius: 0.5rem;
+    ">
+    <p id="insert-eic-dialog-message">Add EiC</p>
+    <form id="insert-eic-dialog-form">
         <div class="text-field" style="width: 20rem;">
-            <label for="section"></label>
-            <input type="email">
+            <label>EiC</label>
+            <input type="email" name="insert-eic-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <button id="insert-eic-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: black; background-color: var(--yellow);">Add</button>
             </div>
         </div>
-    </div>
-</div>
-
+    </form>
+</dialog>
 </body>
+<script>
+        {{#isAdmin}}
+        const insertSectionDialog = document.getElementById('insert-section-dialog');
+        document.getElementById('add-section').addEventListener('click', () => insertSectionDialog.showModal());
+        document.getElementById('insert-section-dialog-negative').addEventListener('click', () => insertSectionDialog.close());
+        document.getElementById('insert-section-dialog-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const sectionTitleInput = document.querySelector('input[name=insert-section-dialog-input]');
+            const sectionTitle = sectionTitleInput.value;
+            const response = await fetch(`/api/section/insert?title=${encodeURIComponent(sectionTitle)}`, { method: 'POST'});
+            if(!response.ok) { alert('failed to add section'); return;}
+            location.reload(true);
+        });
+        {{/isAdmin}}
+
+    const updateSectionTitleDialog = document.getElementById('update-section-title-dialog');
+    const updateSectionTitleDialogMessage = document.getElementById('update-section-title-dialog-message');
+    const editButtons = document.querySelectorAll('button[data-type="edit-button"]');
+    let currentUpdateSectionTitle = null
+    let currentUpdateSectionId = document.getElementById('update-section-title-dialog-message')
+    function onEditButton(id, title) {
+        updateSectionTitleDialogMessage.innerHTML = `edit title of <b>${title}</b>`;
+        currentUpdateSectionId = id;
+        currentUpdateSectionTitle = title;
+        updateSectionTitleDialog.showModal();
+    }
+    editButtons.forEach(button => { button.addEventListener('click', () => onEditButton(button.dataset.id, button.dataset.title)); });
+    document.getElementById('update-section-title-dialog-negative').addEventListener('click', () => updateSectionTitleDialog.close());
+    document.getElementById('update-section-title-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const sectionTitleInput = document.querySelector('input[name="update-section-title-dialog-input"]');
+        const newSectionTitle = sectionTitleInput.value;
+        const response = await fetch(`/api/section/update-title?sectionId=${currentUpdateSectionId}&title=${encodeURIComponent(newSectionTitle)}`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to update section title'); return; }
+        location.reload(true);
+    });
+
+    const hideSectionDialog = document.getElementById('hide-section-dialog');
+    const hideButtons = document.querySelectorAll('button[data-type="hide-button"]');
+
+    function updateSectionTitleDialogOpen(id) {
+    }
+    let currentId = null;
+    hideButtons.forEach(button => { button.addEventListener('click', () => {
+        document.getElementById('hide-section-dialog-message').innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+        currentId = button.dataset.id;
+        hideSectionDialog.showModal();
+    }); });
+
+    document.getElementById('hide-section-dialog-negative').addEventListener('click', () => hideSectionDialog.close());
+    document.getElementById('hide-section-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/section/hide?sectionId=${currentId}&isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide section'); return; }
+        const section = document.querySelector(`div[data-id="${currentId}"]`);
+        if(section) section.remove();
+        hideSectionDialog.close();
+    });
+
+        {{#isAdmin}}
+        const insertEiCDialog = document.getElementById('insert-eic-dialog');
+        document.getElementById('add-eic').addEventListener('click', () => insertEiCDialog.showModal());
+        document.getElementById('insert-eic-dialog-negative').addEventListener('click', () => insertEiCDialog.close());
+        document.getElementById('insert-eic-dialog-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const EiCTitleInput = document.querySelector('input[name=insert-eic-dialog-input]');
+            const EiCTitle = EiCTitleInput.value;
+            const response = await fetch(`/api/eic/insert?title=${encodeURIComponent(eicTitle)}`, { method: 'POST'});
+            if(!response.ok) { alert('failed to add EiC'); return;}
+            location.reload(true);
+        });
+        {{/isAdmin}}
+</script>
 </html>
