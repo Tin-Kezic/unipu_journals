@@ -41,8 +41,11 @@
           ">
             {{#sections}}
                 <article>
-                    <a href="/section/{{sectionId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
-                        <div class="yellow-box">
+                    <a href="/section/{{sectionId}}/section/{{id}}" id="sections" style="text-decoration: none; color: inherit;">
+                        <div
+                                data-id="{{id}}"
+                                class="yellow-box"
+                                onclick="window.location='/">
                             <p class="yellow-box-text">{{title}}</p>
                             <div class="yellow-box-buttons">
                                 {{#canHide}}
@@ -65,6 +68,7 @@
                                             style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;"
                                     >Edit</button>
                                 {{/canEdit}}
+                        </div>
                             </div>
                         </div>
                     </a>
