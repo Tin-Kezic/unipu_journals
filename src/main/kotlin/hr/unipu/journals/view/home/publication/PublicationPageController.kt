@@ -14,13 +14,14 @@ class PublicationPageController(
 ) {
     @GetMapping("/")
     fun page(model: Model): String {
-        model["isAdmin"] = authorizationService.isAdmin()
+        val isAdmin = authorizationService.isAdmin()
+        model["isAdmin"] = isAdmin
         model["publications"] = publicationRepository.allPublished().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
             PublicationDTO(
                 id = publication.id,
                 title = publication.title,
-                canHide = isEicOrSuperior,
+                canHide = isAdmin,
                 canEdit = isEicOrSuperior,
                 isEic = isEicOrSuperior
             )
