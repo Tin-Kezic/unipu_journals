@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home.publication
+package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
@@ -18,7 +18,7 @@ class PublicationPageController(
         model["isAdmin"] = isAdmin
         model["publications"] = publicationRepository.allPublished().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            PublicationDTO(
+            ContainerDTO(
                 id = publication.id,
                 title = publication.title,
                 canHide = isAdmin,

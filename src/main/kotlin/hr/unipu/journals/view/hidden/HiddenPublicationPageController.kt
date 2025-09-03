@@ -2,7 +2,7 @@ package hr.unipu.journals.view.hidden
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.publication.PublicationDTO
+import hr.unipu.journals.view.home.ContainerDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -17,7 +17,7 @@ class HiddenPublicationPageController(
     fun page(model: Model): String {
         model["publications"] = publicationRepository.allHidden().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            PublicationDTO(
+            ContainerDTO(
                 id = publication.id,
                 title = publication.title,
                 canHide = isEicOrSuperior,

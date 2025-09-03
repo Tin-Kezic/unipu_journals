@@ -1,6 +1,6 @@
-package hr.unipu.journals.view.home.publication
+package hr.unipu.journals.view.home
 
-data class PublicationDTO (
+data class ContainerDTO (
     val id: Int,
     val title: String,
     val canHide: Boolean,
