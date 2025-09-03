@@ -158,7 +158,7 @@
         document.getElementById('hide-publication-dialog-message').innerHTML = `Hide <b>${button.dataset.title}</b>?`;
         currentId = button.dataset.id;
         hidePublicationDialog.showModal();
-    }); });
+    });});
 
     document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
