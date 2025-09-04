@@ -57,7 +57,7 @@
                             <p class="yellow-box-text">{{title}}</p>
                             <div class="yellow-box-buttons">
                                 <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                                <button class="m3-button red-button" style="color: black; background-color: var(--yellow); font-size: 0.8rem; width: 3.8rem;">Edit</button>
+                                <button class="m3-button yellow-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Edit</button>
                             </div>
                         </div>
                     </a>
@@ -86,6 +86,7 @@
 <div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Update section name</p>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
         <div class="text-field">
             <label for="section"></label>
             <input type="text">
@@ -125,6 +126,7 @@
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: black; background-color: var(--yellow);">Add</button>
             </div>
         </div>
+        <button id="hide-section-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
     </div>
 </div>
 
