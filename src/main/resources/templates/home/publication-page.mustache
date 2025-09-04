@@ -28,7 +28,7 @@
             style="cursor: pointer;"
             onclick="window.location='/publication/{{id}}'"
         >
-            <p class="yellow-box-text">{{title}}</p>
+            <p class="yellow-box-text" data-id="{{id}}">{{title}}</p>
             <div class="yellow-box-buttons">
                 {{#canHide}}
                     <button
