@@ -27,7 +27,9 @@
         <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
             publications
         </h1>
-        <button class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;" onclick="showOverlayAndDialog()">+ Add section</button>
+        {{#isEicOrSuperior}}
+            <button id="add-section" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;" onclick="showOverlayAndDialog()">+ Add section</button>
+        {{/isEicOrSuperior}}
     </div>
 
     <div style="display: flex; align-items: flex-start;">
