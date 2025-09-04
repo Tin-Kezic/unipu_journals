@@ -125,6 +125,7 @@
     });
     {{/isAdmin}}
 
+    let currentId = null;
     const updatePublicationTitleDialog = document.getElementById('update-publication-title-dialog');
     const updatePublicationTitleDialogMessage = document.getElementById('update-publication-title-dialog-message');
     document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
@@ -139,9 +140,11 @@
         event.preventDefault();
         const publicationTitleInput = document.querySelector('input[name="update-publication-title-dialog-input"]');
         const newPublicationTitle = publicationTitleInput.value;
-        const response = await fetch(`/api/publication/update-title?publicationId=${currentUpdatePublicationId}&title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/update-title?publicationId=${currentId}&title=${encodeURIComponent(publicationTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update publication title'); return; }
-        location.reload(true);
+        document.querySelector(`p[data-id="${currentId}"]`).innerHTML = newPublicationTitle;
+        updatePublicationTitleDialog.close();
+        publicationTitleInput.value = '';
     });
 
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
