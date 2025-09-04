@@ -59,13 +59,17 @@ interface SectionRepository: Repository<Section, Int> {
         @Param(PUBLICATION_ID) publicationId: Int,
     )
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE, $DESCRIPTION = :$DESCRIPTION WHERE $ID = :$ID")
-    fun updateTitleAndDescription(
+    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE WHERE $ID = :$ID")
+    fun updateTitle(
         @Param(ID) id: Int,
         @Param(TITLE) title: String,
-        @Param(DESCRIPTION) description: String
     )
-
+    @Modifying
+    @Query("UPDATE $PUBLICATION_SECTION SET $DESCRIPTION = :$DESCRIPTION WHERE $ID = :$ID")
+    fun updateDescription(
+        @Param(ID) id: Int,
+        @Param(DESCRIPTION) description: String,
+    )
     @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION_SECTION WHERE $ID = :$ID)")
     fun exists(@Param(ID) id: Int): Boolean
 
