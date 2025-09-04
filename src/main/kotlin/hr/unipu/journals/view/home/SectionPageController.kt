@@ -19,7 +19,8 @@ class SectionPageController(
 ) {
     @GetMapping("/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        model["publications-sidebar"] = publicationRepository.allPublished()
+        model["publicationsSidebar"] = publicationRepository.allPublished()
+        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["sections"] = sectionRepository.allPublishedByPublicationId(publicationId).map { section ->
             val isSectionEditorOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             ContainerDTO(
