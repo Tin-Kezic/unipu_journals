@@ -52,20 +52,21 @@
         </div>
     {{/publications}}
 </section>
-
-<dialog id="insert-publication-dialog" closedby="any">
-    <p id="insert-publication-dialog-message">Add publication</p>
-    <form id="insert-publication-dialog-form">
-        <div class="text-field">
-            <label>title</label>
-            <input type="text" name="insert-publication-dialog-input">
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
-        </div>
-    </form>
-</dialog>
+{{#isAdmin}}
+    <dialog id="insert-publication-dialog" closedby="any">
+        <p id="insert-publication-dialog-message">Add publication</p>
+        <form id="insert-publication-dialog-form">
+            <div class="text-field">
+                <label>title</label>
+                <input type="text" name="insert-publication-dialog-input">
+            </div>
+            <div style="display: flex; justify-content: space-between">
+                <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+                <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+            </div>
+        </form>
+    </dialog>
+{{/isAdmin}}
 <dialog id="update-publication-title-dialog" closedby="any">
     <p id="update-publication-title-dialog-message"></p>
     <form id="update-publication-title-dialog-form">
