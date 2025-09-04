@@ -148,17 +148,14 @@
     });
 
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
-    const hideButtons = document.querySelectorAll('button[data-type="hide-button"]');
-
-    function updatePublicationTitleDialogOpen(id) {
-    }
-    let currentId = null;
-    hideButtons.forEach(button => { button.addEventListener('click', () => {
-        document.getElementById('hide-publication-dialog-message').innerHTML = `Hide <b>${button.dataset.title}</b>?`;
-        currentId = button.dataset.id;
-        hidePublicationDialog.showModal();
-    });});
-
+    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hidePublicationDialog.showModal();
+        });
+    });
     document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/api/publication/hide?publicationId=${currentId}&isHidden=true`, { method: 'PUT' });
