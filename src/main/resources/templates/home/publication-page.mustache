@@ -66,7 +66,20 @@
         </div>
     </form>
 </dialog>
+<script>
+    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
+    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
+    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
+    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
+        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        if(!response.ok) { alert('failed to add publication'); return; }
+        location.reload(true);
+    });
+</script>
 {{/isAdmin}}
+
 <dialog id="update-publication-title-dialog" closedby="any">
     <p id="update-publication-title-dialog-message"></p>
     <form id="update-publication-title-dialog-form">
@@ -80,35 +93,7 @@
         </div>
     </form>
 </dialog>
-<dialog id="hide-publication-dialog" closedby="any">
-    <p id="hide-publication-dialog-message"></p>
-    <br>
-    <div style="display: flex; justify-content: space-between">
-        <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
-        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
-    </div>
-</dialog>
-</body>
-<style>
-    .m3-button:active {
-        transform: none;
-        box-shadow: none !important;
-    }
-</style>
 <script>
-    {{#isAdmin}}
-    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
-    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
-    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
-    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
-        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
-        if(!response.ok) { alert('failed to add publication'); return; }
-        location.reload(true);
-    });
-    {{/isAdmin}}
-
     let currentId = null;
     const updatePublicationTitleDialog = document.getElementById('update-publication-title-dialog');
     const updatePublicationTitleDialogMessage = document.getElementById('update-publication-title-dialog-message');
@@ -127,7 +112,17 @@
         if(!response.ok) { alert('failed to update publication title'); return; }
         location.reload(true);
     });
+</script>
 
+<dialog id="hide-publication-dialog" closedby="any">
+    <p id="hide-publication-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
+    </div>
+</dialog>
+<script>
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
     const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
     document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
@@ -146,4 +141,5 @@
         hidePublicationDialog.close();
     });
 </script>
+</body>
 </html>
