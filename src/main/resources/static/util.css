@@ -67,6 +67,12 @@ nav ul li a:active {
     align-items: center;
     position: relative;
 }
+dialog {
+    left: 0; right: 0; top: 0; bottom: 0;
+    margin: auto; position: fixed;
+    padding: 1.5rem;
+    border: none; border-radius: 0.5rem;
+}
 .search-bar {
     padding: 1vh 1vw;
     padding-right: 2.25rem;
