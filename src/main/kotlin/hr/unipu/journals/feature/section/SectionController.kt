@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/publication/")
+@RequestMapping("/api/publication")
 class SectionController(private val sectionRepository: SectionRepository) {
 
-    @PostMapping("{publicationId}/insert")
+    @PostMapping("/{publicationId}/insert")
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
@@ -30,7 +30,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
             ResponseEntity.ok("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("{publicationId}/update-title-and-description")
+    @PutMapping("/{publicationId}/section/{sectionId}/update-title-and-description")
     fun update(
         @PathVariable sectionId: Int,
         @RequestParam title: String,
@@ -41,7 +41,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
             ResponseEntity.ok("title successfully updated")
         } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
     }
-    @PutMapping("{publicationId}/hide/{section_id}")
+    @PutMapping("/{publicationId}/section/{section_id}/update-hidden")
     fun updateHidden(
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
