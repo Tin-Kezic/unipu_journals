@@ -24,8 +24,8 @@
             data-id="{{id}}"
             class="yellow-box"
             style="cursor: pointer;"
-            onclick="window.location='/publication/{{id}}'"
-        >
+            onclick="window.location='/publication/{{id}}'
+        ">
             <p class="yellow-box-text" data-id="{{id}}">{{title}}</p>
             <div class="yellow-box-buttons">
                 {{#canHide}}
@@ -52,41 +52,18 @@
         </div>
     {{/publications}}
 </section>
-{{#isAdmin}}
-<dialog id="insert-publication-dialog" closedby="any">
-    <p id="insert-publication-dialog-message">Add publication</p>
-    <form id="insert-publication-dialog-form">
+<dialog id="dialog" closedby="any">
+    <p id="dialog-message">Add publication</p>
+    <form id="dialog-form">
         <div class="text-field">
-            <label>title</label>
-            <input type="text" name="insert-publication-dialog-input">
+            <label id="dialog-input-label"></label>
+            <input id="dialog-input" name="dialog-input" type="text">
         </div>
         <div style="display: flex; justify-content: space-between">
-            <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+            <button id="dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button id="dialog-positive" class="m3-button" style="box-shadow: none; padding-inline: 1.8rem; margin-left: 1rem;"></button>
         </div>
     </form>
-</dialog>
-{{/isAdmin}}
-<dialog id="update-publication-title-dialog" closedby="any">
-    <p id="update-publication-title-dialog-message"></p>
-    <form id="update-publication-title-dialog-form">
-        <div class="text-field">
-            <label>title</label>
-            <input type="text" name="update-publication-title-dialog-input">
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button id="update-publication-title-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button yellow-button" style="box-shadow: none; padding-inline: 0.8rem;">&nbsp&nbsp Edit &nbsp&nbsp</button>
-        </div>
-    </form>
-</dialog>
-<dialog id="hide-publication-dialog" closedby="any">
-    <p id="hide-publication-dialog-message"></p>
-    <br>
-    <div style="display: flex; justify-content: space-between">
-        <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
-        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
-    </div>
 </dialog>
 </body>
 <style>
@@ -96,54 +73,81 @@
     }
 </style>
 <script>
-    {{#isAdmin}}
-    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
-    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
-    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
-    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
-        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
-        if(!response.ok) { alert('failed to add publication'); return; }
-        location.reload(true);
-    });
-    {{/isAdmin}}
-
+    const dialog = document.getElementById('dialog');
+    const dialogMessage = document.getElementById('dialog-message');
+    const dialogForm = document.getElementById('dialog-form');
+    const dialogInputLabel = document.getElementById('dialog-input-label');
+    const dialogInput = document.getElementById('dialog-input');
+    const dialogNegative = document.getElementById('dialog-negative');
+    const dialogPositive = document.getElementById('dialog-positive');
+    
+    const editButtons = document.querySelectorAll('button[data-type="edit-button"]');
+    const hideButtons = document.querySelectorAll('button[data-type="hide-button"]');
     let currentId = null;
-    const updatePublicationTitleDialog = document.getElementById('update-publication-title-dialog');
-    const updatePublicationTitleDialogMessage = document.getElementById('update-publication-title-dialog-message');
-    document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
-        button.addEventListener('click', () => {
-            updatePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
-            currentId = button.dataset.id;
-            updatePublicationTitleDialog.showModal();
-        });
-    });
-    document.getElementById('update-publication-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
-    document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
-        const response = await fetch(`/api/publication/${currentId}/update-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to update publication title'); return; }
-        location.reload(true);
-    });
 
-    const hidePublicationDialog = document.getElementById('hide-publication-dialog');
-    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
-    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+    let currentOperation = null;
+
+    document.getElementById('add-publication').addEventListener('click', () => {
+            dialogMessage.innerHTML = `Add publication`;
+            dialogInputLabel.innerHTML = 'title';
+            dialogInput.style.display = 'block';
+            dialogPositive.innerHTML = 'Add';
+            dialogPositive.classList.add('purple-button');
+            currentOperation = 'INSERT';
+            dialog.showModal();
+    });
+    editButtons.forEach(button => {
         button.addEventListener('click', () => {
-            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            dialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
             currentId = button.dataset.id;
-            hidePublicationDialog.showModal();
+            dialogInputLabel.innerHTML = 'title';
+            dialogInput.style.display = 'block';
+            dialogPositive.innerHTML = 'Edit';
+            dialogPositive.classList.add('yellow-button');
+            currentOperation = 'EDIT';
+            dialog.showModal();
         });
     });
-    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
-    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to hide publication'); return; }
-        const publication = document.querySelector(`div[data-id="${currentId}"]`);
-        if(publication) publication.remove();
-        hidePublicationDialog.close();
+    hideButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            dialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            dialogInputLabel.innerHTML = '';
+            dialogInput.style.display = 'none';
+            dialogPositive.innerHTML = 'Hide';
+            dialogPositive.classList.add('red-button');
+            currentOperation = 'HIDE';
+            dialog.showModal();
+        });
+    });
+    dialogNegative.addEventListener('click', () => {
+        dialogPositive.classList.remove('purple-button', 'yellow-button', 'red-button');
+        dialog.close()
+    });
+    dialogForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const inputValue = document.querySelector('input[name=dialog-input]').value;
+        switch(currentOperation) {
+            case 'INSERT':
+                const insertResponse = await fetch(`/api/publication/insert?title=${encodeURIComponent(inputValue)}`, { method: 'POST' });
+                if(!insertResponse.ok) { alert('failed to add publication'); return; }
+                location.reload(true);
+            break;
+            case 'EDIT':
+                const editResponse = await fetch(`/api/publication/${currentId}/update-title?title=${encodeURIComponent(inputValue)}`, { method: 'PUT' });
+                if(!editResponse.ok) { alert('failed to update publication title'); return; }
+                location.reload(true);
+            break;
+            case 'HIDE':
+                const hideResponse = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+                if(!hideResponse.ok) { alert('failed to hide publication'); return; }
+                const publication = document.querySelector(`div[data-id="${currentId}"]`);
+                if(publication) publication.remove();
+                dialog.close();
+                dialogPositive.classList.remove('red-button');
+            break;
+            default: alert('invalid current-operation'); return;
+        }
     });
 </script>
 </html>
