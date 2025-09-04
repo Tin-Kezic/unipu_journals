@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/publication")
 class SectionController(private val sectionRepository: SectionRepository) {
 
-    @PostMapping("/{publicationId}/insert")
+    @PostMapping("/{publicationId}/section/insert")
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
