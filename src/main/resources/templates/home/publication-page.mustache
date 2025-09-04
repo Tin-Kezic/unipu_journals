@@ -123,13 +123,10 @@
     document.getElementById('update-publication-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
     document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const publicationTitleInput = document.querySelector('input[name="update-publication-title-dialog-input"]');
-        const newPublicationTitle = publicationTitleInput.value;
+        const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
         const response = await fetch(`/api/publication/update-title?publicationId=${currentId}&title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update publication title'); return; }
-        document.querySelector(`p[data-id="${currentId}"]`).innerHTML = newPublicationTitle;
-        updatePublicationTitleDialog.close();
-        publicationTitleInput.value = '';
+        location.reload(true);
     });
 
     const hidePublicationDialog = document.getElementById('hide-publication-dialog');
