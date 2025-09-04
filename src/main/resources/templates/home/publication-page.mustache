@@ -122,7 +122,7 @@
     document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
-        const response = await fetch(`/api/publication/update-title?publicationId=${currentId}&title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/${currentId}/update-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update publication title'); return; }
         location.reload(true);
     });
@@ -138,7 +138,7 @@
     });
     document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/hide?publicationId=${currentId}&isHidden=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide publication'); return; }
         const publication = document.querySelector(`div[data-id="${currentId}"]`);
         if(publication) publication.remove();
