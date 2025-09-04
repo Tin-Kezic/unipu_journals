@@ -118,8 +118,7 @@
     document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
     document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const publicationTitleInput = document.querySelector('input[name=insert-publication-dialog-input]');
-        const publicationTitle = publicationTitleInput.value;
+        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
         const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
         if(!response.ok) { alert('failed to add publication'); return; }
         location.reload(true);
