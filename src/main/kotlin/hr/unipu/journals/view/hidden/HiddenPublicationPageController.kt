@@ -22,9 +22,9 @@ class HiddenPublicationPageController(
                 title = publication.title,
                 canHide = isEicOrSuperior,
                 canEdit = isEicOrSuperior,
-                isEic = isEicOrSuperior
+                isEditor = isEicOrSuperior
             )
-        }.sortedByDescending { it.isEic }
+        }.sortedByDescending { it.isEditor }
         return "hidden/hidden-publication-page"
     }
 }

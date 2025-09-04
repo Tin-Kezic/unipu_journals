@@ -23,9 +23,9 @@ class PublicationPageController(
                 title = publication.title,
                 canHide = isAdmin,
                 canEdit = isEicOrSuperior,
-                isEic = isEicOrSuperior
+                isEditor = isEicOrSuperior
             )
-        }.sortedByDescending { it.isEic }
+        }.sortedByDescending { it.isEditor }
         return "home/publication-page"
     }
 }

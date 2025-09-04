@@ -22,9 +22,9 @@ class ArchivePublicationPageController(
                 title = publication.title,
                 canHide = isEicOrSuperior,
                 canEdit = isEicOrSuperior,
-                isEic = isEicOrSuperior
+                isEditor = isEicOrSuperior
             )
-        }.sortedByDescending { it.isEic }
+        }.sortedByDescending { it.isEditor }
         return "archive/archive-publication-page"
     }
 }
