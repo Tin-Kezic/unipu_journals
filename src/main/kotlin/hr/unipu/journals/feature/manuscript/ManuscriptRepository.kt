@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param
 
 private const val MANUSCRIPT = "manuscript"
 private const val ID = "id"
+private const val TITLE = "title"
+private const val DESCRIPTION = "description"
 private const val AUTHOR_ID = "author_id"
 private const val CATEGORY_ID = "category_id"
 private const val CURRENT_STATE = "current_state"
@@ -33,8 +35,6 @@ private const val PUBLICATION = "publication"
 
 // section
 private const val PUBLICATION_SECTION = "publication_section"
-private const val TITLE = "title"
-private const val DESCRIPTION = "description"
 private const val PUBLICATION_ID = "publication_id"
 private const val IS_HIDDEN = "is_hidden"
 
