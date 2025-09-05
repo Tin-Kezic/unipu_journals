@@ -72,7 +72,7 @@ class SecurityConfig {
             }
             authorizeHttpRequests {
                 authorize("/root", hasRole(ROOT))
-                authorize("/publication/{publicationId}/configure-eic-on-publication", hasRole(ADMIN))
+                authorize("/publication/{publicationId}/manage-eic-on-publication", hasRole(ADMIN))
                 listOf(
                     "/eic-initial-review",
                     "/technical-processing-page"
