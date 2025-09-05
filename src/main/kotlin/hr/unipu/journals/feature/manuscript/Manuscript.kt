@@ -16,7 +16,7 @@ data class Manuscript(
     val state: ManuscriptState,
     val sectionId: Int,
     val fileUrl: String,
-    val submissionDate: LocalDateTime?,
+    val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
     val views: Int,
     val downloads: Int,
