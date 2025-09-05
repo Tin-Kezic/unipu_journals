@@ -51,17 +51,39 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (3, 2),
 (4, 7),
 (5, 2);
-INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads) VALUES
-(4, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3),
-(4, 2, 'MINOR_FIXES', 2, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 5, 1),
-(5, 3, 'AWAITING_REVIEWER_REVIEW', 3, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 22, 5),
-(10, 4, 'MAJOR_FIXES', 4, 'http://example.com/ms4.pdf', CURRENT_TIMESTAMP, NULL, 7, 2),
-(10, 5, 'PUBLISHED', 5, 'http://example.com/ms5.pdf', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 110, 90),
-(4, 1, 'REJECTED', 1, 'http://example.com/ms6.pdf', CURRENT_TIMESTAMP, NULL, 4, 0),
-(5, 2, 'DRAFT', 2, 'http://example.com/ms7.pdf', CURRENT_TIMESTAMP, NULL, 0, 0),
-(10, 3, 'HIDDEN', 3, 'http://example.com/ms8.pdf', CURRENT_TIMESTAMP, NULL, 3, 1),
-(5, 4, 'AWAITING_INITIAL_EDITOR_REVIEW', 4, 'http://example.com/ms9.pdf', CURRENT_TIMESTAMP, NULL, 8, 2),
-(10, 5, 'AWAITING_INITIAL_EIC_REVIEW', 5, 'http://example.com/ms10.pdf', CURRENT_TIMESTAMP, NULL, 6, 1);
+INSERT INTO manuscript
+(author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description)
+VALUES
+(4, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3,
+ 'Artificial Intelligence in Healthcare', 'Explores how AI models improve diagnostics and personalized medicine.'),
+
+(4, 2, 'MINOR_FIXES', 2, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 5, 1,
+ 'Sustainable Agriculture Practices', 'Examines eco-friendly farming techniques to increase yield with minimal environmental impact.'),
+
+(5, 3, 'AWAITING_REVIEWER_REVIEW', 3, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 22, 5,
+ 'Cybersecurity in IoT Devices', 'Analyzes vulnerabilities and proposes solutions for connected smart devices.'),
+
+(10, 4, 'MAJOR_FIXES', 4, 'http://example.com/ms4.pdf', CURRENT_TIMESTAMP, NULL, 7, 2,
+ 'Blockchain Applications in Finance', 'Studies decentralized systems and their implications for modern banking.'),
+
+(10, 5, 'PUBLISHED', 5, 'http://example.com/ms5.pdf', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 110, 90,
+ 'Climate Change and Renewable Energy', 'Investigates renewable solutions to mitigate global warming effects.'),
+
+(4, 1, 'REJECTED', 1, 'http://example.com/ms6.pdf', CURRENT_TIMESTAMP, NULL, 4, 0,
+ 'Nanotechnology in Medicine', 'Reviews the potential of nanomaterials for targeted drug delivery.'),
+
+(5, 2, 'DRAFT', 2, 'http://example.com/ms7.pdf', CURRENT_TIMESTAMP, NULL, 0, 0,
+ 'Data Privacy in Social Media', 'Considers regulations and frameworks for user protection online.'),
+
+(10, 3, 'HIDDEN', 3, 'http://example.com/ms8.pdf', CURRENT_TIMESTAMP, NULL, 3, 1,
+ 'Robotics in Manufacturing', 'Evaluates automation benefits and challenges in industrial sectors.'),
+
+(5, 4, 'AWAITING_INITIAL_EDITOR_REVIEW', 4, 'http://example.com/ms9.pdf', CURRENT_TIMESTAMP, NULL, 8, 2,
+ 'Quantum Computing Algorithms', 'Discusses error correction and scalability in quantum systems.'),
+
+(10, 5, 'AWAITING_INITIAL_EIC_REVIEW', 5, 'http://example.com/ms10.pdf', CURRENT_TIMESTAMP, NULL, 6, 1,
+ 'Global Supply Chain Resilience', 'Assesses disruptions and recovery strategies in international trade.');
+
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 (1, 4, 'AUTHOR'),
 (1, 4, 'CORRESPONDING_AUTHOR'),
