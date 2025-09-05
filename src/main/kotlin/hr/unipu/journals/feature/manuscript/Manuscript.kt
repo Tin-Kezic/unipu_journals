@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript
 
-import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
