@@ -19,12 +19,10 @@ class SectionController(private val sectionRepository: SectionRepository) {
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
-        @RequestParam description: String
     ): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             sectionRepository.insert(
                 title = Jsoup.clean(title, Safelist.none()),
-                description = Jsoup.clean(description, Safelist.relaxed()),
                 publicationId = publicationId,
             )
             ResponseEntity.ok("account successfully added")
