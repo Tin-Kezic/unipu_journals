@@ -50,12 +50,11 @@ interface SectionRepository: Repository<Section, Int> {
 
     @Modifying
     @Query("""
-        INSERT INTO $PUBLICATION_SECTION ($TITLE, $DESCRIPTION, $PUBLICATION_ID)
-        VALUES (:$TITLE, :$DESCRIPTION, :$PUBLICATION_ID)
+        INSERT INTO $PUBLICATION_SECTION ($TITLE, $PUBLICATION_ID)
+        VALUES (:$TITLE, :$PUBLICATION_ID)
     """)
     fun insert(
         @Param(TITLE) title: String,
-        @Param(DESCRIPTION) description: String,
         @Param(PUBLICATION_ID) publicationId: Int,
     )
     @Modifying
