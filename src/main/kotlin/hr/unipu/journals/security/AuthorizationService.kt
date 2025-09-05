@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 
+const val AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_SUPERIOR = "@authorizationService.isAccountOwnerOrSuperior(#accountId)"
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperior(#publicationId)"
@@ -39,6 +40,7 @@ class AuthorizationService(
 
     fun isRoot(): Boolean = user?.username == "root@unipu.hr"
     fun isAdmin(): Boolean =  account?.isAdmin ?: false
+    fun isAccountOwnerOrSuperior(accountId: Int): Boolean = accountId == account?.id || isAdmin()
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
