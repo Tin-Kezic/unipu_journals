@@ -63,7 +63,7 @@ CREATE TABLE eic_on_publication (
 CREATE TABLE publication_section (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    description TEXT,
+    description TEXT DEFAULT '',
     publication_id INT NOT NULL,
     is_hidden BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
