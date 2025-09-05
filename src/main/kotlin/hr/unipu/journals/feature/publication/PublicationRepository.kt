@@ -38,7 +38,7 @@ private const val EIC_ID = "eic_id"
 interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
-    fun titleById(@Param(ID) id: Int): String
+    fun title(@Param(ID) id: Int): String
 
     @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
     fun byTitle(@Param(TITLE) title: String): Publication
