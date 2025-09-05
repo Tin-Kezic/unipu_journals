@@ -40,7 +40,16 @@ class SectionController(private val sectionRepository: SectionRepository) {
             ResponseEntity.ok("title successfully updated")
         } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
+    @PutMapping("/{publicationId}/section/{sectionId}/update-description")
+    fun updateDescription(
+        @PathVariable sectionId: Int,
+        @RequestParam description: String,
+    ): ResponseEntity<String> {
+        return if (sectionRepository.exists(sectionId)) {
+            sectionRepository.updateDescription(sectionId, description)
+            ResponseEntity.ok("description successfully updated")
         } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
+    }
     @PutMapping("/{publicationId}/section/{section_id}/update-hidden")
     fun updateHidden(
         @PathVariable sectionId: Int,
