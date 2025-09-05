@@ -5,18 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Manuscript Page</title>
     <link href="/util.css" rel="stylesheet"/>
-
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
 
 <body>
@@ -30,13 +18,13 @@
 
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        <label class="sidebar-button">
-            <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-
-            <span class="checkbox">Acoustic Ecology</span>
-        </label>
+        {{#sections-sidebar}}
+        <a data-type="sidebar-button" data-id="{{id}}" href="/section/{{id}}" style="text-decoration: none; color: inherit;">
+            <label class="sidebar-button">
+                <span class="checkbox">{{title}}</span>
+            </label>
+        </a>
+        {{/sections-sidebar}}
     </aside>
 
     <section class="main-content" style="
