@@ -100,15 +100,17 @@
     });
 </script>
 {{/isEicOrSuperior}}
+
+<dialog id="update-section-title-dialog" closedby="any">
+    <p id="update-section-title-dialog-message"></p>
+    <form id="update-section-title-dialog-form">
         <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
+            <label>title</label>
+            <input type="text" name="update-section-title-dialog-input">
         </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
-            </div>
+        <div style="display: flex; justify-content: space-between">
+            <button id="update-section-title-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button yellow-button" style="box-shadow: none; padding-inline: 0.8rem;">&nbsp&nbsp Edit &nbsp&nbsp</button>
         </div>
     </div>
 </div>
@@ -139,6 +141,28 @@
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: black; background-color: var(--yellow);">Add</button>
             </div>
         </div>
+    </form>
+</dialog>
+<script>
+    let currentId = null;
+    const updateSectionTitleDialog = document.getElementById('update-section-title-dialog');
+    const updateSectionTitleDialogMessage = document.getElementById('update-section-title-dialog-message');
+    document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            updateSectionTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
+            currentId = button.dataset.id;
+            updateSectionTitleDialog.showModal();
+        });
+    });
+    document.getElementById('update-section-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
+    document.getElementById('update-section-title-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newSectionTitle = document.querySelector('input[name="update-section-title-dialog-input"]').value;
+        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}/update-title?title=${encodeURIComponent(newSectionTitle)}`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to update section title'); return; }
+        location.reload(true);
+    });
+</script>
         <button id="hide-section-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
     </div>
 </div>
