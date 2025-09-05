@@ -157,8 +157,7 @@
     document.getElementById('hide-section-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide Section'); return; }
-        const section = document.querySelector(`div[data-id="${currentId}"]`);
-        if(section) section.remove();
+        document.querySelector(`div[data-id="${currentId}"]`).remove(); // remove section
         hideSectionDialog.close();
     });
 </script>
