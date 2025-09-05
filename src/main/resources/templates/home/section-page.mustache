@@ -39,17 +39,36 @@
             margin: 0 1.5rem 1rem 1.5rem;
           ">
             {{#sections}}
-                <article>
-                    <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
-                        <div class="yellow-box">
-                            <p class="yellow-box-text">{{title}}</p>
-                            <div class="yellow-box-buttons">
-                                <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                                <button class="m3-button yellow-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Edit</button>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+                <div
+                    data-id="{{id}}"
+                    class="yellow-box"
+                    style="cursor: pointer;"
+                    onclick="window.location='/publication/{{publicationId}}/section/{{id}}'"
+                >
+                    <p class="yellow-box-text">{{title}}</p>
+                    <div class="yellow-box-buttons">
+                        {{#canHide}}
+                            <button
+                                onclick="event.stopPropagation()"
+                                data-type="hide-button"
+                                data-id="{{id}}"
+                                data-title="{{title}}"
+                                class="m3-button purple-button"
+                                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+                            >Hide</button>
+                        {{/canHide}}
+                        {{#canEdit}}
+                            <button
+                                onclick="event.stopPropagation()"
+                                data-type="edit-button"
+                                data-id="{{id}}"
+                                data-title="{{title}}"
+                                class="m3-button yellow-button"
+                                style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+                            >Hide</button>
+                        {{/canEdit}}
+                    </div>
+                </div>
             {{/sections}}
         </section>
     </div>
