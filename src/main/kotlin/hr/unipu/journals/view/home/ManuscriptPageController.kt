@@ -21,8 +21,9 @@ class ManuscriptPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
-        model["sections-sidebar"] = sectionRepository.allPublishedByPublicationId(publicationId)
-        model["manuscripts"] = manuscriptRepository.allPublishedBySectionId(sectionId)
+        model["sectionsSidebar"] = sectionRepository.allPublishedByPublicationId(publicationId)
+        model["description"] = sectionRepository.description(sectionId)
+        model["manuscripts"] = manuscriptRepository.allPublishedBySectionId(sectionId).map { }
         model["title"] = sectionRepository.title(sectionId)
         return "home/manuscript-page"
     }
