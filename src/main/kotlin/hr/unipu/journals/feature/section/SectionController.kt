@@ -30,14 +30,13 @@ class SectionController(private val sectionRepository: SectionRepository) {
             ResponseEntity.ok("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("/{publicationId}/section/{sectionId}/update-title-and-description")
-    fun update(
+    @PutMapping("/{publicationId}/section/{sectionId}/update-title")
+    fun updateTitle(
         @PathVariable sectionId: Int,
         @RequestParam title: String,
-        @RequestParam description: String
     ): ResponseEntity<String> {
         return if (sectionRepository.exists(sectionId)) {
-            sectionRepository.updateTitleAndDescription(sectionId, title, description)
+            sectionRepository.updateTitle(sectionId, title)
             ResponseEntity.ok("title successfully updated")
         } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
