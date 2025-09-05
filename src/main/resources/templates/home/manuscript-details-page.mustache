@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Manuscript Details Page</title>
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=download" />
+
+    <link rel="stylesheet" href="/util.css"/>
+
+    <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
+    </script>
+</head>
+
+<body>
+{{>util/header}}
+
+<main style="display: flex; flex-direction: column; width: 60%; margin: 0 auto; align-items: flex-start; text-align: left;">
+    <h1 style="font-size: 1.5rem; font-weight: lighter; margin-top: 2rem; margin-bottom: 0.3rem; width: 100%;">
+        KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques
+    </h1>
+    <div style="display: flex; flex-direction: row; gap: 2rem;">
+        <p style="font-size: 0.875rem; color: var(--light-gray);">Submitted: 8. July 2025.</p>
+        <p style="font-size: 0.875rem; color: var(--light-gray);">Accepted: 10. July 2025.</p>
+    </div>
+    <div class="authors" style="display: flex; flex-wrap: wrap; margin-bottom: 1rem;">
+        <button style="color: var(--light-gray);">Rashmi Kariganuru Bheemarao1</button>
+        <button style="color: var(--light-gray);">Hassan Sadashiva Guruprasad1</button>
+        <button style="color: var(--light-gray);">Shambhavi Bangalore Ravi2</button>
+    </div>
+
+    <p style="text-align: justify; line-height: 1.5rem; font-size: 1.2rem;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut eni Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet,
+    </p>
+</main>
+
+<aside style="position: absolute; top: 6rem; right: 1vw; display: flex; flex-direction: column; gap: 1rem;">
+    <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="box-shadow: none; padding: 0.8rem 2.52rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto; margin-top: 2rem;">
+        Edit
+    </button>
+    <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.8rem 1.37rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto;">
+        Review
+    </button>
+
+    <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem;">
+        <p style="font-size: 0.9rem;">Views</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
+            <p class="number" style="font-size: 2.5rem; text-align: center;">24,321</p>
+            <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--beige); text-shadow: 1px 1px white, -1px -1px var(--light-gray);">visibility</span>
+        </div>
+    </div>
+
+    <div class="yellow-box" style="margin-top: 3rem;">
+        <p style="font-size: 0.9rem;">Downloads</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
+            <p class="number" style="font-size: 2.5rem; text-align: center;">24,321</p>
+            <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--beige); text-shadow: 1px 1px white, -1px -1px var(--light-gray);">download</span>
+        </div>
+    </div>
+
+    <button class="m3-button outline-button download-button" style="min-width: fit-content; background-color: var(--pale-yellow); font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold; margin-right: 1.5rem;">Download</button>
+</aside>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <div class="text-field">
+            <label for="abstract">Abstract</label>
+            <textarea id="abstract" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, </textarea>
+        </div>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<style>
+    .authors button:hover {
+        color: var(--blue) !important;
+    }
+    .yellow-box:hover {
+        box-shadow: none;
+    }
+    .download-button:hover {
+        background-color: var(--very-light-gray);
+        color: var(--dark-purple) !important;
+    }
+
+    @media (max-width: 1220px) {
+        .yellow-box {
+            width: 7rem !important;
+            margin-right: 0rem !important;
+        }
+        .download-button {
+            margin-right: 0rem !important;
+            width: 7rem !important;
+        }
+        .yellow-box .material-symbols-outlined {
+            display: none !important;
+        }
+        .yellow-box p.number {
+            font-size: 1.5rem !important;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .m3-button {
+            font-size: 1rem !important;
+            padding: 0.5rem 1rem !important;
+            width: 5rem !important;
+        }
+
+        main {
+            margin-left: 1rem !important;
+            width: 70% !important;
+        }
+        aside {
+            top: 7rem !important;
+        }
+    }
+</style>
+</html>

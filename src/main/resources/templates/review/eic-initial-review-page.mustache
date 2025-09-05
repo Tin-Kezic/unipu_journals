@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Review Page</title>
+
+    <link rel="stylesheet" href="/util.css" />
+</head>
+
+<body>
+{{>util/header}}
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 1rem;">
+
+    <section class="yellow-box article-box" style="padding: 0.8rem; max-width: 70vw; width: 70vw;">
+        <article>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                <div>
+                    <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                    <p>Rashmi Kariganuru Bheemarao1, Hassan Sadashiva Guruprasad1 and Shambhavi Bangalore Ravi2</p>
+                    <p>Submitted: 9 June 2025       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
+                    <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry…</p>
+                </div>
+                <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">
+                    Download
+                </button>
+            </div>
+        </article>
+    </section>
+
+    <div class="wrapper" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; max-width: 70vw; width: 70vw;">
+        <div class="text-field" style="width: 16rem;">
+            <label for="mail">editor email</label>
+            <input type="email" id="mail" placeholder="editor@mail.com"/>
+        </div>
+
+        <div style="display: flex; gap: 2rem;">
+            <button class="m3-button green-button" style="padding: 1rem 3rem; font-size: 2.5rem;">Accept</button>
+            <button class="m3-button light-red-button" style="padding: 1rem 3.4rem; font-size: 2.5rem;">Reject</button>
+        </div>
+    </div>
+</div>
+</body>
+
+<style>
+    .text-field input {
+        background-color: inherit;
+    }
+    .download-button:hover {
+        background-color: var(--very-light-gray);
+        color: var(--dark-purple) !important;
+    }
+    @media (max-width: 800px) {
+        .article-box {
+            width: 28rem !important;
+            min-height: 15rem !important;
+            max-width: 90vw !important;
+        }
+        .wrapper {
+            max-width: 90vw !important;
+            width: 90vw !important;
+        }
+    }
+</style>
+</html>

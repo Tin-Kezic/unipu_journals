@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Publication</title>
+    <link href="/util.css" rel="stylesheet"/>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script>
+        function showOverlayAndDialog() {
+            document.querySelector('.overlay').classList.add('active');
+            document.querySelector('.dialog').classList.add('active');
+        }
+        function hideOverlayAndDialog() {
+            document.querySelector('.overlay').classList.remove('active');
+            document.querySelector('.dialog').classList.remove('active');
+        }
+    </script>
+</head>
+<body>
+{{>util/header}}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+        publications
+    </h1>
+</div>
+
+<section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+    {{#publications}}
+        <div
+                id="{{id}}"
+                class="yellow-box"
+                onclick="window.location='/publication/{{id}}'"
+                style="text-decoration: none; color: black; cursor: pointer;"
+        >
+            <p class="yellow-box-text">{{title}}</p>
+            <div class="yellow-box-buttons">
+                {{#canHide}}<button onclick="event.stopPropagation(), showOverlayAndDialog()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>{{/canHide}}
+                {{#canEdit}}<button onclick="event.stopPropagation(), showOverlayAndDialog()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>{{/canEdit}}
+            </div>
+        </div>
+    {{/publications}}
+</section>
+
+<div class="overlay">
+    <div class="dialog">
+        <p>Permanently delete <b>Acoustics</b> publication?</p>
+        <p>It contains <b>9</b> sections:</p>
+        <br>
+        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
+            <p>Aeroacoustics</p>
+            <p>Bioacoustics</p>
+            <p>Acoustic signal processing</p>
+            <p>Architectural acoustics</p>
+            <p>Electroacoustics</p>
+            <p>Environmental noise and soundscape</p>
+            <p>Musical acoustics</p>
+            <p>Bioacoustics 2</p></b>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay">
+    <div class="dialog">
+        <p>Restore <b>Acoustics</b> publication?</p>
+        <p>It contains <b>9</b> sections:</p>
+        <br>
+        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
+            <p>Aeroacoustics</p>
+            <p>Bioacoustics</p>
+            <p>Acoustic signal processing</p>
+            <p>Architectural acoustics</p>
+            <p>Electroacoustics</p>
+            <p>Environmental noise and soundscape</p>
+            <p>Musical acoustics</p>
+            <p>Bioacoustics 2</p></b>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<style>
+    .m3-button:active {
+        transform: none;
+        box-shadow: none !important;
+    }
+</style>
+</html>

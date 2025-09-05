@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>publications</title>
+    <link href="/util.css" rel="stylesheet"/>
+</head>
+<body>
+{{>util/header}}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+        publications
+    </h1>
+    {{#isAdmin}}
+        <button id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add publication</button>
+    {{/isAdmin}}
+</div>
+
+<section id="publications" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+    {{#publications}}
+        <div
+            data-id="{{id}}"
+            class="yellow-box"
+            style="cursor: pointer;"
+            onclick="window.location='/publication/{{id}}'
+        ">
+            <p class="yellow-box-text" data-id="{{id}}">{{title}}</p>
+            <div class="yellow-box-buttons">
+                {{#canHide}}
+                    <button
+                        onclick="event.stopPropagation()"
+                        data-type="hide-button"
+                        data-id="{{id}}"
+                        data-title="{{title}}"
+                        class="m3-button purple-button"
+                        style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+                    >Hide</button>
+                {{/canHide}}
+                {{#canEdit}}
+                    <button
+                        onclick="event.stopPropagation()"
+                        data-type="edit-button"
+                        data-id="{{id}}"
+                        data-title="{{title}}"
+                        class="m3-button yellow-button"
+                        style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
+                    >Edit</button>
+                {{/canEdit}}
+            </div>
+        </div>
+    {{/publications}}
+</section>
+{{#isAdmin}}
+<dialog id="insert-publication-dialog" closedby="any">
+    <p id="insert-publication-dialog-message">Add publication</p>
+    <form id="insert-publication-dialog-form">
+        <div class="text-field">
+            <label>title</label>
+            <input type="text" name="insert-publication-dialog-input">
+        </div>
+        <div style="display: flex; justify-content: space-between">
+            <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+        </div>
+    </form>
+</dialog>
+<script>
+    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
+    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
+    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
+    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
+        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        if(!response.ok) { alert('failed to add publication'); return; }
+        location.reload(true);
+    });
+</script>
+{{/isAdmin}}
+
+<dialog id="update-publication-title-dialog" closedby="any">
+    <p id="update-publication-title-dialog-message"></p>
+    <form id="update-publication-title-dialog-form">
+        <div class="text-field">
+            <label>title</label>
+            <input type="text" name="update-publication-title-dialog-input">
+        </div>
+        <div style="display: flex; justify-content: space-between">
+            <button id="update-publication-title-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button yellow-button" style="box-shadow: none; padding-inline: 0.8rem;">&nbsp&nbsp Edit &nbsp&nbsp</button>
+        </div>
+    </form>
+</dialog>
+<script>
+    let currentId = null;
+    const updatePublicationTitleDialog = document.getElementById('update-publication-title-dialog');
+    const updatePublicationTitleDialogMessage = document.getElementById('update-publication-title-dialog-message');
+    document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            updatePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
+            currentId = button.dataset.id;
+            updatePublicationTitleDialog.showModal();
+        });
+    });
+    document.getElementById('update-publication-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
+    document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
+        const response = await fetch(`/api/publication/${currentId}/update-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to update publication title'); return; }
+        location.reload(true);
+    });
+</script>
+
+<dialog id="hide-publication-dialog" closedby="any">
+    <p id="hide-publication-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
+    </div>
+</dialog>
+<script>
+    const hidePublicationDialog = document.getElementById('hide-publication-dialog');
+    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hidePublicationDialog.showModal();
+        });
+    });
+    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
+    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide publication'); return; }
+        document.querySelector(`div[data-id="${currentId}"]`).remove(); // remove publication
+        hidePublicationDialog.close();
+    });
+</script>
+</body>
+</html>

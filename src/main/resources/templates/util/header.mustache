@@ -1,0 +1,59 @@
+<header style="width: 100%">
+    <a class="logo-button" style="text-decoration: none;" href="/">Unipu Journals</a>
+
+    <nav>
+        <ul>
+            <li><a href="/">publications</a></li>
+            <li><a href="/review">review</a></li>
+            <li><a href="/submit">submit</a></li>
+            <li><a href="/archive">archive</a></li>
+            <li><a href="/contact">contact</a></li>
+            <li><a href="/hidden">hidden</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <label>
+            <input type="text" class="search-bar" placeholder="Search...">
+        </label>
+        <svg  class="fa-solid fa-magnifying-glass" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="20px" fill="gray"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+    </div>
+
+    {{#is-logged-in}}
+        <a href="/profile/{{header-profile-id}}" class="m3-button purple-outline-button" style="border: none; padding: 0.1rem 0.5rem; text-decoration: none;">
+            {{header-profile-full-name}}
+            <br>
+            <span style="color: lightgrey">{{header-profile-title}}</span>
+        </a>
+    {{/is-logged-in}}
+    {{^is-logged-in}}
+        <a href="/login.html" class="m3-button purple-outline-button" style="border: none; padding: 1rem; text-decoration: none;">
+            Login
+        </a>
+    {{/is-logged-in}}
+</header>
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1vh 3vw;
+        background-color: var(--purple);
+        position: sticky;
+        z-index: 10;
+        min-height: 8vh;
+        top: 0;
+        flex-wrap: wrap;
+    }
+    @media (max-width: 1008px) {
+        .logo-button, .search-container, .m3-button.purple-outline-button {
+            order: 1;
+        }
+        nav {
+            order: 2;
+            flex:100%;
+            margin-top: 0.5rem;
+        }
+    }
+</style>
