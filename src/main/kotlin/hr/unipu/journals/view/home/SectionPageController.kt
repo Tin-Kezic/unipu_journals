@@ -21,7 +21,7 @@ class SectionPageController(
     fun page(@PathVariable publicationId: Int, model: Model): String {
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
-        model["currentPublication"] = publicationRepository.titleById(publicationId)
+        model["currentPublication"] = publicationRepository.title(publicationId)
         model["sections"] = sectionRepository.allPublishedByPublicationId(publicationId).map { section ->
             val isSectionEditorOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             ContainerDTO(
