@@ -136,8 +136,7 @@
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide publication'); return; }
-        const publication = document.querySelector(`div[data-id="${currentId}"]`);
-        if(publication) publication.remove();
+        document.querySelector(`div[data-id="${currentId}"]`).remove(); // remove publication
         hidePublicationDialog.close();
     });
 </script>
