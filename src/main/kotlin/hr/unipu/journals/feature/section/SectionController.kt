@@ -48,7 +48,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
             ResponseEntity.ok("description successfully updated")
         } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
-    @PutMapping("/{publicationId}/section/{section_id}/update-hidden")
+    @PutMapping("/{publicationId}/section/{sectionId}/update-hidden")
     fun updateHidden(
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
