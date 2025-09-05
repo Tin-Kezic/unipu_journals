@@ -54,19 +54,17 @@
         </section>
     </div>
 </main>
-
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Section name:</p>
+{{#isEicOrSuperior}}
+<dialog id="insert-section-dialog" closedby="any">
+    <p id="insert-section-dialog-message">Add publication</p>
+    <form id="insert-section-dialog-form">
         <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
+            <label>title</label>
+            <input type="text" name="insert-section-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: white; background-color: var(--purple);">Add</button>
-            </div>
+            <button id="insert-section-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
         </div>
     </div>
 </div>
@@ -75,6 +73,21 @@
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Update section name</p>
             <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+    </form>
+</dialog>
+<script>
+    const insertSectionDialog = document.getElementById('insert-section-dialog');
+    document.getElementById('add-section').addEventListener('click', () => insertSectionDialog.showModal());
+    document.getElementById('insert-section-dialog-negative').addEventListener('click', () => insertSectionDialog.close());
+    document.getElementById('insert-section-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const sectionTitle = document.querySelector('input[name=insert-section-dialog-input]').value;
+        const response = await fetch(`/api/publication/{{publicationId}}/section/insert?title=${encodeURIComponent(sectionTitle)}`, { method: 'POST' });
+        if(!response.ok) { alert('failed to add section'); return; }
+        location.reload(true);
+    });
+</script>
+{{/isEicOrSuperior}}
         <div class="text-field">
             <label for="section"></label>
             <input type="text">
