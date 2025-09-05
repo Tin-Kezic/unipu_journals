@@ -370,9 +370,6 @@ dialog {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
-.sidebar-button {
-    user-select: none;
-}
 .sidebar-button input[type="radio"] {
     position: absolute;
     opacity: 0;
@@ -392,17 +389,13 @@ dialog {
     cursor: pointer;
     user-select: none;
 }
-.sidebar-button .sidebar-button-title:hover {
+.sidebar-button-title:hover {
     background: var(--purple);
     color: white;
 }
 .sidebar-button .sidebar-button-title:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
-}
-.sidebar-button + .sidebar-button-title {
-    background: var(--purple);
-    color: white;
 }
 .authors {
     display: inline-flex;
