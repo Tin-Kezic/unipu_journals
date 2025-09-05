@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 @Table("manuscript")
 data class Manuscript(
     @Id val id: Int,
+    val title: String,
+    val description: String,
     val authorId: Int,
     val categoryId: Int,
     @Column("current_state")
