@@ -163,10 +163,9 @@
 </script>
 
 <script>
-    const button = document.querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
-    button.style.background = 'var(--purple)';
-    button.style.color = 'white';
-    const title = button.querySelector('.sidebar-button-title');
+    const title = document
+        .querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
+        .querySelector('.sidebar-button-title');
     title.style.background = 'var(--purple)';
     title.style.color = 'white';
 </script>
