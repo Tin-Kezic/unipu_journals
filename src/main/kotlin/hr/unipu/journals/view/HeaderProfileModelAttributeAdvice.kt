@@ -14,7 +14,6 @@ import hr.unipu.journals.view.home.PublicationPageController
 import hr.unipu.journals.view.profile.EditProfilePageController
 import hr.unipu.journals.view.profile.ProfilePageController
 import hr.unipu.journals.view.review.EicInitialReviewPageController
-import hr.unipu.journals.view.review.ManageManuscriptUnderReviewPageController
 import hr.unipu.journals.view.review.PendingReviewPageController
 import hr.unipu.journals.view.review.ReviewPageController
 import hr.unipu.journals.view.review.ReviewRoundInitializationPageController
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
     EditProfilePageController::class,
     ProfilePageController::class,
     EicInitialReviewPageController::class,
-    ManageManuscriptUnderReviewPageController::class,
     PendingReviewPageController::class,
     ReviewPageController::class,
     ReviewRoundInitializationPageController::class,
