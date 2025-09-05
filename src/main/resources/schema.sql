@@ -77,6 +77,8 @@ CREATE TABLE section_editor_on_section(
 );
 CREATE TABLE manuscript (
     id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
     author_id INT NOT NULL,
     category_id INT NOT NULL,
     current_state manuscript_state NOT NULL,
