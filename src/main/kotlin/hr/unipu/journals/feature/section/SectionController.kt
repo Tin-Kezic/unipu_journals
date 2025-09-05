@@ -39,8 +39,9 @@ class SectionController(private val sectionRepository: SectionRepository) {
         return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateTitleAndDescription(sectionId, title, description)
             ResponseEntity.ok("title successfully updated")
-        } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     @PutMapping("/{publicationId}/section/{section_id}/update-hidden")
     fun updateHidden(
         @PathVariable sectionId: Int,
@@ -49,6 +50,6 @@ class SectionController(private val sectionRepository: SectionRepository) {
         return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateHidden(sectionId, isHidden)
             ResponseEntity.ok("publication successfully hidden")
-        } else ResponseEntity.badRequest().body("id does not exist")
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
 }
