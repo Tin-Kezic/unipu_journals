@@ -359,14 +359,14 @@ dialog {
 }
 #snackbar.show {
     visibility: visible;
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
+    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
 }
-@keyframes fadein {
+@keyframes fade-in {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
-@keyframes fadeout {
+@keyframes fade-out {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
