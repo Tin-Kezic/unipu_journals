@@ -379,7 +379,7 @@ dialog {
     width: 0;
     height: 0;
 }
-.sidebar-button .checkbox {
+.sidebar-button .sidebar-button-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -392,15 +392,15 @@ dialog {
     cursor: pointer;
     user-select: none;
 }
-.sidebar-button .checkbox:hover {
+.sidebar-button .sidebar-button-title:hover {
     background: var(--purple);
     color: white;
 }
-.sidebar-button .checkbox:active {
+.sidebar-button .sidebar-button-title:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
-.sidebar-button input[type="radio"]:checked + .checkbox {
+.sidebar-button + .sidebar-button-title {
     background: var(--purple);
     color: white;
 }
