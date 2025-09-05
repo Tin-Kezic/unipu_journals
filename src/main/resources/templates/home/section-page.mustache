@@ -134,9 +134,33 @@
         location.reload(true);
     });
 </script>
+
+<dialog id="hide-section-dialog" closedby="any">
+    <p id="hide-section-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="hide-section-dialog-negative" class="m3-button outline-button">Cancel</button>
         <button id="hide-section-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Remove</button>
     </div>
-</div>
-
+</dialog>
+<script>
+    const hideSectionDialog = document.getElementById('hide-section-dialog');
+    const hideSectionDialogMessage = document.getElementById('hide-section-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hideSectionDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hideSectionDialog.showModal();
+        });
+    });
+    document.getElementById('hide-section-dialog-negative').addEventListener('click', () => hideSectionDialog.close());
+    document.getElementById('hide-section-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide Section'); return; }
+        const section = document.querySelector(`div[data-id="${currentId}"]`);
+        if(section) section.remove();
+        hideSectionDialog.close();
+    });
+</script>
 </body>
 </html>
