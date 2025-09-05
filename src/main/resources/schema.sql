@@ -81,7 +81,7 @@ CREATE TABLE manuscript (
     description TEXT NOT NULL DEFAULT '',
     author_id INT NOT NULL,
     category_id INT NOT NULL,
-    current_state manuscript_state NOT NULL,
+    current_state manuscript_state NOT NULL DEFAULT 'AWAITING_INITIAL_EIC_REVIEW',
     section_id INT NOT NULL,
     file_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
