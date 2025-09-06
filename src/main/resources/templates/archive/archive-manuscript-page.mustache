@@ -56,9 +56,13 @@
         {{/manuscripts}}
     </section>
 </div>
-</body>
-
 <script>
+    const title = document
+        .querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
+        .querySelector('.sidebar-button-title');
+    title.style.background = 'var(--purple)';
+    title.style.color = 'white';
+
     document.querySelectorAll('button[data-type="unarchive-button"]').forEach(button => {
         button.addEventListener('click', async () => {
             const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${button.dataset.id}/update-archived?isArchived=false`, { method: 'PUT' });
@@ -67,6 +71,7 @@
         });
     });
 </script>
+</body>
 
 <style>
     .yellow-box-buttons button {
