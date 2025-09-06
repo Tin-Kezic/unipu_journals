@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.account
 /*
-import hr.unipu.journals.feature.register.RegisterRequestDTO
+import hr.unipu.journals.feature.profile.register.RegisterRequestDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
