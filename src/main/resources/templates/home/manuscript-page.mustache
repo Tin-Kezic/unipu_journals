@@ -11,9 +11,16 @@
 {{>util/header}}
 
 <section>
-    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-        Acoustics
-    </h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
+            {{title}}
+        </h1>
+        {{#isEicOrSuperior}}
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.5rem;">
+                <button id="manage-section-editors" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">Manage section editors</button>
+            </div>
+        {{/isEicOrSuperior}}
+    </div>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
@@ -39,12 +46,14 @@
     ">
 
         <article class="yellow-box no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
-            <p class="yellow-box-text">{{description}}</p>
+            <p class="yellow-box-text">{{section}}</p>
+        {{#isEicOrSuperior}}
             <footer>
                 <footer style="display: flex; justify-content: flex-end;">
                     <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
                 </footer>
             </footer>
+        {{/isEicOrSuperior}}
         </article>
         {{#manuscripts}}
             <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
@@ -53,30 +62,52 @@
                 <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
 
                 <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
-                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{section}}</p>
+            {{#isEicOrSuperior}}
                 <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                    <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
-                    <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    {{#isHidden}}
+                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
+                    {{/isHidden}}
+                    {{#isArchived}}
+                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    {{/isArchived}}
                 </footer>
+            {{#isEicOrSuperior}}
             </article>
         {{/manuscripts}}
     </section>
 </div>
 
-<div class="overlay">
-    <div class="dialog" style="width: 90vw; height: 90vh;">
-        <div class="text-field">
-            <label for="header">Edit header</label>
-            <textarea id="header" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button purple-button">Edit</button>
+{{#isEicOrSuperior}}
+    <dialog id="edit-description-dialog" closedby="any" style="width: 90vw; height: 90vh;">
+        <form id="insert-description-dialog-form">
+            <div class="text-field">
+                <label>description</label>
+                <p>Edit header</p>
+                <input type="text" name="insert-description-dialog-input">
+                <textarea id="description" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
             </div>
-        </div>
-    </div>
-</div>
+            <div style="display: flex; justify-content: space-between">
+                <button id="insert-description-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+                <div style="display: flex; justify-content: flex-end">
+                    <button class="m3-button purple-button">Edit</button>
+                </div>
+            </div>
+        </form>
+    </dialog>
+                <script>
+                    const insertDescriptionDialog = document.getElementById('insert-description-dialog');
+                    document.getElementById('add-description').addEventListener('click', () => insertDescriptionDialog.showModal());
+                    document.getElementById('insert-description-dialog-negative').addEventListener('click', () => insertDescriptionDialog.close());
+                    document.getElementById('insert-description-dialog-form').addEventListener('submit', async (event) => {
+                        event.preventDefault();
+                        const descriptionTitle = document.querySelector('input[name=insert-description-dialog-input]').value;
+                        const response = await fetch(`/api/publication/{publicationId}/section/{sectionId}insert?description=${encodeURIComponent(description(sectionId))}`, { method: 'POST' });
+                        if(!response.ok) { alert('failed to add description'); return; }
+                        location.reload(true);
+                    });
+                </script>
+{{/isEicOrSuperior}}
 </body>
 
 <style>
