@@ -3,6 +3,7 @@ package hr.unipu.journals.view.home
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.security.AuthorizationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -16,7 +17,8 @@ import java.time.format.DateTimeFormatter
 class ManuscriptPageController(
     private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository,
-    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
+    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val authorizationService: AuthorizationService
 ) {
     @GetMapping("/{publicationId}/section/{sectionId}")
     fun page(
@@ -35,7 +37,9 @@ class ManuscriptPageController(
                 description = manuscript.description
             )
         }
-        model["title"] = sectionRepository.title(sectionId)
+        model["currentSection"] = sectionRepository.title(sectionId)
+        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
+        model["isSectionEditorOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
         return "home/manuscript-page"
     }
 }
