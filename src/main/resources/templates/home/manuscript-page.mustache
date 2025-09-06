@@ -44,16 +44,15 @@
         min-width: 0;
         overflow: hidden;
     ">
-
         <article class="yellow-box no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
-            <p class="yellow-box-text">{{description}}</p>
-        {{#isEicOrSuperior}}
-            <footer>
-                <footer style="display: flex; justify-content: flex-end;">
-                    <button id="edit-description-button" class="m3-button purple-button" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+            <p id="description" class="yellow-box-text">{{description}}</p>
+            {{#isEicOrSuperior}}
+                <footer>
+                    <footer style="display: flex; justify-content: flex-end;">
+                        <button id="edit-description-button" class="m3-button purple-button" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+                    </footer>
                 </footer>
-            </footer>
-        {{/isEicOrSuperior}}
+            {{/isEicOrSuperior}}
         </article>
         {{#manuscripts}}
             <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
@@ -76,31 +75,36 @@
 
 {{#isEicOrSuperior}}
     <dialog id="edit-description-dialog" closedby="any" style="width: 90vw; height: 90vh;">
-        <form id="insert-description-dialog-form">
+        <form id="edit-description-dialog-form">
             <div class="text-field">
-                <label for="description">Edit header</label>
-                <textarea id="description" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
+                <label>description</label>
+                <textarea name="description" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
             </div>
             <div style="display: flex; justify-content: space-between">
-                <button id="insert-description-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+                <button id="edit-description-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
                 <div style="display: flex; justify-content: flex-end">
                     <button class="m3-button purple-button">Edit</button>
                 </div>
             </div>
         </form>
     </dialog>
-<script>
-    const insertDescriptionDialog = document.getElementById('insert-description-dialog');
-        document.getElementById('add-description').addEventListener('click', () => insertDescriptionDialog.showModal());
-                    document.getElementById('insert-description-dialog-negative').addEventListener('click', () => insertDescriptionDialog.close());
-                    document.getElementById('insert-description-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const descriptionTitle = document.querySelector('input[name=insert-description-dialog-input]').value;
-                        const response = await fetch(`/api/publication/{publicationId}/section/{sectionId}insert?description=${encodeURIComponent(description(sectionId))}`, { method: 'POST' });
-                        if(!response.ok) { alert('failed to add description'); return; }
-                        location.reload(true);
-                    });
-                </script>
+    <script>
+        const editDescriptionDialog = document.getElementById('edit-description-dialog');
+        const description = document.getElementById('description');
+        const textarea = document.querySelector('textarea[name=description]');
+        document.getElementById('edit-description-button').addEventListener('click', () => {
+            textarea.value = description.innerHTML;
+            editDescriptionDialog.showModal();
+        });
+        document.getElementById('edit-description-dialog-negative').addEventListener('click', () => editDescriptionDialog.close());
+        document.getElementById('edit-description-dialog-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/update-description?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
+            if(!response.ok) { alert('failed to add description'); return; }
+            description.innerHTML = textarea.value;
+            editDescriptionDialog.close();
+        });
+    </script>
 {{/isEicOrSuperior}}
 </body>
 
