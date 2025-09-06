@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript
 
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
@@ -39,6 +40,34 @@ private const val PUBLICATION_ID = "publication_id"
 private const val IS_HIDDEN = "is_hidden"
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+    @Modifying
+    @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
+    fun insert(
+        @Param(TITLE) title: String,
+        @Param(AUTHOR_ID) authorId: Int,
+        @Param(CATEGORY_ID) categoryId: Int,
+        @Param(SECTION_ID) sectionId: Int,
+        @Param(FILE_URL) fileUrl: String
+    )
+    @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
+    fun exists(@Param(ID) id: Int): Boolean
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $ARCHIVED WHERE $ID = :$ID")
+    fun archive(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $HIDDEN WHERE $ID = :$ID")
+    fun hide(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $PUBLISHED WHERE $ID = :$ID")
+    fun publish(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("DELETE FROM $MANUSCRIPT WHERE $ID = :$ID")
+    fun delete(@Param(ID) id: Int)
+
     @Query("SELECT * FROM $MANUSCRIPT WHERE $ID = :$ID")
     fun byId(@Param(ID) manuscriptId: Int): Manuscript
 

@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript
 
-import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
@@ -17,7 +16,7 @@ data class Manuscript(
     val state: ManuscriptState,
     val sectionId: Int,
     val fileUrl: String,
-    val submissionDate: LocalDateTime?,
+    val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
     val views: Int,
     val downloads: Int,

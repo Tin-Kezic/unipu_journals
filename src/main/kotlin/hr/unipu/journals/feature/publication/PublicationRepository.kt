@@ -102,7 +102,7 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun updateTitle(@Param(ID) id: Int, @Param(TITLE) title: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION WHERE $ID = :$ID)")
-    fun existsById(@Param(ID) id: Int): Boolean
+    fun exists(@Param(ID) id: Int): Boolean
 
     @Modifying
     @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")

@@ -10,6 +10,12 @@ private const val MANUSCRIPT_ID = "manuscript_id"
 private const val ACCOUNT_ID = "account_id"
 private const val ACCOUNT_ROLE = "account_role"
 
+private const val EIC = "'EIC'"
+private const val EDITOR = "'EDITOR'"
+private const val REVIEWER = "'REVIEWER'"
+private const val CORRESPONDING_AUTHOR = "'CORRESPONDING_AUTHOR'"
+private const val AUTHOR = "'AUTHOR'"
+
 // manuscript
 private const val MANUSCRIPT = "manuscript"
 private const val TITLE = "title"
@@ -43,7 +49,9 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         JOIN $ACCOUNT ON $ACCOUNT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID
         JOIN $MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
         WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = $ACCOUNT.$ID
-        AND $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
+        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID = $MANUSCRIPT.$ID
+        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $CORRESPONDING_AUTHOR
+        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $AUTHOR
     """)
     fun authors(@Param(TITLE) manuscriptId: Int): List<String>
     @Query("""
