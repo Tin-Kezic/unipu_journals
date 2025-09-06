@@ -16,15 +16,11 @@ class ArchivePublicationPageController(
     @GetMapping("/archive")
     fun page(model: Model): String {
         model["publications"] = publicationRepository.allArchived().map { publication ->
-            val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            ContainerDTO(
+            ArchiveContainerDTO(
                 id = publication.id,
                 title = publication.title,
-                canHide = isEicOrSuperior,
-                canEdit = isEicOrSuperior,
-                isEditor = isEicOrSuperior
             )
-        }.sortedByDescending { it.isEditor }
+        }
         return "archive/archive-publication-page"
     }
 }
