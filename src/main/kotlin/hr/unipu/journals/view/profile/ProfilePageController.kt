@@ -22,7 +22,16 @@ class ProfilePageController(
     fun page(@PathVariable accountId: Int, model: Model): String {
         model["isAdmin"] = authorizationService.isAdmin()
         val manuscripts = manuscriptRepository.allByAuthor(accountId)
-        model["minor-major"] = manuscripts.filter { manuscript -> manuscript.state == ManuscriptState.MINOR_FIXES || manuscript.state == ManuscriptState.MAJOR_FIXES }
+        model["minor-major"] = manuscripts
+            .filter { manuscript -> manuscript.state == ManuscriptState.MINOR_FIXES || manuscript.state == ManuscriptState.MAJOR_FIXES }
+            .map { manuscript ->
+                ProfileManuscriptDTO(
+                    id = manuscript.id,
+                    title = manuscript.title,
+                    publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
+                    description = manuscript.description
+                )
+            }
         model["manuscripts"] = manuscripts.map { manuscript ->
             ProfileManuscriptDTO(
                 id = manuscript.id,
