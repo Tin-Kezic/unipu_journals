@@ -19,7 +19,7 @@ class PendingReviewPageController(
 ) {
     @GetMapping("/review")
     fun all(model: Model): String {
-        model["publications-sidebar"] = publicationRepository.allUnderReview()
+        model["publicationsSidebar"] = publicationRepository.allUnderReview()
         model["manuscripts"] = manuscriptRepository.allUnderReview().map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
@@ -33,7 +33,7 @@ class PendingReviewPageController(
     }
     @GetMapping("review/from-publication/{publicationId}")
     fun underPublication(@PathVariable publicationId: Int, model: Model): String {
-        model["publications-sidebar"] = publicationRepository.allPublished()
+        model["publicationsSidebar"] = publicationRepository.allPublished()
         model["manuscripts"] = manuscriptRepository.allUnderReviewByPublication(publicationId).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
