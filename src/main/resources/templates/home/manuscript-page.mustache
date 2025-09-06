@@ -17,7 +17,7 @@
         </h1>
         {{#isEicOrSuperior}}
             <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.5rem;">
-                <button id="manage-section-editors" class="m3-button yellow-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">Manage section editors</button>
+                <a href="#" class="m3-button yellow-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; text-decoration: none;">Manage section editors</a>
             </div>
         {{/isEicOrSuperior}}
     </div>
@@ -156,7 +156,7 @@
         document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
             const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
             if(!response.ok) { alert('failed to archive Manuscript'); return; }
-            document.querySelector(`div[data-id="${currentId}"]`).remove();
+            document.querySelector(`article[data-id="${currentId}"]`).remove();
             archiveManuscriptDialog.close();
         });
     </script>
