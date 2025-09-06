@@ -57,8 +57,12 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun archive(@Param(ID) id: Int)
 
     @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $HIDDEN WHERE $ID = :$ID")
+    fun hide(@Param(ID) id: Int)
+
+    @Modifying
     @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $PUBLISHED WHERE $ID = :$ID")
-    fun unarchive(@Param(ID) id: Int)
+    fun publish(@Param(ID) id: Int)
 
     @Modifying
     @Query("DELETE FROM $MANUSCRIPT WHERE $ID = :$ID")
