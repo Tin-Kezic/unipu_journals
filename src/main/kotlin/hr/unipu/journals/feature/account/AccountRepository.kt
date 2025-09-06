@@ -64,6 +64,32 @@ interface AccountRepository: Repository<Account, Int> {
         @Param(ZIP_CODE) zipCode: String,
     )
     @Modifying
+    @Query("""
+        UPDATE $ACCOUNT SET 
+        $FULL_NAME = :$FULL_NAME,
+        $TITLE = :$TITLE,
+        $EMAIL = :$EMAIL,
+        $PASSWORD = :$PASSWORD,
+        $AFFILIATION = :$AFFILIATION,
+        $JOB_TYPE = :$JOB_TYPE,
+        $COUNTRY = :$COUNTRY,
+        $CITY = :$CITY,
+        $ADDRESS = :$ADDRESS,
+        $ZIP_CODE = :$ZIP_CODE
+        WHERE $EMAIL = :$EMAIL
+    """)
+    fun update(
+        @Param(FULL_NAME) fullName: String,
+        @Param(TITLE) title: String,
+        @Param(EMAIL) email: String,
+        @Param(PASSWORD) password: String,
+        @Param(AFFILIATION) affiliation: String,
+        @Param(JOB_TYPE) jobType: String,
+        @Param(COUNTRY) country: String,
+        @Param(CITY) city: String,
+        @Param(ADDRESS) address: String,
+        @Param(ZIP_CODE) zipCode: String
+    )    @Modifying
     @Query("DELETE FROM $ACCOUNT WHERE $ID = :$ID")
     fun delete(@Param(ID) id: Int)
 }
