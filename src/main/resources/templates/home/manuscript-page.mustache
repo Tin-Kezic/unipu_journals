@@ -17,7 +17,7 @@
         </h1>
         {{#isEicOrSuperior}}
             <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.5rem;">
-                <button id="manage-section-editors" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">Manage section editors</button>
+                <button id="manage-section-editors" class="m3-button yellow-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">Manage section editors</button>
             </div>
         {{/isEicOrSuperior}}
     </div>
@@ -55,7 +55,7 @@
             {{/isEicOrSuperior}}
         </article>
         {{#manuscripts}}
-            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
                 <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
@@ -64,8 +64,8 @@
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
             {{#isSectionEditorOrSuperior}}
                 <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
-                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                        <button class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
+                        <button class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
                 </footer>
             {{/isSectionEditorOrSuperior}}
             </article>
@@ -74,22 +74,6 @@
 </div>
 
 {{#isEicOrSuperior}}
-    <dialog id="manage-section-editors-dialog" closedby="any">
-        <p id="manage-section-editors-dialog-message">Manage section editors?</p>
-        <form>
-            <div style="display: flex; justify-content: space-between">
-                <button id="manage-section-editors-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-                <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Manage</button>
-            </div>
-        </form>
-    </dialog>
-    <script>
-        const manageSectionEditorsDialog = document.getElementById('manage-section-editors-dialog');
-        document.getElementById('manage-section-editors-dialog-negative').addEventListener('click', () => insertSectionDialog.close());
-        document.getElementById('manage-section-editors-dialog-form').addEventListener('submit', async (event) => {
-        });
-    </script>
-
     <dialog id="edit-description-dialog" closedby="any" style="width: 90vw; height: 90vh;">
         <form id="edit-description-dialog-form">
             <div class="text-field">
@@ -127,10 +111,11 @@
         <br>
         <div style="display: flex; justify-content: space-between">
             <button id="hide-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
-            <button id="hide-manuscript-dialog-positive" class="m3-button red-button" datatype="hide-button" style="margin-left: 1rem;">Hide</button>
+            <button id="hide-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Hide</button>
         </div>
     </dialog>
     <script>
+        let currentId = null;
         const hideManuscriptDialog = document.getElementById('hide-manuscript-dialog');
         const hideManuscriptDialogMessage = document.getElementById('hide-manuscript-dialog-message');
         document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
@@ -142,10 +127,10 @@
         });
         document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
         document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/{{currentId}}/update-hidden?isHidden=true`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
             if(!response.ok) { alert('failed to hide Manuscript'); return; }
-            document.querySelector(`div[data-id="${currentId}"]`).remove(); // remove manuscript
-            hideSectionDialog.close();
+            document.querySelector(`article[data-id="${currentId}"]`).remove(); // remove manuscript
+            hideManuscriptDialog.close();
         });
     </script>
 
@@ -154,7 +139,7 @@
         <br>
         <div style="display: flex; justify-content: space-between">
             <button id="archive-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
-            <button id="archive-manuscript-dialog-positive" class="m3-button red-button" datatype="archive-button" style="margin-left: 1rem;">Archive</button>
+            <button id="archive-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Archive</button>
         </div>
     </dialog>
     <script>
@@ -169,10 +154,10 @@
         });
         document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
         document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/{{currentId}}/update-archived?isArchived=true`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
             if(!response.ok) { alert('failed to archive Manuscript'); return; }
-            document.querySelector(`div[data-id="${currentId}"]`).updateArchived();
-            archiveSectionDialog.close();
+            document.querySelector(`div[data-id="${currentId}"]`).remove();
+            archiveManuscriptDialog.close();
         });
     </script>
 {{/isEicOrSuperior}}
