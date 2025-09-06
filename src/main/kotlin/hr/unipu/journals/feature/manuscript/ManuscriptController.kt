@@ -35,9 +35,11 @@ class ManuscriptController(private val repository: ManuscriptRepository) {
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         @PathVariable manuscriptId: Int,
+        @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {
         return if(repository.exists(manuscriptId)) {
-            repository.archive(manuscriptId)
+            if(isHidden) repository.hide(manuscriptId)
+            else repository.publish(manuscriptId)
             return ResponseEntity.ok("manuscript isHidden successfully updated")
         } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
     }
@@ -51,7 +53,7 @@ class ManuscriptController(private val repository: ManuscriptRepository) {
     ): ResponseEntity<String> {
         return if(repository.exists(manuscriptId)) {
             if(isArchived) repository.archive(manuscriptId)
-            else repository.unarchive(manuscriptId)
+            else repository.publish(manuscriptId)
             return ResponseEntity.ok("manuscript isArchived successfully updated")
         } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
     }
