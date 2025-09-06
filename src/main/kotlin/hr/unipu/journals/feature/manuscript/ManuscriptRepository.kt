@@ -39,6 +39,19 @@ private const val PUBLICATION_SECTION = "publication_section"
 private const val PUBLICATION_ID = "publication_id"
 private const val IS_HIDDEN = "is_hidden"
 
+// profile
+private const val ACCOUNT = "account"
+private const val FULL_NAME = "full_name"
+private const val EMAIL = "email"
+private const val PASSWORD = "password"
+private const val AFFILIATION = "affiliation"
+private const val JOB_TYPE = "job_type"
+private const val COUNTRY = "country"
+private const val CITY = "city"
+private const val ADDRESS = "address"
+private const val ZIP_CODE = "zip_code"
+private const val IS_ADMIN = "is_admin"
+
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Modifying
     @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
