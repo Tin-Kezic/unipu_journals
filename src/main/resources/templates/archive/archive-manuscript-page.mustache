@@ -58,6 +58,23 @@
 </div>
 </body>
 
+<script>
+    document.querySelectorAll('button[data-type="unarchive-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            archiveManuscriptDialogMessage.innerHTML = `Archive <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            archiveManuscriptDialog.showModal();
+        });
+    });
+    document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
+    document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to archive Manuscript'); return; }
+        document.querySelector(`article[data-id="${currentId}"]`).remove();
+        archiveManuscriptDialog.close();
+    });
+</script>
+
 <style>
     .yellow-box-buttons button {
         font-size: clamp(0.7rem, 1.2vw, 0.9rem);
