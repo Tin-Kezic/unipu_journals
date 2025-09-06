@@ -1,6 +1,6 @@
-package hr.unipu.journals.feature.register
+package hr.unipu.journals.feature.profile
 
-data class RegisterRequestDTO(
+data class ProfileRequestDTO(
     val fullName: String,
     val title: String,
     val email: String,
