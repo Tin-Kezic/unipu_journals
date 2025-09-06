@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.register
+package hr.unipu.journals.feature.profile
 
 import hr.unipu.journals.feature.account.AccountRepository
 import org.jsoup.Jsoup
@@ -17,7 +17,7 @@ class RegisterController(
     private val passwordEncoder: PasswordEncoder
 ) {
     @PostMapping("/register")
-    fun insert(@ModelAttribute request: RegisterRequestDTO): String {
+    fun insert(@ModelAttribute request: ProfileRequestDTO): String {
         var errors = ""
         if(accountRepository.emailExists(request.email)) errors += "&email-taken"
         if(request.password != request.passwordConfirmation) errors += "&password-mismatch"
