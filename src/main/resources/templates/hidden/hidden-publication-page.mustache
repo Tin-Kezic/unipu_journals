@@ -6,16 +6,6 @@
     <title>Hidden Publication</title>
     <link href="/util.css" rel="stylesheet"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
 <body>
 {{>util/header}}
@@ -36,8 +26,8 @@
         >
             <p class="yellow-box-text">{{title}}</p>
             <div class="yellow-box-buttons">
-                {{#canHide}}<button onclick="event.stopPropagation(), showOverlayAndDialog()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>{{/canHide}}
-                {{#canEdit}}<button onclick="event.stopPropagation(), showOverlayAndDialog()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>{{/canEdit}}
+                {{#canHide}}<button onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>{{/canHide}}
+                {{#canEdit}}<button onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>{{/canEdit}}
             </div>
         </div>
     {{/publications}}
