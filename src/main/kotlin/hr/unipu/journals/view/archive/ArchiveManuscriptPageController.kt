@@ -3,6 +3,7 @@ package hr.unipu.journals.view.archive
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.ManuscriptDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -18,6 +19,7 @@ class ArchiveManuscriptPageController(
     private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val authorizationService: AuthorizationService
 ) {
     @GetMapping("/{publicationId}/section/{sectionId}")
     fun page(
@@ -25,6 +27,7 @@ class ArchiveManuscriptPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
+        model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allArchivedByPublicationId(publicationId)
         model["manuscripts"] = manuscriptRepository.allArchivedBySectionId(sectionId).map { manuscript ->
             ManuscriptDTO(
