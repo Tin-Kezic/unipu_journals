@@ -78,10 +78,7 @@ class SecurityConfig {
                     "/technical-processing-page"
                 ).forEach { authorize(it, hasAnyRole(EIC, ADMIN)) }
                 listOf(
-                    "/hidden",
-                    "/hidden/publication/{publicationId}",
-                    "/hidden/publication/{publicationId}/section/{sectionId}",
-                    "/hidden/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}",
+                    "/hidden/**",
                     "/review-round-initialization",
                     "/manage-manuscript-under-review",
                 ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
