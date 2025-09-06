@@ -15,14 +15,14 @@
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
-    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        {{#publications-sidebar}}
-            <a data-type="sidebar-button" data-id="{{id}}" href="review/from-publication/{{id}}" style="text-decoration: none; color: inherit;">
+    <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        {{#publicationsSidebar}}
+            <a data-type="sidebar-button" data-id="{{id}}" href="/review/from-publication/{{id}}" style="text-decoration: none; color: inherit;">
                 <label class="sidebar-button">
-                    <span class="checkbox">{{title}}</span>
+                    <span class="sidebar-button-title">{{title}}</span>
                 </label>
             </a>
-        {{/publications-sidebar}}
+        {{/publicationsSidebar}}
     </aside>
 
     <section class="main-content" style="
