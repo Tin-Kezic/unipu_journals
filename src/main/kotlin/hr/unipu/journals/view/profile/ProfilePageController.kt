@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.profile
 
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,7 +21,9 @@ class ProfilePageController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int, model: Model): String {
         model["isAdmin"] = authorizationService.isAdmin()
-        model["manuscripts"] = manuscriptRepository.allByAuthor(accountId).map { manuscript ->
+        val manuscripts = manuscriptRepository.allByAuthor(accountId)
+        model["minor-major"] = manuscripts.filter { manuscript -> manuscript.state == ManuscriptState.MINOR_FIXES || manuscript.state == ManuscriptState.MAJOR_FIXES }
+        model["manuscripts"] = manuscripts.map { manuscript ->
             ProfileManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
