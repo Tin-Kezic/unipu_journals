@@ -4,40 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="/util.css" rel="stylesheet"/>
-    <title>Section Archive</title>
+    <title>{{currentPublication}}</title>
 </head>
-
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
 {{>util/header}}
 
 <main>
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
         <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
-            publications
+            {{currentPublication}}
         </h1>
     </div>
 
     <div style="display: flex; align-items: flex-start;">
         <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-            {{#publications-sidebar}}
-                <a href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+            {{#publicationsSidebar}}
+                <a data-type="sidebar-button" data-id="{{id}}" href="/archive/publication/{{id}}" style="text-decoration: none; color: inherit;">
                     <label class="sidebar-button">
-                        <span class="checkbox">{{title}}</span>
+                        <span class="sidebar-button-title">{{title}}</span>
                     </label>
                 </a>
-            {{/publications-sidebar}}
+            {{/publicationsSidebar}}
         </aside>
 
         <section style="
@@ -49,50 +36,24 @@
             margin: 0 1.5rem 1rem 1.5rem;
           ">
             {{#sections}}
-                <article>
-                    <a href="/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
-                        <div class="yellow-box">
-                            <p class="yellow-box-text">{{title}}</p>
-                            <div class="yellow-box-buttons">
-                                <button class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>
-                                <button class="m3-button yellow-button" style="font-size: 0.8rem; width: 3.8rem;">Edit</button>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+                <div
+                        data-id="{{id}}"
+                        class="yellow-box"
+                        style="cursor: pointer;"
+                        onclick="window.location='/archive/publication/{{publicationId}}/section/{{id}}'"
+                >
+                    <p class="yellow-box-text">{{title}}</p>
+                </div>
             {{/sections}}
         </section>
     </div>
 </main>
-
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Update section name</p>
-        <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Hide section <b>Acoustic signal processing</b>?</p>
-        <br>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);">hide</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+<script>
+    const title = document
+        .querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
+        .querySelector('.sidebar-button-title');
+    title.style.background = 'var(--purple)';
+    title.style.color = 'white';
+</script>
 </body>
 </html>
