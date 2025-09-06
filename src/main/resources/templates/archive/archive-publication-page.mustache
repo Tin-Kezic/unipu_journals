@@ -3,79 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>archive</title>
+    <title>Archive</title>
     <link href="/util.css" rel="stylesheet"/>
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
 <body>
 {{>util/header}}
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
     <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
-        publications
+        Archive
     </h1>
 </div>
 
-<section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+<section id="publications" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
         <div
-                id="{{id}}"
-                class="yellow-box"
-                onclick="window.location='/publication/{{id}}'"
-                style="text-decoration: none; color: black; cursor: pointer;"
-        >
+            data-id="{{id}}"
+            class="yellow-box"
+            style="cursor: pointer;"
+            onclick="window.location='archive/publication/{{id}}'
+        ">
             <p class="yellow-box-text">{{title}}</p>
-            <div class="yellow-box-buttons">
-                {{#canHide}}<button onclick="event.stopPropagation()" class="m3-button purple-button" style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;">Hide</button>{{/canHide}}
-                {{#canEdit}}<button onclick="event.stopPropagation()" class="m3-button yellow-button" style="font-size: 0.8rem; width: 3.8rem;">Edit</button>{{/canEdit}}
-            </div>
         </div>
     {{/publications}}
 </section>
-
-<div class="overlay" onclick="if(event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Update publication name</p>
-        <div class="text-field">
-            <label for="section"></label>
-            <input type="text">
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 0.8rem; color: black; background-color: var(--yellow);">Rename</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay" onclick="if(event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Hide publication <b>Acoustic signal processing</b>?</p>
-        <br>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--red);">hide</button>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
-
-<style>
-    .m3-button:active {
-        transform: none;
-        box-shadow: none !important;
-    }
-</style>
 </html>
