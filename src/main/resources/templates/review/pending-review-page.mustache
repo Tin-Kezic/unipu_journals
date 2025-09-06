@@ -74,6 +74,13 @@
         {{/manuscripts}}
     </section>
 </div>
+<script>
+    const title = document
+        .querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
+        .querySelector('.sidebar-button-title');
+    title.style.background = 'var(--purple)';
+    title.style.color = 'white';
+</script>
 </body>
 
 <style>
