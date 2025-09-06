@@ -11,17 +11,17 @@
 {{>util/header}}
 
 <section>
-    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-        publications
-    </h1>
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">Review</h1>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
         {{#publications-sidebar}}
-            <label class="sidebar-button">
-                <span class="checkbox">{{title}}</span>
-            </label>
+            <a data-type="sidebar-button" data-id="{{id}}" href="review/from-publication/{{id}}" style="text-decoration: none; color: inherit;">
+                <label class="sidebar-button">
+                    <span class="checkbox">{{title}}</span>
+                </label>
+            </a>
         {{/publications-sidebar}}
     </aside>
 
@@ -39,76 +39,39 @@
 
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        {{#manuscripts}}
+            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+                <p class="yellow-box-text">{{title}}</p>
 
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
+                <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
 
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
-                <button class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
-            </footer>
-        </article>
+                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
 
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
-
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
-
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
-                <button class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</button>
-            </footer>
-        </article>
+                <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
+                    <a href="#" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Accept</a>
+                </footer>
+            </article>
+        {{/manuscripts}}
 
         <br>
 
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        {{#manuscripts}}
+            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+                <p class="yellow-box-text">{{title}}</p>
 
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
+                <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
 
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
-                <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
-                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
-            </footer>
-        </article>
+                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
 
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
-
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
-
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; ">
-                <button class="m3-button yellow-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Manage</button>
-                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Review</button>
-            </footer>
-        </article>
-
+                <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
+                    <a href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black;">Review</a>
+                </footer>
+            </article>
+        {{/manuscripts}}
     </section>
 </div>
 </body>
