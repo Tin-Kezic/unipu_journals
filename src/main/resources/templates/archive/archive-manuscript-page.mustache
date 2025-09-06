@@ -46,6 +46,12 @@
 
                 <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
+
+                {{#isAdmin}}
+                    <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
+                        <a href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; color: white; text-decoration: none;">unarchive</a>
+                    </footer>
+                {{/isAdmin}}
             </article>
         {{/manuscripts}}
     </section>
