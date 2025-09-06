@@ -81,6 +81,13 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun allHiddenBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
     @Query("""
+        SELECT $MANUSCRIPT.* FROM $MANUSCRIPT
+        JOIN $ACCOUNT ON $MANUSCRIPT.$AUTHOR_ID = $ACCOUNT.$ID
+        WHERE $MANUSCRIPT.$AUTHOR_ID = $ACCOUNT.$ID
+    """)
+    fun allByAuthor(@Param(ID) authorId: Int): List<Manuscript>
+
+    @Query("""
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
