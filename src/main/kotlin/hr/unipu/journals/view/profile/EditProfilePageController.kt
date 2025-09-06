@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class EditProfilePageController(private val authorizationService: AuthorizationService) {
-    @GetMapping("/profile/{accountId}/edit-profile")
+    @GetMapping("/profile/{accountId}/edit")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int): String {
         val account = authorizationService.account ?: throw IllegalStateException("account with id $accountId not found")
-        return """redirect:/profile/$accountId/edit-profile
+        return """redirect:/profile/$accountId/edit
            &fullName=${account.fullName}
            &title=${account.title}
            &email=${account.email}

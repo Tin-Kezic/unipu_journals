@@ -19,14 +19,14 @@ class EditProfileController(
     private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
-    @PostMapping("/profile/{accountId}/edit-profile")
+    @PostMapping("/profile/{accountId}/edit")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun insert(@PathVariable accountId: Int, @ModelAttribute request: ProfileRequestDTO): String {
         var errors = ""
         if(accountRepository.emailExists(request.email)) errors += "&email-taken"
         if(request.password != request.passwordConfirmation) errors += "&password-mismatch"
         if(errors.isNotEmpty())
-            return "redirect:/profile/$accountId/edit-profile?$errors" +
+            return "redirect:/profile/$accountId/edit?$errors" +
                     "&fullName=${URLEncoder.encode(request.fullName, encoding)}" +
                     "&title=${URLEncoder.encode(request.title, encoding)}" +
                     "&email=${URLEncoder.encode(request.email, encoding)}" +
