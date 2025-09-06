@@ -3,45 +3,29 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Manuscript Archive</title>
+    <title>Manuscript Page</title>
     <link href="/util.css" rel="stylesheet"/>
-
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
-
 <body>
 {{>util/header}}
 
-<div style="display: flex; flex-direction: row; justify-content: space-between;">
-    <section>
+<section>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
         <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-            Acoustics
+            {{currentSection}}
         </h1>
-    </section>
-
-    <footer style="display: flex; justify-content: flex-end;">
-        <button class="m3-button yellow-button" onclick="showOverlayAndDialog()" style="box-shadow: none; margin-block: 1rem; padding-inline: 1rem; padding-block: 0.4rem; border-radius: 7px; margin-right: 1rem;">+ Add Section editor</button>
-    </footer>
-</div>
+    </div>
+</section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
-    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        <label class="sidebar-button">
-            <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-            <span class="checkbox">Acoustic Ecology</span>
-        </label>
+    <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        {{#sectionsSidebar}}
+            <a data-type="sidebar-button" data-id="{{id}}" href="/archive/publication/{{id}}" style="text-decoration: none; color: inherit;">
+                <label class="sidebar-button">
+                    <span class="sidebar-button-title">{{title}}</span>
+                </label>
+            </a>
+        {{/sectionsSidebar}}
     </aside>
 
     <section class="main-content" style="
@@ -54,48 +38,21 @@
         min-width: 0;
         overflow: hidden;
     ">
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        {{#manuscripts}}
+            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+                <p class="yellow-box-text">{{title}}</p>
 
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
+                <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
 
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
-            </footer>
-        </article>
+                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
+            </article>
+        {{/manuscripts}}
     </section>
-</div>
-
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Add section editor</p>
-        <div class="text-field">
-            <input name="email" type="email">
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.8rem; color: black; background-color: var(--yellow);">Add</button>
-            </div>
-        </div>
-    </div>
 </div>
 </body>
 
 <style>
-    .yellow-box-buttons {
-        display: flex;
-        gap: 0.5rem;
-        margin-left: 1rem;
-        margin-top: 0.5rem;
-    }
-
     .yellow-box-buttons button {
         font-size: clamp(0.7rem, 1.2vw, 0.9rem);
         padding: clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem);
