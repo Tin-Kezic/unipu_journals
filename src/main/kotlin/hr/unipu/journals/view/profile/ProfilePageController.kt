@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.profile
 
+import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter
 class ProfilePageController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
+    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 ) {
     @GetMapping("/profile/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
@@ -28,6 +30,7 @@ class ProfilePageController(
                 ProfileManuscriptDTO(
                     id = manuscript.id,
                     title = manuscript.title,
+                    authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
                     publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                     description = manuscript.description
                 )
@@ -36,6 +39,7 @@ class ProfilePageController(
             ProfileManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
+                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
                 publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 description = manuscript.description
             )
