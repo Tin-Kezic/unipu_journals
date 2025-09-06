@@ -33,7 +33,7 @@ interface AccountRepository: Repository<Account, Int> {
     fun updateRootPassword(@Param(PASSWORD) password: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $ID = :$ID)")
-    fun idExists(@Param(ID) id: Int): Boolean
+    fun exists(@Param(ID) id: Int): Boolean
 
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL)")
     fun emailExists(@Param(EMAIL) email: String): Boolean
