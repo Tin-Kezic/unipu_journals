@@ -74,6 +74,22 @@
 </div>
 
 {{#isEicOrSuperior}}
+    <dialog id="manage-section-editors-dialog" closedby="any">
+        <p id="manage-section-editors-dialog-message">Manage section editors?</p>
+        <form>
+            <div style="display: flex; justify-content: space-between">
+                <button id="manage-section-editors-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+                <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Manage</button>
+            </div>
+        </form>
+    </dialog>
+    <script>
+        const manageSectionEditorsDialog = document.getElementById('manage-section-editors-dialog');
+        document.getElementById('manage-section-editors-dialog-negative').addEventListener('click', () => insertSectionDialog.close());
+        document.getElementById('manage-section-editors-dialog-form').addEventListener('submit', async (event) => {
+        });
+    </script>
+
     <dialog id="edit-description-dialog" closedby="any" style="width: 90vw; height: 90vh;">
         <form id="edit-description-dialog-form">
             <div class="text-field">
@@ -103,6 +119,60 @@
             if(!response.ok) { alert('failed to add description'); return; }
             description.innerHTML = textarea.value;
             editDescriptionDialog.close();
+        });
+    </script>
+
+    <dialog id="hide-manuscript-dialog" closedby="any">
+        <p id="hide-manuscript-dialog-message"></p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button id="hide-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+            <button id="hide-manuscript-dialog-positive" class="m3-button red-button" datatype="hide-button" style="margin-left: 1rem;">Hide</button>
+        </div>
+    </dialog>
+    <script>
+        const hideManuscriptDialog = document.getElementById('hide-manuscript-dialog');
+        const hideManuscriptDialogMessage = document.getElementById('hide-manuscript-dialog-message');
+        document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+            button.addEventListener('click', () => {
+                hideManuscriptDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+                currentId = button.dataset.id;
+                hideManuscriptDialog.showModal();
+            });
+        });
+        document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
+        document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/{{currentId}}/update-hidden?isHidden=true`, { method: 'PUT' });
+            if(!response.ok) { alert('failed to hide Manuscript'); return; }
+            document.querySelector(`div[data-id="${currentId}"]`).remove(); // remove manuscript
+            hideSectionDialog.close();
+        });
+    </script>
+
+    <dialog id="archive-manuscript-dialog" closedby="any">
+        <p id="archive-manuscript-dialog-message"></p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button id="archive-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+            <button id="archive-manuscript-dialog-positive" class="m3-button red-button" datatype="archive-button" style="margin-left: 1rem;">Archive</button>
+        </div>
+    </dialog>
+    <script>
+        const archiveManuscriptDialog = document.getElementById('archive-manuscript-dialog');
+        const archiveManuscriptDialogMessage = document.getElementById('archive-manuscript-dialog-message');
+        document.querySelectorAll('button[data-type="archive-button"]').forEach(button => {
+            button.addEventListener('click', () => {
+                archiveManuscriptDialogMessage.innerHTML = `Archive <b>${button.dataset.title}</b>?`;
+                currentId = button.dataset.id;
+                archiveManuscriptDialog.showModal();
+            });
+        });
+        document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
+        document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/{{currentId}}/update-archived?isArchived=true`, { method: 'PUT' });
+            if(!response.ok) { alert('failed to archive Manuscript'); return; }
+            document.querySelector(`div[data-id="${currentId}"]`).updateArchived();
+            archiveSectionDialog.close();
         });
     </script>
 {{/isEicOrSuperior}}
