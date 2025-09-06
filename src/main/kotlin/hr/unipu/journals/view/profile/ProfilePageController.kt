@@ -22,6 +22,7 @@ class ProfilePageController(
     @GetMapping("/profile/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int, model: Model): String {
+        model["author"] = authorizationService.account?.fullName ?: "no name"
         model["isAdmin"] = authorizationService.isAdmin()
         val manuscripts = manuscriptRepository.allByAuthor(accountId)
         model["minor-major"] = manuscripts
