@@ -20,7 +20,7 @@ class HiddenPublicationPageController(
             ContainerDTO(
                 id = publication.id,
                 title = publication.title,
-                canHide = isEicOrSuperior,
+                canHide = authorizationService.isAdmin(),
                 canEdit = isEicOrSuperior,
                 isEditor = isEicOrSuperior
             )
