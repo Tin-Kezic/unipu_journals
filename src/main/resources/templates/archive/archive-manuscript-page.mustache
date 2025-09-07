@@ -20,7 +20,7 @@
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
         {{#sectionsSidebar}}
-            <a data-type="sidebar-button" data-id="{{id}}" href="/archive/publication/{{id}}" style="text-decoration: none; color: inherit;">
+            <a data-type="sidebar-button" data-id="{{id}}" href="/archive/publication/{{publicationId}}/section/{{id}}" style="text-decoration: none; color: inherit;">
                 <label class="sidebar-button">
                     <span class="sidebar-button-title">{{title}}</span>
                 </label>
@@ -58,7 +58,7 @@
 </div>
 <script>
     const title = document
-        .querySelector('a[data-type="sidebar-button"][data-id="{{publicationId}}"]')
+        .querySelector('a[data-type="sidebar-button"][data-id="{{sectionId}}"]')
         .querySelector('.sidebar-button-title');
     title.style.background = 'var(--purple)';
     title.style.color = 'white';
