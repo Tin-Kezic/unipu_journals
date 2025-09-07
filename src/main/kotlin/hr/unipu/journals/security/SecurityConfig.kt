@@ -72,13 +72,15 @@ class SecurityConfig {
             }
             authorizeHttpRequests {
                 authorize("/root", hasRole(ROOT))
-                authorize("/publication/{publicationId}/manage-eic-on-publication", hasRole(ADMIN))
+                listOf(
+                    "/hidden/**",
+                    "/publication/{publicationId}/manage-eic-on-publication",
+                ).forEach { authorize(it, hasRole(ADMIN)) }
                 listOf(
                     "/eic-initial-review",
                     "/technical-processing-page"
                 ).forEach { authorize(it, hasAnyRole(EIC, ADMIN)) }
                 listOf(
-                    "/hidden/**",
                     "/review-round-initialization",
                     "/manage-manuscript-under-review",
                 ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
