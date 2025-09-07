@@ -15,16 +15,7 @@ class HiddenPublicationPageController(
 ) {
     @GetMapping("/hidden")
     fun page(model: Model): String {
-        model["publications"] = publicationRepository.allHidden().map { publication ->
-            val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            ContainerDTO(
-                id = publication.id,
-                title = publication.title,
-                canHide = authorizationService.isAdmin(),
-                canEdit = isEicOrSuperior,
-                isEditor = isEicOrSuperior
-            )
-        }.sortedByDescending { it.isEditor }
+        model["publications"] = publicationRepository.allHidden()
         return "hidden/hidden-publication-page"
     }
 }
