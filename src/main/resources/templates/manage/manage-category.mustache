@@ -69,7 +69,7 @@
         dialog.close()
     });
     function dialogOpen(category) {
-        document.getElementById('dialog-message').innerHTML = `Revoke EiC privileges for <b>${category}</b>`;
+        document.getElementById('dialog-message').innerHTML = `Remove <b>${category}</b>?`;
         currentCategory = category
         dialog.showModal();
     }
