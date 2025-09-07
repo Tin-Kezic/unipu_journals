@@ -10,6 +10,7 @@ private const val INVITE = "invite"
 private const val ID = "id"
 private const val EMAIL = "email"
 private const val TARGET = "target"
+private const val TARGET_ID = "target_id"
 
 // invitation-target
 private const val ADMIN = "'ADMIN'"
@@ -21,16 +22,16 @@ private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
 interface InviteRepository: Repository<Invite, Int> {
 
-    @Modifying
-    @Query("INSERT INTO $INVITE ($EMAIL, $TARGET) VALUES (:$EMAIL, :$TARGET)")
-    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
-
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 
     @Modifying
-    @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET")
-    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget)
+    @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")
+    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, targetId: Int = 0)
+
+    @Modifying
+    @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET AND $TARGET_ID = :$TARGET_ID")
+    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, targetId: Int = 0)
 
     @Query("SELECT $EMAIL FROM $INVITE WHERE $TARGET = $ADMIN")
     fun allAdminEmails(): List<String>
