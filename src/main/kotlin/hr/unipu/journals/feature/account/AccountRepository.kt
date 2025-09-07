@@ -76,9 +76,10 @@ interface AccountRepository: Repository<Account, Int> {
         $CITY = :$CITY,
         $ADDRESS = :$ADDRESS,
         $ZIP_CODE = :$ZIP_CODE
-        WHERE $EMAIL = :$EMAIL
+        WHERE $ID = :$ID
     """)
     fun update(
+        @Param(ID) id: Int,
         @Param(FULL_NAME) fullName: String,
         @Param(TITLE) title: String,
         @Param(EMAIL) email: String,
