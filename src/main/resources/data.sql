@@ -43,8 +43,7 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (4, 7),
 (5, 2);
 INSERT INTO manuscript
-(author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description)
-VALUES
+(author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (4, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3, 'Artificial Intelligence in Healthcare', 'Explores how AI models improve diagnostics and personalized medicine.'),
 (4, 2, 'MINOR_FIXES', 2, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 5, 1, 'Sustainable Agriculture Practices', 'Examines eco-friendly farming techniques to increase yield with minimal environmental impact.'),
 (5, 3, 'AWAITING_REVIEWER_REVIEW', 3, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 22, 5, 'Cybersecurity in IoT Devices', 'Analyzes vulnerabilities and proposes solutions for connected smart devices.'),
@@ -1310,8 +1309,7 @@ VALUES
 (4, 93),
 (105, 60),
 (101, 110);
-INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description)
-VALUES
+INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (108, 46, 'REJECTED', 57, 'http://files.example.com/manuscript1.pdf', '2022-12-23 14:47:50', NULL, 975, 132, 'Climate Change and Renewable Energy', 'Investigates renewable solutions to mitigate global warming effects.'),
 (150, 94, 'REJECTED', 83, 'http://files.example.com/manuscript2.pdf', '2023-02-17 15:49:26', NULL, 568, 28, 'Cybersecurity in IoT Devices', 'Analyzes vulnerabilities and proposes solutions for connected smart devices.'),
 (160, 87, 'HIDDEN', 163, 'http://files.example.com/manuscript3.pdf', '2024-03-24 22:10:06', NULL, 100, 214, 'Quantum Computing Algorithms', 'Discusses error correction and scalability in quantum systems.'),
@@ -1512,8 +1510,7 @@ VALUES
 (181, 136, 'REJECTED', 130, 'http://files.example.com/manuscript198.pdf', '2021-09-07 14:12:50', NULL, 839, 147, 'Data Privacy in Social Media', 'Considers regulations and frameworks for user protection online.'),
 (136, 25, 'MAJOR_FIXES', 61, 'http://files.example.com/manuscript199.pdf', '2024-09-27 16:42:53', NULL, 309, 520, 'Nanotechnology in Medicine', 'Reviews the potential of nanomaterials for targeted drug delivery.'),
 (200, 28, 'AWAITING_INITIAL_EIC_REVIEW', 16, 'http://files.example.com/manuscript200.pdf', '2023-10-16 07:26:57', NULL, 442, 760, 'Blockchain Applications in Finance', 'Studies decentralized systems and their implications for modern banking.');
-INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
-VALUES
+INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 (127, 121, 'EDITOR'),
 (196, 131, 'AUTHOR'),
 (186, 170, 'EDITOR'),
@@ -1587,8 +1584,7 @@ VALUES
 (139, 143, 'REVIEWER'),
 (4, 47, 'AUTHOR'),
 (191, 14, 'REVIEWER');
-INSERT INTO manuscript_review (manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url, author_response_file_url, author_response, review_date, author_response_date)
-VALUES
+INSERT INTO manuscript_review (manuscript_id, reviewer_id, round, reviewer_comment, reviewer_comment_file_url, author_response_file_url, author_response, review_date, author_response_date)VALUES
 (31, 16, 3, 'Reviewer comment 1', 'http://files.example.com/review_comment1.pdf', 'http://files.example.com/author_response1.pdf', 'Author comment 1', '2021-07-21 06:41:55', '2021-07-26 06:41:55'),
 (149, 53, 2, 'Reviewer comment 2', 'http://files.example.com/review_comment2.pdf', 'http://files.example.com/author_response2.pdf', 'Author comment 2', '2024-03-11 07:05:16', '2024-03-16 07:05:16'),
 (26, 102, 3, 'Reviewer comment 3', 'http://files.example.com/review_comment3.pdf', 'http://files.example.com/author_response3.pdf', 'Author comment 3', '2024-04-17 04:42:57', '2024-04-22 04:42:57'),
