@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Manuscript Details Page</title>
+    <title>{{title}}</title>
     <link rel="stylesheet" href="/util.css"/>
 </head>
 
@@ -25,10 +25,6 @@
 </main>
 
 <aside style="position: absolute; top: 6rem; right: 1vw; display: flex; flex-direction: column; gap: 1rem;">
-    {{#isSectionEditorOnSection}}
-        <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.8rem 1.37rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto;">Review</button>
-    {{/isSectionEditorOnSection}}
-
     <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem;">
         <p style="font-size: 0.9rem;">Views</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
