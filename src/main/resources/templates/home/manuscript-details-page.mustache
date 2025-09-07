@@ -25,15 +25,14 @@
 </main>
 
 <aside style="position: absolute; top: 6rem; right: 1vw; display: flex; flex-direction: column; gap: 1rem;">
-    {{#isEicOrSuperior}}
-        <button class="m3-button purple-button" style="box-shadow: none; padding: 0.8rem 2.52rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto; margin-top: 2rem;">Edit</button>
+    {{#isSectionEditorOnSection}}
         <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.8rem 1.37rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto;">Review</button>
-    {{/isEicOrSuperior}}
+    {{/isSectionEditorOnSection}}
 
     <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem;">
         <p style="font-size: 0.9rem;">Views</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
-            <p class="number" style="font-size: 2.5rem; text-align: center;">24,321</p>
+            <p class="number" style="font-size: 2.5rem; text-align: center;">{{views}}</p>
             <svg xmlns="http://www.w3.org/2000/svg" style="color: var(--beige); text-shadow: 1px 1px white, -1px -1px var(--light-gray);" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
         </div>
     </div>
@@ -41,28 +40,13 @@
     <div class="yellow-box" style="margin-top: 3rem;">
         <p style="font-size: 0.9rem;">Downloads</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
-            <p class="number" style="font-size: 2.5rem; text-align: center;">24,321</p>
+            <p class="number" style="font-size: 2.5rem; text-align: center;">{{downloads}}</p>
             <span class="material-symbols-outlined" style="font-size: 3rem; color: var(--beige); text-shadow: 1px 1px white, -1px -1px var(--light-gray);">download</span>
         </div>
     </div>
 
     <button class="m3-button outline-button download-button" style="min-width: fit-content; background-color: var(--pale-yellow); font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold; margin-right: 1.5rem;">Download</button>
 </aside>
-
-<div class="overlay">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <div class="text-field">
-            <label for="abstract">Abstract</label>
-            <textarea id="abstract" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, </textarea>
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">save</button>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
 
 <style>
