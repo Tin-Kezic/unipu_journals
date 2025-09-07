@@ -36,6 +36,7 @@ class ManuscriptDetailsPageController(
         model["abstract"] = manuscript.description
         model["fileUrl"] = manuscript.fileUrl
         model["views"] = manuscript.views
+        model["downloads"] = manuscript.downloads
         model["isSectionEditorOnSection"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
         return "home/manuscript-page"
     }
