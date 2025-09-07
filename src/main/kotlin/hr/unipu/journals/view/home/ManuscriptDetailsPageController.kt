@@ -31,7 +31,7 @@ class ManuscriptDetailsPageController(
         model["publicationDate"] = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date"
         model["authors"] = accountRoleOnManuscriptRepository.authors(manuscript.id)
         model["abstract"] = manuscript.description
-        model["description"] = sectionRepository.description(sectionId)
+        model["abstract"] = sectionRepository.description(sectionId)
         model["fileUrl"] = manuscript.fileUrl
         return "home/manuscript-page"
     }
