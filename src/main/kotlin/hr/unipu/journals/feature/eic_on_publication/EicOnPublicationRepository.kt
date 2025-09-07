@@ -42,10 +42,6 @@ interface EicOnPublicationRepository: Repository<EicOnPublication, Int> {
     fun assign(@Param(PUBLICATION_ID) publicationId: Int, @Param(EIC_ID) eicId: Int)
 
     @Modifying
-    @Query("""
-        DELETE FROM $EIC_ON_PUBLICATION WHERE
-        WHERE $PUBLICATION_ID = :$PUBLICATION_ID
-        AND $EIC_ID = :$EIC_ID
-    """)
+    @Query("DELETE FROM $EIC_ON_PUBLICATION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $EIC_ID = :$EIC_ID")
     fun revoke(@Param(PUBLICATION_ID) publicationId: Int, @Param(EIC_ID) eicId: Int)
 }
