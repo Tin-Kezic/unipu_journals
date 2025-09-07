@@ -62,6 +62,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param(SECTION_ID) sectionId: Int,
         @Param(FILE_URL) fileUrl: String
     )
+    @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
+    fun title(@Param(ID) sectionId: Int): String
     @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
     fun exists(@Param(ID) id: Int): Boolean
 
