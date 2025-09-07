@@ -42,7 +42,8 @@ CREATE TABLE account (
 CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
-    target invitation_target NOT NULL
+    target invitation_target NOT NULL,
+    target_id INT NOT NULL
 );
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
