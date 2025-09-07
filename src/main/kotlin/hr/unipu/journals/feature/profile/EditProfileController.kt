@@ -54,6 +54,7 @@ class EditProfileController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return "redirect:/profile/$accountId"
+        return if(currentEmail != request.email) "redirect:/login.html"
+        else "redirect:/profile/$accountId"
     }
 }
