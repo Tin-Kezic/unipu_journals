@@ -25,13 +25,16 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 
+    @Query("SELECT $INVITE.$EMAIL FROM $INVITE WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION AND $INVITE.$TARGET_ID = :$ID")
+    fun eicOnPublicationEmailsByPublicationId(@Param(ID) publicationId: Int): List<String>
+
     @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")
-    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, targetId: Int = 0)
+    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int = -1)
 
     @Modifying
     @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET AND $TARGET_ID = :$TARGET_ID")
-    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, targetId: Int = 0)
+    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int = -1)
 
     @Query("SELECT $EMAIL FROM $INVITE WHERE $TARGET = $ADMIN")
     fun allAdminEmails(): List<String>
