@@ -8,18 +8,6 @@
     <link rel="stylesheet" href="/util.css" />
 </head>
 
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
 {{>util/header}}
 
@@ -77,8 +65,8 @@
             <section class="yellow-box" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics... more
-                <button onclick="showOverlayAndDialog()">more</button>
+                In practical terms, acoustics...
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px;">more</button>
             </section>
 
             <br>
@@ -93,10 +81,9 @@
             <section class="yellow-box " style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range of fields... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics is essential in a wide range o fields... more
+                In practical terms, acoustics is essential in a wide range o fields...
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px;">more</button>
             </section>
-
-            <button class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
         </section>
     </aside>
 
@@ -280,7 +267,7 @@
 
                     <section class="comments-section">
                         <div style="display: flex; gap: 2rem; align-items: flex-start; margin-top: -0.5rem;">
-                            <div style="flex: 1;">
+                            <div style="flex: 0.8;">
                                 <div class="yellow-box" style="padding: 0.7rem 1.5rem; font-weight: 100;">
                                     <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                                         <span>Do you have any conflict of interest regarding this manuscript?</span>
@@ -384,32 +371,48 @@
         </form>
     </main>
 </div>
-</body>
 
-<div class="overlay">
-    <div class="dialog" style="padding-inline: 2rem;">
-        <p style="text-align: center;">Editor's recommendation</p>
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <p>Reviewer's comment</p>
         <br>
-        <div style="display: flex; justify-content: center;">
-            <button type="button" class="m3-button orange-button" style="width:9rem;">Reject</button>
-        </div>
-        <br>
-        <br>
-        <div style="display: flex; gap: 0.5rem;">
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Accept</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Minor</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Major</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Reject</button>
-        </div>
-        <br>
-        <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+        <p style="padding-inline: 4rem; text-align: justify; line-height: 1.5rem; font-size: 1.2rem; margin-bottom: 1rem;">
+            Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
+            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
+
+            (this window supports html parsing)
+            Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
+            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
+            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
+
+            (this window supports html parsing)
+        </p>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
             <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button outline-button">Submit</button>
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">edit</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog" style="padding: 1.5rem 3rem;">
+        <p>Author's reply</p>
+        <br>
+        <p style="padding-inline: 4rem; text-align: justify; line-height: 1.5rem; font-size: 1.2rem; margin-bottom: 1rem;">
+            Very cool review, thanks
+        </p>
+        <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 
 <style>
     .content {
