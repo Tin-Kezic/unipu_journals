@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Configure Artycle Type</title>
+    <title>Configure Category</title>
     <link href="/util.css" rel="stylesheet"/>
     <script src="/htmx.min.js"></script>
 </head>
@@ -21,7 +21,7 @@
 
 <main style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 1rem 2rem 0 2rem; display: flex; flex-direction: column;">
     <section>
-        <h2 style="font-weight: normal;">Article Type</h2>
+        <h2 style="font-weight: normal;">Category</h2>
         <div style="display:flex; align-items:center; gap: 0.5rem;">
             <div class="text-field">
                 <input type="text" placeholder="Journal">
@@ -30,7 +30,7 @@
         </div>
     </section>
 
-    <section class="article-type-list" style="display: grid; grid-template-columns: 1fr; gap: 0.6rem;">
+    <section class="article-type-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem;">
         <button class="remove-user-button">
             Journal
             <p style="color: white; font-weight: bold;">—</p>
@@ -51,5 +51,25 @@
     .text-field input {
         background-color: white;
     }
+    @media (max-width: 1300px) {
+        .users-list {
+            grid-template-columns: 1fr 1fr 1fr !important;
+        }
+    }
+    @media (max-width: 800px) {
+        .users-list {
+            grid-template-columns: 1fr 1fr !important;
+        }
+
+        .main-container {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            margin-left: 2rem !important;
+        }
+    }
+    @media (max-width: 600px) {
+        .users-list {
+            grid-template-columns: 1fr !important;
+        }
 </style>
 </html>
