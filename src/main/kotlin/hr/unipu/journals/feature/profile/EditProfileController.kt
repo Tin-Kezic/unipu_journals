@@ -25,9 +25,10 @@ class EditProfileController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun insert(@PathVariable accountId: Int, @ModelAttribute request: ProfileRequestDTO): String {
         val account = authorizationService.account!!
+        val currentEmail = account.email
         val id = account.id
         var errors = ""
-        if(accountRepository.emailExists(request.email)) errors += "&email-taken"
+        if(accountRepository.emailExists(request.email) && currentEmail != request.email) errors += "&email-taken"
         if(request.password != request.passwordConfirmation) errors += "&password-mismatch"
         if(errors.isNotEmpty())
             return "redirect:/profile/$accountId/edit?$errors" +
