@@ -25,8 +25,8 @@
         >
             <p class="yellow-box-text">{{title}}</p>
             <div class="yellow-box-buttons">
-                {{#canHide}}<button onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>{{/canHide}}
-                {{#canEdit}}<button onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>{{/canEdit}}
+                <button onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
+                <button onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
             </div>
         </div>
     {{/publications}}
@@ -46,7 +46,7 @@
             <p>Environmental noise and soundscape</p>
             <p>Musical acoustics</p>
             <p>Bioacoustics 2</p></b>
-        <br>
+       <br>
         <div style="display: flex; justify-content: space-between">
             <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
             <div style="display: flex; justify-content: flex-end">
