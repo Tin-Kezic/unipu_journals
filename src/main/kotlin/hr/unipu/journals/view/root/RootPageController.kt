@@ -26,7 +26,7 @@ class RootPageController(
     @GetMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(model: Model): String {
-        model["admin-emails"] = accountRepository.allAdminEmails() + inviteRepository.allAdminEmails()
+        model["adminEmails"] = accountRepository.allAdminEmails() + inviteRepository.allAdminEmails()
         return "configure/root-page"
     }
 
