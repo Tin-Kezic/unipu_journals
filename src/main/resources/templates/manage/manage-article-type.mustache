@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Configure Artycle Type</title>
+    <link href="/util.css" rel="stylesheet"/>
+    <script src="/htmx.min.js"></script>
+</head>
+
+<body style="margin-left: 3rem; margin-top: 2rem;">
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between;">
+    <div class="header" style="margin: 1.5rem 0 0 1.5rem;">
+        <h1 style="font-size: 3.5rem; align-self: flex-start;">Unipu Journals</h1>
+        <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem;">Configure category</p>
+    </div>
+
+    <button class="m3-button purple-button" style="padding-inline: 2.5rem; font-size: 1.5rem; box-shadow: none; text-wrap: nowrap; margin-right: 2rem; border-radius: 0.5rem; margin-top: 2rem;">Done</button>
+</div>
+
+<main style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 1rem 2rem 0 2rem; display: flex; flex-direction: column;">
+    <section>
+        <h2 style="font-weight: normal;">Article Type</h2>
+        <div style="display:flex; align-items:center; gap: 0.5rem;">
+            <div class="text-field">
+                <input type="text" placeholder="Journal">
+            </div>
+            <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none; text-wrap: nowrap; border-radius: 0.5rem;">+ Add</button>
+        </div>
+    </section>
+
+    <section class="article-type-list" style="display: grid; grid-template-columns: 1fr; gap: 0.6rem;">
+        <button class="remove-user-button">
+            Journal
+            <p style="color: white; font-weight: bold;">—</p>
+        </button>
+        <button class="remove-user-button">
+            Abstract
+            <p style="color: white; font-weight: bold;">—</p>
+        </button>
+        <button class="remove-user-button">
+            Journal
+            <p style="color: white; font-weight: bold;">—</p>
+        </button>
+    </section>
+</main>
+</body>
+
+<style>
+    .text-field input {
+        background-color: white;
+    }
+</style>
+</html>
