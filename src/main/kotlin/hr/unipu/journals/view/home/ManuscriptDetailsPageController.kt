@@ -31,7 +31,6 @@ class ManuscriptDetailsPageController(
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY"))
-        model["isPublished"] = manuscript.publicationDate != null
         model["publicationDate"] = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date"
         model["authors"] = accountRoleOnManuscriptRepository.authors(manuscript.id)
         model["abstract"] = manuscript.description
