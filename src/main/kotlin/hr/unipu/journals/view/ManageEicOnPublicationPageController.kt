@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
-class ConfigureEicOnPublicationPageController() {
+class ManageEicOnPublicationPageController() {
     @GetMapping("/publication/{publicationId}/manage-eic-on-publication")
     fun page() = "manage/manage-eic-on-publication"
 }
