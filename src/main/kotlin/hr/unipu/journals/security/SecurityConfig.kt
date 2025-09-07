@@ -88,6 +88,7 @@ class SecurityConfig {
                 ).forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
                 listOf(
                     "/submit",
+                    "/review/**",
                     "/profile/{accountId}",
                     "/profile/{accountId}/edit",
                     "/api/publication/{publicationId}/section/{sectionId}/insert"
