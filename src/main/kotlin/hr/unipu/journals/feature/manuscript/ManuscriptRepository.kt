@@ -75,6 +75,19 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
     """)
     fun pending(@Param("id") id: Int): List<Manuscript>
+
+    @Query("""
+        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
+        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
+        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$ID
+        AND $PUBLICATION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION.$ID = :$PUBLICATION_ID
+    """)
+    fun pendingByPublication(@Param(ID) id: Int, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
+
     @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
     fun exists(@Param(ID) id: Int): Boolean
 
