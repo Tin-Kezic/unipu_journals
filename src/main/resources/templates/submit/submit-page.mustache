@@ -19,23 +19,19 @@
         <div style="display: flex; flex-direction: row; gap: 0.3rem;">
             <select name="category" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
                 <option value="category">Category</option>
-                {{#categories}}
-                    <option value="{{.}}">{{.}}</option>
-                {{/categories}}
+                {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
             </select>
 
             <a href="/category" type="button" class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Edit</a>
 
-            <select class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
-                <option value="category">Publication </option>
-                <option value="dropdown-content">Hello World!</option>
-                <option value="dropdown-content">Hello World!</option>
+            <select name="publication" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
+                <option value="publication">Publication</option>
+                {{#publications}}<option value="{{.}}">{{.}}</option>{{/publications}}
             </select>
 
-            <select class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
-                <option value="category">Section </option>
-                <option value="dropdown-content">Hello World!</option>
-                <option value="dropdown-content">Hello World!</option>
+            <select name="section" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
+                <option value="section">Section</option>
+                {{#sections}}<option value="{{.}}">{{.}}</option>{{/sections}}
             </select>
         </div>
 
@@ -59,8 +55,13 @@
                 <label>affiliation/institution</label>
                 <input type="text" required>
             </div>
+
             <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
-            <button type="button" class="m3-button purple-button corresponding-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Corresponding author</button>
+
+            <label class="pale-yellow-checkbox-button">
+                <input type="radio" name="corresponding-author" value="corresponding-author">
+                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+            </label>
         </div>
 
         <div class="author-container">
@@ -80,8 +81,13 @@
                 <label>affiliation/institution</label>
                 <input type="text" required>
             </div>
+
             <button type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
-            <button type="button" class="m3-button purple-button corresponding-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Corresponding author</button>
+
+            <label class="pale-yellow-checkbox-button">
+                <input type="radio" name="corresponding-author" value="corresponding-author">
+                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+            </label>
         </div>
 
         <div class="text-field">
@@ -95,7 +101,7 @@
             <button class="m3-button yellow-button">Submit</button>
         </div>
         <br> <br>
-        <div id="file-list" style="background-color:white;"></div>
+        <div id="file-list"></div>
     </form>
 </div>
 <script>
