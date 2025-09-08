@@ -53,6 +53,9 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 
+    @Query("SELECT $EMAIL FROM $INVITE WHERE $TARGET = $ADMIN")
+    fun allAdminEmails(): List<String>
+
     @Query("SELECT $INVITE.$EMAIL FROM $INVITE WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION AND $INVITE.$TARGET_ID = :$ID")
     fun eicOnPublicationEmailsByPublicationId(@Param(ID) publicationId: Int): List<String>
 
