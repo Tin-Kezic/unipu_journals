@@ -64,7 +64,9 @@
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
             {{#isSectionEditorOrSuperior}}
                 <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                        <button class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
+                        {{#isAdmin}}
+                            <button class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
+                        {{/isAdmin}}
                         <button class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
                 </footer>
             {{/isSectionEditorOrSuperior}}
