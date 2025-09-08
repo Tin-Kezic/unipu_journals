@@ -26,6 +26,7 @@ class ManuscriptPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
+        model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allPublishedByPublicationId(publicationId)
         model["description"] = sectionRepository.description(sectionId)
         model["manuscripts"] = manuscriptRepository.allPublishedBySectionId(sectionId).map { manuscript ->
