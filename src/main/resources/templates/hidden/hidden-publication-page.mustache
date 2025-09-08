@@ -15,7 +15,7 @@
     </h1>
 </div>
 
-<section style="flex: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+<section style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
         <div
             id="{{id}}"
@@ -32,29 +32,38 @@
     {{/publications}}
 </section>
 
-<div class="overlay">
-    <div class="dialog">
-        <p>Permanently delete <b>Acoustics</b> publication?</p>
-        <p>It contains <b>9</b> sections:</p>
+<dialog id="delete-publication-dialog" closedby="any">
+    <p id="delete-publication-dialog-message"></p>
+        <p>It contains <b>{{sectionsNumber}}</b> sections:</p>
         <br>
-        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
-            <p>Aeroacoustics</p>
-            <p>Bioacoustics</p>
-            <p>Acoustic signal processing</p>
-            <p>Architectural acoustics</p>
-            <p>Electroacoustics</p>
-            <p>Environmental noise and soundscape</p>
-            <p>Musical acoustics</p>
-            <p>Bioacoustics 2</p></b>
+        {{#sections}}<b style="line-height: 1.5rem;"><p>{{.}}</p></b>{{/sections}}
        <br>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button">cancel</button>
+            <button id="delete-publication-dialog-negative" class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
             </div>
         </div>
-    </div>
-</div>
+</dialog>
+<script>
+    const deletePublicationDialog = document.getElementById('delete-publication-title-dialog');
+    const deletePublicationTitleDialogMessage = document.getElementById('delete-publication-title-dialog-message');
+    document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            deletePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
+            currentId = button.dataset.id;
+            deletePublicationTitleDialog.showModal();
+        });
+    });
+    document.getElementById('delete-publication-title-dialog-negative').addEventListener('click', () => deletePublicationTitleDialog.close());
+    document.getElementById('delete-publication-title-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newPublicationTitle = document.querySelector('input[name="delete-publication-title-dialog-input"]').value;
+        const response = await fetch(`/api/publication/${currentId}/delete-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to delete publication title'); return; }
+        location.reload(true);
+    });
+</script>
 
 <div class="overlay">
     <div class="dialog">
