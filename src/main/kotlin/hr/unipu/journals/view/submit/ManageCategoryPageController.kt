@@ -1,4 +1,4 @@
-package hr.unipu.journals.view
+package hr.unipu.journals.view.submit
 
 import hr.unipu.journals.feature.category.CategoryRepository
 import org.springframework.stereotype.Controller
