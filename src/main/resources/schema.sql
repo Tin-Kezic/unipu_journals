@@ -88,8 +88,8 @@ CREATE TABLE manuscript (
     publication_date TIMESTAMP,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL,
     FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
 );
 CREATE TABLE account_role_on_manuscript (
@@ -112,6 +112,6 @@ CREATE TABLE manuscript_review (
     author_response_file_url TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP NOT NULL,
-    FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE SET NULL,
     FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE CASCADE
 );
