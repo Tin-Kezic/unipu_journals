@@ -38,7 +38,10 @@ private const val EIC_ID = "eic_id"
 interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
-    fun titleById(@Param(ID) id: Int): String
+    fun title(@Param(ID) id: Int): String
+
+    @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
+    fun byTitle(@Param(TITLE) title: String): Publication
 
     /*
     @Query("""
@@ -50,7 +53,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         AND $MANUSCRIPT.$CURRENT_STATE = $PUBLISHED
     """)
      */
-    @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE")
+    @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE ORDER BY $ID DESC")
     fun allPublished(): List<Publication>
 
     @Query("""
@@ -60,6 +63,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
         AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allArchived(): List<Publication>
 
@@ -70,6 +74,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE $PUBLICATION.$IS_HIDDEN = TRUE
         OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
         OR $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allHidden(): List<Publication>
 
@@ -84,6 +89,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+        ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allUnderReview(): List<Publication>
 
@@ -96,7 +102,7 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun updateTitle(@Param(ID) id: Int, @Param(TITLE) title: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION WHERE $ID = :$ID)")
-    fun existsById(@Param(ID) id: Int): Boolean
+    fun exists(@Param(ID) id: Int): Boolean
 
     @Modifying
     @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")

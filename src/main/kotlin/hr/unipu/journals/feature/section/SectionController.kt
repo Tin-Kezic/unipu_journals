@@ -12,36 +12,43 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/publication/")
+@RequestMapping("/api/publication")
 class SectionController(private val sectionRepository: SectionRepository) {
 
-    @PostMapping("{publicationId}/insert")
+    @PostMapping("/{publicationId}/section/insert")
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
-        @RequestParam description: String
     ): ResponseEntity<String> {
         return if(title.isNotEmpty()) {
             sectionRepository.insert(
                 title = Jsoup.clean(title, Safelist.none()),
-                description = Jsoup.clean(description, Safelist.relaxed()),
                 publicationId = publicationId,
             )
             ResponseEntity.ok("account successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("{publicationId}/update-title-and-description")
-    fun update(
+    @PutMapping("/{publicationId}/section/{sectionId}/update-title")
+    fun updateTitle(
         @PathVariable sectionId: Int,
         @RequestParam title: String,
-        @RequestParam description: String
     ): ResponseEntity<String> {
         return if (sectionRepository.exists(sectionId)) {
-            sectionRepository.updateTitleAndDescription(sectionId, title, description)
+            sectionRepository.updateTitle(sectionId, title)
             ResponseEntity.ok("title successfully updated")
-        } else ResponseEntity.badRequest().body("section with id: $sectionId does not exist")
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
-    @PutMapping("{publicationId}/hide/{section_id}")
+    @PutMapping("/{publicationId}/section/{sectionId}/update-description")
+    fun updateDescription(
+        @PathVariable sectionId: Int,
+        @RequestParam description: String,
+    ): ResponseEntity<String> {
+        return if (sectionRepository.exists(sectionId)) {
+            sectionRepository.updateDescription(sectionId, description)
+            ResponseEntity.ok("description successfully updated")
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
+    }
+    @PutMapping("/{publicationId}/section/{sectionId}/update-hidden")
     fun updateHidden(
         @PathVariable sectionId: Int,
         @RequestParam isHidden: Boolean
@@ -49,6 +56,6 @@ class SectionController(private val sectionRepository: SectionRepository) {
         return if (sectionRepository.exists(sectionId)) {
             sectionRepository.updateHidden(sectionId, isHidden)
             ResponseEntity.ok("publication successfully hidden")
-        } else ResponseEntity.badRequest().body("id does not exist")
+        } else ResponseEntity.badRequest().body("section with id $sectionId does not exist")
     }
 }

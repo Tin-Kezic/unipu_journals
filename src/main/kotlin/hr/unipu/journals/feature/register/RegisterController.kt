@@ -7,6 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
+import java.net.URLEncoder
+
+private const val encoding = "UTF-8"
 
 @Controller
 class RegisterController(
@@ -20,15 +23,15 @@ class RegisterController(
         if(request.password != request.passwordConfirmation) errors += "&password-mismatch"
         if(errors.isNotEmpty())
             return "redirect:/register.html?$errors" +
-                    "&fullName=${request.fullName}" +
-                    "&title=${request.title}" +
-                    "&email=${request.email}" +
-                    "&affiliation=${request.affiliation}" +
-                    "&jobType=${request.jobType}" +
-                    "&country=${request.country}" +
-                    "&city=${request.city}" +
-                    "&address=${request.address}" +
-                    "&zipCode=${request.zipCode}"
+                    "&fullName=${URLEncoder.encode(request.fullName, encoding)}" +
+                    "&title=${URLEncoder.encode(request.title, encoding)}" +
+                    "&email=${URLEncoder.encode(request.email, encoding)}" +
+                    "&affiliation=${URLEncoder.encode(request.affiliation, encoding)}" +
+                    "&jobType=${URLEncoder.encode(request.jobType, encoding)}" +
+                    "&country=${URLEncoder.encode(request.country, encoding)}" +
+                    "&city=${URLEncoder.encode(request.city, encoding)}" +
+                    "&address=${URLEncoder.encode(request.address, encoding)}" +
+                    "&zipCode=${URLEncoder.encode(request.zipCode, encoding)}"
         accountRepository.insert(
             fullName = Jsoup.clean(request.fullName, Safelist.none()),
             title = Jsoup.clean(request.title, Safelist.none()),

@@ -1,11 +1,14 @@
 package hr.unipu.journals.feature.manuscript
 
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 private const val MANUSCRIPT = "manuscript"
 private const val ID = "id"
+private const val TITLE = "title"
+private const val DESCRIPTION = "description"
 private const val AUTHOR_ID = "author_id"
 private const val CATEGORY_ID = "category_id"
 private const val CURRENT_STATE = "current_state"
@@ -33,22 +36,48 @@ private const val PUBLICATION = "publication"
 
 // section
 private const val PUBLICATION_SECTION = "publication_section"
-private const val TITLE = "title"
-private const val DESCRIPTION = "description"
 private const val PUBLICATION_ID = "publication_id"
 private const val IS_HIDDEN = "is_hidden"
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+    @Modifying
+    @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
+    fun insert(
+        @Param(TITLE) title: String,
+        @Param(AUTHOR_ID) authorId: Int,
+        @Param(CATEGORY_ID) categoryId: Int,
+        @Param(SECTION_ID) sectionId: Int,
+        @Param(FILE_URL) fileUrl: String
+    )
+    @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
+    fun exists(@Param(ID) id: Int): Boolean
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $ARCHIVED WHERE $ID = :$ID")
+    fun archive(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $HIDDEN WHERE $ID = :$ID")
+    fun hide(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $PUBLISHED WHERE $ID = :$ID")
+    fun publish(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("DELETE FROM $MANUSCRIPT WHERE $ID = :$ID")
+    fun delete(@Param(ID) id: Int)
+
     @Query("SELECT * FROM $MANUSCRIPT WHERE $ID = :$ID")
     fun byId(@Param(ID) manuscriptId: Int): Manuscript
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED ORDER BY $ID DESC")
     fun allPublishedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $ARCHIVED")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $ARCHIVED ORDER BY $ID DESC")
     fun allArchivedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $HIDDEN")
+    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $HIDDEN ORDER BY $ID DESC")
     fun allHiddenBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
 
     @Query("""
@@ -62,6 +91,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+        ORDER BY $MANUSCRIPT.$ID DESC
     """)
     fun allUnderReview(): List<Manuscript>
 
@@ -76,8 +106,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
         OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
-        
         AND $PUBLICATION.$ID = :$ID
+        ORDER BY $MANUSCRIPT.$ID DESC
     """)
     fun allUnderReviewByPublication(@Param(ID) publicationId: Int): List<Manuscript>
 }

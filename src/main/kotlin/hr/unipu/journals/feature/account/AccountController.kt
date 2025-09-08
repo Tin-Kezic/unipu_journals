@@ -38,7 +38,7 @@ class AccountController(
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        return if(accountRepository.idExists(id)) {
+        return if(accountRepository.exists(id)) {
             accountRepository.delete(id)
             ResponseEntity.ok("account deleted successfully")
         } else ResponseEntity.badRequest().body("ID does not exist")

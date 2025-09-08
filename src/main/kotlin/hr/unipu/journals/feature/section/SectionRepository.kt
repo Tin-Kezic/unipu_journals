@@ -29,13 +29,14 @@ interface SectionRepository: Repository<Section, Int> {
     @Query("SELECT $DESCRIPTION from $PUBLICATION_SECTION WHERE $ID = :$ID")
     fun description(@Param(ID) sectionId: Int): String
 
-    @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $IS_HIDDEN = FALSE")
+    @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $IS_HIDDEN = FALSE ORDER BY $ID DESC")
     fun allPublishedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
 
     @Query("""
         SELECT DISTINCT $PUBLICATION_SECTION.* FROM $PUBLICATION_SECTION
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
+        ORDER BY $PUBLICATION_SECTION.$ID DESC
     """)
     fun allArchivedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
 
@@ -43,27 +44,31 @@ interface SectionRepository: Repository<Section, Int> {
         SELECT DISTINCT $PUBLICATION_SECTION.* FROM $PUBLICATION_SECTION
         JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
         WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE AND $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
+        ORDER BY $PUBLICATION_SECTION.$ID DESC
     """)
     fun allHiddenByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
 
     @Modifying
     @Query("""
-        INSERT INTO $PUBLICATION_SECTION ($TITLE, $DESCRIPTION, $PUBLICATION_ID)
-        VALUES (:$TITLE, :$DESCRIPTION, :$PUBLICATION_ID)
+        INSERT INTO $PUBLICATION_SECTION ($TITLE, $PUBLICATION_ID)
+        VALUES (:$TITLE, :$PUBLICATION_ID)
     """)
     fun insert(
         @Param(TITLE) title: String,
-        @Param(DESCRIPTION) description: String,
         @Param(PUBLICATION_ID) publicationId: Int,
     )
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE, $DESCRIPTION = :$DESCRIPTION WHERE $ID = :$ID")
-    fun updateTitleAndDescription(
+    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE WHERE $ID = :$ID")
+    fun updateTitle(
         @Param(ID) id: Int,
         @Param(TITLE) title: String,
-        @Param(DESCRIPTION) description: String
     )
-
+    @Modifying
+    @Query("UPDATE $PUBLICATION_SECTION SET $DESCRIPTION = :$DESCRIPTION WHERE $ID = :$ID")
+    fun updateDescription(
+        @Param(ID) id: Int,
+        @Param(DESCRIPTION) description: String,
+    )
     @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION_SECTION WHERE $ID = :$ID)")
     fun exists(@Param(ID) id: Int): Boolean
 

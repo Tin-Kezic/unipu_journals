@@ -9,15 +9,16 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 
+const val AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN = "@authorizationService.isAccountOwnerOrAdmin(#accountId)"
 const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
 const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
-const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperiorOrSuperior(#publicationId)"
+const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperior(#publicationId)"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEicOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@authorizationService.isSectionEditorOnSectionOrSuperior(#sectionId)"
-const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@authorizationService.isSectionEditorOnSection(#publicationId, #sectionId)"
+const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrSuperior(#publicationId, #sectionId, #manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrSuperior(#publicationId, #sectionId, #manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrSuperior(#publicationId, #sectionId, #manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrSuperior(#publicationId, #sectionId, #manuscriptId)"
 
 @Service
 class AuthorizationService(
@@ -39,6 +40,7 @@ class AuthorizationService(
 
     fun isRoot(): Boolean = user?.username == "root@unipu.hr"
     fun isAdmin(): Boolean =  account?.isAdmin ?: false
+    fun isAccountOwnerOrAdmin(accountId: Int): Boolean = accountId == account?.id || isAdmin()
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin

@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Configure EiC On Publication Page</title>
+    <title>Manage EiCs On Publication</title>
     <link href="/util.css" rel="stylesheet"/>
-    <script src="/htmx.min.js"></script>
+
+    <script>
+    function showOverlayAndDialog() {
+    document.querySelector('.overlay').classList.add('active');
+    document.querySelector('.dialog').classList.add('active');
+    }
+
+    function hideOverlayAndDialog() {
+    document.querySelector('.overlay').classList.remove('active');
+    document.querySelector('.dialog').classList.remove('active');
+    }
+    </script>
 </head>
 
 <body style="margin-left: 3rem; margin-top: 2rem;">
@@ -30,90 +41,103 @@
     <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem;">
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemailfakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@gmail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             user1@unipu.hr
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
         <button class="remove-user-button">
             fakemail@fakemail.com
-            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            <img src="/icon/user-minus.svg" class="fa-solid fa-user-minus fa-xl" onclick="showOverlayAndDialog()" style="height: 2rem;"/>
         </button>
     </section>
 </main>
+
+<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+    <div class="dialog">
+        <p>Remove chief <b>user1@unipu.hr?</b></p>
+        <br>
+        <div style="display: flex; justify-content: space-between">
+            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <div style="display: flex; justify-content: flex-end">
+                <button class="m3-button red-button">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 <style>

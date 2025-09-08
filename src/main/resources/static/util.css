@@ -27,18 +27,6 @@ body {
     background-size: cover;
     background-position: center;
 }
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1vh 3vw;
-    background-color: var(--purple);
-    position: sticky;
-    z-index: 10;
-    min-height: 8vh;
-    top: 0;
-    flex-wrap: wrap;
-}
 .logo-button {
     display: flex;
     align-items: center;
@@ -78,6 +66,12 @@ nav ul li a:active {
     display: flex;
     align-items: center;
     position: relative;
+}
+dialog {
+    left: 0; right: 0; top: 0; bottom: 0;
+    margin: auto; position: fixed;
+    padding: 1.5rem;
+    border: none; border-radius: 0.5rem;
 }
 .search-bar {
     padding: 1vh 1vw;
@@ -147,7 +141,7 @@ nav ul li a:active {
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
-.darkpurple-white-outline-button {
+.dark-purple-white-outline-button {
     background-color: var(--dark-purple);
     color: white;
     border: 0.1rem solid white;
@@ -194,7 +188,6 @@ nav ul li a:active {
 .text-field {
     position: relative;
     width: 100%;
-    max-width: 22.5rem;
     margin: 1.25rem 0;
 }
 .text-field label {
@@ -257,7 +250,7 @@ nav ul li a:active {
     color: white;
 }
 .pale-yellow-checkbox-button {
-    user-select: none;            /* Prevent text selection */
+    user-select: none; /* Prevent text selection */
 }
 .pale-yellow-checkbox-button input {
     position: absolute;
@@ -284,7 +277,7 @@ nav ul li a:active {
 }
 .blue-checkbox {
     appearance: none;
-    -webkit-appearance: none; /* Za Safari */
+    -webkit-appearance: none; /* for Safari */
     width: 1rem;
     height: 1rem;
     border: 2px solid var(--checkbox-gray);
@@ -344,33 +337,10 @@ nav ul li a:active {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-.overlay {
-    visibility: hidden;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+#snackbar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 20;
-}
-.overlay.active {
-    visibility: visible;
-}
-.dialog {
-    visibility: hidden;
-    background: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-    box-sizing: border-box;
-}
-.dialog.active {
-    visibility: visible;
-}
-#snackbar {
+    gap: 1rem;
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 13vw;
     background-color: white;
@@ -389,22 +359,16 @@ nav ul li a:active {
 }
 #snackbar.show {
     visibility: visible;
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-    However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
+    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
 }
-/* Animations to fade the snackbar in and out */
-@keyframes fadein {
+@keyframes fade-in {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
-@keyframes fadeout {
+@keyframes fade-out {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
-}
-.sidebar-button {
-    user-select: none;
 }
 .sidebar-button input[type="radio"] {
     position: absolute;
@@ -412,7 +376,7 @@ nav ul li a:active {
     width: 0;
     height: 0;
 }
-.sidebar-button .checkbox {
+.sidebar-button .sidebar-button-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -425,17 +389,13 @@ nav ul li a:active {
     cursor: pointer;
     user-select: none;
 }
-.sidebar-button .checkbox:hover {
+.sidebar-button-title:hover {
     background: var(--purple);
     color: white;
 }
-.sidebar-button .checkbox:active {
+.sidebar-button .sidebar-button-title:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
-}
-.sidebar-button input[type="radio"]:checked + .checkbox {
-    background: var(--purple);
-    color: white;
 }
 .authors {
     display: inline-flex;

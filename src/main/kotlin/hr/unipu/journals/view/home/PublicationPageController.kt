@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home.publication
+package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
@@ -14,17 +14,18 @@ class PublicationPageController(
 ) {
     @GetMapping("/")
     fun page(model: Model): String {
-        model["isAdmin"] = authorizationService.isAdmin()
+        val isAdmin = authorizationService.isAdmin()
+        model["isAdmin"] = isAdmin
         model["publications"] = publicationRepository.allPublished().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            PublicationDTO(
+            ContainerDTO(
                 id = publication.id,
                 title = publication.title,
-                canHide = isEicOrSuperior,
+                canHide = isAdmin,
                 canEdit = isEicOrSuperior,
-                isEic = isEicOrSuperior
+                isEditor = isEicOrSuperior
             )
-        }.sortedWith(compareByDescending<PublicationDTO> { it.isEic }.thenByDescending { it.id })
+        }.sortedByDescending { it.isEditor }
         return "home/publication-page"
     }
 }

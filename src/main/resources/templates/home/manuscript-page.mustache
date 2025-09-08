@@ -5,39 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Manuscript Page</title>
     <link href="/util.css" rel="stylesheet"/>
-    <script src="/htmx.min.js"></script>
 </head>
 
 <body>
 {{>util/header}}
 
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <section>
-    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
-        Acoustics
-    </h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">
+            {{currentSection}}
+        </h1>
+        {{#isEicOrSuperior}}
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.5rem;">
+                <button id="manage-section-editors" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">Manage section editors</button>
+            </div>
+        {{/isEicOrSuperior}}
+    </div>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
-    <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
-        <label class="sidebar-button">
-            <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-
-            <span class="checkbox">Acoustic Ecology</span>
-        </label>
+    <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        {{#sectionsSidebar}}
+            <a data-type="sidebar-button" data-id="{{id}}" href="/publication/{{id}}" style="text-decoration: none; color: inherit;">
+                <label class="sidebar-button">
+                    <span class="sidebar-button-title">{{title}}</span>
+                </label>
+            </a>
+        {{/sectionsSidebar}}
     </aside>
 
     <section class="main-content" style="
@@ -50,55 +44,68 @@
         min-width: 0;
         overflow: hidden;
     ">
-
         <article class="yellow-box no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
-            <p class="yellow-box-text">
-                Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
-                Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
-
-                (this window supports html parsing)
-            </p>
-            <footer>
-                <footer style="display: flex; justify-content: flex-end;">
-                    <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+            <p id="description" class="yellow-box-text">{{description}}</p>
+            {{#isEicOrSuperior}}
+                <footer>
+                    <footer style="display: flex; justify-content: flex-end;">
+                        <button id="edit-description-button" class="m3-button purple-button" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+                    </footer>
                 </footer>
-            </footer>
+            {{/isEicOrSuperior}}
         </article>
+        {{#manuscripts}}
+            <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+                <p class="yellow-box-text">{{title}}</p>
 
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
 
-            <div class="authors" style="display: flex; flex-wrap: wrap;">
-                <button>Rashmi Kariganuru Bheemarao1</button>
-                <button>Hassan Sadashiva Guruprasad1</button>
-                <button>Shambhavi Bangalore Ravi2</button>
-            </div>
-
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
-            <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                <button class="m3-button outline-button" style="width: auto; border-radius: 10rem;">Hide</button>
-                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
-            </footer>
-        </article>
+                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
+            {{#isSectionEditorOrSuperior}}
+                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
+                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none;">Hide</button>
+                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                </footer>
+            {{/isSectionEditorOrSuperior}}
+            </article>
+        {{/manuscripts}}
     </section>
 </div>
 
-<div class="overlay">
-    <div class="dialog" style="width: 90vw; height: 90vh;">
-        <div class="text-field">
-            <label for="header">Edit header</label>
-            <textarea id="header" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button red-button" style="padding-inline: 1.8rem; background-color: var(--purple)">Edit</button>
+{{#isEicOrSuperior}}
+    <dialog id="edit-description-dialog" closedby="any" style="width: 90vw; height: 90vh;">
+        <form id="edit-description-dialog-form">
+            <div class="text-field">
+                <label>description</label>
+                <textarea name="description" style="width: 100%; height:100%; resize: vertical; field-sizing: content; min-height: 70vh; min-width: 88vw; padding: 1rem 2rem; font-size: 1rem;"></textarea>
             </div>
-        </div>
-    </div>
-</div>
+            <div style="display: flex; justify-content: space-between">
+                <button id="edit-description-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+                <div style="display: flex; justify-content: flex-end">
+                    <button class="m3-button purple-button">Edit</button>
+                </div>
+            </div>
+        </form>
+    </dialog>
+    <script>
+        const editDescriptionDialog = document.getElementById('edit-description-dialog');
+        const description = document.getElementById('description');
+        const textarea = document.querySelector('textarea[name=description]');
+        document.getElementById('edit-description-button').addEventListener('click', () => {
+            textarea.value = description.innerHTML;
+            editDescriptionDialog.showModal();
+        });
+        document.getElementById('edit-description-dialog-negative').addEventListener('click', () => editDescriptionDialog.close());
+        document.getElementById('edit-description-dialog-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/update-description?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
+            if(!response.ok) { alert('failed to add description'); return; }
+            description.innerHTML = textarea.value;
+            editDescriptionDialog.close();
+        });
+    </script>
+{{/isEicOrSuperior}}
 </body>
 
 <style>

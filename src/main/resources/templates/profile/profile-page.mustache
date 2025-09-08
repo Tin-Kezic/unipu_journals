@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Profile Page</title>
+
+    <link rel="stylesheet" href="/util.css" />
+</head>
+
+<body>
+{{>util/header}}
+
+<div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
+    <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
+        <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">Marko Markić</p>
+        <br>
+        <button class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem;">Edit profile</button>
+        <br><br><br><br>
+        <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center;">
+            <div class="dropdown sort" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Most recent</span>
+                </div>
+                <div class="dropdown-content">
+                    <p>Most recent</p>
+                    <p>Oldest</p>
+                    <p>Alphabetically</p>
+                    <p>Views</p>
+                    <p>Downloads</p>
+                </div>
+            </div>
+
+            <div class="dropdown filter" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Filter</span>
+                </div>
+                <div class="dropdown-content" style="text-wrap: nowrap;">
+                    <p>All</p>
+                    <p>Rejected</p>
+                    <p style="padding-left: 0.3rem;">Incomplete submission</p>
+                    <p>Under processing</p>
+                    <p>Published</p>
+                    <p>Archived</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem;">
+                <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Submitted manuscripts</button>
+                <p style="font-size: 2rem; font-weight: lighter;">|</p>
+                <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
+            </div>
+
+            <div class="delete-container" style="display: flex; justify-content: flex-end;">
+                <button class="m3-button red-button">Delete</button>
+            </div>
+        </div>
+
+        <div class="manuscript-container-yellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.3rem; justify-content: flex-end; margin-left: 0.3rem; margin-top: 1.5rem;">
+                        <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
+                        <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                    <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    </footer>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                    <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    </footer>
+                </div>
+            </article>
+        </div>
+        <br>
+        <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">
+                            <button>Rashmi Kariganuru Bheemarao1</button>
+                            <button>Hassan Sadashiva Guruprasad1</button>
+                            <button>Shambhavi Bangalore Ravi2</button>
+                        </div>
+                        <p style="margin-block: 0.5rem;">Published: 9 June 2025</p>
+                        <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+                    </div>
+                    <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                        <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                        <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    </footer>
+                </div>
+            </article>
+        </div>
+    </main>
+</div>
+</body>
+</html>
+
+<style>
+    .manuscript-button:active {
+        text-decoration: underline;
+    }
+    .manuscript-container:hover {
+        background-color: var(--very-light-gray) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .manuscript-container-yellow:hover {
+        background-color: var(--orange) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        width: 11rem;
+        box-shadow: 0px 8px 8px rgba(0,0,0,0.1);
+        z-index: 1;
+        border: 1.5px solid var(--purple);
+        border-radius: 0.3rem;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropdown-content p {
+        display: block;
+        width: 100%;
+        padding: 0.7rem 1rem;
+        margin-top: -3px;
+        box-sizing: border-box;
+        transition: background 0.2s;
+        border-bottom: 1.5px solid var(--purple);
+    }
+    .dropdown-content p:hover {
+        background-color: #ebe9ff;
+        cursor: pointer;
+        border-top: 1.5px solid var(--purple);
+    }
+    .dropdown.sort .dropdown-content p {
+        padding-block: 0.95rem;
+    }
+
+    @media (max-width: 800px) {
+        .manuscript-container {
+            max-height: 40vh !important;
+        }
+        .manuscript-containeryellow {
+            max-height: 40vh !important;
+        }
+        .wrapper {
+            flex-direction: column !important;
+            margin-inline: 1rem !important;
+            gap: 1rem !important;
+        }
+        .wrapper aside {
+            margin-top: 1rem !important;
+        }
+        .m3-button.purple-button {
+            text-wrap: wrap !important;
+        }
+        .yellow-box-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 5rem;
+        }
+    }
+</style>

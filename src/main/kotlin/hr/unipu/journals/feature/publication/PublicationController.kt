@@ -6,7 +6,6 @@ import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -26,23 +25,20 @@ class PublicationController(private val repository: PublicationRepository) {
             ResponseEntity.ok("publication successfully added")
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
-    @PutMapping("/update-title/{publicationId}")
+    @PutMapping("/{publicationId}/update-title")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateTitle(@RequestParam id: Int, @RequestParam title: String): ResponseEntity<String> {
-        return if(repository.existsById(id)) {
-            repository.updateTitle(id, Jsoup.clean(title, Safelist.none()))
+    fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
+        return if(repository.exists(publicationId)) {
+            repository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
             ResponseEntity.ok("title successfully updated")
-        } else ResponseEntity.badRequest().body("publication with id: $id does not exist")
+        } else ResponseEntity.badRequest().body("publication with id: $publicationId does not exist")
     }
-    @PutMapping("/hide/{publicationId}")
+    @PutMapping("/{publicationId}/update-hidden")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
-    fun updateHidden(
-        @PathVariable publicationId: Int,
-        @RequestParam isHidden: Boolean
-    ): ResponseEntity<String> {
-        return if (repository.existsById(publicationId)) {
+    fun updateHidden(@PathVariable publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
+        return if (repository.exists(publicationId)) {
             repository.updateHidden(publicationId, isHidden)
-            ResponseEntity.ok("publication successfully hidden")
+            ResponseEntity.ok("publication isHidden successfully updated")
         } else ResponseEntity.badRequest().body("id does not exist")
     }
 }
