@@ -64,6 +64,17 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     )
     @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
     fun title(@Param(ID) sectionId: Int): String
+
+    @Query("""
+        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
+        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
+        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$ID
+        AND $PUBLICATION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+    """)
+    fun pending(@Param("id") id: Int): List<Manuscript>
     @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
     fun exists(@Param(ID) id: Int): Boolean
 
