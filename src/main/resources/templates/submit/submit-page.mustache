@@ -105,17 +105,25 @@
     </form>
 </div>
 
-<div class="overlay">
-    <div class="dialog">
-        <p>Submit <b>KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</b>?</p>
+<dialog id="submit-manuscript-dialog" closedby="any">
+    <p id="submit-manuscript-dialog-message">Submit {{title}}</p>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
-            </div>
+            <button id="submit-manuscript-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Submit</button>
         </div>
-    </div>
-</div>
+</dialog>
+<script>
+    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
+    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
+    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
+    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
+        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        if(!response.ok) { alert('failed to add publication'); return; }
+        location.reload(true);
+    });
+</script>
 
 <script>
     const fileInput = document.querySelector('input[type="file"]');
