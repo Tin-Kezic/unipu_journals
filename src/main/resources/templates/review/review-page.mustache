@@ -8,37 +8,25 @@
     <link rel="stylesheet" href="/util.css" />
 </head>
 
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
 {{>util/header}}
 
 <div class="content">
     <aside style="flex: 0 0 300px;">
-        <section class="yellow-box review-reports" style="padding-block: 2.4rem; margin-bottom: 0.9rem;">
+        <section class="yellow-box review-reports" style="padding-block: 2.4rem; margin-bottom: 0.9rem; user-select: none;">
             <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 1</button>
             <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 2</button>
             <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 3</button>
         </section>
 
         <section class="yellow-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem; user-select: none;">
                 <p>Review report 1</p>
                 <p>21.7.2025.</p>
             </div>
             <p>state: Minor</p>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
                 <p>Reviewer's comment</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="#">AnnouncementFlyer.pdf</a>
@@ -49,12 +37,12 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... more
-                <button onclick="showOverlayAndDialog()">more</button>
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px; user-select: none;">more</button>
             </section>
 
             <br>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
                 <p>Author's reply</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="#">AnnouncementFlyer.pdf</a>
@@ -65,6 +53,7 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range of fields... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range o fields... more
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px; user-select: none;">more</button>
             </section>
 
             <button class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
@@ -79,7 +68,7 @@
                         <div>
                             <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
                             <p>Rashmi Kariganuru Bheemarao1, Hassan Sadashiva Guruprasad1 and Shambhavi Bangalore Ravi2</p>
-                            <p>Submitted: 9 June 2025       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
+                            <p style="user-select: none;">Submitted: 9 June 2025       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
                             <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
                         </div>
                         <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
@@ -91,7 +80,7 @@
                 </div>
             </section>
 
-            <fieldset style="border: none;">
+            <fieldset style="border: none; user-select: none;">
                 <section class="Recommendations">
                     <p><b>Recommendations for Authors</b> (will be shown to authors)</p>
                     <p class="recommendations-description">Answers to the following questions do not replace any specific comments made for authors. Please give further details in the "comments for authors" box below.</p>
@@ -377,7 +366,7 @@
                                     <button class="pdf-remove-button">-</button>
                                 </div>
 
-                                <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
+                                <button class="m3-button purple-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
                                 <button class="m3-button yellow-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem;" type="submit">Submit Review</button>
                             </div>
                         </div>
@@ -406,7 +395,7 @@
         </div>
         <br>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">Cancel</button>
+            <button class="m3-button outline-button">Cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button outline-button">Submit</button>
             </div>
@@ -414,7 +403,7 @@
     </div>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Reviewer's comment</p>
         <br>
@@ -431,7 +420,7 @@
             (this window supports html parsing)
         </p>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">edit</button>
             </div>
@@ -439,7 +428,7 @@
     </div>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Author's reply</p>
         <br>
@@ -455,7 +444,7 @@
     </div>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <div class="text-field">
             <label for="comment">Reviewer's comment</label>
@@ -471,7 +460,7 @@
             (this window supports html parsing)</textarea>
         </div>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">save</button>
             </div>
@@ -479,14 +468,14 @@
     </div>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <div class="text-field">
             <label for="comment">Author's reply</label>
             <textarea id="comment" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;">Very cool review, thanks.</textarea>
         </div>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">save</button>
             </div>

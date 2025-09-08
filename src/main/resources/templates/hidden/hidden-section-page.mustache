@@ -7,24 +7,12 @@
     <title>Section Archive</title>
 </head>
 
-<script>
-    function showOverlayAndDialog() {
-        document.querySelector('.overlay').classList.add('active');
-        document.querySelector('.dialog').classList.add('active');
-    }
-
-    function hideOverlayAndDialog() {
-        document.querySelector('.overlay').classList.remove('active');
-        document.querySelector('.dialog').classList.remove('active');
-    }
-</script>
-
 <body>
 {{>util/header}}
 
 <main>
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1rem;">
-        <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+        <h1 style="font-size: 1.5rem; font-weight: 400;">
             publications
         </h1>
     </div>
@@ -54,8 +42,8 @@
                         <div class="yellow-box">
                             <p class="yellow-box-text">{{title}}</p>
                             <div class="yellow-box-buttons">
-                                <button class="m3-button red-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
-                                <button class="m3-button outline-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
+                                <button class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
+                                <button class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
                             </div>
                         </div>
                     </a>
@@ -82,7 +70,7 @@
                 Techniques</p></b>
         <br>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
             </div>
@@ -107,7 +95,7 @@
                 Techniques</p></b>
         <br>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
             </div>

@@ -5,18 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Hidden Manuscript</title>
     <link href="/util.css" rel="stylesheet"/>
-
-    <script>
-        function showOverlayAndDialog() {
-            document.querySelector('.overlay').classList.add('active');
-            document.querySelector('.dialog').classList.add('active');
-        }
-
-        function hideOverlayAndDialog() {
-            document.querySelector('.overlay').classList.remove('active');
-            document.querySelector('.dialog').classList.remove('active');
-        }
-    </script>
 </head>
 
 <body>
@@ -32,9 +20,6 @@
     <aside class="sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
         <label class="sidebar-button">
             <span class="checkbox">Archaeoacoustics</span>
-        </label>
-        <label class="sidebar-button">
-            <span class="checkbox">Acoustic Ecology</span>
         </label>
     </aside>
 
@@ -57,11 +42,11 @@
                 <button>Shambhavi Bangalore Ravi2</button>
             </div>
 
-            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">Published: 9 June 2025</p>
+            <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem; user-select: none;">Published: 9 June 2025</p>
             <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
             <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
-                <button class="m3-button red-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
-                <button class="m3-button outline-button" onclick="showOverlayAndDialog()" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
+                <button class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
+                <button class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
             </footer>
         </article>
     </section>
@@ -71,7 +56,7 @@
     <div class="dialog">
         <p>Permanently delete <b>KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</b>?</p>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
             </div>
@@ -83,7 +68,7 @@
     <div class="dialog">
         <p>Restore <b>KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</b>?</p>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
             </div>

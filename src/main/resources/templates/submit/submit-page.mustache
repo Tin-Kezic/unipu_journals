@@ -14,7 +14,7 @@
 <div style="margin: 2rem; padding: 2rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none;">
     <form>
         <div class="text-field" style="width: 100%; margin-top: -0.5rem;">
-            <label for="title">title</label>
+            <label>title</label>
             <input type="text" required>
         </div>
 
@@ -25,7 +25,7 @@
                 <option value="dropdown-content">Hello World!
             </select>
 
-            <button class="m3-button purple-button" onclick="showOverlayAndDialog()" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem;">Edit</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem;">Edit</button>
 
             <select class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
                 <option value="category";>Publication </option>
@@ -45,19 +45,19 @@
         <p style="font-size: 0.8rem; color: var(--light-gray); margin-left: 0.5rem; margin-bottom: 0.3rem;">Author</p>
         <div class="author-container">
             <div class="text-field">
-                <label for="author1">full name</label>
+                <label>full name</label>
                 <input type="text" required>
             </div>
             <div class="text-field">
-                <label for="email1">institutional email</label>
+                <label>institutional email</label>
                 <input type="email" required>
             </div>
             <div class="text-field">
-                <label for="country1">country</label>
+                <label>country</label>
                 <input type="text" required>
             </div>
             <div class="text-field">
-                <label for="affiliation1">affiliation/institution</label>
+                <label>affiliation/institution</label>
                 <input type="text" required>
             </div>
             <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
@@ -66,19 +66,19 @@
 
         <div class="author-container">
             <div class="text-field">
-                <label for="author1">full name</label>
+                <label>full name</label>
                 <input type="text" required>
             </div>
             <div class="text-field">
-                <label for="email1">institutional email</label>
+                <label>institutional email</label>
                 <input type="email" required>
             </div>
             <div class="text-field">
-                <label for="country1">country</label>
+                <label>country</label>
                 <input type="text" required>
             </div>
             <div class="text-field">
-                <label for="affiliation1">affiliation/institution</label>
+                <label>affiliation/institution</label>
                 <input type="text" required>
             </div>
             <button type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
@@ -109,7 +109,6 @@
         padding-inline: 1rem;
         border: 1.3px solid var(--beige);
         border-radius: 0.4rem;
-        user-select: none;
         margin: 1rem 0;
     }
     .author-container .text-field {
