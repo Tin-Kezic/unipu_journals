@@ -92,8 +92,7 @@
     document.getElementById('dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/root/revoke-admin?email=${encodeURIComponent(currentEmail)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to delete item'); return; }
-        const button = document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`);
-        if (button) button.remove();
+        document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`).remove();
         dialog.close()
     });
     function dialogOpen(email) {

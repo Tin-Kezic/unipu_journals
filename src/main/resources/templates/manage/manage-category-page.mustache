@@ -64,8 +64,7 @@
     document.getElementById('dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/category/delete?category=${encodeURIComponent(currentCategory)}`, { method: 'DELETE' });
         if(!response.ok) { alert('failed to delete category'); return; }
-        const button = document.querySelector(`.remove-user-button[data-category="${currentCategory}"]`);
-        if (button) button.remove();
+        document.querySelector(`.remove-user-button[data-category="${currentCategory}"]`).remove();
         dialog.close()
     });
     function dialogOpen(category) {
