@@ -42,14 +42,14 @@ class RootPageController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun addAdmin(@RequestParam email: String): ResponseEntity<String> {
         if(accountRepository.emailExists(email)) accountRepository.updateIsAdmin(email, true)
-        else inviteRepository.insert(email, InvitationTarget.ADMIN)
+        else inviteRepository.insert(email, InvitationTarget.ADMIN, -1)
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
 
     @PutMapping("/revoke-admin")
     fun revokeAdmin(@RequestParam email: String): ResponseEntity<String> {
         if(accountRepository.isAdmin(email)) accountRepository.updateIsAdmin(email, false)
-        else if (inviteRepository.isAdmin(email)) inviteRepository.revoke(email, InvitationTarget.ADMIN)
+        else if (inviteRepository.isAdmin(email)) inviteRepository.revoke(email, InvitationTarget.ADMIN, -1)
         else return ResponseEntity.status(404).body("No admin entry found for email: $email")
         return ResponseEntity.ok("Successfully revoked admin privileges for $email")
     }

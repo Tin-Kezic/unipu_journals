@@ -84,12 +84,9 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")
-    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int = -1)
+    fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int)
 
     @Modifying
     @Query("DELETE FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = :$TARGET AND $TARGET_ID = :$TARGET_ID")
-    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int = -1)
-
-    @Query("SELECT $EMAIL FROM $INVITE WHERE $TARGET = $ADMIN")
-    fun allAdminEmails(): List<String>
+    fun revoke(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int)
 }
