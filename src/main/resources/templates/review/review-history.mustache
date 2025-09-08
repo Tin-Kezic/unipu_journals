@@ -13,7 +13,7 @@
 
 <div class="content">
     <aside style="flex: 0 0 300px;">
-        <section class="yellow-box review-reports" style="padding-block: 2.4rem; margin-bottom: 0.9rem; display: flex; flex-direction: row; justify-content: space-between;">
+        <section class="yellow-box review-reports" style="padding-block: 2.4rem; margin-bottom: 0.9rem; display: flex; flex-direction: row; justify-content: space-between; user-select: none;">
             <div style="display: flex; flex-direction: column; align-items: center; margin-left: 1.5rem;">
                 <button style="text-decoration: underline; background-color: inherit; border: none;">Reviewer 1</button>
                 <div style="display: flex; flex-direction: column;">
@@ -42,20 +42,14 @@
             </div>
         </section>
 
-        <div class="yellow-box" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+        <div class="yellow-box" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; user-select: none;">
             <p style="font-size: 1.5rem;">Review 1</p>
             <p style="font-size: 0.9rem;">state: Minor</p>
             <p style="font-size: 0.9rem; color: var(--light-gray);">21.7.2025.</p>
         </div>
 
         <section class="yellow-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem;">
-                <p>Review report 1</p>
-                <p>21.7.2025.</p>
-            </div>
-            <p>state: Minor</p>
-
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
                 <p>Reviewer's comment</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="#">AnnouncementFlyer.pdf</a>
@@ -66,12 +60,12 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics...
-                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px;">more</button>
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px; user-select: none;">more</button>
             </section>
 
             <br>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
                 <p>Author's reply</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="#">AnnouncementFlyer.pdf</a>
@@ -82,7 +76,7 @@
                 Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range of fields... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
                 In practical terms, acoustics is essential in a wide range o fields...
-                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px;">more</button>
+                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--purple); border-width: 1px; user-select: none;">more</button>
             </section>
         </section>
     </aside>
@@ -99,7 +93,7 @@
                 <button class="m3-button yellow-button" style="width: fit-content; padding: 1rem 2rem;">decision</button>
             </div>
 
-            <fieldset style="border: none;">
+            <fieldset style="border: none; user-select: none;">
                 <section class="Recommendations">
                     <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
                         <div class="yellow-box rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100;">
@@ -372,7 +366,7 @@
     </main>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Reviewer's comment</p>
         <br>
@@ -389,7 +383,7 @@
             (this window supports html parsing)
         </p>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">edit</button>
             </div>
@@ -397,7 +391,7 @@
     </div>
 </div>
 
-<div class="overlay" onclick="if (event.target === this) hideOverlayAndDialog()">
+<div class="overlay">
     <div class="dialog" style="padding: 1.5rem 3rem;">
         <p>Author's reply</p>
         <br>
@@ -405,7 +399,7 @@
             Very cool review, thanks
         </p>
         <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outline-button" onclick="hideOverlayAndDialog()">cancel</button>
+            <button class="m3-button outline-button">cancel</button>
             <div style="display: flex; justify-content: flex-end">
                 <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--purple);">edit</button>
             </div>

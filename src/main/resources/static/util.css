@@ -37,6 +37,7 @@ body {
     background-color: var(--purple);
     border: none;
     cursor: pointer;
+    user-select: none;
 }
 nav ul {
     list-style: none;
@@ -104,6 +105,7 @@ dialog {
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
 .m3-button:active {
     transform: scale(0.98);
@@ -112,10 +114,12 @@ dialog {
 .yellow-button {
     background-color: var(--yellow);
     color: black;
+    user-select: none;
 }
 .purple-button {
     background-color: var(--purple);
     color: white;
+    user-select: none;
 }
 .outline-button {
     background-color: transparent;
@@ -124,22 +128,26 @@ dialog {
     padding: 0.7rem 1rem;
     font-size: 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .red-button {
     background-color: var(--red);
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .light-red-button {
     background-color: var(--light-red);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
 .green-button {
     background-color: var(--green);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
 .dark-purple-white-outline-button {
     background-color: var(--dark-purple);
@@ -147,6 +155,7 @@ dialog {
     border: 0.1rem solid white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .purple-outline-button {
     background-color: var(--purple);
@@ -154,6 +163,7 @@ dialog {
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .purple-outline-button:hover {
     background-color: var(--dark-purple);
@@ -166,6 +176,7 @@ dialog {
     padding: 0.3rem 3rem;
     box-shadow: none;
     font-weight: 600;
+    user-select: none;
 }
 .orange-button:hover {
     background-color: var(--orange);
@@ -180,10 +191,12 @@ dialog {
     color: var(--beige);
     border: 0.1rem solid var(--beige);
     box-shadow: none;
+    user-select: none;
 }
 .pale-yellow-button:hover {
     background-color: var(--purple);
     color: white;
+    user-select: none;
 }
 .text-field {
     position: relative;
@@ -198,6 +211,7 @@ dialog {
     color: var(--light-gray);
     background-color: var(--pale-yellow);
     padding: 0 0.25rem;
+    user-select: none;
 }
 .text-field input {
     width: 100%;
@@ -216,6 +230,7 @@ dialog {
     color: var(--red);
     margin-top: 0.25rem;
     display: none;
+    user-select: none;
 }
 .error-msg.show {
     display: block;
@@ -231,7 +246,6 @@ dialog {
     background: white;
     border: 1.3px solid var(--light-gray);
     cursor: pointer;
-    user-select: none;
 }
 .remove-user-button:hover {
     background: var(--red);
@@ -242,7 +256,7 @@ dialog {
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .remove-user-button .fa-user-minus {
-    margin-left: auto; /* Align icon to the right */
+    margin-left: auto;
     color: black;
     cursor: pointer;
 }
@@ -250,7 +264,7 @@ dialog {
     color: white;
 }
 .pale-yellow-checkbox-button {
-    user-select: none; /* Prevent text selection */
+    user-select: none;
 }
 .pale-yellow-checkbox-button input {
     position: absolute;
@@ -307,7 +321,6 @@ dialog {
     background-color: var(--pale-yellow);
     border: 1.3px solid var(--beige);
     border-radius: 0.4rem;
-    user-select: none;
     padding: 0.5rem;
     text-align: left;
     overflow-wrap: break-word;
@@ -328,8 +341,9 @@ dialog {
 .yellow-box-buttons {
     margin: auto 0.4rem 0.4rem auto;
     align-self: flex-end;
-    display:flex;
+    display: flex;
     gap: 0.5rem;
+    user-select: none;
 }
 .yellow-box-buttons .m3-button {
     padding: 0.4rem 0.6rem;
@@ -353,6 +367,7 @@ dialog {
     z-index: 1;
     right: 5%;
     bottom: 1.8rem;
+    user-select: none;
 }
 .fa-circle-check {
     color: var(--green);
@@ -387,7 +402,6 @@ dialog {
     background: white;
     border: 1.3px solid var(--light-gray);
     cursor: pointer;
-    user-select: none;
 }
 .sidebar-button-title:hover {
     background: var(--purple);
@@ -439,7 +453,6 @@ dialog {
     border: 2px solid var(--red);
     border-radius: 0.2rem;
     cursor: pointer;
-    user-select: none;
     height: 1rem;
     width: 1rem;
     font-size: 1.5rem;

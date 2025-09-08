@@ -14,8 +14,8 @@
     <h1 style="font-size: 1.5rem; font-weight: lighter; margin-top: 2rem; margin-bottom: 0.3rem; width: 100%;">{{title}}</h1>
 
     <div style="display: flex; flex-direction: row; gap: 2rem;">
-        <p style="font-size: 0.875rem; color: var(--light-gray);">{{submissionDate}}</p>
-        <p style="font-size: 0.875rem; color: var(--light-gray);">{{publicationDate}}</p>
+        <p style="font-size: 0.875rem; color: var(--light-gray); user-select: none;">{{submissionDate}}</p>
+        <p style="font-size: 0.875rem; color: var(--light-gray); user-select: none;">{{publicationDate}}</p>
     </div>
     <div class="authors" style="display: flex; flex-wrap: wrap; margin-bottom: 1rem;">
         {{#authors}} <button style="color: var(--light-gray);">{{.}}</button> {{/authors}}
@@ -27,7 +27,7 @@
 <aside style="position: absolute; top: 6rem; right: 1vw; display: flex; flex-direction: column; gap: 1rem;">
     <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.8rem 1.37rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto;">Review History</button>
 
-    <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem;">
+    <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem; user-select: none;">
         <p style="font-size: 0.9rem;">Views</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
             <p class="number" style="font-size: 2.5rem; text-align: center;">{{views}}</p>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <div class="yellow-box" style="margin-top: 3rem;">
+    <div class="yellow-box" style="margin-top: 3rem; user-select: none;">
         <p style="font-size: 0.9rem;">Downloads</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
             <p class="number" style="font-size: 2.5rem; text-align: center;">{{downloads}}</p>
