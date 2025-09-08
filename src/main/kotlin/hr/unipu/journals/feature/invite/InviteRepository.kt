@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.account.Account
+import hr.unipu.journals.feature.manuscript.Manuscript
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -56,6 +56,16 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT $INVITE.$EMAIL FROM $INVITE WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION AND $INVITE.$TARGET_ID = :$ID")
     fun eicOnPublicationEmailsByPublicationId(@Param(ID) publicationId: Int): List<String>
 
+    @Query("""
+        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
+        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        JOIN $INVITE ON $PUBLICATION.$ID = $INVITE.$TARGET_ID
+        WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION
+        AND $PUBLICATION.$IS_HIDDEN = FALSE
+        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+    """)
+    fun eicOnManuscript(@Param(ID) id: Int): List<Manuscript>
     @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")
     fun insert(@Param(EMAIL) email: String, @Param(TARGET) target: InvitationTarget, @Param(TARGET_ID) targetId: Int = -1)
