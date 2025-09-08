@@ -90,7 +90,8 @@ class SecurityConfig {
                     "/review/**",
                     "/profile/{accountId}",
                     "/profile/{accountId}/edit",
-                    "/api/publication/{publicationId}/section/{sectionId}/insert"
+                    "/api/publication/{publicationId}/section/{sectionId}/insert",
+                    "/404.html", "/403.html", "/505.html"
                 ).forEach { authorize(it, authenticated) }
                 authorize(anyRequest, permitAll)
             }
