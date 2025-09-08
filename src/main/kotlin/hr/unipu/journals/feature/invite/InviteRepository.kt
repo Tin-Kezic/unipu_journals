@@ -20,6 +20,34 @@ private const val SECTION_EDITOR_ON_SECTION = "'SECTION_EDITOR_ON_SECTION'"
 private const val EDITOR_ON_MANUSCRIPT = "'EDITOR_ON_MANUSCRIPT'"
 private const val REVIEWER_ON_MANUSCRIPT = "'REVIEWER_ON_MANUSCRIPT'"
 
+// manuscript
+private const val MANUSCRIPT = "manuscript"
+private const val TITLE = "title"
+private const val DESCRIPTION = "description"
+private const val AUTHOR_ID = "author_id"
+private const val CATEGORY_ID = "category_id"
+private const val CURRENT_STATE = "current_state"
+private const val SECTION_ID = "section_id"
+private const val FILE_URL = "file_url"
+private const val SUBMISSION_DATE = "submission_date"
+private const val PUBLICATION_DATE = "publication_date"
+private const val VIEWS = "views"
+private const val DOWNLOADS = "downloads"
+
+// section
+private const val PUBLICATION_SECTION = "publication_section"
+//private const val ID = "id"
+//private const val TITLE = "title"
+//private const val DESCRIPTION = "description"
+private const val PUBLICATION_ID = "publication_id"
+private const val IS_HIDDEN = "is_hidden"
+
+// publication
+private const val PUBLICATION = "publication"
+//private const val ID = "id"
+//private const val TITLE = "title"
+//private const val IS_HIDDEN = "is_hidden"
+
 interface InviteRepository: Repository<Invite, Int> {
 
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
