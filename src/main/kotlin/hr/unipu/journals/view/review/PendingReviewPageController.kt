@@ -6,7 +6,7 @@ import hr.unipu.journals.feature.manuscript.Manuscript
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ManuscriptDTO
+import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

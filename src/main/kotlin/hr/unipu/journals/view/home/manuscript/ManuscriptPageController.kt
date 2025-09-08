@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home
+package hr.unipu.journals.view.home.manuscript
 
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository

@@ -8,9 +8,9 @@ import hr.unipu.journals.view.hidden.HiddenManuscriptPageController
 import hr.unipu.journals.view.hidden.HiddenPublicationPageController
 import hr.unipu.journals.view.hidden.HiddenSectionPageController
 import hr.unipu.journals.view.home.ManuscriptDetailsPageController
-import hr.unipu.journals.view.home.ManuscriptPageController
+import hr.unipu.journals.view.home.manuscript.ManuscriptPageController
 import hr.unipu.journals.view.home.SectionPageController
-import hr.unipu.journals.view.home.PublicationPageController
+import hr.unipu.journals.view.home.publication.PublicationPageController
 import hr.unipu.journals.view.profile.EditProfilePageController
 import hr.unipu.journals.view.profile.ProfilePageController
 import hr.unipu.journals.view.review.EicInitialReviewPageController
