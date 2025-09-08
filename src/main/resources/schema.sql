@@ -58,12 +58,12 @@ CREATE TABLE eic_on_publication (
     publication_id INT NOT NULL,
     eic_id INT NOT NULL,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
-    FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
+    FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE CASCADE
 );
 CREATE TABLE publication_section (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    description TEXT,
+    description TEXT DEFAULT '',
     publication_id INT NOT NULL,
     is_hidden BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
@@ -72,7 +72,7 @@ CREATE TABLE section_editor_on_section(
     id SERIAL PRIMARY KEY,
     publication_section_id INT NOT NULL,
     section_editor_id INT NOT NULL,
-    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE NO ACTION,
+    FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE CASCADE,
     FOREIGN KEY (section_editor_id) REFERENCES account(id) ON DELETE CASCADE
 );
 CREATE TABLE manuscript (
@@ -81,24 +81,24 @@ CREATE TABLE manuscript (
     description TEXT NOT NULL DEFAULT '',
     author_id INT NOT NULL,
     category_id INT NOT NULL,
-    current_state manuscript_state NOT NULL,
+    current_state manuscript_state NOT NULL DEFAULT 'AWAITING_INITIAL_EIC_REVIEW',
     section_id INT NOT NULL,
     file_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     publication_date TIMESTAMP,
     views INT NOT NULL DEFAULT 0,
     downloads INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
-    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
-    FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
+    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
     account_id INT NOT NULL,
     account_role manuscript_role NOT NULL,
-    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION,
-    FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE NO ACTION,
+    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE CASCADE,
+    FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
     UNIQUE (manuscript_id, account_id, account_role)
 );
 CREATE TABLE manuscript_review (
@@ -112,6 +112,6 @@ CREATE TABLE manuscript_review (
     author_response_file_url TEXT,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP NOT NULL,
-    FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE NO ACTION,
-    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE NO ACTION
+    FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE CASCADE,
+    FOREIGN KEY (manuscript_id) REFERENCES manuscript(id) ON DELETE CASCADE
 );
