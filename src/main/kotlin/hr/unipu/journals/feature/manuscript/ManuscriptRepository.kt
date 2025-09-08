@@ -33,14 +33,21 @@ private const val ARCHIVED = "'ARCHIVED'"
 
 // publication
 private const val PUBLICATION = "publication"
+//private const val ID = "id"
+//private const val TITLE = "title"
+//private const val IS_HIDDEN = "is_hidden"
 
 // section
 private const val PUBLICATION_SECTION = "publication_section"
+//private const val ID = "id"
+//private const val TITLE = "title"
+//private const val DESCRIPTION = "description"
 private const val PUBLICATION_ID = "publication_id"
 private const val IS_HIDDEN = "is_hidden"
 
 // profile
 private const val ACCOUNT = "account"
+//private const val ID = "id"
 private const val FULL_NAME = "full_name"
 private const val EMAIL = "email"
 private const val PASSWORD = "password"
@@ -51,6 +58,12 @@ private const val CITY = "city"
 private const val ADDRESS = "address"
 private const val ZIP_CODE = "zip_code"
 private const val IS_ADMIN = "is_admin"
+
+// eic_on_publication
+private const val EIC_ON_PUBLICATION = "eic_on_publication"
+//private const val ID = "id"
+//private const val PUBLICATION_ID = "publication_id"
+private const val EIC_ID = "eic_id"
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Modifying
