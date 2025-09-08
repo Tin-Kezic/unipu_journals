@@ -25,71 +25,54 @@
         >
             <p class="yellow-box-text">{{title}}</p>
             <div class="yellow-box-buttons">
-                <button onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
-                <button onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
+                <button id="{{id}}" data-title="{{title}}" data-type="delete-button" onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
+                <button id="{{id}}" data-title="{{title}}" data-type="restore-button" onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
             </div>
         </div>
     {{/publications}}
 </section>
 
-<dialog id="delete-publication-dialog" closedby="any">
-    <p id="delete-publication-dialog-message"></p>
-        <p>It contains <b>{{sectionsNumber}}</b> sections:</p>
-        <br>
-        {{#sections}}<b style="line-height: 1.5rem;"><p>{{.}}</p></b>{{/sections}}
-       <br>
-        <div style="display: flex; justify-content: space-between">
-            <button id="delete-publication-dialog-negative" class="m3-button outline-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
-            </div>
-        </div>
-</dialog>
-<script>
-    const deletePublicationDialog = document.getElementById('delete-publication-title-dialog');
-    const deletePublicationTitleDialogMessage = document.getElementById('delete-publication-title-dialog-message');
-    document.querySelectorAll('button[data-type="edit-button"]').forEach(button => {
-        button.addEventListener('click', () => {
-            deletePublicationTitleDialogMessage.innerHTML = `edit title of <b>${button.dataset.title}</b>`;
-            currentId = button.dataset.id;
-            deletePublicationTitleDialog.showModal();
-        });
-    });
-    document.getElementById('delete-publication-title-dialog-negative').addEventListener('click', () => deletePublicationTitleDialog.close());
-    document.getElementById('delete-publication-title-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const newPublicationTitle = document.querySelector('input[name="delete-publication-title-dialog-input"]').value;
-        const response = await fetch(`/api/publication/${currentId}/delete-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to delete publication title'); return; }
-        location.reload(true);
-    });
-</script>
-
-<div class="overlay">
-    <div class="dialog">
-        <p>Restore <b>Acoustics</b> publication?</p>
-        <p>It contains <b>9</b> sections:</p>
-        <br>
-        <b style="line-height: 1.5rem;"><p>Archaeoacoustics</p>
-            <p>Aeroacoustics</p>
-            <p>Bioacoustics</p>
-            <p>Acoustic signal processing</p>
-            <p>Architectural acoustics</p>
-            <p>Electroacoustics</p>
-            <p>Environmental noise and soundscape</p>
-            <p>Musical acoustics</p>
-            <p>Bioacoustics 2</p></b>
-        <br>
-        <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outline-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button purple-button" style="padding-inline: 1rem; box-shadow: none;">restore</button>
-            </div>
+<dialog id="dialog" closedby="any">
+    <p id="dialog-message"></p>
+    <div style="display: flex; justify-content: space-between">
+        <button type="button" id="dialog-negative" class="m3-button outline-button">cancel</button>
+        <div style="display: flex; justify-content: flex-end">
+            <button id="dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
         </div>
     </div>
-</div>
+</dialog>
+<script>
+    const dialog = document.getElementById('dialog');
+    const dialogMessage = document.getElementById('dialog-message');
+    let currentId = null;
+    let currentType = null;
+    document.querySelectorAll('button[data-type="delete-button"], button[data-type="restore-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            dialogMessage.innerHTML = `permanently delete <b>${button.dataset.title}</b>`;
+            if(button.dataset.type == 'delete-button') {
+                dialogMessage.innerHTML = `permanently delete <b>${button.dataset.title}</b>?`;
+            } else {
+                dialogMessage.innerHTML = `restore <b>${button.dataset.title}</b>?`;
+            }
+            currentId = button.id;
+            currentType = button.dataset.type;
+            dialog.showModal();
+        });
+    });
+    document.getElementById('dialog-negative').addEventListener('click', () => dialog.close());
+    document.getElementById('dialog-positive').addEventListener('click', async () => {
+        if(currentType == 'delete-button') {
+            const response = await fetch(`/api/publication/${currentId}/delete`, { method: 'DELETE' });
+            if(!response.ok) { alert('failed to permanently delete publication'); return; }
+        } else {
+            const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=false`, { method: 'PUT' });
+            if(!response.ok) { alert('failed to restore publication'); return; }
+        }
+        document.querySelector(`div[id="${currentId}"]`).remove();
+        dialog.close();
+    });
+</script>
 </body>
-
 <style>
     .m3-button:active {
         transform: none;
