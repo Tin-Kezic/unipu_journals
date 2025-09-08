@@ -4,7 +4,7 @@ import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscr
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ManuscriptDTO
+import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

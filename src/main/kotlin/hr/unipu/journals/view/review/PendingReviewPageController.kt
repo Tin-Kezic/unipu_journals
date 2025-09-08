@@ -6,7 +6,7 @@ import hr.unipu.journals.feature.manuscript.Manuscript
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ManuscriptDTO
+import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -33,16 +33,16 @@ class PendingReviewPageController(
     }
     @GetMapping("/review")
     fun all(model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allUnderReview()
-        model["invited"] = inviteRepository.eicOnManuscript(authorizationService.account!!.id).toManuscriptDTO()
+        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(authorizationService.account!!.id)
+        model["invited"] = inviteRepository.eicOnManuscript(authorizationService.account!!.email).toManuscriptDTO()
         model["pending"] = manuscriptRepository.pending(authorizationService.account!!.id).toManuscriptDTO()
         model["publicationId"] = 0
         return "review/pending-review-page"
     }
     @GetMapping("review/from-publication/{publicationId}")
     fun underPublication(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allUnderReview()
-        model["invited"] = inviteRepository.eicOnManuscriptByPublication(authorizationService.account!!.id, publicationId).toManuscriptDTO()
+        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliationByPublicationId(authorizationService.account!!.id, publicationId)
+        model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(authorizationService.account!!.email, publicationId).toManuscriptDTO()
         model["pending"] = manuscriptRepository.pendingByPublication(authorizationService.account!!.id, publicationId).toManuscriptDTO()
         return "review/pending-review-page"
     }

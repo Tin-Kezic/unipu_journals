@@ -67,8 +67,9 @@ interface InviteRepository: Repository<Invite, Int> {
         WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $INVITE.$EMAIL = :$EMAIL
     """)
-    fun eicOnManuscript(@Param(ID) id: Int): List<Manuscript>
+    fun eicOnManuscript(@Param(EMAIL) email: String): List<Manuscript>
 
     @Query("""
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
@@ -78,9 +79,10 @@ interface InviteRepository: Repository<Invite, Int> {
         WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $INVITE.$EMAIL = :$EMAIL
         AND $PUBLICATION.$ID = :$PUBLICATION_ID
     """)
-    fun eicOnManuscriptByPublication(@Param(ID) id: Int, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
+    fun eicOnManuscriptByPublicationId(@Param(EMAIL) email: String, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
 
     @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")

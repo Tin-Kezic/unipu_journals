@@ -1,7 +1,8 @@
-package hr.unipu.journals.view.home
+package hr.unipu.journals.view.home.publication
 
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.home.ContainerDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

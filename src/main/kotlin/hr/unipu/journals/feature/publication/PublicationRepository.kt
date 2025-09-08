@@ -37,22 +37,27 @@ private const val EIC_ID = "eic_id"
 
 interface PublicationRepository: Repository<Publication, Int> {
 
+    @Query("""
+        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION
+        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
+        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$EIC_ID
+        """)
+    fun allUnderReviewWithAffiliation(@Param(EIC_ID) eicId: Int): List<Publication>
+
+    @Query("""
+        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION
+        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
+        WHERE $PUBLICATION.$ID = $PUBLICATION_ID
+        AND $EIC_ON_PUBLICATION.$EIC_ID = :$EIC_ID
+    """)
+    fun allUnderReviewWithAffiliationByPublicationId(@Param(EIC_ID) eicId: Int, @Param(PUBLICATION_ID) publicationId: Int): List<Publication>
+
     @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
     fun title(@Param(ID) id: Int): String
 
     @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
     fun byTitle(@Param(TITLE) title: String): Publication
 
-    /*
-    @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $PUBLISHED
-    """)
-     */
     @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE ORDER BY $ID DESC")
     fun allPublished(): List<Publication>
 

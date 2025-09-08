@@ -59,7 +59,7 @@ CREATE TABLE eic_on_publication (
     publication_id INT NOT NULL,
     eic_id INT NOT NULL,
     FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
-    FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE NO ACTION
+    FOREIGN KEY (eic_id) REFERENCES account(id) ON DELETE CASCADE
 );
 CREATE TABLE publication_section (
     id SERIAL PRIMARY KEY,
@@ -91,7 +91,7 @@ CREATE TABLE manuscript (
     downloads INT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE NO ACTION,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE NO ACTION,
-    FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE NO ACTION
+    FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
