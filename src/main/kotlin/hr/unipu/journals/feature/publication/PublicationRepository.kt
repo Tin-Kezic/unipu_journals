@@ -43,16 +43,6 @@ interface PublicationRepository: Repository<Publication, Int> {
     @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
     fun byTitle(@Param(TITLE) title: String): Publication
 
-    /*
-    @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $PUBLISHED
-    """)
-     */
     @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE ORDER BY $ID DESC")
     fun allPublished(): List<Publication>
 
