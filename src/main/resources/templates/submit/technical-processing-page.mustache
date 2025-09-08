@@ -24,14 +24,12 @@
 <div style="margin: 2rem; padding: 2rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
-            <div>
-                <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
-                <div class="authors" style="display: flex; flex-wrap: wrap;">
-                    <button>Rashmi Kariganuru Bheemarao1</button>
-                    <button>Hassan Sadashiva Guruprasad1</button>
-                    <button>Shambhavi Bangalore Ravi2</button>
+            {{#manuscripts}}
+                <div>
+                    <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
+                    <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
                 </div>
-            </div>
+            {{/manuscripts}}
         </div>
 
         <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
@@ -44,33 +42,24 @@
             <label>title</label>
             <input type="text" required>
         </div>
-        <div class="dropdown" style="width: 12rem;">
-            <div style="display: flex; justify-content: space-between; width: 12rem; height: 2.7rem; padding: 0.7rem 0.75rem 0.5rem; font-size: 1rem; background: var(--pale-yellow); border: 1.2px solid var(--light-gray); border-radius: 0.3rem; margin-bottom: 0.3rem;">
-                <span>Article type</span><span>▼</span>
-            </div>
-            <div class="dropdown-content">
-                <p>Hello World!</p>
-                <p>Hello World!</p>
-            </div>
-        </div>
-        <button class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem;">Edit</button>
-        <div class="dropdown" style="width: 12rem;">
-            <div style="display: flex; justify-content: space-between; width: 12rem; height: 2.7rem; padding: 0.7rem 0.75rem 0.5rem; font-size: 1rem; background: var(--pale-yellow); border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
-                <span>Publication</span><span>▼</span>
-            </div>
-            <div class="dropdown-content">
-                <p>Hello World!</p>
-                <p>Hello World!</p>
-            </div>
-        </div>
-        <div class="dropdown" style="width: 12rem;">
-            <div style="display: flex; justify-content: space-between; width: 12rem; height: 2.7rem; padding: 0.7rem 0.75rem 0.5rem; font-size: 1rem; background: var(--pale-yellow); border: 1.2px solid var(--light-gray); border-radius: 0.3rem; margin-top: 0.3rem;">
-                <span>Section</span><span>▼</span>
-            </div>
-            <div class="dropdown-content">
-                <p>Hello World!</p>
-                <p>Hello World!</p>
-            </div>
+
+        <div style="display: flex; flex-direction: row; gap: 0.3rem;">
+            <select name="category" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
+                <option value="category">Category</option>
+                {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
+            </select>
+
+            <a href="/category" type="button" class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Edit</a>
+
+            <select name="publication" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
+                <option value="publication">Publication</option>
+                {{#publications}}<option value="{{.}}">{{.}}</option>{{/publications}}
+            </select>
+
+            <select name="section" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
+                <option value="section">Section</option>
+                {{#sections}}<option value="{{.}}">{{.}}</option>{{/sections}}
+            </select>
         </div>
 
         <br><br>
@@ -94,7 +83,11 @@
                 <input type="text" required>
             </div>
             <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
-            <button type="button" class="m3-button purple-button corresponding-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Corresponding author</button>
+
+            <label class="pale-yellow-checkbox-button">
+                <input type="radio" name="corresponding-author" value="corresponding-author">
+                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+            </label>
         </div>
 
         <div class="author-container">
@@ -115,7 +108,11 @@
                 <input type="text" required>
             </div>
             <button type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
-            <button type="button" class="m3-button purple-button corresponding-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Corresponding author</button>
+
+            <label class="pale-yellow-checkbox-button">
+                <input type="radio" name="corresponding-author" value="corresponding-author">
+                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+            </label>
         </div>
 
         <div class="text-field">
