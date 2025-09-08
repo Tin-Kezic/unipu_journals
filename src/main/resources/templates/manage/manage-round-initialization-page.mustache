@@ -11,19 +11,21 @@
 {{>util/header}}
 
 <div class="main-container" style="display: flex; align-items: flex-start;">
-    <section class="yellow-box article-box" style="padding: 0.8rem; flex: 1;">
-        <article>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
-                <div>
-                    <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
-                    <p>Rashmi Kariganuru Bheemarao1, Hassan Sadashiva Guruprasad1 and Shambhavi Bangalore Ravi2</p>
-                    <p>Submitted: 9 June 2025       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
-                    <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
+    {{#manuscripts}}
+        <section class="yellow-box article-box" style="padding: 0.8rem; flex: 1;">
+            <article>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                    <div>
+                        <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
+                        <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
+                        <p>{{submissionDate}}       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
+                        <p style="margin-top: 0.2rem;">{{description}}</p>
+                    </div>
+                    <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
                 </div>
-                <button class="m3-button outline-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
-            </div>
-        </article>
-    </section>
+            </article>
+        </section>
+    {{/manuscripts}}
 
     <div style="display: flex; align-items: flex-start; gap: 1.5rem; min-width: fit-content;">
         <div style="display: flex; flex-direction: column; gap: 1rem;">
@@ -47,10 +49,12 @@
     </section>
 
     <section class="users-list" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; column-gap: 1.3rem; margin-left: 3rem;">
-        <button class="remove-user-button">
-            fakemail@gmail.com
-            <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
-        </button>
+        {{#reviewerEmails}}
+            <button class="remove-user-button">
+                {{.}}
+                <img src="/user-minus.svg" class="fa-solid fa-user-minus fa-xl" style="height: 2rem;"/>
+            </button>
+        {{/reviewerEmails}}
     </section>
 </main>
 </body>
