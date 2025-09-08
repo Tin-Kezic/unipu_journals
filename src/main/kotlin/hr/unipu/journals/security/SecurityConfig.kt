@@ -84,10 +84,7 @@ class SecurityConfig {
                     "/review-round-initialization",
                     "/manage-manuscript-under-review",
                 ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
-                listOf(
-                    "/review",
-                    "/review/{manuscriptReviewId}",
-                ).forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
+                //listOf().forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
                 listOf(
                     "/submit",
                     "/review/**",
