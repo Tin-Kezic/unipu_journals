@@ -39,7 +39,7 @@
 
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
-        {{#manuscripts}}
+        {{#invited}}
             <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
@@ -52,13 +52,13 @@
                     <a href="#" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black; font-weight: normal; text-decoration: none;">Accept</a>
                 </footer>
             </article>
-        {{/manuscripts}}
+        {{/invited}}
 
         <br>
 
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
-        {{#manuscripts}}
+        {{#pending}}
             <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
@@ -71,7 +71,7 @@
                     <a href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; font-weight: normal; text-decoration: none;">Review</a>
                 </footer>
             </article>
-        {{/manuscripts}}
+        {{/pending}}
     </section>
 </div>
 <script>
