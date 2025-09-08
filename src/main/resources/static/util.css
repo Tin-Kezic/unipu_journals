@@ -341,7 +341,7 @@ dialog {
 .yellow-box-buttons {
     margin: auto 0.4rem 0.4rem auto;
     align-self: flex-end;
-    display:flex;
+    display: flex;
     gap: 0.5rem;
     user-select: none;
 }
