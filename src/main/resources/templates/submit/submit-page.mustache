@@ -13,7 +13,7 @@
     <form>
         <div class="text-field" style="width: 100%; margin-top: -0.5rem;">
             <label>title</label>
-            <input type="text" required>
+            <input name="title" type="text" required>
         </div>
 
         <div style="display: flex; flex-direction: row; gap: 0.3rem;">
@@ -43,19 +43,19 @@
         <div class="author-container">
             <div class="text-field">
                 <label>full name</label>
-                <input type="text" required>
+                <input name="full-name" type="text" required>
             </div>
             <div class="text-field">
                 <label>institutional email</label>
-                <input type="email" required>
+                <input name="institutional-email" type="email" required>
             </div>
             <div class="text-field">
                 <label>country</label>
-                <input type="text" required>
+                <input name="country" type="text" required>
             </div>
             <div class="text-field">
                 <label>affiliation/institution</label>
-                <input type="text" required>
+                <input name="affiliation" type="text" required>
             </div>
 
             <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
@@ -98,7 +98,10 @@
         </div>
         <div style="display: flex; justify-content: space-between;">
             <label class="m3-button purple-button">Upload files
-                <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
+                <input
+                    type="file" multiple
+                    accept=".doc,.docx,.odt,.pdf,.zip,.7z"
+                    style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
             </label>
             <button class="m3-button yellow-button">Submit</button>
         </div>
@@ -107,27 +110,29 @@
     </form>
 </div>
 
-<dialog id="submit-manuscript-dialog" closedby="any">
-    <p id="submit-manuscript-dialog-message">Submit {{title}}</p>
-        <div style="display: flex; justify-content: space-between">
-            <button id="submit-manuscript-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button id="submit-manuscript-dialog-positive" class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Submit</button>
-        </div>
-</dialog>
 <script>
-    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
-    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
-    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
-    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
+    document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
-        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        const title = document.querySelector('input[name="title"]').value;
+        const category = document.querySelector('select[name="category"]').value;
+        const publication = document.querySelector('select[name="publication"]').value;
+        const section = document.querySelector('select[name="section"]').value;
+        const authors = 1 //todo. implement
+        const abstract = document.getElementById('abstract').value;
+        const files = document.querySelector('input[type="file"]').files;
+        const response = await fetch(`
+            /api/manuscript/insert
+                ?title=${encodeURIComponent(publicationTitle)}
+                &category=${encodeURIComponent(category)}
+                &publication=${encodeURIComponent(publication)}
+                &section=${encodeURIComponent(section)}
+                &authors=${encodeURIComponent(authors)}
+                &abstract=${encodeURIComponent(abstract)}
+                &files=${encodeURIComponent(files)}
+            `, { method: 'POST' });
         if(!response.ok) { alert('failed to add publication'); return; }
         location.reload(true);
     });
-</script>
-
-<script>
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
 
@@ -170,14 +175,12 @@
         min-width: 2.5rem;
         padding: 0.3rem 0.5rem;
     }
-
     @media (max-width: 480px) {
         .author-container .m3-button {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
         }
     }
-
     @media (max-width: 768px) {
         .category-list {
             grid-template-columns: 1fr !important;
