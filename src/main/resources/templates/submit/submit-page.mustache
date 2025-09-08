@@ -88,13 +88,14 @@
             <label for="abstract">Abstract</label>
             <textarea id="abstract" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;"></textarea>
         </div>
-        <label class="m3-button purple-button">Upload files
-            <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
-        </label>
+        <div style="display: flex; justify-content: space-between;">
+            <label class="m3-button purple-button">Upload files
+                <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
+            </label>
+            <button class="m3-button yellow-button">Submit</button>
+        </div>
         <br> <br>
         <div id="file-list" style="background-color:white;"></div>
-
-        <button class="m3-button yellow-button">Submit</button>
     </form>
 </div>
 <script>
