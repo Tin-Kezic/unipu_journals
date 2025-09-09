@@ -103,6 +103,7 @@ CREATE TABLE account_role_on_manuscript (
     UNIQUE (manuscript_id, account_id, account_role)
 );
 CREATE TYPE one_to_five AS ENUM ('1', '2', '3', '4', '5');
+CREATE TYPE review_question AS ENUM ('YES', 'CAN_BE_IMPROVED', 'MUST_BE_IMPROVED');
 CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
