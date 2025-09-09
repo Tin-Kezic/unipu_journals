@@ -12,6 +12,10 @@
 {{>util/header}}
 
 <div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
+    <div style="display: flex; justify-content: flex-end;">
+        <button class="m3-button red-button" id="view-profile" style="background-color: var(--gray); height: fit-content; text-wrap: nowrap; margin-top: 1rem;">View profile</button>
+    </div>
+
     <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
         <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
         <br>
@@ -58,7 +62,7 @@
             </div>
 
             {{#isAdmin}}
-                <div class="delete-container" style="display: flex; justify-content: flex-end;">
+                <div class="delete-container" id="delete-account-button" style="display: flex; justify-content: flex-end;">
                     <button class="m3-button red-button">Delete</button>
                 </div>
             {{/isAdmin}}
@@ -114,6 +118,65 @@
         {{/manuscripts}}
     </main>
 </div>
+
+<dialog id="delete-profile-dialog" closedby="any">
+    <p id="delete-profile-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button type="button" id="delete-profile-dialog-negative" class="m3-button outline-button">cancel</button>
+        <div style="display: flex; justify-content: flex-end">
+            <button id="delete-profile-dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
+        </div>
+    </div>
+</dialog>
+<script>
+    const deleteProfileDialog = document.getElementById('delete-profile-dialog');
+    const deleteProfileDialogMessage = document.getElementById('delete-profile-dialog-message');
+    document.getElementById('delete-account-button')
+        button.addEventListener('click', () => {
+            deleteProfileDialogMessage.innerHTML = `permanently delete <b>${profile.dataset.all}</b>`;
+            if(button.dataset.type == 'delete-button') {
+                deleteProfileDialogMessage.innerHTML = `permanently delete <b>${profile.dataset.all}</b>?`;
+            }
+            currentId = account.id;
+            currentType = button.dataset.type;
+            dialog.showModal();
+        });
+    });
+    document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => dialog.close());
+    document.getElementById('delete-profile-dialog-positive').addEventListener('click', async () => {
+        if(currentType == 'delete-button') {
+            const response = await fetch(`//profile/{{accountId}}/${currentId}/delete`, { method: 'DELETE' });
+            if(!response.ok) { alert('failed to permanently delete account'); return; }
+        }
+        document.querySelector(`div[id="${currentId}"]`).remove();
+        dialog.close();
+    });
+</script>
+
+<dialog id="view-profile-dialog" closedby="any">
+    <p>full name: {{fullName}}</p>
+        title: {{title}}
+        title: {{email}}
+        affiliation: {{affiliation}}
+        job type: {{jobType}}
+        country: {{country}}
+        city: {{city}}
+        address: {{address}}
+        zip code: {{zipCode}}
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">cancel</button>
+        <div style="display: flex; justify-content: flex-end">
+            <button id="view-profile-dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
+        </div>
+    </div>
+</dialog>
+<script>
+    const viewProfileDialog = document.getElementById('view-profile-dialog');
+    document.getElementById('view-profile').addEventListener('click', () => viewProfileDialog.showModal());
+    document.getElementById('dialog-negative').addEventListener('click', () => viewProfileDialog.close());
+</script>
 </body>
 </html>
 
