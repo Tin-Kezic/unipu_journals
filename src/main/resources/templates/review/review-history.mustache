@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Review History Page</title>
-
     <link rel="stylesheet" href="/util.css" />
 </head>
-
 <body>
 {{>util/header}}
 
@@ -186,13 +184,13 @@
                             <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
                                 <p style="flex: 1;">Is the research design appropriate?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="design-yes" name="design" value="yes" disabled {{#appropriateDesign1}}checked{{/appropriateDesign1}}>
+                                    <input type="radio" id="design-yes" name="design" value="yes" disabled {{#appropriateResearchDesign1}}checked{{/appropriateResearchDesign1}}>
                                     <label for="design-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="design-impr" name="design" value="improved" disabled {{#appropriateDesign2}}checked{{/appropriateDesign2}}>
+                                    <input type="radio" id="design-impr" name="design" value="improved" disabled {{#appropriateResearchDesign2}}checked{{/appropriateResearchDesign2}}>
                                     <label for="design-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="design-must" name="design" value="must" disabled {{#appropriateDesign3}}checked{{/appropriateDesign3}}>
+                                    <input type="radio" id="design-must" name="design" value="must" disabled {{#appropriateResearchDesign3}}checked{{/appropriateResearchDesign3}}>
                                     <label for="design-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
