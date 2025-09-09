@@ -102,6 +102,7 @@ CREATE TABLE account_role_on_manuscript (
     FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
     UNIQUE (manuscript_id, account_id, account_role)
 );
+CREATE TYPE one_to_five AS ENUM ('1', '2', '3', '4', '5');
 CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
