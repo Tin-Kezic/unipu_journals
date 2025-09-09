@@ -120,7 +120,7 @@
 </div>
 
 <dialog id="delete-profile-dialog" closedby="any">
-    <p id="delete-profile-dialog-message"></p>
+    <p id="delete-profile-dialog-message">delete account <b>{{fullName}}</b>?</p>
     <br>
     <div style="display: flex; justify-content: space-between">
         <button type="button" id="delete-profile-dialog-negative" class="m3-button outline-button">cancel</button>
@@ -131,26 +131,12 @@
 </dialog>
 <script>
     const deleteProfileDialog = document.getElementById('delete-profile-dialog');
-    const deleteProfileDialogMessage = document.getElementById('delete-profile-dialog-message');
-    document.getElementById('delete-account-button')
-        button.addEventListener('click', () => {
-            deleteProfileDialogMessage.innerHTML = `permanently delete <b>${profile.dataset.all}</b>`;
-            if(button.dataset.type == 'delete-button') {
-                deleteProfileDialogMessage.innerHTML = `permanently delete <b>${profile.dataset.all}</b>?`;
-            }
-            currentId = account.id;
-            currentType = button.dataset.type;
-            dialog.showModal();
-        });
-    });
+    document.getElementById('delete-account-button').addEventListener('click', () => dialog.showModal());
     document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => dialog.close());
     document.getElementById('delete-profile-dialog-positive').addEventListener('click', async () => {
-        if(currentType == 'delete-button') {
-            const response = await fetch(`//profile/{{accountId}}/${currentId}/delete`, { method: 'DELETE' });
-            if(!response.ok) { alert('failed to permanently delete account'); return; }
-        }
-        document.querySelector(`div[id="${currentId}"]`).remove();
-        dialog.close();
+        const response = await fetch(`/profile/{{accountId}}/delete`, { method: 'DELETE' });
+        if(!response.ok) { alert('failed to delete account'); return; }
+        window.location.href = '/';
     });
 </script>
 
