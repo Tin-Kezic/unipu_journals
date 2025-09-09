@@ -1,30 +1,3 @@
-CREATE TYPE manuscript_role AS ENUM (
-    'EIC',
-    'EDITOR',
-    'REVIEWER',
-    'CORRESPONDING_AUTHOR',
-    'AUTHOR'
-);
-CREATE TYPE manuscript_state AS ENUM (
-    'AWAITING_INITIAL_EIC_REVIEW',
-    'AWAITING_INITIAL_EDITOR_REVIEW',
-    'AWAITING_REVIEWER_REVIEW',
-    'MINOR_FIXES',
-    'MAJOR_FIXES',
-    'PUBLISHED',
-    'REJECTED',
-    'ARCHIVED',
-    'HIDDEN',
-    'DRAFT'
-);
-CREATE TYPE invitation_target AS ENUM (
-    'ADMIN',
-    'EIC_ON_PUBLICATION',
-    'EIC_ON_MANUSCRIPT',
-    'SECTION_EDITOR_ON_SECTION',
-    'EDITOR_ON_MANUSCRIPT',
-    'REVIEWER_ON_MANUSCRIPT'
-);
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
     full_name TEXT NOT NULL,
@@ -38,6 +11,14 @@ CREATE TABLE account (
     address TEXT NOT NULL,
     zip_code TEXT NOT NULL,
     is_admin BOOL NOT NULL DEFAULT FALSE
+);
+CREATE TYPE invitation_target AS ENUM (
+    'ADMIN',
+    'EIC_ON_PUBLICATION',
+    'EIC_ON_MANUSCRIPT',
+    'SECTION_EDITOR_ON_SECTION',
+    'EDITOR_ON_MANUSCRIPT',
+    'REVIEWER_ON_MANUSCRIPT'
 );
 CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
@@ -76,6 +57,18 @@ CREATE TABLE section_editor_on_section(
     FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE CASCADE,
     FOREIGN KEY (section_editor_id) REFERENCES account(id) ON DELETE CASCADE
 );
+CREATE TYPE manuscript_state AS ENUM (
+    'AWAITING_INITIAL_EIC_REVIEW',
+    'AWAITING_INITIAL_EDITOR_REVIEW',
+    'AWAITING_REVIEWER_REVIEW',
+    'MINOR_FIXES',
+    'MAJOR_FIXES',
+    'PUBLISHED',
+    'REJECTED',
+    'ARCHIVED',
+    'HIDDEN',
+    'DRAFT'
+);
 CREATE TABLE manuscript (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
@@ -92,6 +85,13 @@ CREATE TABLE manuscript (
     FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL,
     FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
+);
+CREATE TYPE manuscript_role AS ENUM (
+    'EIC',
+    'EDITOR',
+    'REVIEWER',
+    'CORRESPONDING_AUTHOR',
+    'AUTHOR'
 );
 CREATE TABLE account_role_on_manuscript (
     id SERIAL PRIMARY KEY,
