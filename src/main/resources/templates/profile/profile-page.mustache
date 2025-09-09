@@ -13,7 +13,7 @@
 
 <div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
     <div style="display: flex; justify-content: flex-end;">
-        <button class="m3-button red-button" data-type="view-profile-button" style="background-color: var(--gray); height: fit-content; text-wrap: nowrap; margin-top: 1rem;">View profile</button>
+        <button class="m3-button red-button" id="view-profile" style="background-color: var(--gray); height: fit-content; text-wrap: nowrap; margin-top: 1rem;">View profile</button>
     </div>
 
     <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
@@ -62,7 +62,7 @@
             </div>
 
             {{#isAdmin}}
-                <div class="delete-container" data-type=delete-button style="display: flex; justify-content: flex-end;">
+                <div class="delete-container" id="delete-account-button" style="display: flex; justify-content: flex-end;">
                     <button class="m3-button red-button">Delete</button>
                 </div>
             {{/isAdmin}}
@@ -132,9 +132,7 @@
 <script>
     const deleteProfileDialog = document.getElementById('delete-profile-dialog');
     const deleteProfileDialogMessage = document.getElementById('delete-profile-dialog-message');
-    let currentId = null;
-    let currentType = null;
-    document.querySelectorAll('button[data-type="delete-button"]).forEach(button => {
+    document.getElementById('delete-account-button')
         button.addEventListener('click', () => {
             deleteProfileDialogMessage.innerHTML = `permanently delete <b>${profile.dataset.all}</b>`;
             if(button.dataset.type == 'delete-button') {
@@ -157,7 +155,15 @@
 </script>
 
 <dialog id="view-profile-dialog" closedby="any">
-    <p id="view-profile-dialog-message"></p>
+    <p>full name: {{fullName}}</p>
+        title: {{title}}
+        title: {{email}}
+        affiliation: {{affiliation}}
+        job type: {{jobType}}
+        country: {{country}}
+        city: {{city}}
+        address: {{address}}
+        zip code: {{zipCode}}
     <br>
     <div style="display: flex; justify-content: space-between">
         <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">cancel</button>
@@ -168,18 +174,8 @@
 </dialog>
 <script>
     const viewProfileDialog = document.getElementById('view-profile-dialog');
-    const viewProfiledialogMessage = document.getElementById('view-profile-dialog-message');
-    document.getElementById('dialog-negative').addEventListener('click', () => dialog.close());
-    full name: Marko Markić
-    title: mr. sc.
-            title: something@unipu.hr
-    affiliation: University of Juraj Dobrila
-    job type: professor
-    country: Zimbabwe
-    city: Pula
-    address: StreetName 12
-    zip code: 10000
-    });
+    document.getElementById('view-profile').addEventListener('click', () => viewProfileDialog.showModal());
+    document.getElementById('dialog-negative').addEventListener('click', () => viewProfileDialog.close());
 </script>
 </body>
 </html>
