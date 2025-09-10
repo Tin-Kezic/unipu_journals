@@ -4,6 +4,7 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
+import org.springframework.transaction.annotation.Transactional
 
 private const val MANUSCRIPT = "manuscript"
 private const val ID = "id"
@@ -68,6 +69,7 @@ private const val EIC_ID = "eic_id"
 interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Modifying
+    @Transactional
     @Query("UPDATE $MANUSCRIPT SET $VIEWS = $VIEWS + 1 WHERE $ID = :$ID")
     fun incrementViews(@Param(ID) id: Int)
 
