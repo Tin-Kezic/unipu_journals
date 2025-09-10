@@ -142,22 +142,19 @@
     });
 </script>
 
-<dialog id="view-profile-dialog" closedby="any">
+<dialog id="view-profile-dialog" closedby="any" style="padding: 2rem">
     <p>full name: {{fullName}}</p>
-        title: {{title}}
-        title: {{email}}
-        affiliation: {{affiliation}}
-        job type: {{jobType}}
-        country: {{country}}
-        city: {{city}}
-        address: {{address}}
-        zip code: {{zipCode}}
+    <p>title: {{title}}</p>
+    <p>email: {{email}}</p>
+    <p>affiliation: {{affiliation}}</p>
+    <p>job type: {{jobType}}</p>
+    <p>country: {{country}}</p>
+    <p>city: {{city}}</p>
+    <p>address: {{address}}</p>
+    <p>zip code: {{zipCode}}</p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">cancel</button>
-        <div style="display: flex; justify-content: flex-end">
-            <button id="view-profile-dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
-        </div>
+        <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">close</button>
     </div>
 </dialog>
 <script>
