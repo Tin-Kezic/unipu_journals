@@ -66,6 +66,10 @@ private const val EIC_ON_PUBLICATION = "eic_on_publication"
 private const val EIC_ID = "eic_id"
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $VIEWS = $VIEWS + 1 WHERE $ID = :$ID")
+    fun incrementViews(@Param(ID) id: Int)
     @Modifying
     @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
     fun insert(
