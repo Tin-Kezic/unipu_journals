@@ -27,6 +27,7 @@ class ManuscriptDetailsPageController(
         @PathVariable manuscriptId: Int,
         model: Model
     ): String {
+        manuscriptRepository.incrementViews(manuscriptId)
         val manuscript = manuscriptRepository.byId(manuscriptId)
         model["id"] = manuscriptId
         model["title"] = manuscript.title
