@@ -21,6 +21,9 @@ private const val IS_ADMIN = "is_admin"
 
 interface AccountRepository: Repository<Account, Int> {
 
+    @Query("SELECT * FROM $ACCOUNT WHERE $ID = :$ID")
+    fun byId(@Param(ID) id: Int): Account
+
     @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL AND $IS_ADMIN = TRUE)")
     fun isAdmin(@Param(EMAIL) email: String): Boolean
 
