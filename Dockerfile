@@ -5,7 +5,7 @@ COPY gradle ./gradle
 RUN ./gradlew --no-daemon dependencies
 COPY src ./src
 RUN ./gradlew --no-daemon bootJar
-FROM eclipse-temurin:24-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
