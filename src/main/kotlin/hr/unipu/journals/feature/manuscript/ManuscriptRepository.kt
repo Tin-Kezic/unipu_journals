@@ -70,6 +70,11 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Modifying
     @Query("UPDATE $MANUSCRIPT SET $VIEWS = $VIEWS + 1 WHERE $ID = :$ID")
     fun incrementViews(@Param(ID) id: Int)
+
+    @Modifying
+    @Query("UPDATE $MANUSCRIPT SET $DOWNLOADS = $DOWNLOADS + 1 WHERE $ID = :$ID")
+    fun incrementDownloads(@Param(ID) id: Int)
+
     @Modifying
     @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
     fun insert(
