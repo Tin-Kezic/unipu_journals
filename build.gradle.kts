@@ -36,3 +36,7 @@ kotlin {
 tasks.test {
 	useJUnitPlatform()
 }
+tasks.jar {
+    archiveBaseName.set("unipu_journals")
+    archiveVersion.set("0.0.1")
+}
