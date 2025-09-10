@@ -1,11 +1,9 @@
-FROM gradle:8.10.2-jdk24 AS build
-WORKDIR /app
-COPY build.gradle.kts settings.gradle.kts ./
-COPY src ./src
-RUN gradle build --no-daemon
+FROM gradle:8.5-jdk17 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle bootJar --no-daemon
 
-FROM eclipse-temurin:24-jre-alpine
-WORKDIR /app
-COPY --from=build /app/build/libs/unipu_journals-0.0.1.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+FROM eclipse-temurin:17-jdk-alpine
+VOLUME /tmp
+COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
