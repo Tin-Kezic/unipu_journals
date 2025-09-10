@@ -27,6 +27,7 @@ class PendingReviewPageController(
             id = manuscript.id,
             title = manuscript.title,
             authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
+            fileUrl = manuscript.fileUrl,
             publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
             description = manuscript.description
         )
