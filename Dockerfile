@@ -1,20 +1,12 @@
 FROM gradle:8.5-jdk17 AS build
-
-WORKDIR /home/gradle/project
-
+WORKDIR /app
 COPY gradlew settings.gradle.kts build.gradle.kts ./
 COPY gradle ./gradle
-
-RUN ./gradlew dependencies --no-daemon || true
-
+RUN ./gradlew --no-daemon dependencies
 COPY src ./src
-
-RUN ./gradlew bootJar --no-daemon
-
+RUN ./gradlew --no-daemon bootJar
 FROM eclipse-temurin:24-jdk-alpine
-
 WORKDIR /app
-COPY --from=build /home/gradle/project/build/libs/*.jar app.jar
-
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
