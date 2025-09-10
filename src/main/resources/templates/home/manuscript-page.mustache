@@ -55,7 +55,7 @@
             {{/isEicOrSuperior}}
         </article>
         {{#manuscripts}}
-            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <article data-id="{{id}}" onclick="window.location.href='/publication/{{publicationId}}/section/{{sectionId}}/manuscript/{{id}}'" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
                 <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
