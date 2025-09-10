@@ -6,15 +6,9 @@
     <title>Edit Profile</title>
     <link href="/util.css" rel="stylesheet"/>
 </head>
-
-<body style="align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        justify-content: center;">
+<body>
 {{>util/header}}
-<main style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
-    <section>
+<main style="width: 100%; display: flex; flex-direction: column; align-items: center; align-items: center; display: flex; flex-direction: column; height: 100vh; justify-content: center;"> <section>
         {{#account}}
             <form style="width: 100%;" method="post" action="/profile/{{id}}/edit">
                 <div class="text-field">
