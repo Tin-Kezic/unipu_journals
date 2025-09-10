@@ -31,16 +31,31 @@ private const val HIDDEN = "'HIDDEN'"
 private const val DRAFT = "'DRAFT'"
 private const val ARCHIVED = "'ARCHIVED'"
 
+// account-role-on-manuscript
+private const val ACCOUNT_ROLE_ON_MANUSCRIPT = "account_role_on_manuscript"
+private const val MANUSCRIPT_ID = "manuscript_id"
+private const val ACCOUNT_ID = "account_id"
+private const val ACCOUNT_ROLE = "account_role"
+
 // eic-on-publication
 private const val EIC_ON_PUBLICATION = "eic_on_publication"
 private const val EIC_ID = "eic_id"
+
+// manuscript-role
+private const val EIC = "'EIC'"
+private const val EDITOR =  "'EDITOR'"
+private const val REVIEWER = "'REVIEWER'"
+private const val CORRESPONDING_AUTHOR = "'CORRESPONDING_AUTHOR'"
+private const val AUTHOR = "'AUTHOR'"
 
 interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("""
         SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION
-        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
-        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$EIC_ID
+        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON :$EIC_ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID
+        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $EIC
+        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $EDITOR
+        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $REVIEWER
         """)
     fun allUnderReviewWithAffiliation(@Param(EIC_ID) eicId: Int): List<Publication>
 
