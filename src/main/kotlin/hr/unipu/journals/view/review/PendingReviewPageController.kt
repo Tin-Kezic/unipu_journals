@@ -42,7 +42,7 @@ class PendingReviewPageController(
     }
     @GetMapping("review/from-publication/{publicationId}")
     fun underPublication(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliationByPublicationId(authorizationService.account!!.id, publicationId)
+        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(authorizationService.account!!.id)
         model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(authorizationService.account!!.email, publicationId).toManuscriptDTO()
         model["pending"] = manuscriptRepository.pendingByPublication(authorizationService.account!!.id, publicationId).toManuscriptDTO()
         return "review/pending-review-page"

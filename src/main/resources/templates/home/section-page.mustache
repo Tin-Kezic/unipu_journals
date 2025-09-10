@@ -14,12 +14,14 @@
         <h1 style="font-size: 1.5rem; font-weight: 400;">
             {{currentPublication}}
         </h1>
-        {{#isEicOrSuperior}}
             <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.5rem;">
+                {{#isEicOrSuperior}}
                 <button id="add-section" class="m3-button purple-button" style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add section</button>
+                {{/isEicOrSuperior}}
+                {{#isAdmin}}
                 <a href="/publication/{{publicationId}}/manage-eic-on-publication" class="yellow-button" style="padding: 0.7rem 2rem; font-size: 1rem; border-radius: 0.5rem; border: none; text-decoration: none;">Manage EiCs</a>
+                {{/isAdmin}}
             </div>
-        {{/isEicOrSuperior}}
     </div>
 
     <div style="display: flex; align-items: flex-start;">

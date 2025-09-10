@@ -12,6 +12,7 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import java.time.format.DateTimeFormatter
 
 @Controller
@@ -23,7 +24,11 @@ class ProfilePageController(
 ) {
     @GetMapping("/profile/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
-    fun page(@PathVariable accountId: Int, model: Model): String {
+    fun page(
+        @PathVariable accountId: Int,
+        //@RequestParam fragment,
+        model: Model
+    ): String {
         val profile = accountRepository.byId(authorizationService.account!!.id)
         model["fullName"] = profile.fullName
         model["title"] = profile.title
