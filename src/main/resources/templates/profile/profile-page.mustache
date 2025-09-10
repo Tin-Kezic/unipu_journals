@@ -108,8 +108,10 @@
                             <p style="margin-top: 0.2rem;">{{description}}</p>
                         </div>
                         <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
-                            <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
-                            <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                            {{#isAdmin}}
+                                <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                            {{/isAdmin}}
                         </footer>
                     </div>
                 </article>
