@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.profile
 
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptState
@@ -17,16 +18,26 @@ import java.time.format.DateTimeFormatter
 class ProfilePageController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
+    private val accountRepository: AccountRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 ) {
     @GetMapping("/profile/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int, model: Model): String {
-        model["fullName"] = authorizationService.account?.fullName ?: "no name"
+        val profile = accountRepository.byId(authorizationService.account!!.id)
+        model["fullName"] = profile.fullName
+        model["title"] = profile.title
+        model["email"] = profile.email
+        model["affiliation"] = profile.affiliation
+        model["jobType"] = profile.jobType
+        model["country"] = profile.country
+        model["city"] = profile.city
+        model["address"] = profile.address
+        model["zipCode"] = profile.zipCode
         model["isAdmin"] = authorizationService.isAdmin()
         val manuscripts = manuscriptRepository.allByAuthor(accountId)
         model["minor-major"] = manuscripts
-            .filter { manuscript -> manuscript.state == ManuscriptState.MINOR_FIXES || manuscript.state == ManuscriptState.MAJOR_FIXES }
+            .filter { manuscript -> manuscript.state == ManuscriptState.MINOR || manuscript.state == ManuscriptState.MAJOR }
             .map { manuscript ->
                 ProfileManuscriptDTO(
                     id = manuscript.id,
