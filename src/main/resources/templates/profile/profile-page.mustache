@@ -4,18 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{fullName}}</title>
-
     <link rel="stylesheet" href="/util.css" />
 </head>
-
 <body>
 {{>util/header}}
-
 <div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
     <div style="display: flex; justify-content: flex-end;">
         <button class="m3-button red-button" id="view-profile" style="background-color: var(--gray); height: fit-content; text-wrap: nowrap; margin-top: 1rem;">View profile</button>
     </div>
-
     <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
         <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
         <br>
@@ -36,7 +32,6 @@
                     <p>Downloads</p>
                 </div>
             </div>
-
             <div class="dropdown filter" style="width: 11rem; text-align: center;">
                 <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
                     <span>Filter</span>
@@ -52,7 +47,6 @@
             </div>
         </div>
     </aside>
-
     <main>
         <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
             <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem; user-select: none;">
@@ -60,14 +54,12 @@
                 <p style="font-size: 2rem; font-weight: lighter;">|</p>
                 <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
             </div>
-
             {{#isAdmin}}
                 <div class="delete-container" id="delete-account-button" style="display: flex; justify-content: flex-end;">
                     <button class="m3-button red-button">Delete</button>
                 </div>
             {{/isAdmin}}
         </div>
-
         {{#minor-major}}
             <div class="manuscript-container-yellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
                 <article>
@@ -82,7 +74,6 @@
                             <p style="margin-block: 0.5rem;">{{publicationDate}}</p>
                             <p style="margin-top: 0.2rem;">{{description}}</p>
                         </div>
-
                         <div style="display: flex; flex-direction: column; gap: 0.3rem; justify-content: flex-end; margin-left: 0.3rem; margin-top: 1.5rem;">
                             <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
                             <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
@@ -92,7 +83,6 @@
             </div>
             <br>
         {{/minor-major}}
-
         {{#manuscripts}}
             <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
                 <article>
@@ -120,7 +110,6 @@
         {{/manuscripts}}
     </main>
 </div>
-
 <dialog id="delete-profile-dialog" closedby="any">
     <p id="delete-profile-dialog-message">delete account <b>{{fullName}}</b>?</p>
     <br>
@@ -132,6 +121,7 @@
     </div>
 </dialog>
 <script>
+    <!--
     const deleteProfileDialog = document.getElementById('delete-profile-dialog');
     document.getElementById('delete-account-button').addEventListener('click', () => dialog.showModal());
     document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => dialog.close());
@@ -140,8 +130,8 @@
         if(!response.ok) { alert('failed to delete account'); return; }
         window.location.href = '/';
     });
+    -->
 </script>
-
 <dialog id="view-profile-dialog" closedby="any" style="padding: 2rem">
     <p>full name: {{fullName}}</p>
     <p>title: {{title}}</p>
@@ -160,11 +150,10 @@
 <script>
     const viewProfileDialog = document.getElementById('view-profile-dialog');
     document.getElementById('view-profile').addEventListener('click', () => viewProfileDialog.showModal());
-    document.getElementById('dialog-negative').addEventListener('click', () => viewProfileDialog.close());
+    document.getElementById('view-profile-dialog-negative').addEventListener('click', () => viewProfileDialog.close());
 </script>
 </body>
 </html>
-
 <style>
     .manuscript-button:active {
         text-decoration: underline;
