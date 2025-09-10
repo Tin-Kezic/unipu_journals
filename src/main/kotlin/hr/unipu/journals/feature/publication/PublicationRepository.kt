@@ -23,8 +23,8 @@ private const val CURRENT_STATE = "current_state"
 private const val AWAITING_INITIAL_EIC_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW'"
 private const val AWAITING_INITIAL_EDITOR_REVIEW = "'AWAITING_INITIAL_EDITOR_REVIEW'"
 private const val AWAITING_REVIEWER_REVIEW = "'AWAITING_REVIEWER_REVIEW'"
-private const val MINOR_FIXES = "'MINOR_FIXES'"
-private const val MAJOR_FIXES = "'MAJOR_FIXES'"
+private const val MINOR = "'MINOR'"
+private const val MAJOR = "'MAJOR'"
 private const val REJECTED = "'REJECTED'"
 private const val PUBLISHED = "'PUBLISHED'"
 private const val HIDDEN = "'HIDDEN'"
@@ -107,8 +107,8 @@ interface PublicationRepository: Repository<Publication, Int> {
         AND $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EIC_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EDITOR_REVIEW
         OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR_FIXES
-        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR_FIXES
+        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR
+        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR
         ORDER BY $PUBLICATION.$ID DESC
     """)
     fun allUnderReview(): List<Publication>
