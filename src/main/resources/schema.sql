@@ -133,6 +133,7 @@ CREATE TABLE manuscript_review (
     reviewer_comment_file_url TEXT,
     author_response TEXT,
     author_response_file_url TEXT,
+    recommendation review_recommendation NOT NULL,
     review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     author_response_date TIMESTAMP NOT NULL,
     FOREIGN KEY (reviewer_id) REFERENCES account(id) ON DELETE SET NULL,
