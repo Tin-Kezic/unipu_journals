@@ -59,6 +59,9 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT $INVITE.$EMAIL FROM $INVITE WHERE $INVITE.$TARGET = $EIC_ON_PUBLICATION AND $INVITE.$TARGET_ID = :$ID")
     fun eicOnPublicationEmailsByPublicationId(@Param(ID) publicationId: Int): List<String>
 
+    @Query("SELECT $INVITE.$EMAIL FROM $INVITE WHERE $INVITE.$TARGET = $SECTION_EDITOR_ON_SECTION AND $INVITE.$TARGET_ID = :$ID")
+    fun sectionEditorOnSectionEmailsBySectionId(@Param(ID) sectionId: Int): List<String>
+
     @Query("""
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
