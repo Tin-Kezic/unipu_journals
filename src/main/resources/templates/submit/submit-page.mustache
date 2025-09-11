@@ -33,8 +33,23 @@
 
             <select name="section" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-gray); border-radius: 0.3rem;">
                 <option value="section">Section</option>
-                {{#sections}}<option value="{{.}}">{{.}}</option>{{/sections}}
             </select>
+            <script>
+                const publicationSelect = document.querySelector('select[name="publication"]')
+                const sectionSelect = document.querySelector('select[name="section"]')
+                publicationSelect.addEventListener('change', async (event) => {
+                    const response = await fetch(`/api/publication/${publicationSelect.value}/section-titles`, { method: 'GET' });
+                    if(!response.ok) { alert('failed to fetch sections'); return; };
+                    sectionSelect.innerHTML = '';
+                    const sectionTitles = await response.json()
+                    sectionTitles.forEach(sectionTitle => {
+                        newOption = document.createElement('option');
+                        newOption.value = sectionTitle;
+                        newOption.innerHTML = sectionTitle;
+                        sectionSelect.appendChild(newOption);
+                    });
+                });
+            </script>
         </div>
 
         <br><br>
@@ -103,7 +118,7 @@
                     accept=".doc,.docx,.odt,.pdf,.zip,.7z"
                     style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
             </label>
-            <button onclick="window.location.href='/'" class="m3-button yellow-button">Submit</button>
+            <button class="m3-button yellow-button">Submit</button>
         </div>
         <br> <br>
         <div id="file-list"></div>
@@ -117,21 +132,19 @@
         const category = document.querySelector('select[name="category"]').value;
         const publication = document.querySelector('select[name="publication"]').value;
         const section = document.querySelector('select[name="section"]').value;
-        const authors = 1 //todo. implement
+        const authors = 'author_1' //todo. implement
         const abstract = document.getElementById('abstract').value;
         const files = document.querySelector('input[type="file"]').files;
         const response = await fetch(`
-            /api/manuscript/insert
-                ?title=${encodeURIComponent(publicationTitle)}
+            /api/publication/${publication}/section/${section}/insert
+                ?title=${encodeURIComponent(title)}
                 &category=${encodeURIComponent(category)}
-                &publication=${encodeURIComponent(publication)}
-                &section=${encodeURIComponent(section)}
                 &authors=${encodeURIComponent(authors)}
                 &abstract=${encodeURIComponent(abstract)}
                 &files=${encodeURIComponent(files)}
             `, { method: 'POST' });
         if(!response.ok) { alert('failed to add publication'); return; }
-        location.reload(true);
+        window.location.href = '/';
     });
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
