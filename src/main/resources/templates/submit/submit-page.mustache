@@ -72,40 +72,46 @@
                 <label>affiliation/institution</label>
                 <input name="affiliation" type="text" required>
             </div>
+            <button id="add-author" type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
+            <script>
+                document.getElementById('add-author').addEventListener('click', () => {
+                    newAuthorContainer = document.createElement('div');
+                    newAuthorContainer.className = 'author-container';
+                    newAuthorContainer.innerHTML = `
+                        <div class="text-field">
+                            <label>full name</label>
+                            <input name="full-name" type="text" required>
+                        </div>
+                        <div class="text-field">
+                            <label>institutional email</label>
+                            <input name="institutional-email" type="email" required>
+                        </div>
+                        <div class="text-field">
+                            <label>country</label>
+                            <input name="country" type="text" required>
+                        </div>
+                        <div class="text-field">
+                            <label>affiliation/institution</label>
+                            <input name="affiliation" type="text" required>
+                        </div>
 
-            <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
+                        <button onclick="this.parentNode.remove()" type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
 
+                        <label class="pale-yellow-checkbox-button">
+                            <input type="radio" name="corresponding-author" value="corresponding-author">
+                            <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+                        </label>
+                    `;
+                    document.getElementById('additional-authors').appendChild(newAuthorContainer);
+                });
+            </script>
             <label class="pale-yellow-checkbox-button">
                 <input type="radio" name="corresponding-author" value="corresponding-author">
                 <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
             </label>
         </div>
 
-        <div class="author-container">
-            <div class="text-field">
-                <label>full name</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>institutional email</label>
-                <input type="email" required>
-            </div>
-            <div class="text-field">
-                <label>country</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>affiliation/institution</label>
-                <input type="text" required>
-            </div>
-
-            <button type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
-
-            <label class="pale-yellow-checkbox-button">
-                <input type="radio" name="corresponding-author" value="corresponding-author">
-                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
-            </label>
-        </div>
+        <div id="additional-authors"></div>
 
         <div class="text-field">
             <label for="abstract">Abstract</label>
@@ -124,7 +130,6 @@
         <div id="file-list"></div>
     </form>
 </div>
-
 <script>
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
