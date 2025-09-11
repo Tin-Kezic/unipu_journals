@@ -140,16 +140,16 @@
 
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
+        const category = document.querySelector('select[name="category"]').value;
+        if(category == 'category') { alert('select a category'); return; }
+
         const publication = document.querySelector('select[name="publication"]').value;
         if(publication == 'publication') { alert('select a publication'); return; }
+
         const section = document.querySelector('select[name="section"]').value;
         if(section == '') { alert("publication doesn't contain any sections"); return; }
 
         const title = document.querySelector('input[name="title"]').value;
-        console.log(title)
-        const category = document.querySelector('select[name="category"]').value;
-        console.log(category)
-        if(category == '') { alert('select a category'); return; }
 
         // authors
         const fullNames = document.querySelectorAll('input[name="full-name"]');
@@ -163,25 +163,29 @@
             institutionalEmail: institutionalEmails[index].value,
             country: countries[index].value,
             affiliation: affiliations[index].value,
-            isCorrespondingAuthor: isCorrespondingAuthorList[index].value
+            isCorrespondingAuthor: isCorrespondingAuthorList[index].checked
         }));
-        console.log(authors)
 
         let noCorrespondingAuthor = true
-        authors.forEach(author => { if(author.isCorrespondingAuthor) noCorrespondingAuthor = false })
+        authors.forEach(author => { if(author.isCorrespondingAuthor) { noCorrespondingAuthor = false }})
         if(noCorrespondingAuthor) { alert('select corresponding author'); return; }
 
         const abstract = document.getElementById('abstract').value;
         const files = document.querySelector('input[type="file"]').files;
+        Array.from(files).forEach(file => {
+            console.log(`FILES: ${file.name}`)
+        })
+        /*
         const response = await fetch(`
             /api/publication/${publication}/section/${section}/insert
                 ?title=${encodeURIComponent(title)}
                 &category=${encodeURIComponent(category)}
                 &authors=${encodeURIComponent(authors)}
                 &abstract=${encodeURIComponent(abstract)}
-                &files=${encodeURIComponent(files)}
-            `, { method: 'POST' });
+                &files=files
+            `, { method: 'POST' }); //&files=${encodeURIComponent(Array.from(files))}
         if(!response.ok) { alert('failed to submit manuscript'); return; }
+        */
         window.location.href = '/';
     });
     const fileInput = document.querySelector('input[type="file"]');
