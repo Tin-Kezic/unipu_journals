@@ -4,6 +4,8 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 private const val PUBLICATION_SECTION = "publication_section"
 private const val ID = "id"
@@ -21,10 +23,23 @@ private const val CURRENT_STATE = "current_state"
 private const val ARCHIVED = "'ARCHIVED'"
 private const val HIDDEN = "'HIDDEN'"
 
+// publication
+private const val PUBLICATION = "publication"
+//private const val ID = "id"
+//private const val TITLE = "title"
+//private const val IS_HIDDEN = "is_hidden"
+
 interface SectionRepository: Repository<Section, Int> {
 
     @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
     fun title(@Param(ID) sectionId: Int): String
+
+    @Query("""
+        SELECT $PUBLICATION_SECTION.$TITLE FROM $PUBLICATION_SECTION
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        WHERE $PUBLICATION.$TITLE = :$TITLE
+        """)
+    fun titleByPublicationTitle(@Param(TITLE) publicationTitle: String): List<String>
 
     @Query("SELECT $DESCRIPTION from $PUBLICATION_SECTION WHERE $ID = :$ID")
     fun description(@Param(ID) sectionId: Int): String
