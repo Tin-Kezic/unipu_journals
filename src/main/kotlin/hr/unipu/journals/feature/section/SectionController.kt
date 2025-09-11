@@ -3,7 +3,7 @@ package hr.unipu.journals.feature.section
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/publication")
 class SectionController(private val sectionRepository: SectionRepository) {
 
+    @GetMapping("/{publicationTitle}/section-titles")
+    fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
+        return sectionRepository.titleByPublicationTitle(publicationTitle)
+    }
     @PostMapping("/{publicationId}/section/insert")
     fun insert(
         @PathVariable publicationId: Int,
