@@ -30,7 +30,6 @@ class SectionEditorOnSectionController(
             targetId = sectionId
         )
     }
-
     @PutMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
     fun revoke(
         @PathVariable sectionId: Int,
