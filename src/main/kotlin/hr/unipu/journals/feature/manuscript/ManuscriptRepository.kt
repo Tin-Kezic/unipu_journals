@@ -77,6 +77,15 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("UPDATE $MANUSCRIPT SET $DOWNLOADS = $DOWNLOADS + 1 WHERE $ID = :$ID")
     fun incrementDownloads(@Param(ID) id: Int)
 
+    //todo. fix
+    @Query("""
+        SELECT $PUBLICATION.$ID AS publicationId, $PUBLICATION_SECTION.$ID AS sectionId FROM $MANUSCRIPT
+        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        WHERE $MANUSCRIPT.$ID = :$ID
+        """)
+    fun publicationAndSection(@Param(ID) manuscriptId: Int): Pair<Int, Int>
+
     @Modifying
     @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
     fun insert(
