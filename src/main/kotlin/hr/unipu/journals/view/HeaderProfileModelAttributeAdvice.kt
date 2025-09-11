@@ -7,7 +7,7 @@ import hr.unipu.journals.view.archive.ArchiveSectionPageController
 import hr.unipu.journals.view.hidden.HiddenManuscriptPageController
 import hr.unipu.journals.view.hidden.HiddenPublicationPageController
 import hr.unipu.journals.view.hidden.HiddenSectionPageController
-import hr.unipu.journals.view.home.ManuscriptDetailsPageController
+import hr.unipu.journals.view.home.manuscript.ManuscriptDetailsPageController
 import hr.unipu.journals.view.home.manuscript.ManuscriptPageController
 import hr.unipu.journals.view.home.section.SectionPageController
 import hr.unipu.journals.view.home.publication.PublicationPageController
