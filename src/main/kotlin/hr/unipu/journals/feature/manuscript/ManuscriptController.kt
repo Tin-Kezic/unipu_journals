@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/publication")
-class ManuscriptController(private val repository: ManuscriptRepository) {
+class ManuscriptController(private val publicationRepository: ManuscriptRepository) {
     @PostMapping("{publicationId}/section/{sectionId}/insert")
     fun insert(
         @PathVariable sectionId: Int,
         @RequestParam manuscript: InsertManuscriptDTO
     ): ResponseEntity<String> {
-        repository.insert(
+        publicationRepository.insert(
             title = Jsoup.clean(manuscript.title, Safelist.none()),
             authorId = manuscript.authorId,
             categoryId = manuscript.categoryId,
@@ -37,9 +37,9 @@ class ManuscriptController(private val repository: ManuscriptRepository) {
         @PathVariable manuscriptId: Int,
         @RequestParam isHidden: Boolean
     ): ResponseEntity<String> {
-        return if(repository.exists(manuscriptId)) {
-            if(isHidden) repository.hide(manuscriptId)
-            else repository.publish(manuscriptId)
+        return if(publicationRepository.exists(manuscriptId)) {
+            if(isHidden) publicationRepository.hide(manuscriptId)
+            else publicationRepository.publish(manuscriptId)
             return ResponseEntity.ok("manuscript isHidden successfully updated")
         } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
     }
@@ -51,9 +51,9 @@ class ManuscriptController(private val repository: ManuscriptRepository) {
         @PathVariable manuscriptId: Int,
         @RequestParam isArchived: Boolean
     ): ResponseEntity<String> {
-        return if(repository.exists(manuscriptId)) {
-            if(isArchived) repository.archive(manuscriptId)
-            else repository.publish(manuscriptId)
+        return if(publicationRepository.exists(manuscriptId)) {
+            if(isArchived) publicationRepository.archive(manuscriptId)
+            else publicationRepository.publish(manuscriptId)
             return ResponseEntity.ok("manuscript isArchived successfully updated")
         } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
     }
