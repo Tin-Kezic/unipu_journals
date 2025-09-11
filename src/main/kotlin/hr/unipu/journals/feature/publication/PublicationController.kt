@@ -1,6 +1,7 @@
 package hr.unipu.journals.feature.publication
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
@@ -26,7 +27,7 @@ class PublicationController(private val publicationRepository: PublicationReposi
         } else ResponseEntity.badRequest().body("title must not be empty")
     }
     @PutMapping("/{publicationId}/update-title")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
         return if(publicationRepository.exists(publicationId)) {
             publicationRepository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
