@@ -68,7 +68,7 @@
     });
     function dialogOpen(email) {
         document.getElementById('dialog-message').innerHTML = `Revoke EiC privileges for <b>${email}</b>`;
-        currentEmail = email
+        currentEmail = email;
         dialog.showModal();
     }
     document.querySelectorAll('.remove-user-button').forEach(button => {
