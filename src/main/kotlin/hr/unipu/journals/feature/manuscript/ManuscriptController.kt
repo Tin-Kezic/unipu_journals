@@ -18,15 +18,23 @@ class ManuscriptController(private val publicationRepository: ManuscriptReposito
     @PostMapping("{publicationId}/section/{sectionId}/insert")
     fun insert(
         @PathVariable sectionId: Int,
-        @RequestParam manuscript: InsertManuscriptDTO
+        @RequestParam title: String,
+        @RequestParam category: String,
+        @RequestParam authors: String,
+        @RequestParam abstract: String,
+        @RequestParam files: String,
+
     ): ResponseEntity<String> {
+        /*
         publicationRepository.insert(
             title = Jsoup.clean(manuscript.title, Safelist.none()),
-            authorId = manuscript.authorId,
+            authorId = listOf(authors),
             categoryId = manuscript.categoryId,
             sectionId = sectionId,
+            abstract = manuscript.abstract
             fileUrl = Jsoup.clean(manuscript.fileUrl, Safelist.none())
         )
+         */
         return ResponseEntity.ok("manuscript successfully added")
     }
     @PutMapping("/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}/update-hidden")
