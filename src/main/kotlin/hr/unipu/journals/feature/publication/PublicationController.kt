@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/publication")
 class PublicationController(private val publicationRepository: PublicationRepository) {
-
     @PostMapping("/insert")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun insert(@RequestParam title: String): ResponseEntity<String> {
