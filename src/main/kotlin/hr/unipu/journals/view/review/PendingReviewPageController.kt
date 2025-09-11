@@ -12,6 +12,7 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RestController
 import java.time.format.DateTimeFormatter
 
 @Controller
@@ -46,5 +47,13 @@ class PendingReviewPageController(
         model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(authorizationService.account!!.email, publicationId).toManuscriptDTO()
         model["pending"] = manuscriptRepository.pendingByPublication(authorizationService.account!!.id, publicationId).toManuscriptDTO()
         return "review/pending-review-page"
+    }
+}
+@RestController
+class PublicationAndSectionByManuscriptId(private val manuscriptRepository: ManuscriptRepository) {
+    @GetMapping("api/publication-and-section/{manuscriptId}")
+    fun publicationAndSection(@PathVariable manuscriptId: Int): Pair<Int, Int> {
+        println(manuscriptRepository.publicationAndSection(manuscriptId))
+        return manuscriptRepository.publicationAndSection(manuscriptId)
     }
 }

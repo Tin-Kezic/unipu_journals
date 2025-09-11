@@ -36,11 +36,10 @@
         overflow: hidden;
         margin-top: -2.7rem;
     ">
-
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
         {{#invited}}
-            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <article onclick="navigateToManuscriptDetailsPage({{id}})" data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
                 <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
@@ -53,9 +52,14 @@
                 </footer>
             </article>
         {{/invited}}
-
+        <script>
+            async function navigateToManuscriptDetailsPage(id) {
+                const response = await fetch(`/api/publication-and-section/${id}`, { method: 'GET' });
+                if(!response.ok) { alert('failed to navigate'); return; }
+                window.location.href = `/publication/${response.first}/section/${response.second}/manuscript/${id}`;
+            }
+        </script>
         <br>
-
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
         {{#pending}}
