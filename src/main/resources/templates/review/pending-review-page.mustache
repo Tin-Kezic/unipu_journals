@@ -16,6 +16,11 @@
 
 <div class="layout" style="display: flex; align-items: flex-start;">
     <aside style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+        <a data-type="sidebar-button" data-id="0" href="/review" style="text-decoration: none; color: inherit;">
+            <label class="sidebar-button">
+                <span class="sidebar-button-title">All publications</span>
+            </label>
+        </a>
         {{#publicationsSidebar}}
             <a data-type="sidebar-button" data-id="{{id}}" href="/review/from-publication/{{id}}" style="text-decoration: none; color: inherit;">
                 <label class="sidebar-button">
