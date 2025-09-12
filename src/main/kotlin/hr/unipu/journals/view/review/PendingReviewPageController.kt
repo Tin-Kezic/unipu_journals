@@ -4,6 +4,7 @@ import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscr
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.Manuscript
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.PublicationAndSectionDTO
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
@@ -52,7 +53,7 @@ class PendingReviewPageController(
 @RestController
 class PublicationAndSectionByManuscriptId(private val manuscriptRepository: ManuscriptRepository) {
     @GetMapping("api/publication-and-section/{manuscriptId}")
-    fun publicationAndSection(@PathVariable manuscriptId: Int): Pair<Int, Int> {
+    fun publicationAndSection(@PathVariable manuscriptId: Int): PublicationAndSectionDTO {
         println(manuscriptRepository.publicationAndSection(manuscriptId))
         return manuscriptRepository.publicationAndSection(manuscriptId)
     }

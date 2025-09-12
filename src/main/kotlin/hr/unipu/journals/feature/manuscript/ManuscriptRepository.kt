@@ -79,12 +79,12 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     //todo. fix
     @Query("""
-        SELECT $PUBLICATION.$ID AS publicationId, $PUBLICATION_SECTION.$ID AS sectionId FROM $MANUSCRIPT
+        SELECT $PUBLICATION.$ID AS $PUBLICATION_ID, $PUBLICATION_SECTION.$ID AS $SECTION_ID FROM $MANUSCRIPT
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
         WHERE $MANUSCRIPT.$ID = :$ID
         """)
-    fun publicationAndSection(@Param(ID) manuscriptId: Int): Pair<Int, Int>
+    fun publicationAndSection(@Param(ID) manuscriptId: Int): PublicationAndSectionDTO
 
     @Modifying
     @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
@@ -107,7 +107,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
     """)
-    fun pending(@Param("id") id: Int): List<Manuscript>
+    fun pending(@Param(ID) id: Int): List<Manuscript>
 
     @Query("""
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT

@@ -53,7 +53,7 @@
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
 
                 <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
-                    <a href="#" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black; font-weight: normal; text-decoration: none;">Accept</a>
+                    <a href="#" onclick="event.stopPropagation()" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black; font-weight: normal; text-decoration: none;">Accept</a>
                 </footer>
             </article>
         {{/invited}}
@@ -61,14 +61,15 @@
             async function navigateToManuscriptDetailsPage(id) {
                 const response = await fetch(`/api/publication-and-section/${id}`, { method: 'GET' });
                 if(!response.ok) { alert('failed to navigate'); return; }
-                window.location.href = `/publication/${response.first}/section/${response.second}/manuscript/${id}`;
+                const publicationAndSection = await response.json()
+                window.location.href = `/publication/${publicationAndSection.publicationId}/section/${publicationAndSection.sectionId}/manuscript/${id}`;
             }
         </script>
         <br>
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
         {{#pending}}
-            <article data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
+            <article onclick="navigateToManuscriptDetailsPage({{id}})" data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
                 <p class="yellow-box-text">{{title}}</p>
 
                 <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
@@ -77,7 +78,7 @@
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
 
                 <footer class="yellow-box-buttons" style="margin-left: 1rem;  ">
-                    <a href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; font-weight: normal; text-decoration: none;">Review</a>
+                    <a onclick="event.stopPropagation()" href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; font-weight: normal; text-decoration: none;">Review</a>
                 </footer>
             </article>
         {{/pending}}
