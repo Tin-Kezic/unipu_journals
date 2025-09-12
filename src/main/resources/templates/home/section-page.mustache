@@ -130,7 +130,7 @@
             updateSectionTitleDialog.showModal();
         });
     });
-    document.getElementById('update-section-title-dialog-negative').addEventListener('click', () => updatePublicationTitleDialog.close());
+    document.getElementById('update-section-title-dialog-negative').addEventListener('click', () => updateSectionTitleDialog.close());
     document.getElementById('update-section-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const newSectionTitle = document.querySelector('input[name="update-section-title-dialog-input"]').value;
