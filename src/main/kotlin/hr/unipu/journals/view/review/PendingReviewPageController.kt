@@ -36,17 +36,21 @@ class PendingReviewPageController(
     }
     @GetMapping("/review")
     fun all(model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(authorizationService.account!!.id)
-        model["invited"] = inviteRepository.eicOnManuscript(authorizationService.account!!.email).toManuscriptDTO()
-        model["pending"] = manuscriptRepository.pending(authorizationService.account!!.id).toManuscriptDTO()
+        authorizationService.account?.let { account ->
+            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id)
+            model["invited"] = inviteRepository.eicOnManuscript(account.email).toManuscriptDTO()
+            model["pending"] = manuscriptRepository.pending(account.id).toManuscriptDTO()
+        } ?: throw IllegalStateException("account is null")
         model["publicationId"] = 0
         return "review/pending-review-page"
     }
     @GetMapping("review/from-publication/{publicationId}")
     fun underPublication(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(authorizationService.account!!.id)
-        model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(authorizationService.account!!.email, publicationId).toManuscriptDTO()
-        model["pending"] = manuscriptRepository.pendingByPublication(authorizationService.account!!.id, publicationId).toManuscriptDTO()
+        authorizationService.account?.let { account ->
+            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id)
+            model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(account.email, publicationId).toManuscriptDTO()
+            model["pending"] = manuscriptRepository.pendingByPublication(account.id, publicationId).toManuscriptDTO()
+        } ?: throw IllegalStateException("account is null")
         return "review/pending-review-page"
     }
 }
