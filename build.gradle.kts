@@ -40,6 +40,7 @@ kotlin {
 }
 tasks.test {
 	useJUnitPlatform()
+    jvmArgs("-Xshare:off")
 }
 tasks.jar {
     archiveBaseName.set("unipu_journals")
