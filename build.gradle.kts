@@ -12,6 +12,7 @@ java {
 		languageVersion = JavaLanguageVersion.of(24)
 	}
 }
+val byteBuddyAgent: Configuration by configurations.creating
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
@@ -32,6 +33,7 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
     testImplementation("io.mockk:mockk:1.13.13")
+    byteBuddyAgent("net.bytebuddy:byte-buddy-agent:1.17.6")
 }
 kotlin {
 	compilerOptions {
@@ -40,5 +42,5 @@ kotlin {
 }
 tasks.test {
 	useJUnitPlatform()
-    jvmArgs("-Xshare:off")
+    jvmArgs("-Xshare:off", "-javaagent:${byteBuddyAgent.singleFile}")
 }
