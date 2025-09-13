@@ -42,7 +42,3 @@ tasks.test {
 	useJUnitPlatform()
     jvmArgs("-Xshare:off")
 }
-tasks.jar {
-    archiveBaseName.set("unipu_journals")
-    archiveVersion.set("0.0.1")
-}
