@@ -10,6 +10,7 @@ private const val MANUSCRIPT_ID = "manuscript_id"
 private const val ACCOUNT_ID = "account_id"
 private const val ACCOUNT_ROLE = "account_role"
 
+// manuscript_role
 private const val EIC = "'EIC'"
 private const val EDITOR = "'EDITOR'"
 private const val REVIEWER = "'REVIEWER'"
