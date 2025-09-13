@@ -31,7 +31,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.3")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.3")
+    testImplementation("io.mockk:mockk:1.13.13")
 }
 kotlin {
 	compilerOptions {
