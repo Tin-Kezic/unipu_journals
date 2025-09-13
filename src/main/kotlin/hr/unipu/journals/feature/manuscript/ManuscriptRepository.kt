@@ -66,6 +66,20 @@ private const val EIC_ON_PUBLICATION = "eic_on_publication"
 //private const val PUBLICATION_ID = "publication_id"
 private const val EIC_ID = "eic_id"
 
+// account_role_on_manuscript
+//private const val ID = "id"
+private const val ACCOUNT_ROLE_ON_MANUSCRIPT = "account_role_on_manuscript"
+private const val MANUSCRIPT_ID = "manuscript_id"
+private const val ACCOUNT_ID = "account_id"
+private const val ACCOUNT_ROLE = "account_role"
+
+// manuscript_role
+private const val EIC = "'EIC'"
+private const val EDITOR = "'EDITOR'"
+private const val REVIEWER = "'REVIEWER'"
+private const val CORRESPONDING_AUTHOR = "'CORRESPONDING_AUTHOR'"
+private const val AUTHOR = "'AUTHOR'"
+
 interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Modifying
@@ -102,10 +116,12 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
-        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$ID
+        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
+        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE IN ($EIC, $EDITOR, $REVIEWER)
+        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = :$ID
     """)
     fun pending(@Param(ID) id: Int): List<Manuscript>
 
@@ -113,10 +129,12 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
-        WHERE $EIC_ON_PUBLICATION.$EIC_ID = :$ID
+        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
+        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE IN ($EIC, $EDITOR, $REVIEWER)
+        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
+        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = :$ID
         AND $PUBLICATION.$ID = :$PUBLICATION_ID
     """)
     fun pendingByPublication(@Param(ID) id: Int, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>

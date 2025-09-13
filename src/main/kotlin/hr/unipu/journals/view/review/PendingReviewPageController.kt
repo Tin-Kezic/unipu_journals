@@ -13,6 +13,7 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.format.DateTimeFormatter
 
@@ -35,22 +36,18 @@ class PendingReviewPageController(
         )
     }
     @GetMapping("/review")
-    fun all(model: Model): String {
+    fun all(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
-            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id)
-            model["invited"] = inviteRepository.eicOnManuscript(account.email).toManuscriptDTO()
-            model["pending"] = manuscriptRepository.pending(account.id).toManuscriptDTO()
+            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id) + inviteRepository.allPublicationsUnderReviewWithAffiliation(account.email)
+            if(publicationId == null) {
+                model["invited"] = inviteRepository.affiliatedManuscripts(account.email).toManuscriptDTO()
+                model["pending"] = manuscriptRepository.pending(account.id).toManuscriptDTO()
+            } else {
+                model["invited"] = inviteRepository.affiliatedManuscriptByPublicationId(account.email, publicationId).toManuscriptDTO()
+                model["pending"] = manuscriptRepository.pendingByPublication(account.id, publicationId).toManuscriptDTO()
+            }
         } ?: throw IllegalStateException("account is null")
-        model["publicationId"] = 0
-        return "review/pending-review-page"
-    }
-    @GetMapping("review/from-publication/{publicationId}")
-    fun underPublication(@PathVariable publicationId: Int, model: Model): String {
-        authorizationService.account?.let { account ->
-            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id)
-            model["invited"] = inviteRepository.eicOnManuscriptByPublicationId(account.email, publicationId).toManuscriptDTO()
-            model["pending"] = manuscriptRepository.pendingByPublication(account.id, publicationId).toManuscriptDTO()
-        } ?: throw IllegalStateException("account is null")
+        model["publicationId"] = publicationId ?: 0
         return "review/pending-review-page"
     }
 }

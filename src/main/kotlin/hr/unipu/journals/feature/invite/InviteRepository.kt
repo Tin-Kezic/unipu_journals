@@ -1,6 +1,7 @@
 package hr.unipu.journals.feature.invite
 
 import hr.unipu.journals.feature.manuscript.Manuscript
+import hr.unipu.journals.feature.publication.Publication
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -48,6 +49,18 @@ private const val PUBLICATION = "publication"
 //private const val TITLE = "title"
 //private const val IS_HIDDEN = "is_hidden"
 
+// manuscript-state
+private const val AWAITING_INITIAL_EIC_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW'"
+private const val AWAITING_INITIAL_EDITOR_REVIEW = "'AWAITING_INITIAL_EDITOR_REVIEW'"
+private const val AWAITING_REVIEWER_REVIEW = "'AWAITING_REVIEWER_REVIEW'"
+private const val MINOR = "'MINOR'"
+private const val MAJOR = "'MAJOR'"
+private const val REJECTED = "'REJECTED'"
+private const val PUBLISHED = "'PUBLISHED'"
+private const val HIDDEN = "'HIDDEN'"
+private const val DRAFT = "'DRAFT'"
+private const val ARCHIVED = "'ARCHIVED'"
+
 interface InviteRepository: Repository<Invite, Int> {
 
     @Query("SELECT EXISTS (SELECT 1 FROM $INVITE WHERE $EMAIL = :$EMAIL AND $TARGET = $ADMIN)")
@@ -63,29 +76,42 @@ interface InviteRepository: Repository<Invite, Int> {
     fun sectionEditorOnSectionEmailsBySectionId(@Param(ID) sectionId: Int): List<String>
 
     @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
+        SELECT DISTINCT $PUBLICATION.* FROM $INVITE
+        JOIN $MANUSCRIPT ON $INVITE.$TARGET_ID = $MANUSCRIPT.$ID
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $INVITE ON $MANUSCRIPT.$ID = $INVITE.$TARGET_ID
-        WHERE $INVITE.$TARGET = $EIC_ON_MANUSCRIPT
+        WHERE $INVITE.$TARGET IN ($EIC_ON_PUBLICATION, $EIC_ON_MANUSCRIPT, $SECTION_EDITOR_ON_SECTION, $EDITOR_ON_MANUSCRIPT, $REVIEWER_ON_MANUSCRIPT)
+        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
+        AND $INVITE.$EMAIL = :$EMAIL
+        """)
+    fun allPublicationsUnderReviewWithAffiliation(@Param(EMAIL) email: String): List<Publication>
+
+    @Query("""
+        SELECT DISTINCT $MANUSCRIPT.* FROM $INVITE
+        JOIN $MANUSCRIPT ON $INVITE.$TARGET_ID = $MANUSCRIPT.$ID
+        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
+        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
+        WHERE $INVITE.$TARGET IN ($EIC_ON_MANUSCRIPT, $EDITOR_ON_MANUSCRIPT, $REVIEWER_ON_MANUSCRIPT)
+        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
         AND $INVITE.$EMAIL = :$EMAIL
     """)
-    fun eicOnManuscript(@Param(EMAIL) email: String): List<Manuscript>
+    fun affiliatedManuscripts(@Param(EMAIL) email: String): List<Manuscript>
 
     @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
+        SELECT DISTINCT $MANUSCRIPT.* FROM $INVITE
+        JOIN $MANUSCRIPT ON $INVITE.$TARGET_ID = $MANUSCRIPT.$ID
         JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
         JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $INVITE ON $MANUSCRIPT.$ID = $INVITE.$TARGET_ID
-        WHERE $INVITE.$TARGET = $EIC_ON_MANUSCRIPT
+        WHERE $INVITE.$TARGET IN ($EIC_ON_MANUSCRIPT, $EDITOR_ON_MANUSCRIPT, $REVIEWER_ON_MANUSCRIPT)
+        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
         AND $PUBLICATION.$IS_HIDDEN = FALSE
         AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
         AND $INVITE.$EMAIL = :$EMAIL
         AND $PUBLICATION.$ID = :$PUBLICATION_ID
     """)
-    fun eicOnManuscriptByPublicationId(@Param(EMAIL) email: String, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
+    fun affiliatedManuscriptByPublicationId(@Param(EMAIL) email: String, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
 
     @Modifying
     @Query("INSERT INTO $INVITE ($EMAIL, $TARGET, $TARGET_ID) VALUES (:$EMAIL, :$TARGET, :$TARGET_ID)")
