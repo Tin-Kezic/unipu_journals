@@ -29,17 +29,20 @@ class ProfilePageController(
         //@RequestParam fragment,
         model: Model
     ): String {
-        val profile = accountRepository.byId(authorizationService.account!!.id)
-        model["fullName"] = profile.fullName
-        model["title"] = profile.title
-        model["email"] = profile.email
-        model["affiliation"] = profile.affiliation
-        model["jobType"] = profile.jobType
-        model["country"] = profile.country
-        model["city"] = profile.city
-        model["address"] = profile.address
-        model["zipCode"] = profile.zipCode
-        model["isAdmin"] = authorizationService.isAdmin()
+        val account = authorizationService.account ?: throw IllegalStateException("account is null")
+        accountRepository.byId(account.id)?.let { profile ->
+            model["fullName"] = profile.fullName
+            model["title"] = profile.title
+            model["email"] = profile.email
+            model["affiliation"] = profile.affiliation
+            model["jobType"] = profile.jobType
+            model["country"] = profile.country
+            model["city"] = profile.city
+            model["address"] = profile.address
+            model["zipCode"] = profile.zipCode
+        } ?: throw IllegalStateException("no account with id ${account.id} found")
+
+        model["isAdmin"] = account.isAdmin
         val manuscripts = manuscriptRepository.allByAuthor(accountId)
         model["minor-major"] = manuscripts
             .filter { manuscript -> manuscript.state == ManuscriptState.MINOR || manuscript.state == ManuscriptState.MAJOR }
