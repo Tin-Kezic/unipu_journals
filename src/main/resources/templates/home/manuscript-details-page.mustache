@@ -27,7 +27,7 @@
 <aside style="position: absolute; top: 6rem; right: 1vw; display: flex; flex-direction: column; gap: 1rem;">
     <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.8rem 1.37rem; font-size: 1.5rem; border-radius: 0.5rem; margin-left: auto;">Review History</button>
 
-    <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem; user-select: none;">
+    <div class="yellow-box" style="margin-top: 4rem; margin-right: 1.5rem; user-select: none; cursor: default;">
         <p style="font-size: 0.9rem;">Views</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
             <p class="number" style="font-size: 2.5rem; text-align: center;">{{views}}</p>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <div class="yellow-box" style="margin-top: 3rem; user-select: none;">
+    <div class="yellow-box" style="margin-top: 3rem; user-select: none; cursor: default;">
         <p style="font-size: 0.9rem;">Downloads</p>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
             <p class="number" style="font-size: 2.5rem; text-align: center;">{{downloads}}</p>
@@ -53,6 +53,7 @@
     }
     .yellow-box:hover {
         box-shadow: none;
+        background-color: var(--pale-yellow);
     }
     .download-button:hover {
         background-color: var(--very-light-gray);
