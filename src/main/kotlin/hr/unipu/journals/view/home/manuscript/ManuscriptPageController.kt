@@ -29,6 +29,8 @@ class ManuscriptPageController(
         model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allPublishedByPublicationId(publicationId)
         model["description"] = sectionRepository.description(sectionId)
+        model["publicationId"] = publicationId
+        model["sectionId"]   = sectionId
         model["manuscripts"] = manuscriptRepository.allPublishedBySectionId(sectionId).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
