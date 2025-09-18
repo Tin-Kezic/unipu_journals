@@ -108,7 +108,7 @@ CREATE TYPE review_recommendation AS ENUM ('ACCEPT', 'MINOR', 'MAJOR', 'REJECT')
 CREATE TABLE manuscript_review (
     id SERIAL PRIMARY KEY,
     manuscript_id INT NOT NULL,
-    reviewer_id INT NOT NULL,
+    reviewer_id INT,
     round INT NOT NULL,
     novelty one_to_five NOT NULL,
     significance one_to_five NOT NULL,
