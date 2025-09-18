@@ -89,7 +89,7 @@ INSERT INTO publication_section (title, description, publication_id, is_hidden) 
 ('Analytical Chemistry', 'Techniques for analyzing chemical substances', 5, FALSE);
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
 (1, 8),
-(2, 9),
+(2, 9);
 INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (10, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 134, 25, 'Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.'),
 (11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 1, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 245, 33, 'Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.'),
@@ -136,7 +136,7 @@ INSERT INTO manuscript_review (
 (1, 2, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Interesting results.', 'http://example.com/rev3.pdf', 'Added extra details.', 'http://example.com/res3.pdf', 'MAJOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 2, 3, 'TWO', 'TWO', 'TWO', 'TWO', 'ONE', 'TWO', 'TWO', 'TWO', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs major restructuring.', 'http://example.com/rev5.pdf', 'Will restructure.', 'http://example.com/res5.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 3, 1, 'THREE', 'THREE', 'TWO', 'THREE', 'THREE', 'THREE', 'THREE', 'THREE', 'YES', 'YES', 'YES', 'CAN_BE_IMPROVED', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Check figures for accuracy.', 'http://example.com/rev4.pdf', 'Updated figures.', 'http://example.com/res4.pdf', 'REJECT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 3, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'THREE', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'Fixed typos.', 'http://example.com/res6.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 3, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'THREE', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'Fixed typos.', 'http://example.com/res6.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
 (2, 1, 1, 'FOUR', 'FOUR', 'FIVE', 'FOUR', 'FIVE', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Excellent study with clear methodology.', 'http://example.com/rev1.pdf', 'Thank you!', 'http://example.com/res1.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, 2, 1, 'THREE', 'THREE', 'THREE', 'TWO', 'TWO', 'THREE', 'THREE', 'THREE', 'YES', 'CAN_BE_IMPROVED', 'CAN_BE_IMPROVED', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs clarification in methods.', 'http://example.com/rev2.pdf', 'Clarified section 2.', 'http://example.com/res2.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
