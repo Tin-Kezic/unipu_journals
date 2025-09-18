@@ -5,12 +5,16 @@
     --yellow: #ffe08a;
     --pale-yellow: #fff8f1;
     --green: #7aed80;
+    --dark-blue: #152e60;
+    --blue: #407cff;
     --light-blue: #b0c6ff;
     --dark-purple: #605c91;
     --purple: #6b66a1;
-    --beige: #bab2a2;
+    --beige: #cfc6b4;;
+    --very-light-gray: #e8e1d9;
     --light-gray: #7e7667;
     --gray: #49454f;
+    --checkbox-gray: #c5c6d0;
 }
 * {
     margin: 0;
@@ -23,18 +27,6 @@ body {
     background-size: cover;
     background-position: center;
 }
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1vh 3vw;
-    background-color: var(--purple);
-    position: sticky;
-    z-index: 10;
-    min-height: 8vh;
-    top: 0;
-    flex-wrap: wrap;
-}
 .logo-button {
     display: flex;
     align-items: center;
@@ -45,6 +37,7 @@ header {
     background-color: var(--purple);
     border: none;
     cursor: pointer;
+    user-select: none;
 }
 nav ul {
     list-style: none;
@@ -52,7 +45,6 @@ nav ul {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
-    margin: 0;
 }
 nav ul li {
     margin: 0 0.5rem;
@@ -68,13 +60,23 @@ nav ul li a {
 nav ul li a:hover {
     color: var(--yellow);
 }
+nav ul li a:active {
+    text-decoration: underline;
+}
 .search-container {
     display: flex;
     align-items: center;
     position: relative;
 }
+dialog {
+    left: 0; right: 0; top: 0; bottom: 0;
+    margin: auto; position: fixed;
+    padding: 1.5rem;
+    border: none; border-radius: 0.5rem;
+}
 .search-bar {
     padding: 1vh 1vw;
+    padding-right: 2.25rem;
     margin: 0 1vw;
     border: none;
     border-radius: 1rem;
@@ -89,15 +91,12 @@ nav ul li a:hover {
 .fa-solid.fa-magnifying-glass {
     font-size: 1rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin: 0 1.5vw;
+    margin: 0 auto;
     color: var(--gray);
     position: absolute;
-    right: .5rem;
-}
-.fa-solid.fa-magnifying-glass:active {
-    transform: scale(0.97);
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .m3-button {
     border: none;
@@ -106,6 +105,7 @@ nav ul li a:hover {
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
 .m3-button:active {
     transform: scale(0.98);
@@ -114,10 +114,12 @@ nav ul li a:hover {
 .yellow-button {
     background-color: var(--yellow);
     color: black;
+    user-select: none;
 }
 .purple-button {
     background-color: var(--purple);
     color: white;
+    user-select: none;
 }
 .outline-button {
     background-color: transparent;
@@ -126,29 +128,34 @@ nav ul li a:hover {
     padding: 0.7rem 1rem;
     font-size: 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .red-button {
     background-color: var(--red);
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .light-red-button {
     background-color: var(--light-red);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
 .green-button {
     background-color: var(--green);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
+    user-select: none;
 }
-.darkpurple-white-outline-button {
+.dark-purple-white-outline-button {
     background-color: var(--dark-purple);
     color: white;
     border: 0.1rem solid white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .purple-outline-button {
     background-color: var(--purple);
@@ -156,6 +163,7 @@ nav ul li a:hover {
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
+    user-select: none;
 }
 .purple-outline-button:hover {
     background-color: var(--dark-purple);
@@ -168,8 +176,13 @@ nav ul li a:hover {
     padding: 0.3rem 3rem;
     box-shadow: none;
     font-weight: 600;
+    user-select: none;
 }
 .orange-button:hover {
+    background-color: var(--orange);
+    color: black;
+}
+.orange-button:active {
     background-color: var(--orange);
     color: black;
 }
@@ -178,43 +191,46 @@ nav ul li a:hover {
     color: var(--beige);
     border: 0.1rem solid var(--beige);
     box-shadow: none;
+    user-select: none;
 }
 .pale-yellow-button:hover {
     background-color: var(--purple);
     color: white;
+    user-select: none;
 }
 .text-field {
-  position: relative;
-  width: 100%;
-  max-width: 22.5rem;
-  margin: 1.25rem 0;
+    position: relative;
+    width: 100%;
+    margin: 1.25rem 0;
 }
 .text-field label {
-  position: absolute;
-  top: -0.5rem;
-  left: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--light-gray);
-  background-color: var(--pale-yellow);
-  padding: 0 0.25rem;
+    position: absolute;
+    top: -0.5rem;
+    left: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--light-gray);
+    background-color: var(--pale-yellow);
+    padding: 0 0.25rem;
+    user-select: none;
 }
 .text-field input {
-  width: 100%;
-  height: 3.5rem;
-  padding: 0.5rem 0.75rem 0.5rem;
-  font-size: 1rem;
-  background: var(--pale-yellow);
-  border: 1.2px solid var(--light-gray);
-  border-radius: 0.3rem;
+    width: 100%;
+    height: 2.7rem;
+    padding: 0.3rem 0.75rem 0.5rem;
+    font-size: 1rem;
+    background: var(--pale-yellow);
+    border: 1.2px solid var(--light-gray);
+    border-radius: 0.3rem;
 }
 .text-field input::placeholder {
-  color: var(--light-gray);
+    color: var(--light-gray);
 }
 .error-msg {
     font-size: 0.75rem;
     color: var(--red);
     margin-top: 0.25rem;
     display: none;
+    user-select: none;
 }
 .error-msg.show {
     display: block;
@@ -223,14 +239,13 @@ nav ul li a:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 15rem;
-    height: 3.5rem;
+    width: 20rem;
+    height: 2.8rem;
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
     border: 1.3px solid var(--light-gray);
     cursor: pointer;
-    user-select: none;
 }
 .remove-user-button:hover {
     background: var(--red);
@@ -241,7 +256,7 @@ nav ul li a:hover {
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .remove-user-button .fa-user-minus {
-    margin-left: auto; /* Align icon to the right */
+    margin-left: auto;
     color: black;
     cursor: pointer;
 }
@@ -249,56 +264,90 @@ nav ul li a:hover {
     color: white;
 }
 .pale-yellow-checkbox-button {
-  user-select: none;            /* Prevent text selection */
+    user-select: none;
 }
 .pale-yellow-checkbox-button input {
-  position: absolute;
-  opacity: 0;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 .pale-yellow-checkbox-button .checkbox {
-  width: 9rem;
-  height: 1.7rem;
-  border: 1.3px solid var(--beige);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--beige);
-  font-size: 1rem;
-  background: var(--pale-yellow);
-  cursor: pointer;
+    width: 9rem;
+    height: 1.7rem;
+    border: 1.3px solid var(--beige);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--beige);
+    font-size: 1rem;
+    background: var(--pale-yellow);
+    cursor: pointer;
 }
 .pale-yellow-checkbox-button input:checked + .checkbox {
-  background: var(--purple);
-  color: white;
+    background: var(--purple);
+    color: white;
 }
 .blue-checkbox {
-    accent-color: var(--light-blue);
+    appearance: none;
+    -webkit-appearance: none; /* for Safari */
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--checkbox-gray);
+    border-radius: 0.1rem;
+    cursor: pointer;
+    position: relative;
+    margin: 0.1rem;
+}
+.blue-checkbox:checked {
+    background-color: var(--light-blue);
+    border-color: var(--light-blue);
+}
+.blue-checkbox:checked::after {
+    content: "";
+    position: absolute;
+    width: 0.2rem;
+    height: 0.5rem;
+    border: solid var(--dark-blue);
+    border-width: 0 0.15rem 0.15rem 0;
+    transform: rotate(45deg);
+    left: 0.23rem;
+    bottom: 0.12rem;
 }
 .yellow-box {
-  width: 14rem;
-  height: 7rem;
-  background-color: var(--pale-yellow);
-  border: 1.3px solid var(--beige);
-  border-radius: 0.4rem;
-  user-select: none;
-  padding: 0.5rem;
-  text-align: left;
-  overflow-wrap: break-word;
-  overflow: auto;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
+    width: 14rem;
+    height: 7rem;
+    background-color: var(--pale-yellow);
+    border: 1.3px solid var(--beige);
+    border-radius: 0.4rem;
+    padding: 0.5rem;
+    text-align: left;
+    overflow-wrap: break-word;
+    overflow: auto;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.yellow-box:hover {
+    background-color: var(--very-light-gray);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
+.no-hover:hover {
+    background-color: var(--pale-yellow);
+    box-shadow: none;
 }
 .yellow-button:hover {
     background-color: var(--light-gray);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .yellow-box-buttons {
-   margin: auto 0.4rem 0.4rem auto;
-   align-self: flex-end;
-   display:flex;
-   gap: 0.5rem;
+    margin: auto 0.4rem 0.4rem auto;
+    align-self: flex-end;
+    display: flex;
+    gap: 0.5rem;
+    user-select: none;
 }
 .yellow-box-buttons .m3-button {
     padding: 0.4rem 0.6rem;
@@ -306,65 +355,47 @@ nav ul li a:hover {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-}
-.dialog {
-  background: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  max-width: 90%;
-  max-height: 90vh;
-  overflow: auto;
-  box-sizing: border-box;
-}
 #snackbar {
-  visibility: hidden; /* Hidden by default. Visible on click */
-  min-width: 13vw;
-  background-color: white;
-  color: black;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  text-align: center;
-  border-radius: 1rem;
-  padding: 12px;
-  position: fixed;
-  z-index: 1;
-  right: 5%;
-  bottom: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 13vw;
+    background-color: white;
+    color: black;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    text-align: center;
+    border-radius: 1rem;
+    padding: 12px;
+    position: fixed;
+    z-index: 1;
+    right: 5%;
+    bottom: 1.8rem;
+    user-select: none;
 }
 .fa-circle-check {
     color: var(--green);
 }
 #snackbar.show {
-  visibility: visible;
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-  However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
+    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
 }
-/* Animations to fade the snackbar in and out */
-@keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+@keyframes fade-in {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
 }
-@keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
-.sidebar-button {
-    user-select: none;
+@keyframes fade-out {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
 }
 .sidebar-button input[type="radio"] {
     position: absolute;
     opacity: 0;
+    width: 0;
+    height: 0;
 }
-.sidebar-button .checkbox {
+.sidebar-button .sidebar-button-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -375,17 +406,64 @@ nav ul li a:hover {
     background: white;
     border: 1.3px solid var(--light-gray);
     cursor: pointer;
-    user-select: none;
 }
-.sidebar-button .checkbox:hover {
+.sidebar-button-title:hover {
     background: var(--purple);
     color: white;
 }
-.sidebar-button .checkbox:active {
+.sidebar-button .sidebar-button-title:active {
     transform: scale(0.98);
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
-.sidebar-button input[type="radio"]:checked + .checkbox {
-    background: var(--purple);
-    color: white;
+.authors {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    margin-top: 0.2rem;
+}
+.authors button {
+    font-weight: 100;
+    background-color: inherit;
+    border: none;
+    width: fit-content;
+}
+.authors button:hover {
+    color: var(--blue);
+    cursor: pointer;
+}
+.authors button + button::before {
+    content: ",";
+    font-weight: 100;
+    margin-right: 0.25rem;
+}
+.authors button:last-child::before {
+    content: "and";
+    font-weight: 100;
+    margin: 0 0.25rem;
+}
+.pdf-container {
+    border: 1px solid black;
+    padding: 0.1rem;
+    margin-top: 0.5rem;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    gap: 0.5rem;
+    color: var(--blue);
+}
+.pdf-remove-button {
+    background-color: inherit;
+    color: var(--red);
+    border: 2px solid var(--red);
+    border-radius: 0.2rem;
+    cursor: pointer;
+    height: 1rem;
+    width: 1rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+    margin-top: 0.1rem;
+    margin-right: 0.1rem;
 }

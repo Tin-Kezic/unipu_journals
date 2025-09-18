@@ -4,25 +4,21 @@ plugins {
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
-
 repositories {
 	mavenCentral()
 }
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(24)
 	}
 }
-
+val byteBuddyAgent: Configuration by configurations.creating
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.5.3")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
-
-	implementation("io.github.wimdeblauwe:htmx-spring-boot:4.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-mustache:3.5.3")
 	implementation("org.jsoup:jsoup:1.15.3")
 
@@ -36,15 +32,15 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.3")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.2.0")
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.3")
+    testImplementation("io.mockk:mockk:1.13.13")
+    byteBuddyAgent("net.bytebuddy:byte-buddy-agent:1.17.6")
 }
-
 kotlin {
 	compilerOptions {
-		freeCompilerArgs.addAll("-Xjsr305=strict")
+		freeCompilerArgs.add("-Xjsr305=strict")
 	}
 }
-
 tasks.test {
 	useJUnitPlatform()
+    jvmArgs("-Xshare:off", "-javaagent:${byteBuddyAgent.singleFile}")
 }
