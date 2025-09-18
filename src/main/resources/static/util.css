@@ -290,6 +290,10 @@ nav ul li a:hover {
   display: flex;
   flex-direction: column;
 }
+.yellow-button:hover {
+    background-color: var(--light-gray);
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
 .yellow-box-buttons {
    margin: auto 0.4rem 0.4rem auto;
    align-self: flex-end;
