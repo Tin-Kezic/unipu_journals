@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{fullName}}</title>
-    <link rel="stylesheet" href="/util.css" />
+    <link rel="stylesheet" href="/util.css"/>
 </head>
 <body>
 {{>util/header}}
@@ -55,7 +55,7 @@
                 <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
             </div>
             {{#isAdmin}}
-                <div class="delete-container" id="delete-account-button" style="display: flex; justify-content: flex-end;">
+                <div class="delete-container" id="delete-profile-button" style="display: flex; justify-content: flex-end;">
                     <button class="m3-button red-button">Delete</button>
                 </div>
             {{/isAdmin}}
@@ -85,7 +85,7 @@
         {{/minor-major}}
         {{#manuscripts}}
             <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
-                <article>
+                <article data-id="{{id}}">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
                         <div>
                             <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
@@ -99,8 +99,8 @@
                         </div>
                         <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
                             {{#isAdmin}}
-                                <button class="m3-button outline-button" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
-                                <button class="m3-button purple-button" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                                <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                                <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
                             {{/isAdmin}}
                         </footer>
                     </div>
@@ -110,6 +110,7 @@
         {{/manuscripts}}
     </main>
 </div>
+
 <dialog id="delete-profile-dialog" closedby="any">
     <p id="delete-profile-dialog-message">delete account <b>{{fullName}}</b>?</p>
     <br>
@@ -121,17 +122,16 @@
     </div>
 </dialog>
 <script>
-    <!--
     const deleteProfileDialog = document.getElementById('delete-profile-dialog');
-    document.getElementById('delete-account-button').addEventListener('click', () => dialog.showModal());
-    document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => dialog.close());
+    document.getElementById('delete-profile-button').addEventListener('click', () => deleteProfileDialog.showModal());
+    document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => deleteProfileDialog.close());
     document.getElementById('delete-profile-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/profile/{{accountId}}/delete`, { method: 'DELETE' });
         if(!response.ok) { alert('failed to delete account'); return; }
         window.location.href = '/';
     });
-    -->
 </script>
+
 <dialog id="view-profile-dialog" closedby="any" style="padding: 2rem">
     <p>full name: {{fullName}}</p>
     <p>title: {{title}}</p>
@@ -152,8 +152,64 @@
     document.getElementById('view-profile').addEventListener('click', () => viewProfileDialog.showModal());
     document.getElementById('view-profile-dialog-negative').addEventListener('click', () => viewProfileDialog.close());
 </script>
+
+<dialog id="hide-manuscript-dialog" closedby="any">
+    <p id="hide-manuscript-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="hide-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="hide-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Hide</button>
+    </div>
+</dialog>
+<script>
+    let currentId = null;
+    const hideManuscriptDialog = document.getElementById('hide-manuscript-dialog');
+    const hideManuscriptDialogMessage = document.getElementById('hide-manuscript-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hideManuscriptDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hideManuscriptDialog.showModal();
+        });
+    });
+    document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
+    document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide Manuscript'); return; }
+        document.querySelector(`article[data-id="${currentId}"]`).remove();
+        hideManuscriptDialog.close();
+    });
+</script>
+
+<dialog id="archive-manuscript-dialog" closedby="any">
+    <p id="archive-manuscript-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="archive-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="archive-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Archive</button>
+    </div>
+</dialog>
+<script>
+    const archiveManuscriptDialog = document.getElementById('archive-manuscript-dialog');
+    const archiveManuscriptDialogMessage = document.getElementById('archive-manuscript-dialog-message');
+    document.querySelectorAll('button[data-type="archive-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            archiveManuscriptDialogMessage.innerHTML = `Archive <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            archiveManuscriptDialog.showModal();
+        });
+    });
+    document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
+    document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to archive Manuscript'); return; }
+        document.querySelector(`article[data-id="${currentId}"]`).remove();
+        archiveManuscriptDialog.close();
+    });
+</script>
 </body>
 </html>
+
 <style>
     .manuscript-button:active {
         text-decoration: underline;
@@ -205,7 +261,7 @@
         .manuscript-container {
             max-height: 40vh !important;
         }
-        .manuscript-containeryellow {
+        .manuscript-container-yellow {
             max-height: 40vh !important;
         }
         .wrapper {
