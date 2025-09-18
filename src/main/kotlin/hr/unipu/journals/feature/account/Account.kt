@@ -6,9 +6,8 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("ACCOUNT")
 data class Account(
     @Id val id: Int,
-    val name: String,
-    val surname: String,
-    val title: String?,
+    val fullName: String,
+    val title: String,
     val email: String,
     val password: String,
     val affiliation: String,
@@ -17,5 +16,5 @@ data class Account(
     val city: String,
     val address: String,
     val zipCode: String,
-    val isAdmin: Boolean,
+    val isAdmin: Boolean
 )

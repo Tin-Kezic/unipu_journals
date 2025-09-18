@@ -1,158 +1,47 @@
-package hr.unipu.journals.controller.old
-
-import hr.unipu.journals.feature.account.Account
-import hr.unipu.journals.feature.account.AccountRepository
-import hr.unipu.journals.usecase.hashPassword
-import hr.unipu.journals.usecase.sanitize
-import org.springframework.dao.OptimisticLockingFailureException
+package hr.unipu.journals.feature.account
+/*
+import hr.unipu.journals.feature.profile.register.RegisterRequestDTO
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/account")
-class AccountController(private val repository: AccountRepository) {
-
-    private fun processAccount(account: Account): Account {
-        return account.copy(
-            name = sanitize(account.name),
-            surname = sanitize(account.surname),
-            title = sanitize(account.title),
-            email = sanitize(account.email),
-            password = hashPassword(account.password),
-            affiliation = sanitize(account.affiliation),
-            jobType = sanitize(account.jobType),
-            country = sanitize(account.country),
-            city = sanitize(account.city),
-            address = sanitize(account.address),
-            zipCode = sanitize(account.zipCode)
+class AccountController(
+    private val accountRepository: AccountRepository,
+    private val passwordEncoder: PasswordEncoder
+) {
+    @PostMapping("/insert")
+    fun insert(@ModelAttribute request: RegisterRequestDTO): ResponseEntity<String> {
+        if (request.password != request.passwordConfirmation) return ResponseEntity.badRequest().body("password mismatch")
+        if (accountRepository.emailExists(request.email)) return ResponseEntity.badRequest().body("email taken")
+        accountRepository.insert(
+            fullName = Jsoup.clean(request.fullName, Safelist.none()),
+            title = Jsoup.clean(request.title, Safelist.none()),
+            email = Jsoup.clean(request.email, Safelist.none()),
+            password = passwordEncoder.encode(request.password),
+            affiliation = Jsoup.clean(request.affiliation, Safelist.none()),
+            jobType = Jsoup.clean(request.jobType, Safelist.none()),
+            country = Jsoup.clean(request.country, Safelist.none()),
+            city = Jsoup.clean(request.city, Safelist.none()),
+            address = Jsoup.clean(request.address, Safelist.none()),
+            zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
+        return ResponseEntity.ok("account successfully registered")
     }
-    @ResponseBody
-    @PostMapping("/save")
-    fun save(
-        @ModelAttribute name: String,
-        @ModelAttribute surname: String,
-        @ModelAttribute title: String,
-        @ModelAttribute email: String,
-        @ModelAttribute password: String,
-        @ModelAttribute affiliation: String,
-        @ModelAttribute jobType: String,
-        @ModelAttribute country: String,
-        @ModelAttribute city: String,
-        @ModelAttribute address: String,
-        @ModelAttribute zipcode: String,
-    ): ResponseEntity<String> {
-        return try {
-            repository.save(processAccount(account))
-            ResponseEntity.ok().body("account ${account.name} ${account.surname} successfully saved")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. All fields must be non-null. Provided: $account")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error of type OptimisticLockingFailureException")
-        }
+    @DeleteMapping("/delete/{id}")
+    fun delete(@PathVariable id: Int): ResponseEntity<String> {
+        return if(accountRepository.exists(id)) {
+            accountRepository.delete(id)
+            ResponseEntity.ok("account deleted successfully")
+        } else ResponseEntity.badRequest().body("ID does not exist")
     }
-    @ResponseBody
-    @PostMapping("/saveAll")
-    fun saveAll(@ModelAttribute accounts: List<Account>): ResponseEntity<String> {
-        return try {
-            val sanitizedAccounts = accounts.map { processAccount(it) }
-            repository.saveAll(sanitizedAccounts)
-            ResponseEntity.ok().body("accounts successfully saved")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. All fields must be non-null. Provided: $accounts")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
-    /*
-    @GetMapping("/{id}/{template}")
-    fun findById(@PathVariable id: Int, model: Model): String {
-        val account = repository.findById(id).orElse(null) // change later cause mustache crashes on null
-        model["account"] = account
-        return "partial/account"
-    }
-     */
-    @ResponseBody
-    @GetMapping("/exists/{id}")
-    fun existsById(@PathVariable id: Int): Boolean {
-        return try {
-            repository.existsById(id)
-        } catch (_: IllegalArgumentException) { false }
-    }
-    /*
-    @GetMapping("/all")
-    fun findAll(model: Model, ): String {
-        model["accounts"] = repository.findAll()
-        return "partial/accounts"
-    }
-    @PostMapping("/findAllById")
-    fun findAllById(@ModelAttribute ids: List<Int>, model: Model): String {
-        val found = repository.findAllById(ids)
-        model["accounts"] = found
-        return "partial/accounts"
-    }
-     */
-    @ResponseBody
-    @GetMapping("/count")
-    fun count() = repository.count()
-
-    @ResponseBody
-    @PostMapping("/deleteById/{id}")
-    fun deleteById(@PathVariable id: Int) {
-        try {
-            repository.deleteById(id)
-            ResponseEntity.ok().body("account deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
-    @ResponseBody
-    @PostMapping("/delete")
-    fun delete(@ModelAttribute account: Account): ResponseEntity<String> {
-        return try {
-            repository.delete(account)
-            ResponseEntity.ok().body("account deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
-    @ResponseBody
-    @PostMapping("/deleteAllById")
-    fun deleteAllById(@ModelAttribute ids: List<Int>): ResponseEntity<String> {
-        return try {
-            repository.deleteAllById(ids)
-            ResponseEntity.ok().body("account deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. ID must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
-
-    @ResponseBody
-    @PostMapping("/deleteAllEntities")
-    fun deleteAllEntities(@ModelAttribute accounts: List<Account>): ResponseEntity<String> {
-        return try {
-            repository.deleteAll(accounts)
-            ResponseEntity.ok().body("accounts deleted successfully")
-        } catch (_: IllegalArgumentException) {
-            ResponseEntity.badRequest().body("Invalid account data. IDs must be non-null")
-        } catch (_: OptimisticLockingFailureException) {
-            ResponseEntity.internalServerError().body("internal server error. OptimisticLockingFailureException")
-        }
-    }
-
-    @ResponseBody
-    @PostMapping("/deleteAll")
-    fun deleteAll() = repository.deleteAll()
 }
+ */
