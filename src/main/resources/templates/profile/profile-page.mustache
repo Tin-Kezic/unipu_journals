@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{fullName}}</title>
+    <link rel="stylesheet" href="/util.css"/>
+</head>
+<body>
+{{>util/header}}
+<div class="wrapper" style="display: flex; flex-direction: row; margin-inline: 4rem; margin-block: 1rem;">
+    <div style="display: flex; justify-content: flex-end;">
+        <button class="m3-button red-button" id="view-profile" style="background-color: var(--gray); height: fit-content; text-wrap: nowrap; margin-top: 1rem;">View profile</button>
+    </div>
+    <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
+        <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
+        <br>
+        <a href="/profile/{{accountId}}/edit" class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem; text-decoration: none;">Edit profile</a>
+        <br>
+        <a href="/logout" class="m3-button purple-button" style="text-decoration: none;">Log out</a>
+        <br><br><br><br>
+        <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center; user-select: none;">
+            <div class="dropdown sort" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Most recent</span>
+                </div>
+                <div class="dropdown-content">
+                    <p>Most recent</p>
+                    <p>Oldest</p>
+                    <p>Alphabetically</p>
+                    <p>Views</p>
+                    <p>Downloads</p>
+                </div>
+            </div>
+            <div class="dropdown filter" style="width: 11rem; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
+                    <span>Filter</span>
+                </div>
+                <div class="dropdown-content" style="text-wrap: nowrap;">
+                    <p>All</p>
+                    <p>Rejected</p>
+                    <p style="padding-left: 0.3rem;">Incomplete submission</p>
+                    <p>Under processing</p>
+                    <p>Published</p>
+                    <p>Archived</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+            <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem; user-select: none;">
+                <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Submitted manuscripts</button>
+                <p style="font-size: 2rem; font-weight: lighter;">|</p>
+                <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
+            </div>
+            {{#isAdmin}}
+                <div class="delete-container" id="delete-profile-button" style="display: flex; justify-content: flex-end;">
+                    <button class="m3-button red-button">Delete</button>
+                </div>
+            {{/isAdmin}}
+        </div>
+        {{#minor-major}}
+            <div class="manuscript-container-yellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
+                <article>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                        <div>
+                            <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
+                            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                                {{#authors}}
+                                    <button>{{.}}</button>
+                                {{/authors}}
+                            </div>
+                            <p style="margin-block: 0.5rem;">{{publicationDate}}</p>
+                            <p style="margin-top: 0.2rem;">{{description}}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem; justify-content: flex-end; margin-left: 0.3rem; margin-top: 1.5rem;">
+                            <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
+                            <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <br>
+        {{/minor-major}}
+        {{#manuscripts}}
+            <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--pale-yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+                <article data-id="{{id}}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
+                        <div>
+                            <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
+                            <div class="authors" style="display: flex; flex-wrap: wrap;">
+                                {{#authors}}
+                                    <button>{{.}}</button>
+                                {{/authors}}
+                            </div>
+                            <p style="margin-block: 0.5rem;">{{publicationDate}}</p>
+                            <p style="margin-top: 0.2rem;">{{description}}</p>
+                        </div>
+                        <footer class="yellow-box-buttons" style="margin-left: 1rem; ">
+                            {{#isAdmin}}
+                                <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                                <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                            {{/isAdmin}}
+                        </footer>
+                    </div>
+                </article>
+            </div>
+            <br>
+        {{/manuscripts}}
+    </main>
+</div>
+
+<dialog id="delete-profile-dialog" closedby="any">
+    <p id="delete-profile-dialog-message">delete account <b>{{fullName}}</b>?</p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button type="button" id="delete-profile-dialog-negative" class="m3-button outline-button">cancel</button>
+        <div style="display: flex; justify-content: flex-end">
+            <button id="delete-profile-dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
+        </div>
+    </div>
+</dialog>
+<script>
+    const deleteProfileDialog = document.getElementById('delete-profile-dialog');
+    document.getElementById('delete-profile-button').addEventListener('click', () => deleteProfileDialog.showModal());
+    document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => deleteProfileDialog.close());
+    document.getElementById('delete-profile-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/profile/{{accountId}}/delete`, { method: 'DELETE' });
+        if(!response.ok) { alert('failed to delete account'); return; }
+        window.location.href = '/';
+    });
+</script>
+
+<dialog id="view-profile-dialog" closedby="any" style="padding: 2rem">
+    <p>full name: {{fullName}}</p>
+    <p>title: {{title}}</p>
+    <p>email: {{email}}</p>
+    <p>affiliation: {{affiliation}}</p>
+    <p>job type: {{jobType}}</p>
+    <p>country: {{country}}</p>
+    <p>city: {{city}}</p>
+    <p>address: {{address}}</p>
+    <p>zip code: {{zipCode}}</p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">close</button>
+    </div>
+</dialog>
+<script>
+    const viewProfileDialog = document.getElementById('view-profile-dialog');
+    document.getElementById('view-profile').addEventListener('click', () => viewProfileDialog.showModal());
+    document.getElementById('view-profile-dialog-negative').addEventListener('click', () => viewProfileDialog.close());
+</script>
+
+<dialog id="hide-manuscript-dialog" closedby="any">
+    <p id="hide-manuscript-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="hide-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="hide-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Hide</button>
+    </div>
+</dialog>
+<script>
+    let currentId = null;
+    const hideManuscriptDialog = document.getElementById('hide-manuscript-dialog');
+    const hideManuscriptDialogMessage = document.getElementById('hide-manuscript-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hideManuscriptDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hideManuscriptDialog.showModal();
+        });
+    });
+    document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
+    document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to hide Manuscript'); return; }
+        document.querySelector(`article[data-id="${currentId}"]`).remove();
+        hideManuscriptDialog.close();
+    });
+</script>
+
+<dialog id="archive-manuscript-dialog" closedby="any">
+    <p id="archive-manuscript-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="archive-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="archive-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Archive</button>
+    </div>
+</dialog>
+<script>
+    const archiveManuscriptDialog = document.getElementById('archive-manuscript-dialog');
+    const archiveManuscriptDialogMessage = document.getElementById('archive-manuscript-dialog-message');
+    document.querySelectorAll('button[data-type="archive-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            archiveManuscriptDialogMessage.innerHTML = `Archive <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            archiveManuscriptDialog.showModal();
+        });
+    });
+    document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
+    document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
+        if(!response.ok) { alert('failed to archive Manuscript'); return; }
+        document.querySelector(`article[data-id="${currentId}"]`).remove();
+        archiveManuscriptDialog.close();
+    });
+</script>
+</body>
+</html>
+
+<style>
+    .manuscript-button:active {
+        text-decoration: underline;
+    }
+    .manuscript-container:hover {
+        background-color: var(--very-light-gray) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .manuscript-container-yellow:hover {
+        background-color: var(--orange) !important;
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        width: 11rem;
+        box-shadow: 0px 8px 8px rgba(0,0,0,0.1);
+        z-index: 1;
+        border: 1.5px solid var(--purple);
+        border-radius: 0.3rem;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropdown-content p {
+        display: block;
+        width: 100%;
+        padding: 0.7rem 1rem;
+        margin-top: -3px;
+        box-sizing: border-box;
+        transition: background 0.2s;
+        border-bottom: 1.5px solid var(--purple);
+    }
+    .dropdown-content p:hover {
+        background-color: #ebe9ff;
+        cursor: pointer;
+        border-top: 1.5px solid var(--purple);
+    }
+    .dropdown.sort .dropdown-content p {
+        padding-block: 0.95rem;
+    }
+
+    @media (max-width: 800px) {
+        .manuscript-container {
+            max-height: 40vh !important;
+        }
+        .manuscript-container-yellow {
+            max-height: 40vh !important;
+        }
+        .wrapper {
+            flex-direction: column !important;
+            margin-inline: 1rem !important;
+            gap: 1rem !important;
+        }
+        .wrapper aside {
+            margin-top: 1rem !important;
+        }
+        .m3-button.purple-button {
+            text-wrap: wrap !important;
+        }
+        .yellow-box-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 5rem;
+        }
+    }
+</style>

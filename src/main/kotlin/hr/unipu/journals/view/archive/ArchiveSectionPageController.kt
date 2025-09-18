@@ -1,4 +1,28 @@
-package hr.unipu.journals.controller.view.archive
+package hr.unipu.journals.view.archive
 
-class ArchiveSectionPageController {
+import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.feature.section.SectionRepository
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+
+@Controller
+class ArchiveSectionPageController(
+    private val publicationRepository: PublicationRepository,
+    private val sectionRepository: SectionRepository
+) {
+    @GetMapping("archive/publication/{publicationId}")
+    fun page(@PathVariable publicationId: Int, model: Model): String {
+        model["publicationsSidebar"] = publicationRepository.allArchived()
+        model["currentPublication"] = publicationRepository.title(publicationId)
+        model["sections"] = sectionRepository.allArchivedByPublicationId(publicationId).map { section ->
+            ArchiveContainerDTO(
+                id = section.id,
+                title = section.title,
+            )
+        }
+        return "archive/archive-section-page"
+    }
 }

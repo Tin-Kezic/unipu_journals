@@ -1,4 +1,4 @@
-package hr.unipu.journals.controller.old
+package hr.unipu.journals.feature.manuscript_review
 
 import org.springframework.web.bind.annotation.RestController
 
