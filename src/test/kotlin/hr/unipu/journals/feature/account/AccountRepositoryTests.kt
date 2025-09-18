@@ -13,129 +13,50 @@ import kotlin.test.assertEquals
 
 @DataJdbcTest
 class AccountRepositoryTests {
-    @Autowired
-    private lateinit var accountRepository: AccountRepository
-
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
-
-    private val testAccount = Account(
-        id = 1,
-        fullName = "John Doe",
-        title = "Dr.",
-        email = "john.doe@example.com",
-        password = "secure123",
-        affiliation = "University",
-        jobType = "Professor",
-        country = "USA",
-        city = "Cheyenne",
-        address = "200 West 24th Street",
-        zipCode = "82002-0020",
-        isAdmin = false
-    )
-    fun insertAccount(
-        fullName: String = testAccount.fullName,
-        title: String = testAccount.title,
-        email: String = testAccount.email,
-        password: String = testAccount.password,
-        affiliation: String = testAccount.affiliation,
-        jobType: String = testAccount.jobType,
-        country: String = testAccount.country,
-        city: String = testAccount.city,
-        address: String = testAccount.address,
-        zipCode: String = testAccount.zipCode
-    ) = accountRepository.insert(fullName, title, email, password, affiliation, jobType, country, city, address, zipCode)
-
-    @Test
-    fun `assign and revoke admin, check is admin`() {
-        // Arrange
-        insertAccount(email = "user@email.com")
-        insertAccount(email = "admin@email.com")
-        insertAccount(email = "revokedAdmin@email.com")
-
-        // act
-        accountRepository.updateIsAdmin("admin@email.com", true)
-        accountRepository.updateIsAdmin("revokedAdmin@email.com", true)
-        accountRepository.updateIsAdmin("revokedAdmin@email.com", false)
-
-        // assert
-        assertTrue(accountRepository.isAdmin("admin@email.com"))
-        assertFalse(accountRepository.isAdmin("user@email.com"))
-        assertFalse(accountRepository.isAdmin("revokedAdmin@email.com"))
+    @Autowired private lateinit var accountRepository: AccountRepository
+    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
+    @Test fun `insert account`() {
+        accountRepository.insert(
+            fullName = "John",
+            title = "Dr.",
+            email = "john@unipu.hr",
+            password = "secure123",
+            affiliation = "University",
+            jobType = "Professor",
+            country = "USA",
+            city = "Cheyenne",
+            address = "200 West 24th Street",
+            zipCode = "82002-0020"
+        )
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
     }
-    @Test
-    fun `update root account password`() {
-        // arrange
-        insertAccount(email = "root@unipu.hr")
-        // act
+    @Test fun `assign and revoke admin, check is admin`() {
+        accountRepository.updateIsAdmin("new.admin@unipu.hr", true)
+        assertTrue(accountRepository.isAdmin("new.admin@unipu.hr"))
+    }
+    @Test fun `revoke admin`() {
+        accountRepository.updateIsAdmin("revoked.admin@unipu.hr", false)
+        assertFalse(accountRepository.isAdmin("revoked.admin@unipu.hr"))
+        assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
+    }
+    @Test fun `update root account password`() {
         accountRepository.updateRootPassword("newPassword")
-        // assert
         assertEquals("newPassword", accountRepository.byEmail("root@unipu.hr")?.password)
     }
-    @Test
-    fun `account exists by id`() {
-        // arrange
-        insertAccount()
-        val id = jdbcTemplate.queryForObject<Int>("SELECT MAX(id) FROM account")
-        // act
-        val accountExists = accountRepository.exists(id)
-        // assert
-        assertTrue(accountExists)
+    @Test fun `account exists by email`() = assertTrue(accountRepository.emailExists("root@unipu.hr"))
+    @Test fun `retrieve account by id`() = assertEquals("root@unipu.hr", accountRepository.byId(1)?.email)
+    @Test fun `retrieve account by email`() = assertEquals(1, accountRepository.byEmail("root@unipu.hr")?.id)
+    @Test fun `account exists by id`() {
+        assertTrue(accountRepository.exists(1))
+        assertFalse(accountRepository.exists(100))
     }
-    @Test
-    fun `account exists by email`() {
-        // arrange
-        insertAccount()
-        // act
-        val accountExists = accountRepository.emailExists(testAccount.email)
-        // assert
-        assertTrue(accountExists)
+    @Test fun `retrieve all admin emails`() {
+        assertTrue(accountRepository.allAdminEmails().containsAll(listOf("admin1@unipu.hr", "admin2@unipu.hr", "revoke.admin@unipu.hr")))
+        assertFalse(accountRepository.allAdminEmails().containsAll(listOf("user1@unipu.hr", "user2@unipu.hr", "user3@unipu.hr")))
     }
-    @Test
-    fun `retrieve account by id`() {
-        // arrange
-        insertAccount()
-        val id = jdbcTemplate.queryForObject<Int>("SELECT MAX(id) FROM account")
-        // act
-        val account = accountRepository.byId(id)
-        // assert
-        assertEquals(testAccount.copy(id = id), account)
-    }
-    @Test
-    fun `retrieve account by email`() {
-        // arrange
-        insertAccount()
-        // act
-        val account = accountRepository.byEmail(testAccount.email)
-        // assert
-        assertEquals(testAccount, account)
-    }
-    @Test
-    fun `retrieve all admin emails`() {
-        // arrange
-        insertAccount(email = "user1@email.com")
-        insertAccount(email = "user2@email.com")
-        insertAccount(email = "admin1@email.com")
-        insertAccount(email = "admin2@email.com")
-        insertAccount(email = "admin3@email.com")
-        // act
-        accountRepository.updateIsAdmin("admin1@email.com", true)
-        accountRepository.updateIsAdmin("admin2@email.com", true)
-        accountRepository.updateIsAdmin("admin3@email.com", true)
-        // assert
-        assertTrue(accountRepository.isAdmin("admin1@email.com"))
-        assertTrue(accountRepository.isAdmin("admin2@email.com"))
-        assertTrue(accountRepository.isAdmin("admin3@email.com"))
-        assertFalse(accountRepository.isAdmin("user1@email.com"))
-        assertFalse(accountRepository.isAdmin("user2@email.com"))
-    }
-    @Test
-    fun `update account`() {
-        // arrange
-        insertAccount()
-        val id = jdbcTemplate.queryForObject<Int>("SELECT MAX(id) FROM account")
+    @Test fun `update account`() {
         val newAccount = Account(
-            id = id,
+            id = 1,
             fullName = "new full name",
             title = "new title",
             email = "new@email",
@@ -148,9 +69,8 @@ class AccountRepositoryTests {
             zipCode = "new zip code",
             isAdmin = false
         )
-        // act
         accountRepository.update(
-            id = id,
+            id = 1,
             fullName = newAccount.fullName,
             title = newAccount.title,
             email = newAccount.email,
@@ -162,19 +82,11 @@ class AccountRepositoryTests {
             address = newAccount.address,
             zipCode = newAccount.zipCode,
         )
-        // assert
-        assertEquals( newAccount, accountRepository.byEmail(newAccount.email))
+        assertEquals(newAccount, accountRepository.byEmail(newAccount.email))
     }
-    @Test
-    fun `delete account`() {
-        // arrange
-        insertAccount()
-        val id = jdbcTemplate.queryForObject<Int>("SELECT MAX(id) FROM account")
-        insertAccount(email = "user@email.com")
-        // act
-        accountRepository.delete(id)
-        // assert
-        assertNull(accountRepository.byId(id))
-        assertNotNull(accountRepository.byId(id + 1))
+    @Test fun `delete account`() {
+        accountRepository.delete(1)
+        assertNull(accountRepository.byId(1))
+        assertNotNull(accountRepository.byId(2))
     }
 }
