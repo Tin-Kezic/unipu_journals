@@ -1,0 +1,103 @@
+package hr.unipu.journals.data_jdbc_tests
+
+import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.account_role_on_manuscript.ManuscriptRole
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+
+@DataJdbcTest
+class AccountRoleOnManuscriptRepositoryTests {
+    @Autowired
+    private lateinit var accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
+
+    @Test fun `retrieve authors by manuscript id`() {
+        val authorsOnManuscript1 = accountRoleOnManuscriptRepository.authors(1)
+        val authorsOnManuscript2 = accountRoleOnManuscriptRepository.authors(2)
+
+        assertContains(authorsOnManuscript1, "author on manuscript1")
+        assertContains(authorsOnManuscript2, "author on manuscript2")
+
+        assertFalse(authorsOnManuscript1.contains("author on manuscript2"))
+        assertFalse(authorsOnManuscript2.contains("author on manuscript1"))
+    }
+    @Test fun `retrieve corresponding author by manuscript id`() {
+        assertEquals("corresponding author on manuscript1", accountRoleOnManuscriptRepository.correspondingAuthor(1))
+        assertEquals("corresponding author on manuscript2", accountRoleOnManuscriptRepository.correspondingAuthor(2))
+    }
+    @Test fun `is role on manuscript`() {
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 10, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 10, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 10, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 10, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 10, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 10, 1))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 11, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 11, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 11, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 11, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 11, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 11, 2))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 12, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 12, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 12, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 12, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 12, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 12, 1))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 13, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 13, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 13, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 13, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 13, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 13, 2))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 14, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 14, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 14, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 14, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 14, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 14, 1))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 15, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 15, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 15, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 15, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 15, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 15, 2))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 16, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 16, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 16, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 16, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 16, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 16, 1))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 17, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 17, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 17, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 17, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 17, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 17, 2))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 18, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 18, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 18, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 18, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 18, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 18, 1))
+
+        assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 19, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, 19, 1))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 19, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 19, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, 19, 2))
+        assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, 19, 2))
+    }
+}
