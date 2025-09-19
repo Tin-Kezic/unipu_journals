@@ -3,6 +3,7 @@ package hr.unipu.journals.security
 import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section_editor_on_section.SectionEditorOnSectionRepository
 import org.springframework.security.core.context.SecurityContextHolder
@@ -45,36 +46,36 @@ class AuthorizationService(
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
-    fun isEicOnManuscriptOrSuperior(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isEicOnManuscript(it, manuscriptId) } ?: false
+    fun isEicOnManuscriptOrSuperior(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isRoleOnManuscript( ManuscriptRole.EIC,it, manuscriptId) } ?: false
     fun isSectionEditorOnSectionOrSuperior(publicationId: Int, sectionId: Int): Boolean = account?.let {
         sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
     fun isEditorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
-        accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+        accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR,it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
     fun isReviewerOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
-        accountRoleOnManuscriptRepository.isReviewerOnManuscript(it.id, manuscriptId)
-                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+        accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR,it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
     fun isCorrespondingAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
-        accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it.id, manuscriptId)
-                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+        accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR ,it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR,it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
     fun isAuthorOnManuscriptOrSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.let {
-        accountRoleOnManuscriptRepository.isAuthorOnManuscript(it.id, manuscriptId)
-                || accountRoleOnManuscriptRepository.isCorrespondingAuthorOnManuscript(it.id, manuscriptId)
-                || accountRoleOnManuscriptRepository.isEditorOnManuscript(it.id, manuscriptId)
+        accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR ,it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR ,it.id, manuscriptId)
+                || accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR,it.id, manuscriptId)
                 || sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
                 || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin

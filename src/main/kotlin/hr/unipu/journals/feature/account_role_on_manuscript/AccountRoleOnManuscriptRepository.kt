@@ -49,51 +49,28 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         SELECT DISTINCT $ACCOUNT.$FULL_NAME FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         JOIN $ACCOUNT ON $ACCOUNT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID
         JOIN $MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
-        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = $ACCOUNT.$ID
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID = $MANUSCRIPT.$ID
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $CORRESPONDING_AUTHOR
-        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $AUTHOR
+        WHERE $MANUSCRIPT.$ID = :$MANUSCRIPT_ID
+        AND ($ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $CORRESPONDING_AUTHOR OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $AUTHOR)
     """)
-    fun authors(@Param(TITLE) manuscriptId: Int): List<String>
+    fun authors(@Param(MANUSCRIPT_ID) manuscriptId: Int): List<String>
     @Query("""
         SELECT DISTINCT $ACCOUNT.$FULL_NAME FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         JOIN $ACCOUNT ON $ACCOUNT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID
         JOIN $MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
-        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = $ACCOUNT.$ID
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID = $MANUSCRIPT.$ID
+        WHERE $MANUSCRIPT.$ID = :$MANUSCRIPT_ID
         AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $CORRESPONDING_AUTHOR
-        OR $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE = $CORRESPONDING_AUTHOR
     """)
-    fun correspondingAuthor(@Param(TITLE) manuscriptId: Int): String
+    fun correspondingAuthor(@Param(MANUSCRIPT_ID) manuscriptId: Int): String
     @Query("""
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
-        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = 'EIC'
+        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID
+        AND $ACCOUNT_ID = :$ACCOUNT_ID
+        AND $ACCOUNT_ROLE = :$ACCOUNT_ROLE
     """)
-    fun isEicOnManuscript(@Param(ACCOUNT_ID) eicId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
-    @Query("""
-        SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
-        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = 'EDITOR'
-    """)
-    fun isEditorOnManuscript(@Param(ACCOUNT_ID) editorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
-    @Query("""
-        SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
-        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = 'REVIEWER'
-    """)
-    fun isReviewerOnManuscript(@Param(ACCOUNT_ID) reviewerId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
-    @Query("""
-        SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
-        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = 'CORRESPONDING_AUTHOR'
-    """)
-    fun isCorrespondingAuthorOnManuscript(@Param(ACCOUNT_ID) correspondingAuthorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
-    @Query("""
-        SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
-        WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = 'AUTHOR'
-    """)
-    fun isAuthorOnManuscript(@Param(ACCOUNT_ID) authorId: Int, @Param(MANUSCRIPT_ID) manuscriptId: Int): Boolean
+    fun isRoleOnManuscript(
+        @Param(ACCOUNT_ROLE) accountRole: ManuscriptRole,
+        @Param(ACCOUNT_ID) eicId: Int,
+        @Param(MANUSCRIPT_ID) manuscriptId: Int,
+    ): Boolean
 }
 
