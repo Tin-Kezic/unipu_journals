@@ -1,5 +1,7 @@
-package hr.unipu.journals.feature.account
+package hr.unipu.journals.data_jdbc_tests
 
+import hr.unipu.journals.feature.account.Account
+import hr.unipu.journals.feature.account.AccountRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertNotNull
