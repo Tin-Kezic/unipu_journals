@@ -69,7 +69,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     """)
     fun isRoleOnManuscript(
         @Param(ACCOUNT_ROLE) accountRole: ManuscriptRole,
-        @Param(ACCOUNT_ID) eicId: Int,
+        @Param(ACCOUNT_ID) accountId: Int,
         @Param(MANUSCRIPT_ID) manuscriptId: Int,
     ): Boolean
 }
