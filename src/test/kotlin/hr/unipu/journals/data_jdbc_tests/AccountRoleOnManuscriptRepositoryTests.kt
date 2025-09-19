@@ -12,8 +12,7 @@ import kotlin.test.assertEquals
 
 @DataJdbcTest
 class AccountRoleOnManuscriptRepositoryTests {
-    @Autowired
-    private lateinit var accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
+    @Autowired private lateinit var accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 
     @Test fun `retrieve authors by manuscript id`() {
         val authorsOnManuscript1 = accountRoleOnManuscriptRepository.authors(1)
