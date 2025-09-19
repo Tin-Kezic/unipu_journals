@@ -65,7 +65,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         SELECT EXISTS (SELECT 1 FROM $ACCOUNT_ROLE_ON_MANUSCRIPT
         WHERE $MANUSCRIPT_ID = :$MANUSCRIPT_ID
         AND $ACCOUNT_ID = :$ACCOUNT_ID
-        AND $ACCOUNT_ROLE = :$ACCOUNT_ROLE
+        AND $ACCOUNT_ROLE = :$ACCOUNT_ROLE)
     """)
     fun isRoleOnManuscript(
         @Param(ACCOUNT_ROLE) accountRole: ManuscriptRole,
