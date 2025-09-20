@@ -14,7 +14,6 @@ class CategoryRepositoryTests {
     @Autowired private lateinit var categoryRepository: CategoryRepository
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
-
     @Test fun `retrieve all categories`() {
         assertTrue(categoryRepository.all().containsAll(listOf(
             "Computer Science",
