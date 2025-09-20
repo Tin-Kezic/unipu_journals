@@ -6,6 +6,7 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('revoke admin', 'Mr.A2', 'revoke.admin@unipu.hr', 'revoked_admin_password',  'admin2 Affiliation', 'admin2 job type', 'admin2 country', 'admin2 city', 'admin2 address', 'admin2 zip code', true),
 ('first eic on publication', 'Mr.E1', 'eic1.on.publication@unipu.hr', 'eic_on_publication_password1', 'EiC1 Affiliation', 'EiC1 job type', 'EiC1 country', 'EiC1 city', 'EiC1 address', 'EiC1 zip code', false),
 ('second eic on publication', 'Mr.E2', 'eic2.on.publication@unipu.hr', 'eic_on_publication_password2', 'EiC2 Affiliation', 'EiC2 job type', 'EiC2 country', 'EiC2 city', 'EiC2 address', 'EiC2 zip code', false),
+('new eic on publication', 'Mr.NE', 'new.eic.on.publication@unipu.hr', 'new_eic_on_publication_password2', 'new EiC2 Affiliation', 'new EiC2 job type', 'new EiC2 country', 'new EiC2 city', 'new EiC2 address', 'new EiC2 zip code', false),
 ('first section editor', 'Mr.SE1', 'section.editor1.publication@unipu.hr', 'section_editor_password1', 'section editor1 Affiliation', 'section editor1 job type', 'section editor1 country', 'section editor1 city', 'section editor1 address', 'section editor1 zip code', false),
 ('second section editor', 'Mr.SE2', 'section.editor2.publication@unipu.hr', 'section_editor_password2', 'section editor2 Affiliation', 'section editor2 job type', 'section editor2 country', 'section editor2 city', 'section editor2 address', 'section editor2 zip code', false),
 ('eic on manuscript1', 'Mr.EOP1', 'eic.on.manuscript1.manuscript@unipu.hr', 'eic_on_manuscript_password1', 'eic on manuscript1 Affiliation', 'eic on manuscript1 job type', 'eic on manuscript1 country', 'eic on manuscript1 city', 'eic on manuscript1 address', 'eic on manuscript1 zip code', false),
@@ -24,23 +25,18 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 INSERT INTO invite (email, target, target_id) VALUES
 ('invited.admin@unipu.hr', 'ADMIN', -1),
 ('invited.admin2@unipu.hr', 'ADMIN', -1),
-
 ('invited.eic.on.publication@unipu.hr', 'EIC_ON_PUBLICATION', 1),
 ('invited.eic.on.publication2@unipu.hr', 'EIC_ON_PUBLICATION', 2),
 ('invited.eic.on.publication3@unipu.hr', 'EIC_ON_PUBLICATION', 3),
-
 ('invited.eic.on.manuscript@unipu.hr', 'EIC_ON_MANUSCRIPT', 1),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 2),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 3),
-
 ('invited.section.editor.on.section@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 1),
 ('invited.section.editor.on.section2@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 2),
 ('invited.section.editor.on.section3@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 3),
-
 ('invited.editor.on.manuscript@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 1),
 ('invited.editor.on.manuscript2@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 2),
 ('invited.editor.on.manuscript3@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 3),
-
 ('invited.reviewer.on.manuscript@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 1),
 ('invited.reviewer.on.manuscript2@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 2),
 ('invited.reviewer.on.manuscript3@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 3);
@@ -57,11 +53,11 @@ INSERT INTO publication (title, is_hidden) VALUES
 ('first hidden publication', TRUE),
 ('second hidden publication', TRUE);
 INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
-(1, 4),
-(2, 5),
-(3, 4),
-(4, 5),
-(5, 4);
+(1, 7),
+(2, 6),
+(3, 7),
+(4, 6),
+(5, 7);
 INSERT INTO publication_section (title, description, publication_id, is_hidden) VALUES
 ('Machine Learning', 'ML research and techniques', 1, TRUE),
 ('Deep Learning', 'Neural networks and deep learning models', 1, FALSE),
@@ -88,8 +84,8 @@ INSERT INTO publication_section (title, description, publication_id, is_hidden) 
 ('Organic Chemistry', 'Organic molecules and reactions', 5, TRUE),
 ('Analytical Chemistry', 'Techniques for analyzing chemical substances', 5, FALSE);
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
-(1, 8),
-(2, 9);
+(1, 9),
+(2, 10);
 INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (10, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 134, 25, 'Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.'),
 (11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 1, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 245, 33, 'Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.'),
@@ -113,16 +109,16 @@ INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_
 (10, 5, 'HIDDEN', 2, 'http://example.com/ms29.pdf', CURRENT_TIMESTAMP, '2025-07-25 17:45:00', 61, 8, 'Clinical Trial Optimization with AI2', 'Optimizing patient recruitment and trial design using machine learning.2'),
 (11, 5, 'DRAFT', 2, 'http://example.com/ms210.pdf', CURRENT_TIMESTAMP, NULL, 76, 15, 'Wearable Technology and AI Integration2', 'Leveraging real-time health data from wearables through AI.2');
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
-(1, 10, 'EIC'),
-(2, 11, 'EIC'),
-(1, 12, 'EDITOR'),
-(2, 13, 'EDITOR'),
-(1, 14, 'REVIEWER'),
-(2, 15, 'REVIEWER'),
-(1, 16, 'CORRESPONDING_AUTHOR'),
-(2, 17, 'CORRESPONDING_AUTHOR'),
-(1, 18, 'AUTHOR'),
-(2, 19, 'AUTHOR');
+(1, 11, 'EIC'),
+(2, 12, 'EIC'),
+(1, 13, 'EDITOR'),
+(2, 14, 'EDITOR'),
+(1, 15, 'REVIEWER'),
+(2, 16, 'REVIEWER'),
+(1, 17, 'CORRESPONDING_AUTHOR'),
+(2, 18, 'CORRESPONDING_AUTHOR'),
+(1, 19, 'AUTHOR'),
+(2, 20, 'AUTHOR');
 INSERT INTO manuscript_review (
     manuscript_id, reviewer_id, round, novelty, significance, technical_quality, clarity,
     methodology, relevance_to_the_publication, language_quality, overall_mark,
