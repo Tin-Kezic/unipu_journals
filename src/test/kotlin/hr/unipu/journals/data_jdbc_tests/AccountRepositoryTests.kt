@@ -53,8 +53,7 @@ class AccountRepositoryTests {
         assertFalse(accountRepository.exists(100))
     }
     @Test fun `retrieve all admin emails`() {
-        assertTrue(accountRepository.allAdminEmails().containsAll(listOf("admin1@unipu.hr", "admin2@unipu.hr", "revoke.admin@unipu.hr")))
-        assertFalse(accountRepository.allAdminEmails().containsAll(listOf("user1@unipu.hr", "user2@unipu.hr", "user3@unipu.hr")))
+        assertEquals(listOf("admin1@unipu.hr", "admin2@unipu.hr", "revoke.admin@unipu.hr"), accountRepository.allAdminEmails())
     }
     @Test fun `update account`() {
         val newAccount = Account(

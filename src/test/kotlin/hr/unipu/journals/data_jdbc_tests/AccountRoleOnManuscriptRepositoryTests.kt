@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import kotlin.test.Test
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 @DataJdbcTest
@@ -15,14 +14,8 @@ class AccountRoleOnManuscriptRepositoryTests {
     @Autowired private lateinit var accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 
     @Test fun `retrieve authors by manuscript id`() {
-        val authorsOnManuscript1 = accountRoleOnManuscriptRepository.authors(1)
-        val authorsOnManuscript2 = accountRoleOnManuscriptRepository.authors(2)
-
-        assertContains(authorsOnManuscript1, "author on manuscript1")
-        assertContains(authorsOnManuscript2, "author on manuscript2")
-
-        assertFalse(authorsOnManuscript1.contains("author on manuscript2"))
-        assertFalse(authorsOnManuscript2.contains("author on manuscript1"))
+        assertEquals(listOf("author on manuscript1"), accountRoleOnManuscriptRepository.authors(1))
+        assertEquals(listOf("author on manuscript2"), accountRoleOnManuscriptRepository.authors(2))
     }
     @Test fun `retrieve corresponding author by manuscript id`() {
         assertEquals("corresponding author on manuscript1", accountRoleOnManuscriptRepository.correspondingAuthor(1))

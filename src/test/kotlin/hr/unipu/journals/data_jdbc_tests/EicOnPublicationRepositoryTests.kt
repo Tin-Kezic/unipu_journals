@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
 import kotlin.test.Test
-import kotlin.test.assertContains
+import kotlin.test.assertEquals
 
 @DataJdbcTest
 class EicOnPublicationRepositoryTests {
@@ -34,17 +34,11 @@ class EicOnPublicationRepositoryTests {
         assertFalse(eicOnPublicationRepository.isEicOnPublication(6, 5))
     }
     @Test fun `retrieve eic emails by publication id`() {
-        assertContains(eicOnPublicationRepository.eicEmailsByPublicationId(1), "eic2.on.publication@unipu.hr")
-        assertContains(eicOnPublicationRepository.eicEmailsByPublicationId(2), "eic1.on.publication@unipu.hr")
-        assertContains(eicOnPublicationRepository.eicEmailsByPublicationId(3), "eic2.on.publication@unipu.hr")
-        assertContains(eicOnPublicationRepository.eicEmailsByPublicationId(4), "eic1.on.publication@unipu.hr")
-        assertContains(eicOnPublicationRepository.eicEmailsByPublicationId(5), "eic2.on.publication@unipu.hr")
-
-        assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(1).contains("eic1.on.publication@unipu.hr"))
-        assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(2).contains("eic2.on.publication@unipu.hr"))
-        assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(3).contains("eic1.on.publication@unipu.hr"))
-        assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(4).contains("eic2.on.publication@unipu.hr"))
-        assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(5).contains("eic1.on.publication@unipu.hr"))
+        assertEquals(listOf("eic2.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(1))
+        assertEquals(listOf("eic1.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(2))
+        assertEquals(listOf("eic2.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(3))
+        assertEquals(listOf("eic1.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(4))
+        assertEquals(listOf("eic2.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(5))
     }
     @Test fun `assign eic on publication`() {
         eicOnPublicationRepository.assign(2, 8)
