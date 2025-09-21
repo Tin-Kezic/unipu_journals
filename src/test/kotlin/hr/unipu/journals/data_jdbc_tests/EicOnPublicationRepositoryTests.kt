@@ -50,4 +50,9 @@ class EicOnPublicationRepositoryTests {
         eicOnPublicationRepository.assign(2, 8)
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM eic_on_publication WHERE publication_id = 2 AND eic_id = 8)"))
     }
+    @Test fun `revoke eic on publication`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM eic_on_publication WHERE publication_id = 3 AND eic_id = 7)"))
+        eicOnPublicationRepository.revoke(3, 7)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM eic_on_publication WHERE publication_id = 3 AND eic_id = 7)"))
+    }
 }
