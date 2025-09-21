@@ -9,7 +9,7 @@ private const val CATEGORY = "category"
 private const val ID = "id"
 private const val NAME = "name"
 interface CategoryRepository: Repository<Category, Int> {
-    @Query("SELECT $NAME FROM $CATEGORY ORDER BY $ID")
+    @Query("SELECT $NAME FROM $CATEGORY ORDER BY $NAME")
     fun all(): List<String>
 
     @Modifying
