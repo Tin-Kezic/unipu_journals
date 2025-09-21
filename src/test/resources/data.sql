@@ -23,21 +23,21 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('user second', 'Mr.U2', 'user2@unipu.hr', 'user_password2', 'Affiliation2', 'job type2', 'country2', 'city2', 'address2', 'zip code2', false),
 ('user third', 'Mr.U3', 'user3@unipu.hr', 'user_password3', 'Affiliation3', 'job type3', 'country3', 'city3', 'address3', 'zip code3', false);
 INSERT INTO invite (email, target, target_id) VALUES
-('invited.admin@unipu.hr', 'ADMIN', -1),
+('invited.admin1@unipu.hr', 'ADMIN', -1),
 ('invited.admin2@unipu.hr', 'ADMIN', -1),
-('invited.eic.on.publication@unipu.hr', 'EIC_ON_PUBLICATION', 1),
+('invited.eic.on.publication1@unipu.hr', 'EIC_ON_PUBLICATION', 1),
 ('invited.eic.on.publication2@unipu.hr', 'EIC_ON_PUBLICATION', 2),
 ('invited.eic.on.publication3@unipu.hr', 'EIC_ON_PUBLICATION', 3),
 ('invited.eic.on.manuscript@unipu.hr', 'EIC_ON_MANUSCRIPT', 1),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 2),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 3),
-('invited.section.editor.on.section@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 1),
+('invited.section.editor.on.section1@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 1),
 ('invited.section.editor.on.section2@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 2),
 ('invited.section.editor.on.section3@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 3),
-('invited.editor.on.manuscript@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 1),
+('invited.editor.on.manuscript1@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 1),
 ('invited.editor.on.manuscript2@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 2),
 ('invited.editor.on.manuscript3@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 3),
-('invited.reviewer.on.manuscript@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 1),
+('invited.reviewer.on.manuscript1@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 1),
 ('invited.reviewer.on.manuscript2@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 2),
 ('invited.reviewer.on.manuscript3@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 3);
 INSERT INTO category (name) VALUES
