@@ -1,8 +1,7 @@
-
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin) VALUES
 ('root', '-', 'root@unipu.hr', 'root', '-', '-', '-', '-', '-', '-', false),
 ('admin', '-', 'admin@unipu.hr', 'admin', '-', '-', '-', '-', '-', '-', true),
-('Alice Smith', 'Dr.', 'alice.smith@nyu.edu', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'New York University', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
+('Alice Smith', 'Dr.', 'alice.smith@nyu.edu', 'admin', 'New York University', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
 ('Bob Johnson', 'Prof.', 'bob.johnson@ox.ac.uk', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University of Oxford', 'Editor', 'UK', 'Oxford', 'High St 12', 'OX1 2JD', FALSE),
 ('Charlie Williams', 'Dr.', 'charlie.williams@imperial.ac.uk', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'Imperial College London', 'Reviewer', 'UK', 'London', '789 Oak St', 'SW1A 1AA', FALSE),
 ('Diana Brown', 'Ms.', 'diana.brown@utoronto.ca', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC' , 'University of Toronto', 'Author', 'Canada', 'Toronto', '101 Maple St', 'M5H 2N2', FALSE),
@@ -61,12 +60,12 @@ INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
 (2, 8),
 (3, 3),
 (4, 8),
-(5, 2),
+(5, 3),
 (6, 3),
 (7, 8),
-(8, 2),
+(8, 4),
 (9, 7),
-(10, 3);
+(10, 4);
 
 INSERT INTO publication_section (title, description, publication_id, is_hidden) VALUES
 ('Machine Learning', 'Research on algorithms and data science', 1, FALSE),
@@ -142,11 +141,11 @@ INSERT INTO manuscript_review (
     appropriate_references, ethical_concerns, reviewer_comment, reviewer_comment_file_url,
     author_response, author_response_file_url, recommendation, review_date, author_response_date
 ) VALUES
-(1, 1, 1, 'FOUR', 'FOUR', 'FIVE', 'FOUR', 'FIVE', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Excellent study with clear methodology.', 'http://example.com/rev1.pdf', 'Thank you!', 'http://example.com/res1.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 2, 1, 'THREE', 'THREE', 'THREE', 'TWO', 'TWO', 'THREE', 'THREE', 'THREE', 'YES', 'CAN_BE_IMPROVED', 'CAN_BE_IMPROVED', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs clarification in methods.', 'http://example.com/rev2.pdf', 'Clarified section 2.', 'http://example.com/res2.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 2, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Interesting results.', 'http://example.com/rev3.pdf', 'Added extra details.', 'http://example.com/res3.pdf', 'MAJOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 3, 1, 'THREE', 'THREE', 'TWO', 'THREE', 'THREE', 'THREE', 'THREE', 'THREE', 'YES', 'YES', 'YES', 'CAN_BE_IMPROVED', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Check figures for accuracy.', 'http://example.com/rev4.pdf', 'Updated figures.', 'http://example.com/res4.pdf', 'REJECT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1, 2, 3, 'TWO', 'TWO', 'TWO', 'TWO', 'ONE', 'TWO', 'TWO', 'TWO', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs major restructuring.', 'http://example.com/rev5.pdf', 'Will restructure.', 'http://example.com/res5.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 3, 1, 'FOUR', 'FOUR', 'FIVE', 'FOUR', 'FIVE', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Excellent study with clear methodology.', 'http://example.com/rev1.pdf', 'Thank you!', 'http://example.com/res1.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 3, 1, 'THREE', 'THREE', 'THREE', 'TWO', 'TWO', 'THREE', 'THREE', 'THREE', 'YES', 'CAN_BE_IMPROVED', 'CAN_BE_IMPROVED', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs clarification in methods.', 'http://example.com/rev2.pdf', 'Clarified section 2.', 'http://example.com/res2.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 3, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Interesting results.', 'http://example.com/rev3.pdf', 'Added extra details.', 'http://example.com/res3.pdf', 'MAJOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 4, 1, 'THREE', 'THREE', 'TWO', 'THREE', 'THREE', 'THREE', 'THREE', 'THREE', 'YES', 'YES', 'YES', 'CAN_BE_IMPROVED', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Check figures for accuracy.', 'http://example.com/rev4.pdf', 'Updated figures.', 'http://example.com/res4.pdf', 'REJECT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 4, 3, 'TWO', 'TWO', 'TWO', 'TWO', 'ONE', 'TWO', 'TWO', 'TWO', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs major restructuring.', 'http://example.com/rev5.pdf', 'Will restructure.', 'http://example.com/res5.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 3, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'THREE', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'Fixed typos.', 'http://example.com/res6.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO invite (email, target, target_id) VALUES
 ('root@unipu.hr', 'ADMIN', 3),
@@ -162,12 +161,12 @@ INSERT INTO invite (email, target, target_id) VALUES
 INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
 (1, 3),
 (2, 8),
-(3, 1),
+(3, 4),
 (4, 8),
 (5, 4),
 (6, 3),
 (7, 8),
-(8, 2),
+(8, 4),
 (9, 7),
 (10, 3);
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
@@ -183,9 +182,9 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (10, 3);
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 -- Machine Learning
-(1, 4, 'AUTHOR'), (1, 3, 'EDITOR'), (1, 3, 'REVIEWER'),
-(2, 13, 'AUTHOR'), (2, 3, 'EDITOR'), (2, 11, 'REVIEWER'),
-(3, 18, 'AUTHOR'), (3, 3, 'EDITOR'), (3, 14, 'REVIEWER'),
+(1, 4, 'AUTHOR'), (3, 3, 'EDITOR'), (4, 3, 'REVIEWER'),
+(2, 13, 'AUTHOR'), (4, 3, 'EDITOR'), (3, 11, 'REVIEWER'),
+(3, 18, 'AUTHOR'), (3, 3, 'EDITOR'), (5, 14, 'REVIEWER'),
 
 -- Neuroscience
 (4, 5, 'AUTHOR'), (4, 7, 'EDITOR'), (4, 6, 'REVIEWER'),
