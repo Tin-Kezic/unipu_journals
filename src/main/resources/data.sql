@@ -1,7 +1,7 @@
 INSERT INTO account (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code, is_admin) VALUES
-('root', '-', 'root@unipu.hr', 'root', '-', '-', '-', '-', '-', '-', false),
-('admin', '-', 'admin@unipu.hr', 'admin', '-', '-', '-', '-', '-', '-', true),
-('Alice Smith', 'Dr.', 'alice.smith@nyu.edu', 'admin', 'New York University', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
+('root', '-', 'root@unipu.hr', '$2a$12$hcrM70SUwW9Wk.WwbqG5feD.oQj8tTTylw1NM8nY26T37o7w70zXC', '-', '-', '-', '-', '-', '-', false),
+('admin', '-', 'admin@unipu.hr', '$2a$12$qWg0p4NrcnDiCfWBvJ5Sk.WR549byNhVC0CzQFalZtTHsDRIf1ZVa', '-', '-', '-', '-', '-', '-', true),
+('Alice Smith', 'Dr.', 'alice.smith@nyu.edu', '$2a$12$qWg0p4NrcnDiCfWBvJ5Sk.WR549byNhVC0CzQFalZtTHsDRIf1ZVa', 'New York University', 'Professor', 'USA', 'New York', '123 Main St', '10001', TRUE),
 ('Bob Johnson', 'Prof.', 'bob.johnson@ox.ac.uk', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University of Oxford', 'Editor', 'UK', 'Oxford', 'High St 12', 'OX1 2JD', FALSE),
 ('Charlie Williams', 'Dr.', 'charlie.williams@imperial.ac.uk', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'Imperial College London', 'Reviewer', 'UK', 'London', '789 Oak St', 'SW1A 1AA', FALSE),
 ('Diana Brown', 'Ms.', 'diana.brown@utoronto.ca', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC' , 'University of Toronto', 'Author', 'Canada', 'Toronto', '101 Maple St', 'M5H 2N2', FALSE),
