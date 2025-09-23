@@ -57,16 +57,16 @@ INSERT INTO publication (title, is_hidden) VALUES
 
 -- EIC assignments
 INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
-(1, 1),
+(1, 3),
 (2, 8),
-(3, 1),
+(3, 3),
 (4, 8),
 (5, 2),
-(6, 1),
+(6, 3),
 (7, 8),
 (8, 2),
 (9, 7),
-(10, 1);
+(10, 3);
 
 INSERT INTO publication_section (title, description, publication_id, is_hidden) VALUES
 ('Machine Learning', 'Research on algorithms and data science', 1, FALSE),
@@ -96,16 +96,16 @@ INSERT INTO publication_section (title, description, publication_id, is_hidden) 
 ('Chemical Engineering', 'Industrial chemical processes', 5, FALSE);
 
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
-(1, 2),
+(1, 3),
 (2, 7),
 (3, 12),
 (4, 16),
-(5, 2),
+(5, 3),
 (6, 7),
 (7, 13),
 (8, 21),
 (9, 7),
-(10, 2);
+(10, 3);
 
 INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (4, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ml1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3, 'AI for Early Disease Detection', 'Explores deep learning models for early diagnostics in healthcare.'),
@@ -149,9 +149,9 @@ INSERT INTO manuscript_review (
 (1, 2, 3, 'TWO', 'TWO', 'TWO', 'TWO', 'ONE', 'TWO', 'TWO', 'TWO', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', 'MUST_BE_IMPROVED', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Needs major restructuring.', 'http://example.com/rev5.pdf', 'Will restructure.', 'http://example.com/res5.pdf', 'ACCEPT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (1, 3, 2, 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'FOUR', 'THREE', 'FOUR', 'FOUR', 'YES', 'YES', 'YES', 'YES', 'YES', FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 'Solid work, minor typos.', 'http://example.com/rev6.pdf', 'Fixed typos.', 'http://example.com/res6.pdf', 'MINOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO invite (email, target, target_id) VALUES
-('root@unipu.hr', 'ADMIN', 1),
-('root@unipu.hr', 'EIC_ON_PUBLICATION', 2),
-('root@unipu.hr', 'EIC_ON_MANUSCRIPT', 2),
+('root@unipu.hr', 'ADMIN', 3),
+('root@unipu.hr', 'EIC_ON_PUBLICATION', 3),
+('root@unipu.hr', 'EIC_ON_MANUSCRIPT', 7),
 ('root@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 5),
 ('root@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 6),
 ('root@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 7),
@@ -160,32 +160,32 @@ INSERT INTO invite (email, target, target_id) VALUES
 ('root@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 15),
 ('root@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 23);
 INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
-(1, 1),
+(1, 3),
 (2, 8),
 (3, 1),
 (4, 8),
-(5, 2),
-(6, 1),
+(5, 4),
+(6, 3),
 (7, 8),
 (8, 2),
 (9, 7),
-(10, 1);
+(10, 3);
 INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
-(1, 2),
+(1, 4),
 (2, 7),
 (3, 12),
 (4, 16),
-(5, 2),
+(5, 4),
 (6, 7),
 (7, 13),
 (8, 21),
 (9, 7),
-(10, 2);
+(10, 3);
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 -- Machine Learning
-(1, 4, 'AUTHOR'), (1, 2, 'EDITOR'), (1, 3, 'REVIEWER'),
-(2, 13, 'AUTHOR'), (2, 2, 'EDITOR'), (2, 11, 'REVIEWER'),
-(3, 18, 'AUTHOR'), (3, 2, 'EDITOR'), (3, 14, 'REVIEWER'),
+(1, 4, 'AUTHOR'), (1, 3, 'EDITOR'), (1, 3, 'REVIEWER'),
+(2, 13, 'AUTHOR'), (2, 3, 'EDITOR'), (2, 11, 'REVIEWER'),
+(3, 18, 'AUTHOR'), (3, 3, 'EDITOR'), (3, 14, 'REVIEWER'),
 
 -- Neuroscience
 (4, 5, 'AUTHOR'), (4, 7, 'EDITOR'), (4, 6, 'REVIEWER'),
