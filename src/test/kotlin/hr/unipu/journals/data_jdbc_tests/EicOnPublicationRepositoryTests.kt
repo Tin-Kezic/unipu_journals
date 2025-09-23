@@ -46,7 +46,6 @@ class EicOnPublicationRepositoryTests {
         assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(4).contains("eic2.on.publication@unipu.hr"))
         assertFalse(eicOnPublicationRepository.eicEmailsByPublicationId(5).contains("eic1.on.publication@unipu.hr"))
     }
-
     @Test fun `assign eic on publication`() {
         eicOnPublicationRepository.assign(2, 8)
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM eic_on_publication WHERE publication_id = 2 AND eic_id = 8)"))
