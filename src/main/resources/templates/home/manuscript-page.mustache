@@ -63,7 +63,7 @@
                 <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
             {{#isSectionEditorOrSuperior}}
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0;">
+                <footer class="yellow-box-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
                         {{#isAdmin}}
                             <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>
                         {{/isAdmin}}
@@ -129,7 +129,7 @@
         });
         document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
         document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-state?newState=HIDDEN`, { method: 'PUT' });
             if(!response.ok) { alert('failed to hide Manuscript'); return; }
             document.querySelector(`article[data-id="${currentId}"]`).remove();
             hideManuscriptDialog.close();
@@ -156,7 +156,7 @@
         });
         document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
         document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-state?newState=ARCHIVED`, { method: 'PUT' });
             if(!response.ok) { alert('failed to archive Manuscript'); return; }
             document.querySelector(`article[data-id="${currentId}"]`).remove();
             archiveManuscriptDialog.close();

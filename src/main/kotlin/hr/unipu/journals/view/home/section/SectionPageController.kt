@@ -20,11 +20,11 @@ class SectionPageController(
 ) {
     @GetMapping("/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allPublished()
+        model["publicationsSidebar"] = publicationRepository.all()
         model["isAdmin"] = authorizationService.isAdmin()
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)
-        model["sections"] = sectionRepository.allPublishedByPublicationId(publicationId).map { section ->
+        model["sections"] = sectionRepository.allByPublicationId(publicationId).map { section ->
             val isSectionEditorOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             ContainerDTO(
                 id = section.id,

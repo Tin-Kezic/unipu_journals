@@ -6,205 +6,86 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
 
-private const val MANUSCRIPT = "manuscript"
-private const val ID = "id"
-private const val TITLE = "title"
-private const val DESCRIPTION = "description"
-private const val AUTHOR_ID = "author_id"
-private const val CATEGORY_ID = "category_id"
-private const val CURRENT_STATE = "current_state"
-private const val SECTION_ID = "section_id"
-private const val FILE_URL = "file_url"
-private const val SUBMISSION_DATE = "submission_date"
-private const val PUBLICATION_DATE = "publication_date"
-private const val VIEWS = "views"
-private const val DOWNLOADS = "downloads"
-
-// manuscript-state
-private const val AWAITING_INITIAL_EIC_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW'"
-private const val AWAITING_INITIAL_EDITOR_REVIEW = "'AWAITING_INITIAL_EDITOR_REVIEW'"
-private const val AWAITING_REVIEWER_REVIEW = "'AWAITING_REVIEWER_REVIEW'"
-private const val MINOR = "'MINOR'"
-private const val MAJOR = "'MAJOR'"
-private const val REJECTED = "'REJECTED'"
-private const val PUBLISHED = "'PUBLISHED'"
-private const val HIDDEN = "'HIDDEN'"
-private const val DRAFT = "'DRAFT'"
-private const val ARCHIVED = "'ARCHIVED'"
-
-// publication
-private const val PUBLICATION = "publication"
-//private const val ID = "id"
-//private const val TITLE = "title"
-//private const val IS_HIDDEN = "is_hidden"
-
-// section
-private const val PUBLICATION_SECTION = "publication_section"
-//private const val ID = "id"
-//private const val TITLE = "title"
-//private const val DESCRIPTION = "description"
-private const val PUBLICATION_ID = "publication_id"
-private const val IS_HIDDEN = "is_hidden"
-
-// profile
-private const val ACCOUNT = "account"
-//private const val ID = "id"
-private const val FULL_NAME = "full_name"
-private const val EMAIL = "email"
-private const val PASSWORD = "password"
-private const val AFFILIATION = "affiliation"
-private const val JOB_TYPE = "job_type"
-private const val COUNTRY = "country"
-private const val CITY = "city"
-private const val ADDRESS = "address"
-private const val ZIP_CODE = "zip_code"
-private const val IS_ADMIN = "is_admin"
-
-// eic_on_publication
-private const val EIC_ON_PUBLICATION = "eic_on_publication"
-//private const val ID = "id"
-//private const val PUBLICATION_ID = "publication_id"
-private const val EIC_ID = "eic_id"
-
-// account_role_on_manuscript
-//private const val ID = "id"
-private const val ACCOUNT_ROLE_ON_MANUSCRIPT = "account_role_on_manuscript"
-private const val MANUSCRIPT_ID = "manuscript_id"
-private const val ACCOUNT_ID = "account_id"
-private const val ACCOUNT_ROLE = "account_role"
-
-// manuscript_role
-private const val EIC = "'EIC'"
-private const val EDITOR = "'EDITOR'"
-private const val REVIEWER = "'REVIEWER'"
-private const val CORRESPONDING_AUTHOR = "'CORRESPONDING_AUTHOR'"
-private const val AUTHOR = "'AUTHOR'"
-
 interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE $MANUSCRIPT SET $VIEWS = $VIEWS + 1 WHERE $ID = :$ID")
-    fun incrementViews(@Param(ID) id: Int)
+    @Query("UPDATE manuscript SET views = views + 1 WHERE id = :id")
+    fun incrementViews(@Param("id") id: Int)
 
     @Modifying
-    @Query("UPDATE $MANUSCRIPT SET $DOWNLOADS = $DOWNLOADS + 1 WHERE $ID = :$ID")
-    fun incrementDownloads(@Param(ID) id: Int)
+    @Query("UPDATE manuscript SET downloads = downloads + 1 WHERE id = :id")
+    fun incrementDownloads(@Param("id") id: Int)
 
     //todo. fix
     @Query("""
-        SELECT $PUBLICATION.$ID AS $PUBLICATION_ID, $PUBLICATION_SECTION.$ID AS $SECTION_ID FROM $MANUSCRIPT
-        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        WHERE $MANUSCRIPT.$ID = :$ID
+        SELECT publication.id AS publication_id, publication_section.id AS section_id FROM manuscript
+        JOIN publication_section ON manuscript.section_id = publication_section.id
+        JOIN publication ON publication_section.publication_id = publication.id
+        WHERE manuscript.id = :id
         """)
-    fun publicationAndSection(@Param(ID) manuscriptId: Int): PublicationAndSectionDTO
+    fun publicationAndSection(@Param("id") manuscriptId: Int): PublicationAndSectionDTO
 
     @Modifying
-    @Query("INSERT INTO $MANUSCRIPT ($TITLE, $AUTHOR_ID, $CATEGORY_ID, $SECTION_ID, $FILE_URL) VALUES (:$TITLE, :$AUTHOR_ID, :$CATEGORY_ID, :$SECTION_ID, :$FILE_URL)")
+    @Query("INSERT INTO manuscript (title, author_id, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
     fun insert(
-        @Param(TITLE) title: String,
-        @Param(AUTHOR_ID) authorId: Int,
-        @Param(CATEGORY_ID) categoryId: Int,
-        @Param(SECTION_ID) sectionId: Int,
-        @Param(FILE_URL) fileUrl: String
+        @Param("title") title: String,
+        @Param("author_id") authorId: Int,
+        @Param("category_id") categoryId: Int,
+        @Param("section_id") sectionId: Int,
+        @Param("file_url") fileUrl: String
     )
-    @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun title(@Param(ID) sectionId: Int): String
-
     @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
-        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
-        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE IN ($EIC, $EDITOR, $REVIEWER)
-        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
-        AND $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = :$ID
+        SELECT DISTINCT manuscript.* FROM manuscript
+        JOIN publication_section ON manuscript.section_id = publication_section.id
+        JOIN publication ON publication_section.publication_id = publication.id
+        JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        WHERE account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+        AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        AND publication.is_hidden = FALSE
+        AND publication_section.is_hidden = FALSE
+        AND account_role_on_manuscript.account_id = :account_id
+        AND (publication.id = :publication_id OR :publication_id IS NULL)
     """)
-    fun pending(@Param(ID) id: Int): List<Manuscript>
+    fun pending(@Param("account_id") accountId: Int, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
 
-    @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
-        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
-        WHERE $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE IN ($EIC, $EDITOR, $REVIEWER)
-        AND $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
-        AND $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ID = :$ID
-        AND $PUBLICATION.$ID = :$PUBLICATION_ID
-    """)
-    fun pendingByPublication(@Param(ID) id: Int, @Param(PUBLICATION_ID) publicationId: Int): List<Manuscript>
-
-    @Query("SELECT EXISTS (SELECT 1 FROM $MANUSCRIPT WHERE $ID = :$ID)")
-    fun exists(@Param(ID) id: Int): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM manuscript WHERE id = :id)")
+    fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $ARCHIVED WHERE $ID = :$ID")
-    fun archive(@Param(ID) id: Int)
+    @Query("UPDATE manuscript SET current_state = :state WHERE id = :id")
+    fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState)
 
     @Modifying
-    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $HIDDEN WHERE $ID = :$ID")
-    fun hide(@Param(ID) id: Int)
+    @Query("DELETE FROM manuscript WHERE id = :id")
+    fun delete(@Param("id") id: Int)
 
-    @Modifying
-    @Query("UPDATE $MANUSCRIPT SET $CURRENT_STATE = $PUBLISHED WHERE $ID = :$ID")
-    fun publish(@Param(ID) id: Int)
+    @Query("SELECT * FROM manuscript WHERE id = :id")
+    fun byId(@Param("id") manuscriptId: Int): Manuscript
 
-    @Modifying
-    @Query("DELETE FROM $MANUSCRIPT WHERE $ID = :$ID")
-    fun delete(@Param(ID) id: Int)
-
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $ID = :$ID")
-    fun byId(@Param(ID) manuscriptId: Int): Manuscript
-
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $PUBLISHED ORDER BY $ID DESC")
-    fun allPublishedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
-
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $ARCHIVED ORDER BY $ID DESC")
-    fun allArchivedBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
-
-    @Query("SELECT * FROM $MANUSCRIPT WHERE $SECTION_ID = :$SECTION_ID AND $CURRENT_STATE = $HIDDEN ORDER BY $ID DESC")
-    fun allHiddenBySectionId(@Param(SECTION_ID) sectionId: Int): List<Manuscript>
+    @Query("SELECT * FROM manuscript WHERE section_id = :section_id AND current_state = :state ORDER BY id DESC")
+    fun allBySectionId(@Param("section_id") sectionId: Int, @Param("state") manuscriptState: ManuscriptState): List<Manuscript>
 
     @Query("""
-        SELECT $MANUSCRIPT.* FROM $MANUSCRIPT
-        JOIN $ACCOUNT ON $MANUSCRIPT.$AUTHOR_ID = $ACCOUNT.$ID
-        WHERE $MANUSCRIPT.$AUTHOR_ID = $ACCOUNT.$ID
+        SELECT manuscript.* FROM manuscript
+        JOIN account ON manuscript.author_id = account.id
+        WHERE manuscript.author_id = account.id
     """)
-    fun allByAuthor(@Param(ID) authorId: Int): List<Manuscript>
+    fun allByAuthor(@Param("id") authorId: Int): List<Manuscript>
 
     @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
-        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EIC_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EDITOR_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR
-        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR
-        ORDER BY $MANUSCRIPT.$ID DESC
+        SELECT DISTINCT manuscript.* FROM manuscript
+        JOIN publication_section ON manuscript.section_id = publication_section.id
+        JOIN publication ON publication_section.publication_id = publication.id
+        WHERE publication_section.is_hidden = FALSE
+        AND publication.is_hidden = FALSE
+        AND manuscript.current_state = 'AWAITING_INITIAL_EIC_REVIEW'
+        OR manuscript.current_state = 'AWAITING_INITIAL_EDITOR_REVIEW'
+        OR manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+        OR manuscript.current_state = 'MINOR'
+        OR manuscript.current_state = 'MAJOR'
+        AND (publication.id = :publication_id OR :publication_id IS NULL)
+        ORDER BY manuscript.id DESC
     """)
-    fun allUnderReview(): List<Manuscript>
-
-    @Query("""
-        SELECT DISTINCT $MANUSCRIPT.* FROM $MANUSCRIPT
-        JOIN $PUBLICATION_SECTION ON $MANUSCRIPT.$SECTION_ID = $PUBLICATION_SECTION.$ID
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EIC_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EDITOR_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR
-        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR
-        AND $PUBLICATION.$ID = :$ID
-        ORDER BY $MANUSCRIPT.$ID DESC
-    """)
-    fun allUnderReviewByPublication(@Param(ID) publicationId: Int): List<Manuscript>
+    fun allUnderReview(@Param("publication_id") publicationId: Int?): List<Manuscript>
 }

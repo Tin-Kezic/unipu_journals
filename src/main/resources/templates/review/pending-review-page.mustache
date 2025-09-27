@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -44,34 +44,26 @@
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
         {{#invited}}
-            <article onclick="navigateToManuscriptDetailsPage({{id}})" data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
+            <article onclick="window.location.replace('/navigate-to-manuscript-page?manuscriptId={{id}}')" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
                 <div>
                     <p class="yellow-box-text">{{title}}</p>
 
-                    <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
+                    <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}}<button>{{.}}</button>{{/authors}}</div>
 
                     <pre style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}       Status: {{status}}</pre>
                     <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
                 </div>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; display: flex; flex-direction: column;">
+                <footer class="yellow-box-buttons" style="display: flex; flex-direction: column;">
                     <button class="outline-button" style="border-radius: 0.5rem; border-color: var(--purple);">someone</button>
                     <a href="#" onclick="event.stopPropagation()" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; background-color: var(--green); color: black; font-weight: normal; text-decoration: none;">Accept</a>
                 </footer>
             </article>
         {{/invited}}
-        <script>
-            async function navigateToManuscriptDetailsPage(id) {
-                const response = await fetch(`/api/publication-and-section/${id}`, { method: 'GET' });
-                if(!response.ok) { alert('failed to navigate'); return; }
-                const publicationAndSection = await response.json()
-                window.location.href = `/publication/${publicationAndSection.publicationId}/section/${publicationAndSection.sectionId}/manuscript/${id}`;
-            }
-        </script>
         <br>
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
         {{#pending}}
-            <article onclick="navigateToManuscriptDetailsPage({{id}})" data-id="{{id}}" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
+            <article onclick="window.location.replace('/navigate-to-manuscript-page?manuscriptId={{id}}')" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
                 <div>
                     <p class="yellow-box-text">{{title}}</p>
 
@@ -80,7 +72,7 @@
                     <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
                     <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
                 </div>
-                <footer class="yellow-box-buttons" style="margin-left: 1rem; display: flex; flex-direction: column;">
+                <footer class="yellow-box-buttons" style="display: flex; flex-direction: column;">
                     <div class="outline-button" style="border-radius: 0.5rem; border-color: var(--green);">someone</div>
                     <a onclick="event.stopPropagation()" href="/review/{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; font-weight: normal; text-decoration: none; text-align: center;">Review</a>
                 </footer>

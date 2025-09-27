@@ -23,8 +23,8 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('user second', 'Mr.U2', 'user2@unipu.hr', 'user_password2', 'Affiliation2', 'job type2', 'country2', 'city2', 'address2', 'zip code2', false),
 ('user third', 'Mr.U3', 'user3@unipu.hr', 'user_password3', 'Affiliation3', 'job type3', 'country3', 'city3', 'address3', 'zip code3', false);
 INSERT INTO invite (email, target, target_id) VALUES
-('invited.admin1@unipu.hr', 'ADMIN', -1),
-('invited.admin2@unipu.hr', 'ADMIN', -1),
+('invited.admin1@unipu.hr', 'ADMIN', NULL),
+('invited.admin2@unipu.hr', 'ADMIN', NULL),
 ('invited.eic.on.publication1@unipu.hr', 'EIC_ON_PUBLICATION', 1),
 ('invited.eic.on.publication2@unipu.hr', 'EIC_ON_PUBLICATION', 2),
 ('invited.eic.on.publication3@unipu.hr', 'EIC_ON_PUBLICATION', 3),
@@ -39,7 +39,10 @@ INSERT INTO invite (email, target, target_id) VALUES
 ('invited.editor.on.manuscript3@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 3),
 ('invited.reviewer.on.manuscript1@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 1),
 ('invited.reviewer.on.manuscript2@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 2),
-('invited.reviewer.on.manuscript3@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 3);
+('invited.reviewer.on.manuscript3@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 3),
+('invited.manuscript.role.1.2.3@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 1),
+('invited.manuscript.role.1.2.3@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 2),
+('invited.manuscript.role.1.2.3@unipu.hr', 'EIC_ON_MANUSCRIPT', 3);
 INSERT INTO category (name) VALUES
 ('Computer Science'),
 ('Biology'),
@@ -88,8 +91,8 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (2, 10);
 INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (10, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 134, 25, 'Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.'),
-(11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 1, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 245, 33, 'Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.'),
-(10, 2, 'AWAITING_REVIEWER_REVIEW', 1, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 310, 47, 'Natural Language Processing in Clinical Notes', 'Extracting insights from unstructured clinical data using NLP.'),
+(11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 7, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 245, 33, 'Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.'),
+(10, 2, 'AWAITING_REVIEWER_REVIEW', 11, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 310, 47, 'Natural Language Processing in Clinical Notes', 'Extracting insights from unstructured clinical data using NLP.'),
 (11, 2, 'MINOR', 1, 'http://example.com/ms4.pdf', CURRENT_TIMESTAMP, NULL, 98, 19, 'AI-Powered Drug Discovery', 'Accelerating pharmaceutical research through predictive modeling.'),
 (10, 3, 'MAJOR', 1, 'http://example.com/ms5.pdf', CURRENT_TIMESTAMP, NULL, 87, 12, 'Reinforcement Learning in Surgery', 'Simulating surgical procedures using reinforcement learning algorithms.'),
 (11, 3, 'PUBLISHED', 1, 'http://example.com/ms6.pdf', CURRENT_TIMESTAMP, '2025-06-30 13:32:16', 512, 88, 'AI in Medical Decision Making', 'Examining the implications of autonomous decision systems in healthcare.'),

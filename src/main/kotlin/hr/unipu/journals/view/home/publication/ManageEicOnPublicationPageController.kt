@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.home.publication
 
 import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
+import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.publication.PublicationRepository
 import org.springframework.stereotype.Controller
@@ -18,7 +19,7 @@ class ManageEicOnPublicationPageController(
     @GetMapping("/publication/{publicationId}/manage-eic-on-publication")
     fun page(@PathVariable publicationId: Int, model: Model): String {
         model["currentPublication"] = publicationRepository.title(publicationId)
-        model["eicEmails"] = eicOnPublicationRepository.eicEmailsByPublicationId(publicationId) + inviteRepository.eicOnPublicationEmailsByPublicationId(publicationId)
+        model["eicEmails"] = eicOnPublicationRepository.eicEmailsByPublicationId(publicationId) + inviteRepository.emailsByTarget(InvitationTarget.EIC_ON_PUBLICATION, publicationId)
         return "manage/manage-eic-on-publication-page"
     }
 }

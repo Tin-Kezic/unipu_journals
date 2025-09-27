@@ -1,131 +1,74 @@
 package hr.unipu.journals.feature.publication
 
+import hr.unipu.journals.feature.manuscript.ConcealType
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
-private const val PUBLICATION = "publication"
-private const val ID = "id"
-private const val TITLE = "title"
-private const val IS_HIDDEN = "is_hidden"
-
-// publication_section
-private const val PUBLICATION_SECTION = "publication_section"
-private const val PUBLICATION_ID = "publication_id"
-
-// manuscript
-private const val MANUSCRIPT = "manuscript"
-private const val SECTION_ID = "section_id"
-private const val CURRENT_STATE = "current_state"
-
-// manuscript-state
-private const val AWAITING_INITIAL_EIC_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW'"
-private const val AWAITING_INITIAL_EDITOR_REVIEW = "'AWAITING_INITIAL_EDITOR_REVIEW'"
-private const val AWAITING_REVIEWER_REVIEW = "'AWAITING_REVIEWER_REVIEW'"
-private const val MINOR = "'MINOR'"
-private const val MAJOR = "'MAJOR'"
-private const val REJECTED = "'REJECTED'"
-private const val PUBLISHED = "'PUBLISHED'"
-private const val HIDDEN = "'HIDDEN'"
-private const val DRAFT = "'DRAFT'"
-private const val ARCHIVED = "'ARCHIVED'"
-
-// account-role-on-manuscript
-private const val ACCOUNT_ROLE_ON_MANUSCRIPT = "account_role_on_manuscript"
-private const val MANUSCRIPT_ID = "manuscript_id"
-private const val ACCOUNT_ID = "account_id"
-private const val ACCOUNT_ROLE = "account_role"
-
-// eic-on-publication
-private const val EIC_ON_PUBLICATION = "eic_on_publication"
-private const val EIC_ID = "eic_id"
-
-// manuscript-role
-private const val EIC = "'EIC'"
-private const val EDITOR =  "'EDITOR'"
-private const val REVIEWER = "'REVIEWER'"
-private const val CORRESPONDING_AUTHOR = "'CORRESPONDING_AUTHOR'"
-private const val AUTHOR = "'AUTHOR'"
+private const val UNDER_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR'"
 
 interface PublicationRepository: Repository<Publication, Int> {
-
     @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        JOIN $EIC_ON_PUBLICATION ON $PUBLICATION.$ID = $EIC_ON_PUBLICATION.$PUBLICATION_ID
-        JOIN $ACCOUNT_ROLE_ON_MANUSCRIPT ON $MANUSCRIPT.$ID = $ACCOUNT_ROLE_ON_MANUSCRIPT.$MANUSCRIPT_ID
-        WHERE $MANUSCRIPT.$CURRENT_STATE IN ($AWAITING_INITIAL_EIC_REVIEW, $AWAITING_INITIAL_EDITOR_REVIEW, $AWAITING_REVIEWER_REVIEW)
-        AND $ACCOUNT_ROLE_ON_MANUSCRIPT.$ACCOUNT_ROLE IN ($EIC, $EDITOR, $REVIEWER)
-        AND $EIC_ON_PUBLICATION.$EIC_ID = :$EIC_ID
-        AND $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        """)
-    fun allUnderReviewWithAffiliation(@Param(EIC_ID) eicId: Int): List<Publication>
-
-    @Query("SELECT $TITLE FROM $PUBLICATION WHERE $ID = :$ID")
-    fun title(@Param(ID) id: Int): String
-
-    @Query("SELECT * FROM $PUBLICATION WHERE $TITLE = :$TITLE")
-    fun byTitle(@Param(TITLE) title: String): Publication
-
-    @Query("SELECT * FROM $PUBLICATION WHERE $IS_HIDDEN = FALSE ORDER BY $ID DESC")
-    fun allPublished(): List<Publication>
-
-    @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
-        ORDER BY $PUBLICATION.$ID DESC
+        SELECT DISTINCT publication.* FROM publication
+        JOIN publication_section ON publication.id = publication_section.publication_id
+        JOIN manuscript ON publication_section.id = manuscript.section_id
+        JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
+        JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        WHERE account_role_on_manuscript.account_id = :account_id
+        AND (
+            account_role_on_manuscript.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR_ON_MANUSCRIPT')
+            AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        ) OR (
+            account_role_on_manuscript.target = 'REVIEWER_ON_MANUSCRIPT'
+            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+        )
+        AND publication.is_hidden = FALSE
+        AND publication_section.is_hidden = FALSE
     """)
-    fun allArchived(): List<Publication>
+    fun allWhichContainManuscriptsUnderReviewWithAffiliation(@Param("account_id") accountId: Int): List<Publication>
+
+    @Query("SELECT title FROM publication WHERE id = :id")
+    fun title(@Param("id") id: Int): String
 
     @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION.$IS_HIDDEN = TRUE
-        OR $PUBLICATION_SECTION.$IS_HIDDEN = TRUE
-        OR $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
-        ORDER BY $PUBLICATION.$ID DESC
+        SELECT DISTINCT publication.* FROM publication
+        JOIN publication_section ON publication.id = publication_section.publication_id
+        JOIN manuscript ON publication_section.id = manuscript.section_id
+        WHERE (:state IS NULL AND publication.is_hidden = FALSE)
+        OR (
+            publication.is_hidden = FALSE
+            AND publication_section.is_hidden = FALSE
+            AND (
+                manuscript.current_state = 'ARCHIVED' AND :state = 'ARCHIVED'
+                OR manuscript.current_state IN ($UNDER_REVIEW) AND :state IN ($UNDER_REVIEW)
+            )
+        ) OR (
+            publication.is_hidden = TRUE
+            AND manuscript.current_state = 'HIDDEN'
+            AND :state = 'HIDDEN'
+        )
+        ORDER BY id DESC
     """)
-    fun allHidden(): List<Publication>
-
-    @Query("""
-        SELECT DISTINCT $PUBLICATION.* FROM $PUBLICATION 
-        JOIN $PUBLICATION_SECTION ON $PUBLICATION.$ID = $PUBLICATION_SECTION.$PUBLICATION_ID
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION.$IS_HIDDEN = FALSE
-        AND $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EIC_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_INITIAL_EDITOR_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $AWAITING_REVIEWER_REVIEW
-        OR $MANUSCRIPT.$CURRENT_STATE = $MINOR
-        OR $MANUSCRIPT.$CURRENT_STATE = $MAJOR
-        ORDER BY $PUBLICATION.$ID DESC
-    """)
-    fun allUnderReview(): List<Publication>
+    fun all(@Param("state") manuscriptState: ManuscriptState? = null): List<Publication>
 
     @Modifying
-    @Query("INSERT INTO $PUBLICATION ($TITLE) VALUES (:$TITLE)")
-    fun insert(@Param(TITLE) title: String)
+    @Query("INSERT INTO publication (title) VALUES (:title)")
+    fun insert(@Param("title") title: String)
 
     @Modifying
-    @Query("UPDATE $PUBLICATION SET $TITLE = :$TITLE WHERE $ID = :$ID")
-    fun updateTitle(@Param(ID) id: Int, @Param(TITLE) title: String)
+    @Query("UPDATE publication SET title = :title WHERE id = :id")
+    fun updateTitle(@Param("id") id: Int, @Param("title") title: String)
 
-    @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION WHERE $ID = :$ID)")
-    fun exists(@Param(ID) id: Int): Boolean
-
-    @Modifying
-    @Query("UPDATE $PUBLICATION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")
-    fun updateHidden(@Param(ID) id: Int, @Param(IS_HIDDEN) isHidden: Boolean)
+    @Query("SELECT EXISTS (SELECT 1 FROM publication WHERE id = :id)")
+    fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
-    @Query("DELETE FROM $PUBLICATION WHERE $ID = :$ID")
-    fun delete(@Param(ID) id: Int)
+    @Query("UPDATE publication SET is_hidden = :is_hidden WHERE id = :id")
+    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean)
+
+    @Modifying
+    @Query("DELETE FROM publication WHERE id = :id")
+    fun delete(@Param("id") id: Int)
 }

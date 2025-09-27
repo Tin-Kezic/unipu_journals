@@ -1,7 +1,9 @@
 package hr.unipu.journals.view.archive
 
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.ConcealType
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
@@ -28,8 +30,8 @@ class ArchiveManuscriptPageController(
         model: Model
     ): String {
         model["isAdmin"] = authorizationService.isAdmin()
-        model["sectionsSidebar"] = sectionRepository.allArchivedByPublicationId(publicationId)
-        model["manuscripts"] = manuscriptRepository.allArchivedBySectionId(sectionId).map { manuscript ->
+        model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId, ManuscriptState.ARCHIVED)
+        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId, ManuscriptState.ARCHIVED).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,

@@ -48,7 +48,7 @@
                 <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
 
                 {{#isAdmin}}
-                    <footer class="yellow-box-buttons" style="margin-left: 1rem;">
+                    <footer class="yellow-box-buttons">
                         <button data-type="unarchive-button" data-id="{{id}}" class="m3-button purple-button" style="margin-left: 1rem;  box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap; color: white; text-decoration: none; font-weight: normal;">unarchive</button>
                     </footer>
                 {{/isAdmin}}
@@ -65,7 +65,7 @@
 
     document.querySelectorAll('button[data-type="unarchive-button"]').forEach(button => {
         button.addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${button.dataset.id}/update-archived?isArchived=false`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${button.dataset.id}/update-state?newState=PUBLISHED`, { method: 'PUT' });
             if(!response.ok) { alert('failed to unarchive Manuscript'); return; }
             document.querySelector(`article[data-id="${button.dataset.id}"]`).remove();
         });

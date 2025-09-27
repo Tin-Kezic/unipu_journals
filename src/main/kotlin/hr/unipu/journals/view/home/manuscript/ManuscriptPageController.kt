@@ -2,6 +2,7 @@ package hr.unipu.journals.view.home.manuscript
 
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.stereotype.Controller
@@ -27,11 +28,11 @@ class ManuscriptPageController(
         model: Model
     ): String {
         model["isAdmin"] = authorizationService.isAdmin()
-        model["sectionsSidebar"] = sectionRepository.allPublishedByPublicationId(publicationId)
+        model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId)
         model["description"] = sectionRepository.description(sectionId)
         model["publicationId"] = publicationId
         model["sectionId"]   = sectionId
-        model["manuscripts"] = manuscriptRepository.allPublishedBySectionId(sectionId).map { manuscript ->
+        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId, ManuscriptState.PUBLISHED).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,

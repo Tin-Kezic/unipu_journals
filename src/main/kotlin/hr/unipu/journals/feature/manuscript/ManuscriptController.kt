@@ -38,32 +38,17 @@ class ManuscriptController(private val publicationRepository: ManuscriptReposito
          */
         return ResponseEntity.ok("manuscript successfully added")
     }
-    @PutMapping("/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}/update-hidden")
+    @PutMapping("/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}/update-state")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
-    fun updateHidden(
+    fun updateState(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         @PathVariable manuscriptId: Int,
-        @RequestParam isHidden: Boolean
+        @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> {
         return if(publicationRepository.exists(manuscriptId)) {
-            if(isHidden) publicationRepository.hide(manuscriptId)
-            else publicationRepository.publish(manuscriptId)
+            publicationRepository.updateState(manuscriptId, newState)
             return ResponseEntity.ok("manuscript isHidden successfully updated")
-        } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
-    }
-    @PutMapping("/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}/update-archived")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
-    fun updateArchived(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
-        @PathVariable manuscriptId: Int,
-        @RequestParam isArchived: Boolean
-    ): ResponseEntity<String> {
-        return if(publicationRepository.exists(manuscriptId)) {
-            if(isArchived) publicationRepository.archive(manuscriptId)
-            else publicationRepository.publish(manuscriptId)
-            return ResponseEntity.ok("manuscript isArchived successfully updated")
         } else ResponseEntity.badRequest().body("manuscript with id: $manuscriptId does not exist")
     }
 }

@@ -1,5 +1,7 @@
 package hr.unipu.journals.view.archive
 
+import hr.unipu.journals.feature.manuscript.ConcealType
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import org.springframework.stereotype.Controller
@@ -15,9 +17,9 @@ class ArchiveSectionPageController(
 ) {
     @GetMapping("archive/publication/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.allArchived()
+        model["publicationsSidebar"] = publicationRepository.all(ManuscriptState.ARCHIVED)
         model["currentPublication"] = publicationRepository.title(publicationId)
-        model["sections"] = sectionRepository.allArchivedByPublicationId(publicationId).map { section ->
+        model["sections"] = sectionRepository.allByPublicationId(publicationId, ManuscriptState.ARCHIVED).map { section ->
             ArchiveContainerDTO(
                 id = section.id,
                 title = section.title,

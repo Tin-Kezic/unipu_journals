@@ -1,5 +1,7 @@
 package hr.unipu.journals.feature.section
 
+import hr.unipu.journals.feature.manuscript.ConcealType
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -7,95 +9,65 @@ import org.springframework.data.repository.query.Param
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
-private const val PUBLICATION_SECTION = "publication_section"
-private const val ID = "id"
-private const val TITLE = "title"
-private const val DESCRIPTION = "description"
-private const val PUBLICATION_ID = "publication_id"
-private const val IS_HIDDEN = "is_hidden"
-
-// manuscript
-private const val MANUSCRIPT = "manuscript"
-private const val SECTION_ID = "section_id"
-private const val CURRENT_STATE = "current_state"
-
-// manuscript-state
-private const val ARCHIVED = "'ARCHIVED'"
-private const val HIDDEN = "'HIDDEN'"
-
-// publication
-private const val PUBLICATION = "publication"
-//private const val ID = "id"
-//private const val TITLE = "title"
-//private const val IS_HIDDEN = "is_hidden"
-
 interface SectionRepository: Repository<Section, Int> {
 
-    @Query("SELECT $TITLE from $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun title(@Param(ID) sectionId: Int): String
+    @Query("SELECT title from publication_section WHERE id = :id")
+    fun title(@Param("id") sectionId: Int): String
 
     @Query("""
-        SELECT $PUBLICATION_SECTION.$TITLE FROM $PUBLICATION_SECTION
-        JOIN $PUBLICATION ON $PUBLICATION_SECTION.$PUBLICATION_ID = $PUBLICATION.$ID
-        WHERE $PUBLICATION.$TITLE = :$TITLE
+        SELECT publication_section.title FROM publication_section
+        JOIN publication ON publication_section.publication_id = publication.id
+        WHERE publication.title = :title
         """)
-    fun titleByPublicationTitle(@Param(TITLE) publicationTitle: String): List<String>
+    fun titleByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
-    @Query("SELECT $DESCRIPTION from $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun description(@Param(ID) sectionId: Int): String
-
-    @Query("SELECT * FROM $PUBLICATION_SECTION WHERE $PUBLICATION_ID = :$PUBLICATION_ID AND $IS_HIDDEN = FALSE ORDER BY $ID DESC")
-    fun allPublishedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
+    @Query("SELECT description from publication_section WHERE id = :id")
+    fun description(@Param("id") sectionId: Int): String
 
     @Query("""
-        SELECT DISTINCT $PUBLICATION_SECTION.* FROM $PUBLICATION_SECTION
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $ARCHIVED
-        AND $PUBLICATION_SECTION.$PUBLICATION_ID = :$PUBLICATION_ID
-        ORDER BY $PUBLICATION_SECTION.$ID DESC
+        SELECT DISTINCT publication_section.* FROM publication_section
+        JOIN manuscript ON manuscript.section_id = publication_section.id
+        WHERE publication_section.publication_id = :publication_id
+        AND (
+            :state IS NULL
+            OR (
+                (publication_section.is_hidden = TRUE OR manuscript.current_state = 'HIDDEN')
+                AND :state = 'HIDDEN'
+            )
+        )
+        ORDER BY publication_section.id DESC
     """)
-    fun allArchivedByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
-
-    @Query("""
-        SELECT DISTINCT $PUBLICATION_SECTION.* FROM $PUBLICATION_SECTION
-        JOIN $MANUSCRIPT ON $PUBLICATION_SECTION.$ID = $MANUSCRIPT.$SECTION_ID
-        WHERE $PUBLICATION_SECTION.$IS_HIDDEN = FALSE
-        AND $MANUSCRIPT.$CURRENT_STATE = $HIDDEN
-        AND $PUBLICATION_SECTION.$PUBLICATION_ID = :$PUBLICATION_ID
-        ORDER BY $PUBLICATION_SECTION.$ID DESC
-    """)
-    fun allHiddenByPublicationId(@Param(PUBLICATION_ID) publicationId: Int): List<Section>
+    fun allByPublicationId(@Param("publication_id") publicationId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Section>
 
     @Modifying
     @Query("""
-        INSERT INTO $PUBLICATION_SECTION ($TITLE, $PUBLICATION_ID)
-        VALUES (:$TITLE, :$PUBLICATION_ID)
+        INSERT INTO publication_section (title, publication_id)
+        VALUES (:title, :publication_id)
     """)
     fun insert(
-        @Param(TITLE) title: String,
-        @Param(PUBLICATION_ID) publicationId: Int,
+        @Param("title") title: String,
+        @Param("publication_id") publicationId: Int,
     )
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $TITLE = :$TITLE WHERE $ID = :$ID")
+    @Query("UPDATE publication_section SET title = :title WHERE id = :id")
     fun updateTitle(
-        @Param(ID) id: Int,
-        @Param(TITLE) title: String,
+        @Param("id") id: Int,
+        @Param("title") title: String,
     )
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $DESCRIPTION = :$DESCRIPTION WHERE $ID = :$ID")
+    @Query("UPDATE publication_section SET description = :description WHERE id = :id")
     fun updateDescription(
-        @Param(ID) id: Int,
-        @Param(DESCRIPTION) description: String,
+        @Param("id") id: Int,
+        @Param("description") description: String,
     )
-    @Query("SELECT EXISTS (SELECT 1 FROM $PUBLICATION_SECTION WHERE $ID = :$ID)")
-    fun exists(@Param(ID) id: Int): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = :id)")
+    fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE $PUBLICATION_SECTION SET $IS_HIDDEN = :$IS_HIDDEN WHERE $ID = :$ID")
-    fun updateHidden(@Param(ID) id: Int, @Param(IS_HIDDEN) isHidden: Boolean)
+    @Query("UPDATE publication_section SET is_hidden = :is_hidden WHERE id = :id")
+    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean)
 
     @Modifying
-    @Query("DELETE FROM $PUBLICATION_SECTION WHERE $ID = :$ID")
-    fun delete(@Param(ID) id: Int)
+    @Query("DELETE FROM publication_section WHERE id = :id")
+    fun delete(@Param("id") id: Int)
 }

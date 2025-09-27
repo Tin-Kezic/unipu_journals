@@ -5,95 +5,82 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
-private const val ACCOUNT = "account"
-private const val ID = "id"
-private const val FULL_NAME = "full_name"
-private const val TITLE = "title"
-private const val EMAIL = "email"
-private const val PASSWORD = "password"
-private const val AFFILIATION = "affiliation"
-private const val JOB_TYPE = "job_type"
-private const val COUNTRY = "country"
-private const val CITY = "city"
-private const val ADDRESS = "address"
-private const val ZIP_CODE = "zip_code"
-private const val IS_ADMIN = "is_admin"
-
 interface AccountRepository: Repository<Account, Int> {
 
-    @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL AND $IS_ADMIN = TRUE)")
-    fun isAdmin(@Param(EMAIL) email: String): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM account WHERE email = :email AND is_admin = TRUE)")
+    fun isAdmin(@Param("email") email: String): Boolean
 
     @Modifying
-    @Query("UPDATE $ACCOUNT SET $IS_ADMIN = :$IS_ADMIN WHERE $EMAIL = :$EMAIL")
-    fun updateIsAdmin(@Param(EMAIL) email: String, @Param(IS_ADMIN) isAdmin: Boolean)
+    @Query("UPDATE account SET is_admin = :is_admin WHERE email = :email")
+    fun updateIsAdmin(@Param("email") email: String, @Param("is_admin") isAdmin: Boolean)
 
     @Modifying
-    @Query("UPDATE $ACCOUNT SET $PASSWORD = :$PASSWORD WHERE $EMAIL = 'root@unipu.hr'")
-    fun updateRootPassword(@Param(PASSWORD) password: String)
+    @Query("UPDATE account SET password = :password WHERE email = 'root@unipu.hr'")
+    fun updateRootPassword(@Param("password") password: String)
 
-    @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $ID = :$ID)")
-    fun exists(@Param(ID) id: Int): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM account WHERE id = :id)")
+    fun exists(@Param("id") id: Int): Boolean
 
-    @Query("SELECT EXISTS (SELECT 1 FROM $ACCOUNT WHERE $EMAIL = :$EMAIL)")
-    fun emailExists(@Param(EMAIL) email: String): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM account WHERE email = :email)")
+    fun emailExists(@Param("email") email: String): Boolean
 
-    @Query("SELECT * FROM $ACCOUNT WHERE $ID = :$ID")
-    fun byId(@Param(ID) id: Int): Account?
+    @Query("SELECT * FROM account WHERE id = :id")
+    fun byId(@Param("id") id: Int): Account?
 
-    @Query("SELECT * FROM $ACCOUNT WHERE $EMAIL = :$EMAIL")
-    fun byEmail(@Param(EMAIL) email: String): Account?
+    @Query("SELECT * FROM account WHERE email = :email")
+    fun byEmail(@Param("email") email: String): Account?
 
-    @Query("SELECT $EMAIL FROM $ACCOUNT WHERE $IS_ADMIN = TRUE")
+    @Query("SELECT email FROM account WHERE is_admin = TRUE")
     fun allAdminEmails(): List<String>
 
     @Modifying
     @Query("""
-        INSERT INTO $ACCOUNT
-        ($FULL_NAME, $TITLE, $EMAIL, $PASSWORD, $AFFILIATION, $JOB_TYPE, $COUNTRY, $CITY, $ADDRESS, $ZIP_CODE)
+        INSERT INTO account
+        (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code)
         VALUES
-        (:$FULL_NAME, :$TITLE, :$EMAIL, :$PASSWORD, :$AFFILIATION, :$JOB_TYPE, :$COUNTRY, :$CITY, :$ADDRESS, :$ZIP_CODE)
+        (:full_name, :title, :email, :password, :affiliation, :job_type, :country, :city, :address, :zip_code)
     """)
     fun insert(
-        @Param(FULL_NAME) fullName: String,
-        @Param(TITLE) title: String,
-        @Param(EMAIL) email: String,
-        @Param(PASSWORD) password: String,
-        @Param(AFFILIATION) affiliation: String,
-        @Param(JOB_TYPE) jobType: String,
-        @Param(COUNTRY) country: String,
-        @Param(CITY) city: String,
-        @Param(ADDRESS) address: String,
-        @Param(ZIP_CODE) zipCode: String,
+        @Param("full_name") fullName: String,
+        @Param("title") title: String,
+        @Param("email") email: String,
+        @Param("password") password: String,
+        @Param("affiliation") affiliation: String,
+        @Param("job_type") jobType: String,
+        @Param("country") country: String,
+        @Param("city") city: String,
+        @Param("address") address: String,
+        @Param("zip_code") zipCode: String,
     )
     @Modifying
     @Query("""
-        UPDATE $ACCOUNT SET 
-        $FULL_NAME = :$FULL_NAME,
-        $TITLE = :$TITLE,
-        $EMAIL = :$EMAIL,
-        $PASSWORD = :$PASSWORD,
-        $AFFILIATION = :$AFFILIATION,
-        $JOB_TYPE = :$JOB_TYPE,
-        $COUNTRY = :$COUNTRY,
-        $CITY = :$CITY,
-        $ADDRESS = :$ADDRESS,
-        $ZIP_CODE = :$ZIP_CODE
-        WHERE $ID = :$ID
+        UPDATE account SET
+        full_name = :full_name,
+        title = :title,
+        email = :email,
+        password = :password,
+        affiliation = :affiliation,
+        job_type = :job_type,
+        country = :country,
+        city = :city,
+        address = :address,
+        zip_code = :zip_code
+        WHERE id = :id
     """)
     fun update(
-        @Param(ID) id: Int,
-        @Param(FULL_NAME) fullName: String,
-        @Param(TITLE) title: String,
-        @Param(EMAIL) email: String,
-        @Param(PASSWORD) password: String,
-        @Param(AFFILIATION) affiliation: String,
-        @Param(JOB_TYPE) jobType: String,
-        @Param(COUNTRY) country: String,
-        @Param(CITY) city: String,
-        @Param(ADDRESS) address: String,
-        @Param(ZIP_CODE) zipCode: String
-    )    @Modifying
-    @Query("DELETE FROM $ACCOUNT WHERE $ID = :$ID")
-    fun delete(@Param(ID) id: Int)
+        @Param("id") id: Int,
+        @Param("full_name") fullName: String,
+        @Param("title") title: String,
+        @Param("email") email: String,
+        @Param("password") password: String,
+        @Param("affiliation") affiliation: String,
+        @Param("job_type") jobType: String,
+        @Param("country") country: String,
+        @Param("city") city: String,
+        @Param("address") address: String,
+        @Param("zip_code") zipCode: String
+    )
+    @Modifying
+    @Query("DELETE FROM account WHERE id = :id")
+    fun delete(@Param("id") id: Int)
 }

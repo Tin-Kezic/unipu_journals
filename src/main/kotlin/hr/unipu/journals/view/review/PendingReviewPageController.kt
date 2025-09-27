@@ -38,24 +38,18 @@ class PendingReviewPageController(
     @GetMapping("/review")
     fun all(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
-            model["publicationsSidebar"] = publicationRepository.allUnderReviewWithAffiliation(account.id) + inviteRepository.allPublicationsUnderReviewWithAffiliation(account.email)
-            if(publicationId == null) {
-                model["invited"] = inviteRepository.affiliatedManuscripts(account.email).toManuscriptDTO()
-                model["pending"] = manuscriptRepository.pending(account.id).toManuscriptDTO()
-            } else {
-                model["invited"] = inviteRepository.affiliatedManuscriptByPublicationId(account.email, publicationId).toManuscriptDTO()
-                model["pending"] = manuscriptRepository.pendingByPublication(account.id, publicationId).toManuscriptDTO()
-            }
+            model["publicationsSidebar"] =
+                publicationRepository.allWhichContainManuscriptsUnderReviewWithAffiliation(account.id) +
+                inviteRepository.allPublicationsWhichContainManuscriptsUnderReviewWithAffiliation(account.email)
+            model["invited"] = inviteRepository.affiliatedManuscripts(account.email, publicationId).toManuscriptDTO()
+            model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()
         } ?: throw IllegalStateException("account is null")
         model["publicationId"] = publicationId ?: 0
         return "review/pending-review-page"
     }
-}
-@RestController
-class PublicationAndSectionByManuscriptId(private val manuscriptRepository: ManuscriptRepository) {
-    @GetMapping("api/publication-and-section/{manuscriptId}")
-    fun publicationAndSection(@PathVariable manuscriptId: Int): PublicationAndSectionDTO {
-        println(manuscriptRepository.publicationAndSection(manuscriptId))
-        return manuscriptRepository.publicationAndSection(manuscriptId)
+    @GetMapping("/navigate-to-manuscript-page")
+    fun navigateToManuscriptPage(@RequestParam manuscriptId: Int): String {
+        val (publicationId, sectionId) = manuscriptRepository.publicationAndSection(manuscriptId)
+        return "redirect:/publication/$publicationId/section/$sectionId/manuscript/$manuscriptId"
     }
 }

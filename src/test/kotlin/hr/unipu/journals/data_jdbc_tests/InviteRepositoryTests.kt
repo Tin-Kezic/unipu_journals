@@ -1,0 +1,45 @@
+package hr.unipu.journals.data_jdbc_tests
+
+import hr.unipu.journals.feature.invite.InvitationTarget
+import hr.unipu.journals.feature.invite.InviteRepository
+import hr.unipu.journals.feature.publication.Publication
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+@DataJdbcTest
+class InviteRepositoryTests {
+    @Autowired private lateinit var inviteRepository: InviteRepository
+
+    @Test fun `is admin`() {
+        assertTrue(inviteRepository.isAdmin("invited.admin1@unipu.hr"))
+        assertTrue(inviteRepository.isAdmin("invited.admin2@unipu.hr"))
+        assertFalse(inviteRepository.isAdmin("invited.eic.on.publication1@unipu.hr"))
+        assertFalse(inviteRepository.isAdmin("invited.eic.on.publication2@unipu.hr"))
+        assertFalse(inviteRepository.isAdmin("invited.reviewer.on.manuscript1@unipu.hr"))
+        assertFalse(inviteRepository.isAdmin("invited.reviewer.on.manuscript2@unipu.hr"))
+    }
+    @Test fun `retrieve all admin emails`() {
+        assertEquals(listOf("invited.admin1@unipu.hr", "invited.admin2@unipu.hr"), inviteRepository.emailsByTarget(InvitationTarget.ADMIN))
+    }
+    @Test fun `retrieve eic on publication emails by publication id`() {
+        assertEquals(listOf("invited.eic.on.publication1@unipu.hr"), inviteRepository.emailsByTarget(InvitationTarget.EIC_ON_PUBLICATION, 1))
+        assertEquals(listOf("invited.eic.on.publication2@unipu.hr"), inviteRepository.emailsByTarget(InvitationTarget.EIC_ON_PUBLICATION, 2))
+    }
+    @Test fun `retrieve section editors on section emails by section id`() {
+        assertEquals(listOf("invited.section.editor.on.section1@unipu.hr"), inviteRepository.emailsByTarget(InvitationTarget.SECTION_EDITOR_ON_SECTION, 1))
+        assertEquals(listOf("invited.section.editor.on.section2@unipu.hr"), inviteRepository.emailsByTarget(InvitationTarget.SECTION_EDITOR_ON_SECTION, 2))
+    }
+    @Test fun `retrieve all publications under review with affiliation by email`() {
+        assertEquals(
+            listOf(
+                Publication(2, "Nature of Biology", false),
+                Publication(3, "Physics Letters", false),
+            ),
+            inviteRepository.allPublicationsWhichContainManuscriptsUnderReviewWithAffiliation("invited.manuscript.role.1.2.3@unipu.hr")
+        )
+    }
+}
