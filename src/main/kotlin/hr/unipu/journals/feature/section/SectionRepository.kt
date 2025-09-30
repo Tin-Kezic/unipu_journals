@@ -1,13 +1,10 @@
 package hr.unipu.journals.feature.section
 
-import hr.unipu.journals.feature.manuscript.ConcealType
 import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 
 interface SectionRepository: Repository<Section, Int> {
 

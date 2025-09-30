@@ -71,27 +71,10 @@ class SecurityConfig {
                 invalidSessionUrl = "/login.html?invalidSession"
             }
             authorizeHttpRequests {
-                authorize("/root", hasRole(ROOT))
-                listOf(
-                    "/hidden/**",
-                    "/publication/{publicationId}/manage-eic-on-publication",
-                ).forEach { authorize(it, hasRole(ADMIN)) }
-                listOf(
-                    "/eic-initial-review",
-                    "/technical-processing-page"
-                ).forEach { authorize(it, hasAnyRole(EIC, ADMIN)) }
-                listOf(
-                    "/review-round-initialization",
-                    "/manage-manuscript-under-review",
-                ).forEach { authorize(it, hasAnyRole(EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
-                //listOf().forEach { authorize(it, hasAnyRole(REVIEWER, EDITOR, SECTION_EDITOR, EIC, ADMIN)) }
                 listOf(
                     "/submit",
                     "/review/**",
-                    "/profile/{accountId}",
-                    "/profile/{accountId}/edit",
                     "/api/publication/{publicationId}/section/{sectionId}/insert",
-                    "/404.html", "/403.html", "/505.html"
                 ).forEach { authorize(it, authenticated) }
                 authorize(anyRequest, permitAll)
             }

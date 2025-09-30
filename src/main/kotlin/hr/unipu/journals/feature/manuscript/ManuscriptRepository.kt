@@ -17,7 +17,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("UPDATE manuscript SET downloads = downloads + 1 WHERE id = :id")
     fun incrementDownloads(@Param("id") id: Int)
 
-    //todo. fix
     @Query("""
         SELECT publication.id AS publication_id, publication_section.id AS section_id FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id

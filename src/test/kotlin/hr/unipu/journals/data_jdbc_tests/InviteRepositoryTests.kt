@@ -2,11 +2,14 @@ package hr.unipu.journals.data_jdbc_tests
 
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
+import hr.unipu.journals.feature.manuscript.Manuscript
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.publication.Publication
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -40,6 +43,15 @@ class InviteRepositoryTests {
                 Publication(3, "Physics Letters", false),
             ),
             inviteRepository.allPublicationsWhichContainManuscriptsUnderReviewWithAffiliation("invited.manuscript.role.1.2.3@unipu.hr")
+        )
+    }
+    @Test fun `retrieve all manuscripts with affiliation by email`() {
+        assertEquals(
+            listOf(
+                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_INITIAL_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47)
+            ),
+            inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
         )
     }
 }

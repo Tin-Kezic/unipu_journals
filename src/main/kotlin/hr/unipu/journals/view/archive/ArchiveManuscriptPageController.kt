@@ -1,7 +1,6 @@
 package hr.unipu.journals.view.archive
 
 import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ConcealType
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.section.SectionRepository

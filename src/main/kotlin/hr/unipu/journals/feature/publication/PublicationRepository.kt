@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.publication
 
-import hr.unipu.journals.feature.manuscript.ConcealType
 import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query

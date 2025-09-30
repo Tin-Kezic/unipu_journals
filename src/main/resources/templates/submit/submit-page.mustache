@@ -175,7 +175,7 @@
         Array.from(files).forEach(file => {
             console.log(`FILES: ${file.name}`)
         })
-        /*
+        /* consideration: using { body: data }
         const response = await fetch(`
             /api/publication/${publication}/section/${section}/insert
                 ?title=${encodeURIComponent(title)}

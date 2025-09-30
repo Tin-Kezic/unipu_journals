@@ -1,6 +1,5 @@
 package hr.unipu.journals.view.archive
 
-import hr.unipu.journals.feature.manuscript.ConcealType
 import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
