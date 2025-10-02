@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.queryForObject
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,6 +18,7 @@ import kotlin.test.assertEquals
 @DataJdbcTest
 class InviteRepositoryTests {
     @Autowired private lateinit var inviteRepository: InviteRepository
+    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
     @Test fun `is admin`() {
         assertTrue(inviteRepository.isAdmin("invited.admin1@unipu.hr"))
@@ -53,5 +56,84 @@ class InviteRepositoryTests {
             ),
             inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
         )
+    }
+    @Test fun `invite admin`() {
+        inviteRepository.insert("test.invite.admin@unipu.hr", InvitationTarget.ADMIN)
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'ADMIN')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.admin@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `invite eic on publication`() {
+        inviteRepository.insert("test.invite.eic.on.publication@unipu.hr", InvitationTarget.EIC_ON_PUBLICATION)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'ADMIN')"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.publication@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `invite section editor on section`() {
+        inviteRepository.insert("test.invite.section.editor.on.section@unipu.hr", InvitationTarget.SECTION_EDITOR_ON_SECTION)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'ADMIN')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.section.editor.on.section@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `invite EiC on manuscript`() {
+        inviteRepository.insert("test.invite.eic.on.manuscript@unipu.hr", InvitationTarget.EIC_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'ADMIN')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.eic.on.manuscript@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `invite editor on manuscript`() {
+        inviteRepository.insert("test.invite.editor.on.manuscript@unipu.hr", InvitationTarget.EDITOR_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'ADMIN')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.editor.on.manuscript@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `invite reviewer on manuscript`() {
+        inviteRepository.insert("test.invite.reviewer.on.manuscript@unipu.hr", InvitationTarget.REVIEWER_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'ADMIN')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'test.invite.reviewer.on.manuscript@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+    }
+    @Test fun `revoke invite`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.admin1@unipu.hr' AND target = 'ADMIN')"))
+        inviteRepository.revoke("invited.admin1@unipu.hr", InvitationTarget.ADMIN)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.admin1@unipu.hr' AND target = 'ADMIN')"))
+
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.eic.on.publication1@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+        inviteRepository.revoke("invited.eic.on.publication1@unipu.hr", InvitationTarget.EIC_ON_PUBLICATION)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.eic.on.publication1@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.section.editor.on.section1@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+        inviteRepository.revoke("invited.section.editor.on.section1@unipu.hr", InvitationTarget.SECTION_EDITOR_ON_SECTION)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.section.editor.on.section1@unipu.hr' AND target = 'SECTION_EDITOR_ON_SECTION')"))
+
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.eic.on.manuscript1@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+        inviteRepository.revoke("invited.eic.on.manuscript1@unipu.hr", InvitationTarget.EIC_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.eic.on.manuscript1@unipu.hr' AND target = 'EIC_ON_MANUSCRIPT')"))
+
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.editor.on.manuscript1@unipu.hr' AND target = 'EDITOR_ON_MANUSCRIPT')"))
+        inviteRepository.revoke("invited.editor.on.publication1@unipu.hr", InvitationTarget.EDITOR_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.editor.on.manuscript1@unipu.hr' AND target = 'EIC_ON_PUBLICATION')"))
+
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.reviewer.on.manuscript1@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
+        inviteRepository.revoke("invited.reviewer.on.manuscript1@unipu.hr", InvitationTarget.REVIEWER_ON_MANUSCRIPT)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM invite WHERE email = 'invited.reviewer.on.manuscript1@unipu.hr' AND target = 'REVIEWER_ON_MANUSCRIPT')"))
     }
 }

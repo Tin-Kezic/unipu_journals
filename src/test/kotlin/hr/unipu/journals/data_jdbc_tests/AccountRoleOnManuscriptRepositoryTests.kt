@@ -21,7 +21,7 @@ class AccountRoleOnManuscriptRepositoryTests {
         assertEquals("corresponding author on manuscript1", accountRoleOnManuscriptRepository.correspondingAuthor(1))
         assertEquals("corresponding author on manuscript2", accountRoleOnManuscriptRepository.correspondingAuthor(2))
     }
-    @Test fun `is role on manuscript`() {
+    @Test fun `assert is role on manuscript`() {
         assertTrue(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 11, 1))
         assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EIC, 11, 2))
         assertFalse(accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, 11, 1))

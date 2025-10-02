@@ -15,7 +15,7 @@ class EicOnPublicationRepositoryTests {
     @Autowired private lateinit var eicOnPublicationRepository: EicOnPublicationRepository
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
-    @Test fun `is eic on publication`() {
+    @Test fun `assert is eic on publication`() {
         assertTrue(eicOnPublicationRepository.isEicOnPublication(7, 1))
         assertTrue(eicOnPublicationRepository.isEicOnPublication(6, 2))
         assertTrue(eicOnPublicationRepository.isEicOnPublication(7, 3))

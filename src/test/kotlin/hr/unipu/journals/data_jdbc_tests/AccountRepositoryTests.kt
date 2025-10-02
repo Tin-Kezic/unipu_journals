@@ -18,6 +18,7 @@ class AccountRepositoryTests {
     @Autowired private lateinit var accountRepository: AccountRepository
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
     @Test fun `insert account`() {
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
         accountRepository.insert(
             fullName = "John",
             title = "Dr.",
@@ -37,8 +38,10 @@ class AccountRepositoryTests {
         assertTrue(accountRepository.isAdmin("new.admin@unipu.hr"))
     }
     @Test fun `revoke admin`() {
-        accountRepository.updateIsAdmin("revoked.admin@unipu.hr", false)
-        assertFalse(accountRepository.isAdmin("revoked.admin@unipu.hr"))
+        assertTrue(accountRepository.isAdmin("revoke.admin@unipu.hr"))
+        assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
+        accountRepository.updateIsAdmin("revoke.admin@unipu.hr", false)
+        assertFalse(accountRepository.isAdmin("revoke.admin@unipu.hr"))
         assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
     }
     @Test fun `update root account password`() {

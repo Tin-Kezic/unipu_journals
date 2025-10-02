@@ -28,7 +28,7 @@ INSERT INTO invite (email, target, target_id) VALUES
 ('invited.eic.on.publication1@unipu.hr', 'EIC_ON_PUBLICATION', 1),
 ('invited.eic.on.publication2@unipu.hr', 'EIC_ON_PUBLICATION', 2),
 ('invited.eic.on.publication3@unipu.hr', 'EIC_ON_PUBLICATION', 3),
-('invited.eic.on.manuscript@unipu.hr', 'EIC_ON_MANUSCRIPT', 1),
+('invited.eic.on.manuscript1@unipu.hr', 'EIC_ON_MANUSCRIPT', 1),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 2),
 ('invited.eic.on.manuscript2@unipu.hr', 'EIC_ON_MANUSCRIPT', 3),
 ('invited.section.editor.on.section1@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 1),
