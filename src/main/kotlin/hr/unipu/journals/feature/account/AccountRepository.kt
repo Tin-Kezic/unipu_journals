@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param
 
 interface AccountRepository: Repository<Account, Int> {
 
-    @Query("SELECT EXISTS (SELECT 1 FROM account WHERE email = :email AND is_admin = TRUE)")
+    @Query("SELECT is_admin FROM account WHERE email = :email")
     fun isAdmin(@Param("email") email: String): Boolean
 
     @Modifying
