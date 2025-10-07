@@ -34,7 +34,7 @@ class RootPageController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun updatePassword(@RequestParam password: String, @RequestParam passwordConfirmation: String): String {
         if(password != passwordConfirmation) return "redirect:/root?password-mismatch"
-        accountRepository.updateRootPassword(passwordEncoder.encode(password))
+        accountRepository.updatePassword("root@unipu.hr", passwordEncoder.encode(password))
         return "redirect:/root?successfully-updated-password"
     }
 

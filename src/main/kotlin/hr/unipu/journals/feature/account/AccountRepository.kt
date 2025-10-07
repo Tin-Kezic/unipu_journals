@@ -15,8 +15,8 @@ interface AccountRepository: Repository<Account, Int> {
     fun updateIsAdmin(@Param("email") email: String, @Param("is_admin") isAdmin: Boolean)
 
     @Modifying
-    @Query("UPDATE account SET password = :password WHERE email = 'root@unipu.hr'")
-    fun updateRootPassword(@Param("password") password: String)
+    @Query("UPDATE account set password = :password WHERE email = :email")
+    fun updatePassword(@Param("email") email: String, @Param("password") password: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM account WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean

@@ -45,7 +45,7 @@ class AccountRepositoryTests {
         assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
     }
     @Test fun `update root account password`() {
-        accountRepository.updateRootPassword("newPassword")
+        accountRepository.updatePassword("root@unipu.hr", "newPassword")
         assertEquals("newPassword", accountRepository.byEmail("root@unipu.hr")?.password)
     }
     @Test fun `account exists by email`() = assertTrue(accountRepository.emailExists("root@unipu.hr"))
