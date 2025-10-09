@@ -50,8 +50,9 @@ class AccountRepositoryTests {
         )
     }
     @Test fun `update root account password`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'root@unipu.hr')"))
         accountRepository.updatePassword("root@unipu.hr", "newPassword")
-        assertEquals("newPassword", accountRepository.byEmail("root@unipu.hr")?.password)
+        assertEquals(jdbcTemplate.queryForObject<String>("SELECT password FROM account WHERE email = 'root@unipu.hr'"), "newPassword")
     }
     @Test fun `account exists by email`() = assertTrue(accountRepository.emailExists("root@unipu.hr"))
     @Test fun `retrieve account by id`() = assertEquals("root@unipu.hr", accountRepository.byId(1)?.email)
