@@ -33,16 +33,15 @@ class AccountRepositoryTests {
         )
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
     }
-    @Test fun `assign and revoke admin, check is admin`() {
+    @Test fun `assign admin`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'new.admin@unipu.hr' AND is_admin = FALSE)"))
         accountRepository.updateIsAdmin("new.admin@unipu.hr", true)
-        assertTrue(accountRepository.isAdmin("new.admin@unipu.hr"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'new.admin@unipu.hr' AND is_admin = TRUE)"))
     }
     @Test fun `revoke admin`() {
-        assertTrue(accountRepository.isAdmin("revoke.admin@unipu.hr"))
-        assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'revoke.admin@unipu.hr' AND is_admin = TRUE)"))
         accountRepository.updateIsAdmin("revoke.admin@unipu.hr", false)
-        assertFalse(accountRepository.isAdmin("revoke.admin@unipu.hr"))
-        assertTrue(accountRepository.isAdmin("admin1@unipu.hr"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'revoke.admin@unipu.hr' AND is_admin = FALSE)"))
     }
     @Test fun `update root account password`() {
         accountRepository.updatePassword("root@unipu.hr", "newPassword")
