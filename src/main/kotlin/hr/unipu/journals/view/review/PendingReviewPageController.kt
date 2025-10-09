@@ -4,7 +4,6 @@ import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscr
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.Manuscript
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript.PublicationAndSectionDTO
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
 import java.time.format.DateTimeFormatter
 
 @Controller
@@ -49,7 +46,7 @@ class PendingReviewPageController(
     }
     @GetMapping("/navigate-to-manuscript-page")
     fun navigateToManuscriptPage(@RequestParam manuscriptId: Int): String {
-        val (publicationId, sectionId) = manuscriptRepository.publicationAndSection(manuscriptId)
+        val (publicationId, sectionId) = manuscriptRepository.publicationIdAndSectionId(manuscriptId)
         return "redirect:/publication/$publicationId/section/$sectionId/manuscript/$manuscriptId"
     }
 }

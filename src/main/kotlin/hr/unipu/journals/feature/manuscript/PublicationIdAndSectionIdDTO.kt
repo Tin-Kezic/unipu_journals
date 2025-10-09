@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript
 
-data class PublicationAndSectionDTO (
+data class PublicationIdAndSectionIdDTO (
     val publicationId: Int,
     val sectionId: Int
 )

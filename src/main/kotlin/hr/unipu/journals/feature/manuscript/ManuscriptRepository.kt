@@ -23,7 +23,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         JOIN publication ON publication_section.publication_id = publication.id
         WHERE manuscript.id = :id
         """)
-    fun publicationAndSection(@Param("id") manuscriptId: Int): PublicationAndSectionDTO
+    fun publicationIdAndSectionId(@Param("id") manuscriptId: Int): PublicationIdAndSectionIdDTO
 
     @Modifying
     @Query("INSERT INTO manuscript (title, author_id, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
