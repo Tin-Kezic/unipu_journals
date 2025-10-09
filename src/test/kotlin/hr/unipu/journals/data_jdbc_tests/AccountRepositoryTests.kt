@@ -43,6 +43,12 @@ class AccountRepositoryTests {
         accountRepository.updateIsAdmin("revoke.admin@unipu.hr", false)
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'revoke.admin@unipu.hr' AND is_admin = FALSE)"))
     }
+    @Test fun `check is admin`() {
+        assertEquals(
+            jdbcTemplate.queryForObject<Boolean>("SELECT is_admin FROM account WHERE email = 'new.admin@unipu.hr'"),
+            accountRepository.isAdmin("new.admin@unipu.hr")
+        )
+    }
     @Test fun `update root account password`() {
         accountRepository.updatePassword("root@unipu.hr", "newPassword")
         assertEquals("newPassword", accountRepository.byEmail("root@unipu.hr")?.password)
