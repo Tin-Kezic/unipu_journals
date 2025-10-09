@@ -54,9 +54,22 @@ class AccountRepositoryTests {
         accountRepository.updatePassword("root@unipu.hr", "newPassword")
         assertEquals(jdbcTemplate.queryForObject<String>("SELECT password FROM account WHERE email = 'root@unipu.hr'"), "newPassword")
     }
-    @Test fun `account exists by email`() = assertTrue(accountRepository.emailExists("root@unipu.hr"))
-    @Test fun `retrieve account by id`() = assertEquals("root@unipu.hr", accountRepository.byId(1)?.email)
-    @Test fun `retrieve account by email`() = assertEquals(1, accountRepository.byEmail("root@unipu.hr")?.id)
+    @Test fun `account exists by email`() {
+        assertTrue(accountRepository.emailExists("root@unipu.hr"))
+        assertFalse(accountRepository.emailExists("404@unipu.hr"))
+    }
+    @Test fun `retrieve account by id`() {
+        assertEquals(
+            Account(1, "root", "Mr.R", "root@unipu.hr", $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC", "root Affiliation", "root job type", "root country", "root city", "root address", "root zip code", false),
+            accountRepository.byId(1)
+        )
+    }
+    @Test fun `retrieve account by email`() {
+        assertEquals(
+            Account(1, "root", "Mr.R", "root@unipu.hr", $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC", "root Affiliation", "root job type", "root country", "root city", "root address", "root zip code", false),
+            accountRepository.byEmail("root@unipu.hr")
+        )
+    }
     @Test fun `account exists by id`() {
         assertTrue(accountRepository.exists(1))
         assertFalse(accountRepository.exists(100))
