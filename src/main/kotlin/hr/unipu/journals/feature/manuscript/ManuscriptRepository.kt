@@ -71,20 +71,4 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         WHERE manuscript.author_id = account.id
     """)
     fun allByAuthor(@Param("id") authorId: Int): List<Manuscript>
-
-    @Query("""
-        SELECT DISTINCT manuscript.* FROM manuscript
-        JOIN publication_section ON manuscript.section_id = publication_section.id
-        JOIN publication ON publication_section.publication_id = publication.id
-        WHERE publication_section.is_hidden = FALSE
-        AND publication.is_hidden = FALSE
-        AND manuscript.current_state = 'AWAITING_INITIAL_EIC_REVIEW'
-        OR manuscript.current_state = 'AWAITING_INITIAL_EDITOR_REVIEW'
-        OR manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-        OR manuscript.current_state = 'MINOR'
-        OR manuscript.current_state = 'MAJOR'
-        AND (publication.id = :publication_id OR :publication_id IS NULL)
-        ORDER BY manuscript.id DESC
-    """)
-    fun allUnderReview(@Param("publication_id") publicationId: Int?): List<Manuscript>
 }
