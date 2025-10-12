@@ -30,7 +30,7 @@ class ArchiveManuscriptPageController(
     ): String {
         model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId, ManuscriptState.ARCHIVED)
-        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId, ManuscriptState.ARCHIVED).map { manuscript ->
+        model["manuscripts"] = manuscriptRepository.all(sectionId = sectionId, manuscriptState = ManuscriptState.ARCHIVED).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,

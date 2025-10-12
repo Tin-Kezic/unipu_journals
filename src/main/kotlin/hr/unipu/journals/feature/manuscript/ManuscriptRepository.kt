@@ -5,8 +5,40 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+
+    @Query("""
+        SELECT * FROM manuscript
+        WHERE (id = :id OR :id IS NULL)
+        AND (title = :title OR :title IS NULL)
+        AND (description = :description OR :description IS NULL)
+        AND (author_id = :author_id OR :author_id IS NULL)
+        AND (category_id = :category_id OR :category_id IS NULL)
+        AND (current_state = :state OR :state IS NULL)
+        AND (section_id = :section_id OR :section_id IS NULL)
+        AND (file_url = :file_url OR :file_url IS NULL)
+        AND (submission_date = :submission_date OR :submission_date IS NULL)
+        AND (publication_date = :publication_date OR :publication_date IS NULL)
+        AND (views = :views OR :views IS NULL)
+        AND (downloads = :downloads OR :downloads IS NULL)
+        ORDER BY id DESC
+        """)
+    fun all(
+        @Param("id") id: Int? = null,
+        @Param("title") title: String? = null,
+        @Param("description") description: String? = null,
+        @Param("author_id") authorId: Int? = null,
+        @Param("category_id") categoryId: Int? = null,
+        @Param("state") manuscriptState: ManuscriptState? = null,
+        @Param("section_id") sectionId: Int? = null,
+        @Param("file_url") fileUrl: String? = null,
+        @Param("submission_date") submissionDate: LocalDateTime? = null,
+        @Param("publication_date") publicationDate: LocalDateTime? = null,
+        @Param("views") views: Int? = null,
+        @Param("downloads") downloads: Int? = null
+    ): List<Manuscript>
 
     @Modifying
     @Transactional
@@ -61,9 +93,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Query("SELECT * FROM manuscript WHERE id = :id")
     fun byId(@Param("id") manuscriptId: Int): Manuscript
-
-    @Query("SELECT * FROM manuscript WHERE section_id = :section_id AND current_state = :state ORDER BY id DESC")
-    fun allBySectionId(@Param("section_id") sectionId: Int, @Param("state") manuscriptState: ManuscriptState): List<Manuscript>
 
     @Query("""
         SELECT manuscript.* FROM manuscript
