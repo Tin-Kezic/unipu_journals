@@ -21,7 +21,11 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('author on manuscript2', 'Mr.A2', 'author.on.manuscript2@unipu.hr', 'author_on_manuscript_password2', 'author2 Affiliation', 'author2 job type', 'author2 country', 'author2 city', 'author2 address', 'author2 zip code', false),
 ('user first', 'Mr.U1', 'user1@unipu.hr', 'user_password1', 'Affiliation1', 'job type1', 'country1', 'city1', 'address1', 'zip code1', false),
 ('user second', 'Mr.U2', 'user2@unipu.hr', 'user_password2', 'Affiliation2', 'job type2', 'country2', 'city2', 'address2', 'zip code2', false),
-('user third', 'Mr.U3', 'user3@unipu.hr', 'user_password3', 'Affiliation3', 'job type3', 'country3', 'city3', 'address3', 'zip code3', false);
+('user third', 'Mr.U3', 'user3@unipu.hr', 'user_password3', 'Affiliation3', 'job type3', 'country3', 'city3', 'address3', 'zip code3', false),
+('author for new manuscript', 'Mr.author for new manuscript', 'author.for.new.manuscript@unipu.hr', 'author_for_new_manuscript_password', 'author for new manuscript affiliation', 'author for new manuscript job type', 'author for new manuscript country', 'author for new manuscript country', 'author for new manuscript city', 'author for new manuscript zip code', false),
+('EiC on first and eleventh, editor on second, reviewer on third', 'Mr.EiC on first and eleventh, editor on second, reviewer on third', 'EiC.on.first.editor.on.second.reviewer.on.third@unipu.hr', 'eic_editor_reviewer_password', 'EiC editor reviewer affiliation', 'EiC editor reviewer job type', 'EiC editor reviewer country', 'EiC editor reviewer country', 'EiC editor reviewer city', 'EiC editor reviewer zip code', false),
+('reviewer on first and eleventh, EiC on second, editor on third', 'Mr.reviewer on first and eleventh, EiC on second, editor on third', 'reviewer.on.first.EiC.on.second.editor.on.third@unipu.hr', 'reviewer_eic_editor_password', 'reviewer EiC editor affiliation', 'reviewer EiC editor job type', 'reviewer EiC editor country', 'reviewer EiC editor country', 'reviewer EiC editor city', 'reviewer EiC editor zip code', false),
+('editor on first and eleventh, reviewer on second, EiC on third', 'Mr.editor on first and eleventh, reviewer on second, EiC on third', 'editor.on.first.reviewer.on.second.EiC.on.third@unipu.hr', 'editor_reviewer_eic_password', 'editor reviewer EiC affiliation', 'editor reviewer EiC job type', 'editor reviewer EiC country', 'editor reviewer EiC country', 'editor reviewer EiC city', 'editor reviewer EiC zip code', false);
 INSERT INTO invite (email, target, target_id) VALUES
 ('invited.admin1@unipu.hr', 'ADMIN', NULL),
 ('invited.admin2@unipu.hr', 'ADMIN', NULL),
@@ -90,8 +94,8 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (1, 9),
 (2, 10);
 INSERT INTO manuscript (title, description, author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads) VALUES
-('Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.', 10, 1, 'AWAITING_INITIAL_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', '2025-09-28 13:28:00', NULL, 134, 25),
-('Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.', 11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 7, 'http://example.com/ms2.pdf', '2023-09-28 13:28:00', NULL, 245, 33),
+('Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.', 10, 1, 'AWAITING_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', '2025-09-28 13:28:00', NULL, 134, 25),
+('Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.', 11, 1, 'AWAITING_EDITOR_REVIEW', 7, 'http://example.com/ms2.pdf', '2023-09-28 13:28:00', NULL, 245, 33),
 ('Natural Language Processing in Clinical Notes', 'Extracting insights from unstructured clinical data using NLP.', 10, 2, 'AWAITING_REVIEWER_REVIEW', 11, 'http://example.com/ms3.pdf', '2022-09-28 13:28:00' , NULL, 310, 47),
 ('AI-Powered Drug Discovery', 'Accelerating pharmaceutical research through predictive modeling.', 11, 2, 'MINOR', 1, 'http://example.com/ms4.pdf', '2025-09-28 13:28:00', NULL, 98, 19),
 ('Reinforcement Learning in Surgery', 'Simulating surgical procedures using reinforcement learning algorithms.', 10, 3, 'MAJOR', 1, 'http://example.com/ms5.pdf', '2021-09-28 13:28:00', NULL, 87, 12),
@@ -101,8 +105,8 @@ INSERT INTO manuscript (title, description, author_id, category_id, current_stat
 ('Clinical Trial Optimization with AI', 'Optimizing patient recruitment and trial design using machine learning.', 10, 5, 'HIDDEN', 1, 'http://example.com/ms9.pdf', '2018-09-28 13:28:00', '2025-07-25 17:45:00', 60, 7),
 ('Wearable Technology and AI Integration', 'Leveraging real-time health data from wearables through AI.', 11, 5, 'DRAFT', 1, 'http://example.com/ms10.pdf', '2017-09-28 13:28:00', NULL, 75, 14),
 
-('Machine Learning for Radiology2', 'A study on using ML to detect anomalies in radiological images.2', 10, 1, 'AWAITING_INITIAL_EIC_REVIEW', 2, 'http://example.com/ms21.pdf', '2016-09-28 13:28:00', NULL, 135, 26),
-('Deep Learning in Genomics2', 'Analyzes genomic sequences using deep neural networks to predict mutations.2', 11, 1, 'AWAITING_INITIAL_EDITOR_REVIEW', 2, 'http://example.com/ms22.pdf', '2015-09-28 13:28:00', NULL, 246, 34),
+('Machine Learning for Radiology2', 'A study on using ML to detect anomalies in radiological images.2', 10, 1, 'AWAITING_EIC_REVIEW', 2, 'http://example.com/ms21.pdf', '2016-09-28 13:28:00', NULL, 135, 26),
+('Deep Learning in Genomics2', 'Analyzes genomic sequences using deep neural networks to predict mutations.2', 11, 1, 'AWAITING_EDITOR_REVIEW', 2, 'http://example.com/ms22.pdf', '2015-09-28 13:28:00', NULL, 246, 34),
 ('Natural Language Processing in Clinical Notes2', 'Extracting insights from unstructured clinical data using NLP.2', 10, 2, 'AWAITING_REVIEWER_REVIEW', 2, 'http://example.com/ms23.pdf', '2014-09-28 13:28:00', NULL, 311, 48),
 ('AI-Powered Drug Discovery2', 'Accelerating pharmaceutical research through predictive modeling.2', 11, 2, 'MINOR', 2, 'http://example.com/ms24.pdf', '2013-09-28 13:28:00', NULL, 99, 20),
 ('Reinforcement Learning in Surgery2', 'Simulating surgical procedures using reinforcement learning algorithms.2', 10, 3, 'MAJOR', 2, 'http://example.com/ms25.pdf', '2012-09-28 13:28:00', NULL, 88, 13),
@@ -110,7 +114,8 @@ INSERT INTO manuscript (title, description, author_id, category_id, current_stat
 ('Predictive Analytics in Emergency Care2', 'Forecasting patient outcomes in emergency rooms using AI.2', 10, 4, 'REJECTED', 2, 'http://example.com/ms27.pdf', '2010-09-28 13:28:00', NULL, 46, 6),
 ('AI-Based Mental Health Assessment2', 'Assessing mental health using sentiment analysis and behavioral data.2', 11, 4, 'ARCHIVED', 2, 'http://example.com/ms28.pdf', '2009-09-28 13:28:00', '2025-06-30 13:30:00', 22, 4),
 ('Clinical Trial Optimization with AI2', 'Optimizing patient recruitment and trial design using machine learning.2', 10, 5, 'HIDDEN', 2, 'http://example.com/ms29.pdf', '2008-09-28 13:28:00', '2025-07-25 17:45:00', 61, 8),
-('Wearable Technology and AI Integration2', 'Leveraging real-time health data from wearables through AI.2', 11, 5, 'DRAFT', 2, 'http://example.com/ms210.pdf', '20007-09-28 13:28:00', NULL, 76, 15);
+('Wearable Technology and AI Integration2', 'Leveraging real-time health data from wearables through AI.2', 11, 5, 'DRAFT', 2, 'http://example.com/ms210.pdf', '2007-09-28 13:28:00', NULL, 76, 15),
+('Manuscript awaiting deletion', 'description of manuscript awaiting deletion', 11, 5, 'REJECTED', 2, 'http://example.com/ms210.pdf', '2007-09-28 13:28:00', NULL, 76, 15);
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 (1, 11, 'EIC'),
 (2, 12, 'EIC'),
@@ -121,7 +126,19 @@ INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
 (1, 17, 'CORRESPONDING_AUTHOR'),
 (2, 18, 'CORRESPONDING_AUTHOR'),
 (1, 19, 'AUTHOR'),
-(2, 20, 'AUTHOR');
+(2, 20, 'AUTHOR'),
+(1, 25, 'EIC'),
+(1, 26, 'REVIEWER'),
+(1, 27, 'EDITOR'),
+(2, 25, 'EDITOR'),
+(2, 26, 'EIC'),
+(2, 27, 'REVIEWER'),
+(3, 25, 'REVIEWER'),
+(3, 26, 'EDITOR'),
+(3, 27, 'EIC'),
+(11, 25, 'EIC'),
+(11, 26, 'REVIEWER'),
+(11, 27, 'EDITOR');
 INSERT INTO manuscript_review (
     manuscript_id, reviewer_id, round, novelty, significance, technical_quality, clarity,
     methodology, relevance_to_the_publication, language_quality, overall_mark,
