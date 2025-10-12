@@ -43,7 +43,7 @@ class ReviewHistoryPageController(
         model["reviewerWithRounds"] = manuscriptReviewRepository.reviewersAndRounds(manuscriptId)
             .groupBy { it.reviewerId }
             .map { (reviewer, rounds) -> ReviewerWithRounds(reviewer, rounds.map { it.round }) }
-        val manuscriptReview = manuscriptReviewRepository.review(manuscriptId, round, reviewerId)
+        val manuscriptReview = manuscriptReviewRepository.review(manuscriptId, reviewerId, round)
         model["round"] = manuscriptReview.round
 
         when(manuscriptReview.novelty) {
