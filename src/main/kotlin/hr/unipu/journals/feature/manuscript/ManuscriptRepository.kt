@@ -71,12 +71,20 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication_section.publication_id = publication.id
         JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
-        AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        WHERE account_role_on_manuscript.account_id = :account_id
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
-        AND account_role_on_manuscript.account_id = :account_id
         AND (publication.id = :publication_id OR :publication_id IS NULL)
+        AND ((
+            account_role_on_manuscript.account_role = 'EIC'
+            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        ) OR (
+            account_role_on_manuscript.account_role = 'EDITOR'
+            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        ) OR (
+            account_role_on_manuscript.account_role = 'REVIEWER'
+            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+        ))
     """)
     fun pending(@Param("account_id") accountId: Int, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
 
