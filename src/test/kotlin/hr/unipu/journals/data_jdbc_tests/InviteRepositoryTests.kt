@@ -51,7 +51,7 @@ class InviteRepositoryTests {
     @Test fun `retrieve all manuscripts with affiliation by email`() {
         assertEquals(
             listOf(
-                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_INITIAL_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
+                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
                 Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47)
             ),
             inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")

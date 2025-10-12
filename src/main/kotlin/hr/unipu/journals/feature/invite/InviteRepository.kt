@@ -21,7 +21,7 @@ interface InviteRepository: Repository<Invite, Int> {
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication_section.publication_id = publication.id
         WHERE invite.email = :email
-        AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR')
+        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR')
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
     """)
@@ -33,7 +33,7 @@ interface InviteRepository: Repository<Invite, Int> {
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication_section.publication_id = publication.id
         WHERE invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR_ON_MANUSCRIPT', 'REVIEWER_ON_MANUSCRIPT')
-        AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
         AND invite.email = :email

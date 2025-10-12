@@ -6,7 +6,7 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
-private const val UNDER_REVIEW = "'AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR'"
+private const val UNDER_REVIEW = "'AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR'"
 
 interface PublicationRepository: Repository<Publication, Int> {
     @Query("""
@@ -18,7 +18,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         WHERE account_role_on_manuscript.account_id = :account_id
         AND (
             account_role_on_manuscript.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR_ON_MANUSCRIPT')
-            AND manuscript.current_state IN ('AWAITING_INITIAL_EIC_REVIEW', 'AWAITING_INITIAL_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
         ) OR (
             account_role_on_manuscript.target = 'REVIEWER_ON_MANUSCRIPT'
             AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'

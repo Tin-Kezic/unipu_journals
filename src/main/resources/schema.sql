@@ -58,8 +58,8 @@ CREATE TABLE section_editor_on_section(
     FOREIGN KEY (section_editor_id) REFERENCES account(id) ON DELETE CASCADE
 );
 CREATE TYPE manuscript_state AS ENUM (
-    'AWAITING_INITIAL_EIC_REVIEW',
-    'AWAITING_INITIAL_EDITOR_REVIEW',
+    'AWAITING_EIC_REVIEW',
+    'AWAITING_EDITOR_REVIEW',
     'AWAITING_REVIEWER_REVIEW',
     'MINOR',
     'MAJOR',
@@ -75,7 +75,7 @@ CREATE TABLE manuscript (
     description TEXT NOT NULL DEFAULT '',
     author_id INT,
     category_id INT,
-    current_state manuscript_state NOT NULL DEFAULT 'AWAITING_INITIAL_EIC_REVIEW',
+    current_state manuscript_state NOT NULL DEFAULT 'AWAITING_EIC_REVIEW',
     section_id INT NOT NULL,
     file_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
