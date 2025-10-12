@@ -8,7 +8,6 @@ import hr.unipu.journals.feature.manuscript_review.ReviewQuestion
 import hr.unipu.journals.feature.manuscript_review.ReviewerAndRound
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
-import org.springframework.jdbc.core.JdbcTemplate
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,7 +16,6 @@ import kotlin.test.assertEquals
 @Suppress("BooleanLiteralArgument")
 class ManuscriptReviewRepositoryTests {
     @Autowired private lateinit var manuscriptReviewRepository: ManuscriptReviewRepository
-    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
     @Test fun `retrieve review by manuscript id, reviewer id and round`() {
         assertEquals(
