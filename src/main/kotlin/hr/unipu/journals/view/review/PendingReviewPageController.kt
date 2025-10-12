@@ -36,7 +36,7 @@ class PendingReviewPageController(
     fun all(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
             model["publicationsSidebar"] =
-                publicationRepository.allWhichContainManuscriptsUnderReviewWithAffiliation(account.id) +
+                publicationRepository.allWithPendingManuscripts(account.id) +
                 inviteRepository.allPublicationsWhichContainManuscriptsUnderReviewWithAffiliation(account.email)
             model["invited"] = inviteRepository.affiliatedManuscripts(account.email, publicationId).toManuscriptDTO()
             model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()
