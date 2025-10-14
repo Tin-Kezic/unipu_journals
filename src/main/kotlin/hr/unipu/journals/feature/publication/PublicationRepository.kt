@@ -33,21 +33,24 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun pending(@Param("account_id") accountId: Int, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
      */
     @Query("""
-        SELECT DISTINCT publication.* FROM publication
+        SELECT DISTINCT publication.* FROM manuscript
         JOIN publication_section ON publication.id = publication_section.publication_id
         JOIN manuscript ON publication_section.id = manuscript.section_id
-        JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
         JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE account_role_on_manuscript.account_id = :account_id
-        AND (
-            account_role_on_manuscript.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR_ON_MANUSCRIPT')
-            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        ) OR (
-            account_role_on_manuscript.target = 'REVIEWER_ON_MANUSCRIPT'
-            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-        )
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
+        AND (publication.id = :publication_id OR :publication_id IS NULL)
+        AND ((
+            account_role_on_manuscript.account_role = 'EIC'
+            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        ) OR (
+            account_role_on_manuscript.account_role = 'EDITOR'
+            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+        ) OR (
+            account_role_on_manuscript.account_role = 'REVIEWER'
+            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+        ))
     """)
     fun allWithPendingManuscripts(@Param("account_id") accountId: Int): List<Publication>
 
