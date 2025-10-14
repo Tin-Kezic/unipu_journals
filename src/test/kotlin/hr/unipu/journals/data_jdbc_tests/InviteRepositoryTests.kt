@@ -45,7 +45,7 @@ class InviteRepositoryTests {
                 Publication(2, "Nature of Biology", false),
                 Publication(3, "Physics Letters", false),
             ),
-            inviteRepository.allPublicationsWhichContainManuscriptsUnderReviewWithAffiliation("invited.manuscript.role.1.2.3@unipu.hr")
+            inviteRepository.allPublicationsWithPendingManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
         )
     }
     @Test fun `retrieve all manuscripts with affiliation by email`() {
