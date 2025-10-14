@@ -6,8 +6,6 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
-private const val UNDER_REVIEW = "'AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR'"
-
 interface PublicationRepository: Repository<Publication, Int> {
     @Query("""
         SELECT DISTINCT publication.* FROM manuscript
@@ -34,26 +32,29 @@ interface PublicationRepository: Repository<Publication, Int> {
     @Query("SELECT title FROM publication WHERE id = :id")
     fun title(@Param("id") id: Int): String
 
+
+    @Query("SELECT * FROM publication WHERE publication.is_hidden = FALSE")
+    fun allPublished(): List<Publication>
+
     @Query("""
         SELECT DISTINCT publication.* FROM publication
         JOIN publication_section ON publication.id = publication_section.publication_id
-        JOIN manuscript ON publication_section.id = manuscript.section_id
-        WHERE (:state IS NULL AND publication.is_hidden = FALSE)
-        OR (
-            publication.is_hidden = FALSE
-            AND publication_section.is_hidden = FALSE
-            AND (
-                manuscript.current_state = 'ARCHIVED' AND :state = 'ARCHIVED'
-                OR manuscript.current_state IN ($UNDER_REVIEW) AND :state IN ($UNDER_REVIEW)
-            )
-        ) OR (
-            publication.is_hidden = TRUE
-            AND manuscript.current_state = 'HIDDEN'
-            AND :state = 'HIDDEN'
-        )
-        ORDER BY id DESC
+        JOIN manuscript ON manuscript.section_id = publication_section.id
+        WHERE publication_is_hidden = TRUE
+        OR publication_section.is_hidden = TRUE
+        OR manuscript.current_state = 'HIDDEN'
+        """)
+    fun allHidden(): List<Publication>
+
+    @Query("""
+        SELECT DISTINCT publication.* FROM publication
+        JOIN publication_section ON publication.id = publication_section.publication_id
+        JOIN manuscript ON manuscript.section_id = publication_section.id
+        WHERE publication_is_hidden = FALSE
+        AND publication_section.is_hidden = FALSE
+        AND manuscript.current_state = 'ARCHIVED'
     """)
-    fun all(@Param("state") manuscriptState: ManuscriptState? = null): List<Publication>
+    fun allContainingArchivedManuscripts(): List<Publication>
 
     @Modifying
     @Query("INSERT INTO publication (title) VALUES (:title)")

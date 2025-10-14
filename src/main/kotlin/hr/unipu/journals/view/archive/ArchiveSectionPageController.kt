@@ -16,7 +16,7 @@ class ArchiveSectionPageController(
 ) {
     @GetMapping("archive/publication/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        model["publicationsSidebar"] = publicationRepository.all(ManuscriptState.ARCHIVED)
+        model["publicationsSidebar"] = publicationRepository.allContainingArchivedManuscripts()
         model["currentPublication"] = publicationRepository.title(publicationId)
         model["sections"] = sectionRepository.allByPublicationId(publicationId, ManuscriptState.ARCHIVED).map { section ->
             ArchiveContainerDTO(

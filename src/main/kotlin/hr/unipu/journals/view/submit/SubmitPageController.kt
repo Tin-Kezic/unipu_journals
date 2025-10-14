@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.submit
 
 import hr.unipu.journals.feature.category.CategoryRepository
+import hr.unipu.journals.feature.manuscript.ManuscriptState
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
@@ -20,7 +21,7 @@ class SubmitPageController(
     fun page(model: Model): String {
         model["isAdmin"] = authorizationService.isAdmin()
         model["categories"] = categoryRepository.all()
-        model["publications"] = publicationRepository.all().map { it.title }
+        model["publications"] = publicationRepository.allPublished().map { it.title }
         model["sections"] = listOf("Section_1", "Section_2", "Section_3")
         return "submit/submit-page"
     }
