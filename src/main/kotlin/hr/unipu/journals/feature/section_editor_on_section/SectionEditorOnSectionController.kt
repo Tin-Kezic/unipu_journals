@@ -21,7 +21,7 @@ class SectionEditorOnSectionController(
         @PathVariable sectionId: Int,
         @RequestParam email: String
     ) {
-        if(accountRepository.emailExists(email)) {
+        if(accountRepository.existsByEmail(email)) {
             val sectionEditorId = accountRepository.byEmail(email)!!.id
             sectionEditorOnSectionRepository.assign(sectionId, sectionEditorId)
         } else inviteRepository.insert(
@@ -35,7 +35,7 @@ class SectionEditorOnSectionController(
         @PathVariable sectionId: Int,
         @RequestParam email: String
     ) {
-        if(accountRepository.emailExists(email)) {
+        if(accountRepository.existsByEmail(email)) {
             val sectionEditorId = accountRepository.byEmail(email)!!.id
             sectionEditorOnSectionRepository.revoke(sectionId, sectionEditorId)
         } else inviteRepository.revoke(

@@ -25,7 +25,7 @@ class AccountController(
     @PostMapping("/insert")
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         var error = ""
-        if (accountRepository.emailExists(account.email)) error += "email taken"
+        if (accountRepository.existsByEmail(account.email)) error += "email taken"
         if (account.password != account.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
         accountRepository.insert(
@@ -49,7 +49,7 @@ class AccountController(
         val currentEmail = account.email
         val id = account.id
         var error = ""
-        if(accountRepository.emailExists(request.email) && currentEmail != request.email) error += "email taken"
+        if(accountRepository.existsByEmail(request.email) && currentEmail != request.email) error += "email taken"
         if(request.password != request.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
         accountRepository.update(
@@ -69,7 +69,7 @@ class AccountController(
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        return if(accountRepository.exists(id)) {
+        return if(accountRepository.existsById(id)) {
             accountRepository.delete(id)
             ResponseEntity.ok("account deleted successfully")
         } else ResponseEntity.badRequest().body("ID does not exist")

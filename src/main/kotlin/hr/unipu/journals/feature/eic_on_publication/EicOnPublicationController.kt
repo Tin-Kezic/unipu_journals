@@ -18,7 +18,7 @@ class EicOnPublicationController(
 ) {
     @PutMapping("{publicationId}/assign-eic")
     fun assign(@PathVariable publicationId: Int, @RequestParam email: String) {
-        if(accountRepository.emailExists(email)) {
+        if(accountRepository.existsByEmail(email)) {
             val eicId = accountRepository.byEmail(email)!!.id
             eicOnPublicationRepository.assign(publicationId, eicId)
         } else inviteRepository.insert(
@@ -30,7 +30,7 @@ class EicOnPublicationController(
 
     @PutMapping("{publicationId}/revoke-eic")
     fun revoke(@PathVariable publicationId: Int, @RequestParam email: String) {
-        if(accountRepository.emailExists(email)) {
+        if(accountRepository.existsByEmail(email)) {
             val eicId = accountRepository.byEmail(email)!!.id
             eicOnPublicationRepository.revoke(publicationId, eicId)
         } else inviteRepository.revoke(

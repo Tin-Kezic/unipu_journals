@@ -55,8 +55,8 @@ class AccountRepositoryTests {
         assertEquals(jdbcTemplate.queryForObject<String>("SELECT password FROM account WHERE email = 'root@unipu.hr'"), "newPassword")
     }
     @Test fun `account exists by email`() {
-        assertTrue(accountRepository.emailExists("root@unipu.hr"))
-        assertFalse(accountRepository.emailExists("404@unipu.hr"))
+        assertTrue(accountRepository.existsByEmail("root@unipu.hr"))
+        assertFalse(accountRepository.existsByEmail("404@unipu.hr"))
     }
     @Test fun `retrieve account by id`() {
         assertEquals(
@@ -71,8 +71,8 @@ class AccountRepositoryTests {
         )
     }
     @Test fun `account exists by id`() {
-        assertTrue(accountRepository.exists(1))
-        assertFalse(accountRepository.exists(100))
+        assertTrue(accountRepository.existsById(1))
+        assertFalse(accountRepository.existsById(100))
     }
     @Test fun `retrieve all admin emails`() {
         assertEquals(listOf("admin1@unipu.hr", "admin2@unipu.hr", "revoke.admin@unipu.hr"), accountRepository.allAdminEmails())

@@ -19,10 +19,10 @@ interface AccountRepository: Repository<Account, Int> {
     fun updatePassword(@Param("email") email: String, @Param("password") password: String)
 
     @Query("SELECT EXISTS (SELECT 1 FROM account WHERE id = :id)")
-    fun exists(@Param("id") id: Int): Boolean
+    fun existsById(@Param("id") id: Int): Boolean
 
     @Query("SELECT EXISTS (SELECT 1 FROM account WHERE email = :email)")
-    fun emailExists(@Param("email") email: String): Boolean
+    fun existsByEmail(@Param("email") email: String): Boolean
 
     @Query("SELECT * FROM account WHERE id = :id")
     fun byId(@Param("id") id: Int): Account?
