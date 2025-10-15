@@ -11,9 +11,9 @@ interface CategoryRepository: Repository<Category, Int> {
 
     @Modifying
     @Query("INSERT INTO category (name) VALUES (:name)")
-    fun insert(@Param("name") title: String)
+    fun insert(@Param("name") title: String): Int
 
     @Modifying
     @Query("DELETE FROM category WHERE name = :name")
-    fun delete(@Param("name") category: String)
+    fun delete(@Param("name") category: String) : Int
 }

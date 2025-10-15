@@ -20,12 +20,12 @@ class CategoryRepositoryTests {
     }
     @Test fun `insert category`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM category WHERE name = 'new category')"))
-        categoryRepository.insert("new category")
+        assertEquals(1, categoryRepository.insert("new category"))
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM category WHERE name = 'new category')"))
     }
     @Test fun `delete category`() {
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM category WHERE name = 'Physics')"))
-        categoryRepository.delete("Physics")
+        assertEquals(1, categoryRepository.delete("Physics"))
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM category WHERE name = 'Physics')"))
     }
 }
