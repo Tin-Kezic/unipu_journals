@@ -19,7 +19,7 @@ class AccountRepositoryTests {
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
     @Test fun `insert account`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
-        accountRepository.insert(
+        assertEquals(1, accountRepository.insert(
             fullName = "John",
             title = "Dr.",
             email = "john@unipu.hr",
@@ -30,7 +30,7 @@ class AccountRepositoryTests {
             city = "Cheyenne",
             address = "200 West 24th Street",
             zipCode = "82002-0020"
-        )
+        ))
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
     }
     @Test fun `assign admin`() {
@@ -108,8 +108,9 @@ class AccountRepositoryTests {
         assertEquals(newAccount, accountRepository.byEmail(newAccount.email))
     }
     @Test fun `delete account`() {
-        accountRepository.delete(1)
-        assertNull(accountRepository.byId(1))
-        assertNotNull(accountRepository.byId(2))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE id = 1)"))
+        assertEquals(1, accountRepository.delete(1))
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE id = 1)"))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE id = 2)"))
     }
 }

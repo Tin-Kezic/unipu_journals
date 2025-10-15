@@ -28,7 +28,7 @@ class AccountController(
         if (accountRepository.existsByEmail(account.email)) error += "email taken"
         if (account.password != account.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        accountRepository.insert(
+        val rowsInserted = accountRepository.insert(
             fullName = Jsoup.clean(account.fullName, Safelist.none()),
             title = Jsoup.clean(account.title, Safelist.none()),
             email = Jsoup.clean(account.email, Safelist.none()),
@@ -40,7 +40,8 @@ class AccountController(
             address = Jsoup.clean(account.address, Safelist.none()),
             zipCode = Jsoup.clean(account.zipCode, Safelist.none())
         )
-        return ResponseEntity.ok("account successfully registered")
+        if(rowsInserted > 0) return ResponseEntity.ok("successfully registered account: $account")
+        return ResponseEntity.internalServerError().body("failed to register account: $account")
     }
     @PutMapping("/update")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
@@ -52,7 +53,7 @@ class AccountController(
         if(accountRepository.existsByEmail(request.email) && currentEmail != request.email) error += "email taken"
         if(request.password != request.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        accountRepository.update(
+        val rowsUpdated = accountRepository.update(
             id = id,
             fullName = Jsoup.clean(request.fullName, Safelist.none()),
             title = Jsoup.clean(request.title, Safelist.none()),
@@ -65,13 +66,13 @@ class AccountController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return ResponseEntity.ok("account successfully updated")
+        if(rowsUpdated == 0) return ResponseEntity.internalServerError().body("failed updating account: $account")
+        return ResponseEntity.ok("successfully updated account: $account")
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        return if(accountRepository.existsById(id)) {
-            accountRepository.delete(id)
-            ResponseEntity.ok("account deleted successfully")
-        } else ResponseEntity.badRequest().body("ID does not exist")
+        val deletedRows = accountRepository.delete(id)
+        if(deletedRows == 0) return ResponseEntity.badRequest().body("no account found with id: $id")
+        return ResponseEntity.ok("successfully deleted account with id: $id")
     }
 }

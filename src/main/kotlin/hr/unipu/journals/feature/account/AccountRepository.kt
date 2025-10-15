@@ -51,7 +51,7 @@ interface AccountRepository: Repository<Account, Int> {
         @Param("city") city: String,
         @Param("address") address: String,
         @Param("zip_code") zipCode: String,
-    )
+    ): Int
     @Modifying
     @Query("""
         UPDATE account SET
@@ -79,8 +79,8 @@ interface AccountRepository: Repository<Account, Int> {
         @Param("city") city: String,
         @Param("address") address: String,
         @Param("zip_code") zipCode: String
-    )
+    ): Int
     @Modifying
     @Query("DELETE FROM account WHERE id = :id")
-    fun delete(@Param("id") id: Int)
+    fun delete(@Param("id") id: Int): Int
 }
