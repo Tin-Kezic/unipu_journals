@@ -24,7 +24,7 @@ class SectionEditorOnSectionController(
         if(accountRepository.existsByEmail(email)) {
             val sectionEditorId = accountRepository.byEmail(email)!!.id
             sectionEditorOnSectionRepository.assign(sectionId, sectionEditorId)
-        } else inviteRepository.insert(
+        } else inviteRepository.invite(
             email = email,
             target = InvitationTarget.SECTION_EDITOR_ON_SECTION,
             targetId = sectionId

@@ -43,7 +43,7 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Modifying
     @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target, :target_id)")
-    fun insert(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): Int
+    fun invite(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): Int
 
     @Modifying
     @Query("DELETE FROM invite WHERE email = :email AND target = :target AND (target_id = :target_id OR :target_id IS NULL)")

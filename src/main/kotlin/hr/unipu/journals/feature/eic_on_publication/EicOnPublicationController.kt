@@ -21,7 +21,7 @@ class EicOnPublicationController(
     fun assign(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
         val rowsAffected = accountRepository.byEmail(email)?.let {
             eicOnPublicationRepository.assign(publicationId, it.id)
-        } ?: inviteRepository.insert(
+        } ?: inviteRepository.invite(
                 email = email,
                 target = InvitationTarget.EIC_ON_PUBLICATION,
                 targetId = publicationId
