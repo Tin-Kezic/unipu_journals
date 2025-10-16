@@ -53,7 +53,7 @@ class AccountController(
         if(accountRepository.existsByEmail(request.email) && currentEmail != request.email) error += "email taken"
         if(request.password != request.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        val rowsUpdated = accountRepository.update(
+        val rowsAffected = accountRepository.update(
             id = id,
             fullName = Jsoup.clean(request.fullName, Safelist.none()),
             title = Jsoup.clean(request.title, Safelist.none()),
@@ -66,7 +66,7 @@ class AccountController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return if(rowsUpdated > 0) return ResponseEntity.ok("successfully updated account: $account")
+        return if(rowsAffected > 0) return ResponseEntity.ok("successfully updated account: $account")
             else ResponseEntity.internalServerError().body("failed updating account: $account")
     }
     @DeleteMapping("/delete/{id}")
