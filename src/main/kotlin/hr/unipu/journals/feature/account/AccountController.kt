@@ -66,8 +66,8 @@ class AccountController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        if(rowsUpdated == 0) return ResponseEntity.internalServerError().body("failed updating account: $account")
-        return ResponseEntity.ok("successfully updated account: $account")
+        return if(rowsUpdated > 0) return ResponseEntity.ok("successfully updated account: $account")
+            else ResponseEntity.internalServerError().body("failed updating account: $account")
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
