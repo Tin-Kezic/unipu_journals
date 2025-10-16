@@ -3,6 +3,7 @@ package hr.unipu.journals.feature.eic_on_publication
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,26 +18,27 @@ class EicOnPublicationController(
     private val inviteRepository: InviteRepository
 ) {
     @PutMapping("{publicationId}/assign-eic")
-    fun assign(@PathVariable publicationId: Int, @RequestParam email: String) {
-        if(accountRepository.existsByEmail(email)) {
-            val eicId = accountRepository.byEmail(email)!!.id
-            eicOnPublicationRepository.assign(publicationId, eicId)
-        } else inviteRepository.insert(
-            email = email,
-            target = InvitationTarget.EIC_ON_PUBLICATION,
-            targetId = publicationId
+    fun assign(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
+        val rowsAffected = accountRepository.byEmail(email)?.let {
+            eicOnPublicationRepository.assign(publicationId, it.id)
+        } ?: inviteRepository.insert(
+                email = email,
+                target = InvitationTarget.EIC_ON_PUBLICATION,
+                targetId = publicationId
         )
+        return if(rowsAffected > 0) ResponseEntity.ok("eic $email successfully assigned on publication $publicationId")
+        else ResponseEntity.internalServerError().body("failed assigning $email as eic on publication $publicationId")
     }
-
     @PutMapping("{publicationId}/revoke-eic")
-    fun revoke(@PathVariable publicationId: Int, @RequestParam email: String) {
-        if(accountRepository.existsByEmail(email)) {
-            val eicId = accountRepository.byEmail(email)!!.id
-            eicOnPublicationRepository.revoke(publicationId, eicId)
-        } else inviteRepository.revoke(
+    fun revoke(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
+        val rowsAffected = accountRepository.byEmail(email)?.let {
+            eicOnPublicationRepository.revoke(publicationId, it.id)
+        } ?: inviteRepository.revoke(
             email = email,
             target = InvitationTarget.EIC_ON_PUBLICATION,
             targetId = publicationId
         )
+        return if(rowsAffected > 0) ResponseEntity.ok("eic $email successfully revoked on publication $publicationId")
+        else ResponseEntity.internalServerError().body("failed revoking $email as eic on publication $publicationId")
     }
 }
