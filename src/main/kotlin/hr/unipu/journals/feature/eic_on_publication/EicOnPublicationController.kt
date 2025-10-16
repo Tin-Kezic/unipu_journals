@@ -26,7 +26,7 @@ class EicOnPublicationController(
                 target = InvitationTarget.EIC_ON_PUBLICATION,
                 targetId = publicationId
         )
-        return if(rowsAffected > 0) ResponseEntity.ok("eic $email successfully assigned on publication $publicationId")
+        return if(rowsAffected == 1) ResponseEntity.ok("eic $email successfully assigned on publication $publicationId")
         else ResponseEntity.internalServerError().body("failed assigning $email as eic on publication $publicationId")
     }
     @PutMapping("{publicationId}/revoke-eic")
@@ -38,7 +38,7 @@ class EicOnPublicationController(
             target = InvitationTarget.EIC_ON_PUBLICATION,
             targetId = publicationId
         )
-        return if(rowsAffected > 0) ResponseEntity.ok("eic $email successfully revoked on publication $publicationId")
+        return if(rowsAffected == 1) ResponseEntity.ok("eic $email successfully revoked on publication $publicationId")
         else ResponseEntity.internalServerError().body("failed revoking $email as eic on publication $publicationId")
     }
 }

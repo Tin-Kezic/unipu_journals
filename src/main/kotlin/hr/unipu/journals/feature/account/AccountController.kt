@@ -66,13 +66,13 @@ class AccountController(
             address = Jsoup.clean(request.address, Safelist.none()),
             zipCode = Jsoup.clean(request.zipCode, Safelist.none())
         )
-        return if(rowsAffected > 0) return ResponseEntity.ok("successfully updated account: $account")
+        return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account: $account")
             else ResponseEntity.internalServerError().body("failed updating account: $account")
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
         val rowsAffected = accountRepository.delete(id)
-        if(rowsAffected == 0) return ResponseEntity.badRequest().body("no account found with id: $id")
-        return ResponseEntity.ok("successfully deleted account with id: $id")
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $id")
+        else ResponseEntity.internalServerError().body("failed to delete account $id")
     }
 }
