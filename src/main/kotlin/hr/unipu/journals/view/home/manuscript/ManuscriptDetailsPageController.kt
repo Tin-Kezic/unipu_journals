@@ -4,6 +4,7 @@ import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscr
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.InternalServerErrorException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -27,8 +28,9 @@ class ManuscriptDetailsPageController(
         @PathVariable manuscriptId: Int,
         model: Model
     ): String {
-        manuscriptRepository.incrementViews(manuscriptId)
-        val manuscript = manuscriptRepository.byId(manuscriptId)
+        val rowsAffected = manuscriptRepository.incrementViews(manuscriptId)
+        if(rowsAffected == 0) throw InternalServerErrorException("failed to increment views")
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return "redirect:/404"
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY"))

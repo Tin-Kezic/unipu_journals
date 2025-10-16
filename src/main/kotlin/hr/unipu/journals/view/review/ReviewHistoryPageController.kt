@@ -30,7 +30,7 @@ class ReviewHistoryPageController(
         model: Model
     ): String {
         model["isUnderReviewAndUserIsAffiliated"] = 0
-        val manuscript = manuscriptRepository.byId(manuscriptId)
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return "redirect:/404"
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd.MM.YYYY"))
