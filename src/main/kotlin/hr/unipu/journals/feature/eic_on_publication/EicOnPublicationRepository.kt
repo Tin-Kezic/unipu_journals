@@ -19,9 +19,9 @@ interface EicOnPublicationRepository: Repository<EicOnPublication, Int> {
 
     @Modifying
     @Query("INSERT INTO eic_on_publication (publication_id, eic_id) VALUES (:publication_id, :eic_id)")
-    fun assign(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int)
+    fun assign(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int): Int
 
     @Modifying
     @Query("DELETE FROM eic_on_publication WHERE publication_id = :publication_id AND eic_id = :eic_id")
-    fun revoke(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int)
+    fun revoke(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int): Int
 }
