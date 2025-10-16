@@ -20,12 +20,12 @@ class ManuscriptRepositoryTests {
 
     @Test fun `increment views by manuscript id`() {
         val views = jdbcTemplate.queryForObject<Int>("SELECT views FROM manuscript WHERE id = 1")
-        manuscriptRepository.incrementViews(1)
+        assertEquals(1, manuscriptRepository.incrementViews(1))
         assertEquals(views + 1, jdbcTemplate.queryForObject<Int>("SELECT views FROM manuscript WHERE id = 1"))
     }
     @Test fun `increment downloads by manuscript id`() {
         val downloads = jdbcTemplate.queryForObject<Int>("SELECT downloads FROM manuscript WHERE id = 1")
-        manuscriptRepository.incrementDownloads(1)
+        assertEquals(1, manuscriptRepository.incrementDownloads(1))
         assertEquals(downloads + 1, jdbcTemplate.queryForObject<Int>("SELECT downloads FROM manuscript WHERE id = 1"))
     }
     @Test fun `retrieve publication id and section id of manuscript by manuscriptId`() {
@@ -39,7 +39,7 @@ class ManuscriptRepositoryTests {
     }
     @Test fun `insert manuscript`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND author_id = 24 AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
-        manuscriptRepository.insert("new manuscript", 24, 1, 11, "new file url")
+        assertEquals(1, manuscriptRepository.insert("new manuscript", 24, 1, 11, "new file url"))
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND author_id = 24 AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
     }
     @Test fun `retrieve manuscripts pending review for account by account id where parent section and publication isn't hidden`() {
