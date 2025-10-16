@@ -100,7 +100,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun delete(@Param("id") id: Int)
 
     @Query("SELECT * FROM manuscript WHERE id = :id")
-    fun byId(@Param("id") manuscriptId: Int): Manuscript
+    fun byId(@Param("id") manuscriptId: Int): Manuscript?
 
     @Query("""
         SELECT manuscript.* FROM manuscript

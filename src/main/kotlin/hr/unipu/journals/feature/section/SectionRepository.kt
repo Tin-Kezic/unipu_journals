@@ -44,27 +44,27 @@ interface SectionRepository: Repository<Section, Int> {
     fun insert(
         @Param("title") title: String,
         @Param("publication_id") publicationId: Int,
-    )
+    ): Int
     @Modifying
     @Query("UPDATE publication_section SET title = :title WHERE id = :id")
     fun updateTitle(
         @Param("id") id: Int,
         @Param("title") title: String,
-    )
+    ): Int
     @Modifying
     @Query("UPDATE publication_section SET description = :description WHERE id = :id")
     fun updateDescription(
         @Param("id") id: Int,
         @Param("description") description: String,
-    )
+    ): Int
     @Query("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
     @Query("UPDATE publication_section SET is_hidden = :is_hidden WHERE id = :id")
-    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean)
+    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean): Int
 
     @Modifying
     @Query("DELETE FROM publication_section WHERE id = :id")
-    fun delete(@Param("id") id: Int)
+    fun delete(@Param("id") id: Int): Int
 }
