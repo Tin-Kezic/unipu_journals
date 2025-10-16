@@ -43,11 +43,11 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Modifying
     @Transactional
     @Query("UPDATE manuscript SET views = views + 1 WHERE id = :id")
-    fun incrementViews(@Param("id") id: Int)
+    fun incrementViews(@Param("id") id: Int): Int
 
     @Modifying
     @Query("UPDATE manuscript SET downloads = downloads + 1 WHERE id = :id")
-    fun incrementDownloads(@Param("id") id: Int)
+    fun incrementDownloads(@Param("id") id: Int): Int
 
     @Query("""
         SELECT publication.id AS publication_id, publication_section.id AS section_id FROM manuscript
@@ -65,7 +65,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("category_id") categoryId: Int,
         @Param("section_id") sectionId: Int,
         @Param("file_url") fileUrl: String
-    )
+    ): Int
     @Query("""
         SELECT DISTINCT manuscript.* FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
@@ -93,7 +93,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Modifying
     @Query("UPDATE manuscript SET current_state = :state WHERE id = :id")
-    fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState)
+    fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState): Int
 
     @Modifying
     @Query("DELETE FROM manuscript WHERE id = :id")
