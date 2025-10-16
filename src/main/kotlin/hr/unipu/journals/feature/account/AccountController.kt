@@ -71,8 +71,8 @@ class AccountController(
     }
     @DeleteMapping("/delete/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        val deletedRows = accountRepository.delete(id)
-        if(deletedRows == 0) return ResponseEntity.badRequest().body("no account found with id: $id")
+        val rowsAffected = accountRepository.delete(id)
+        if(rowsAffected == 0) return ResponseEntity.badRequest().body("no account found with id: $id")
         return ResponseEntity.ok("successfully deleted account with id: $id")
     }
 }
