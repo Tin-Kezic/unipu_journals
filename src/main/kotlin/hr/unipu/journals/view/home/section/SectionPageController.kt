@@ -21,7 +21,7 @@ class SectionPageController(
 ) {
     @GetMapping("/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("publication with id $publicationId not found")
+        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication with id $publicationId")
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isAdmin"] = authorizationService.isAdmin()
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
