@@ -7,19 +7,18 @@ import org.springframework.web.bind.annotation.ResponseStatus
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun notFound() = "/404.html"
-
     @ExceptionHandler(AccessDeniedException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun forbidden() = "/403.html"
+    fun forbidden() = "/error/403.html"
+
+    @ExceptionHandler(ResourceNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun notFound() = "/error/404.html"
 
     @ExceptionHandler(InternalServerErrorException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun internalServerError() = "/505.html"
+    fun internalServerError() = "/error/500.html"
 }
-
 class ResourceNotFoundException(message: String) : RuntimeException(message)
 class AccessDeniedException(message: String) : RuntimeException(message)
 class InternalServerErrorException(message: String) : RuntimeException(message)
