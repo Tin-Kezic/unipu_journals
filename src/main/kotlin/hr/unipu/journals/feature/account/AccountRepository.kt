@@ -12,11 +12,11 @@ interface AccountRepository: Repository<Account, Int> {
 
     @Modifying
     @Query("UPDATE account SET is_admin = :is_admin WHERE email = :email")
-    fun updateIsAdmin(@Param("email") email: String, @Param("is_admin") isAdmin: Boolean)
+    fun updateIsAdmin(@Param("email") email: String, @Param("is_admin") isAdmin: Boolean): Int
 
     @Modifying
     @Query("UPDATE account set password = :password WHERE email = 'root@unipu.hr'")
-    fun updateRootPassword(@Param("password") password: String)
+    fun updateRootPassword(@Param("password") password: String): Int
 
     @Query("SELECT EXISTS (SELECT 1 FROM account WHERE id = :id)")
     fun existsById(@Param("id") id: Int): Boolean
