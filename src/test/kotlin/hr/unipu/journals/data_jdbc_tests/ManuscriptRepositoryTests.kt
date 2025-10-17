@@ -122,7 +122,15 @@ class ManuscriptRepositoryTests {
                 Manuscript(12, "Deep Learning in Genomics2", "Analyzes genomic sequences using deep neural networks to predict mutations.2", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 2, "http://example.com/ms22.pdf", LocalDateTime.of(2015, 9, 28, 13, 28, 0), null, 246, 34),
                 Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135, 26)
             ),
-            manuscriptRepository.all(sectionId = 2)
+            manuscriptRepository.allBySectionId(sectionId = 2)
+        )
+    }
+    @Test fun `retrieve all manuscripts contained in certain section by section id and manuscript state`() {
+        assertEquals(
+            listOf(
+                Manuscript(16, "AI in Medical Decision Making2", "Examining the implications of autonomous decision systems in healthcare.2", 11, 3, ManuscriptState.PUBLISHED, 2, "http://example.com/ms26.pdf", LocalDateTime.of(2011, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 32, 16), 513, 89),
+            ),
+            manuscriptRepository.allBySectionId(sectionId = 2, ManuscriptState.PUBLISHED)
         )
     }
     @Test fun `retrieve all manuscripts by author id`() {
@@ -139,7 +147,16 @@ class ManuscriptRepositoryTests {
                 Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47),
                 Manuscript(1, "Machine Learning for Radiology", "A study on using ML to detect anomalies in radiological images.", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 1, "http://example.com/ms1.pdf", LocalDateTime.of(2025, 9, 28, 13, 28, 0), null, 134, 25)
             ),
-            manuscriptRepository.all(authorId = 10)
+            manuscriptRepository.allByAuthorId(authorId = 10)
+        )
+    }
+    @Test fun `retrieve all manuscripts by author id and manuscript state`() {
+        assertEquals(
+            listOf(
+                Manuscript(13, "Natural Language Processing in Clinical Notes2", "Extracting insights from unstructured clinical data using NLP.2", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms23.pdf", LocalDateTime.of(2014, 9, 28, 13, 28, 0), null, 311, 48),
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47),
+            ),
+            manuscriptRepository.allByAuthorId(authorId = 10, ManuscriptState.AWAITING_REVIEWER_REVIEW)
         )
     }
 }

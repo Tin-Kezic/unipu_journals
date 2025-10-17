@@ -37,7 +37,7 @@ class ManuscriptPageController(
         model["description"] = sectionRepository.description(sectionId)
         model["publicationId"] = publicationId
         model["sectionId"] = sectionId
-        model["manuscripts"] = manuscriptRepository.all(sectionId = sectionId, manuscriptState = ManuscriptState.PUBLISHED).map { manuscript ->
+        model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId = sectionId, manuscriptState = ManuscriptState.PUBLISHED).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
