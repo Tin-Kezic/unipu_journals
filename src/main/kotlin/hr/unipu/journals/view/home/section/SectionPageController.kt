@@ -3,6 +3,7 @@ package hr.unipu.journals.view.home.section
 import hr.unipu.journals.feature.publication.PublicationRepository
 import hr.unipu.journals.feature.section.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.ResourceNotFoundException
 import hr.unipu.journals.view.home.ContainerDTO
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -20,6 +21,7 @@ class SectionPageController(
 ) {
     @GetMapping("/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
+        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("publication with id $publicationId not found")
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isAdmin"] = authorizationService.isAdmin()
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
