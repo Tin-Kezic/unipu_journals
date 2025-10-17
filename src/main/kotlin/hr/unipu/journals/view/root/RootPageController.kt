@@ -4,6 +4,7 @@ import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ROOT
+import hr.unipu.journals.view.InternalServerErrorException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -29,28 +30,31 @@ class RootPageController(
         model["adminEmails"] = accountRepository.allAdminEmails() + inviteRepository.emailsByTarget(InvitationTarget.ADMIN)
         return "manage/root-page"
     }
-
     @PostMapping("/update-password")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun updatePassword(@RequestParam password: String, @RequestParam passwordConfirmation: String): String {
         if(password != passwordConfirmation) return "redirect:/root?password-mismatch"
-        accountRepository.updatePassword("root@unipu.hr", passwordEncoder.encode(password))
+        val rowsAffected = accountRepository.updateRootPassword(passwordEncoder.encode(password))
+        if(rowsAffected == 0) throw InternalServerErrorException("failed updating root password")
         return "redirect:/root?successfully-updated-password"
     }
-
-    @PostMapping("/add-admin")
+    @PostMapping("/assign-admin")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
-    fun addAdmin(@RequestParam email: String): ResponseEntity<String> {
-        if(accountRepository.existsByEmail(email)) accountRepository.updateIsAdmin(email, true)
-        else inviteRepository.invite(email, InvitationTarget.ADMIN)
+    fun assignAdmin(@RequestParam email: String): ResponseEntity<String> {
+        var rowsAffected = accountRepository.updateIsAdmin(email, true)
+        if(rowsAffected == 0) {
+            rowsAffected = inviteRepository.invite(email, InvitationTarget.ADMIN)
+            if(rowsAffected == 0) throw InternalServerErrorException("failed assigning admin privileges for $email")
+        }
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
-
     @PutMapping("/revoke-admin")
     fun revokeAdmin(@RequestParam email: String): ResponseEntity<String> {
-        if(accountRepository.isAdmin(email)) accountRepository.updateIsAdmin(email, false)
-        else if (inviteRepository.isAdmin(email)) inviteRepository.revoke(email, InvitationTarget.ADMIN, -1)
-        else return ResponseEntity.status(404).body("No admin entry found for email: $email")
+        var rowsAffected = accountRepository.updateIsAdmin(email, false)
+        if(rowsAffected == 0) {
+            rowsAffected = inviteRepository.revoke(email, InvitationTarget.ADMIN)
+            if(rowsAffected == 0) throw InternalServerErrorException("failed revoking admin privileges for $email")
+        }
         return ResponseEntity.ok("Successfully revoked admin privileges for $email")
     }
 }

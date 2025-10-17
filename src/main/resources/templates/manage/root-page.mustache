@@ -37,7 +37,7 @@
         <div style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
             <section>
                 <h2 style="font-weight: normal; user-select: none;">Admins</h2>
-                <form id="add-admin-form">
+                <form id="assign-admin-form">
                     <div style="display:flex; align-items:center; gap: 0.5rem;">
                         <div class="text-field">
                             <label>admin mail</label>
@@ -103,11 +103,11 @@
     document.querySelectorAll('.remove-user-button').forEach(button => {
         button.addEventListener('click', () => dialogOpen(button.dataset.email));
     });
-    document.getElementById('add-admin-form').addEventListener('submit', async (event) => {
+    document.getElementById('assign-admin-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const emailInput = document.querySelector('input[name="email"]');
         const email = emailInput.value;
-        const response = await fetch(`/root/add-admin?email=${encodeURIComponent(email)}`, { method: 'POST' })
+        const response = await fetch(`/root/assign-admin?email=${encodeURIComponent(email)}`, { method: 'POST' })
         if(!response.ok || !email) { alert('failed to add admin'); return; }
         const newButton = document.createElement('button');
         newButton.className = 'remove-user-button';
