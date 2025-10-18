@@ -48,7 +48,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
     TechnicalProcessingPageController::class,
 ])
 class HeaderProfileModelAttributeAdvice(private val authorizationService: AuthorizationService) {
-
     @ModelAttribute
     fun user(model: Model) {
         val account = authorizationService.account
