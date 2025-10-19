@@ -15,6 +15,8 @@ interface SectionRepository: Repository<Section, Int> {
         SELECT publication_section.title FROM publication_section
         JOIN publication ON publication_section.publication_id = publication.id
         WHERE publication.title = :title
+        AND publication.is_hidden = FALSE
+        AND publication_section.is_hidden = FALSE
         """)
     fun titlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
