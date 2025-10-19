@@ -58,7 +58,8 @@ INSERT INTO publication (title, is_hidden) VALUES
 ('Nature of Biology', FALSE),
 ('Physics Letters', FALSE),
 ('first hidden publication', TRUE),
-('second hidden publication', TRUE);
+('second hidden publication', TRUE),
+('Published empty publication', FALSE);
 INSERT INTO eic_on_publication (publication_id, eic_id) VALUES
 (1, 7),
 (2, 6),
