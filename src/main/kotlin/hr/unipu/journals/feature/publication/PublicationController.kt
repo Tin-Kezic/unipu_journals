@@ -20,33 +20,30 @@ class PublicationController(private val publicationRepository: PublicationReposi
     @PostMapping("/insert")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun insert(@RequestParam title: String): ResponseEntity<String> {
-        return if(title.isNotEmpty()) {
-            publicationRepository.insert(Jsoup.clean(title, Safelist.none()))
-            ResponseEntity.ok("publication successfully added")
-        } else ResponseEntity.badRequest().body("title must not be empty")
+        if(title.isEmpty()) return ResponseEntity.badRequest().body("title must not be empty")
+        val rowsAffected = publicationRepository.insert(Jsoup.clean(title, Safelist.none()))
+        return if(rowsAffected == 1) ResponseEntity.ok("publication successfully added")
+        else ResponseEntity.internalServerError().body("failed to insert publication")
     }
     @PutMapping("/{publicationId}/update-title")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
-        return if(publicationRepository.exists(publicationId)) {
-            publicationRepository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
-            ResponseEntity.ok("title successfully updated")
-        } else ResponseEntity.badRequest().body("publication with id: $publicationId does not exist")
+        val rowsAffected = publicationRepository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
+        return if(rowsAffected == 1) ResponseEntity.ok("title successfully updated")
+        else ResponseEntity.internalServerError().body("failed to update publication with id: $publicationId")
     }
     @PutMapping("/{publicationId}/update-hidden")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun updateHidden(@PathVariable publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
-        return if (publicationRepository.exists(publicationId)) {
-            publicationRepository.updateHidden(publicationId, isHidden)
-            ResponseEntity.ok("publication isHidden successfully updated")
-        } else ResponseEntity.badRequest().body("id does not exist")
+        val rowsAffected = publicationRepository.updateHidden(publicationId, isHidden)
+        return if(rowsAffected == 1) ResponseEntity.ok("publication hidden status successfully updated to $isHidden")
+        else ResponseEntity.internalServerError().body("failed to update hidden status")
     }
     @DeleteMapping("/{publicationId}/delete")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun delete(@PathVariable publicationId: Int): ResponseEntity<String> {
-        return if (publicationRepository.exists(publicationId)) {
-            publicationRepository.delete(publicationId)
-            ResponseEntity.ok("publication isHidden successfully updated")
-        } else ResponseEntity.badRequest().body("id does not exist")
+        val rowsAffected = publicationRepository.delete(publicationId)
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted publication $publicationId")
+        else ResponseEntity.internalServerError().body("failed to delete publication $publicationId")
     }
 }
