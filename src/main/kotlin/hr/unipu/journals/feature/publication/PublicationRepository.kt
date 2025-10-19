@@ -8,14 +8,13 @@ import org.springframework.data.repository.query.Param
 
 interface PublicationRepository: Repository<Publication, Int> {
     @Query("""
-        SELECT DISTINCT publication.* FROM manuscript
+        SELECT DISTINCT publication.* FROM publication
         JOIN publication_section ON publication.id = publication_section.publication_id
         JOIN manuscript ON publication_section.id = manuscript.section_id
         JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE account_role_on_manuscript.account_id = :account_id
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
-        AND (publication.id = :publication_id OR :publication_id IS NULL)
         AND ((
             account_role_on_manuscript.account_role = 'EIC'
             AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
@@ -37,9 +36,9 @@ interface PublicationRepository: Repository<Publication, Int> {
 
     @Query("""
         SELECT DISTINCT publication.* FROM publication
-        JOIN publication_section ON publication.id = publication_section.publication_id
-        JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication_is_hidden = TRUE
+        LEFT JOIN publication_section ON publication.id = publication_section.publication_id
+        LEFT JOIN manuscript ON manuscript.section_id = publication_section.id
+        WHERE publication.is_hidden = TRUE
         OR publication_section.is_hidden = TRUE
         OR manuscript.current_state = 'HIDDEN'
         """)
@@ -49,7 +48,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         SELECT DISTINCT publication.* FROM publication
         JOIN publication_section ON publication.id = publication_section.publication_id
         JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication_is_hidden = FALSE
+        WHERE publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
         AND manuscript.current_state = 'ARCHIVED'
     """)
@@ -57,20 +56,20 @@ interface PublicationRepository: Repository<Publication, Int> {
 
     @Modifying
     @Query("INSERT INTO publication (title) VALUES (:title)")
-    fun insert(@Param("title") title: String)
+    fun insert(@Param("title") title: String): Int
 
     @Modifying
     @Query("UPDATE publication SET title = :title WHERE id = :id")
-    fun updateTitle(@Param("id") id: Int, @Param("title") title: String)
+    fun updateTitle(@Param("id") id: Int, @Param("title") title: String): Int
 
     @Query("SELECT EXISTS (SELECT 1 FROM publication WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
     @Query("UPDATE publication SET is_hidden = :is_hidden WHERE id = :id")
-    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean)
+    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean): Int
 
     @Modifying
     @Query("DELETE FROM publication WHERE id = :id")
-    fun delete(@Param("id") id: Int)
+    fun delete(@Param("id") id: Int): Int
 }
