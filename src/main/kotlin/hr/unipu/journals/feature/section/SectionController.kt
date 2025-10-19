@@ -17,7 +17,7 @@ class SectionController(private val sectionRepository: SectionRepository) {
 
     @GetMapping("/{publicationTitle}/section-titles")
     fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
-        return sectionRepository.titleByPublicationTitle(publicationTitle)
+        return sectionRepository.titlesByPublicationTitle(publicationTitle)
     }
     @PostMapping("/{publicationId}/section/insert")
     fun insert(

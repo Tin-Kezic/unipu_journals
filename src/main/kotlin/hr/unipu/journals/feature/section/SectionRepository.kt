@@ -16,7 +16,7 @@ interface SectionRepository: Repository<Section, Int> {
         JOIN publication ON publication_section.publication_id = publication.id
         WHERE publication.title = :title
         """)
-    fun titleByPublicationTitle(@Param("title") publicationTitle: String): List<String>
+    fun titlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
     @Query("SELECT description from publication_section WHERE id = :id")
     fun description(@Param("id") sectionId: Int): String
