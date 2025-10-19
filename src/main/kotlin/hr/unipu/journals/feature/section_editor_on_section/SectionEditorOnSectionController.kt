@@ -30,7 +30,7 @@ class SectionEditorOnSectionController(
             targetId = sectionId
         )
         return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
-        else ResponseEntity.internalServerError().body("failed assigning section editor $email on section $sectionId")
+        else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
     }
     @PutMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
     fun revoke(
@@ -45,6 +45,6 @@ class SectionEditorOnSectionController(
             targetId = sectionId
         )
         return if(rowsAffected == 1) ResponseEntity.ok("successfully revoked section editor $email on section $sectionId")
-        else ResponseEntity.internalServerError().body("failed revoking section editor $email on section $sectionId")
+        else ResponseEntity.internalServerError().body("failed to revoke section editor $email on section $sectionId")
     }
 }

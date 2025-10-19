@@ -61,6 +61,6 @@ class ManuscriptController(
         }
         val rowsAffected = manuscriptRepository.updateState(manuscriptId, newState)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully updated state on manuscript: $manuscriptId")
-        else ResponseEntity.internalServerError().body("failed updating state on manuscript: $manuscriptId")
+        else ResponseEntity.internalServerError().body("failed to update state on manuscript: $manuscriptId")
     }
 }

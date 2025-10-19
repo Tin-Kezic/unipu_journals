@@ -35,7 +35,7 @@ class RootPageController(
     fun updatePassword(@RequestParam password: String, @RequestParam passwordConfirmation: String): String {
         if(password != passwordConfirmation) return "redirect:/root?password-mismatch"
         val rowsAffected = accountRepository.updateRootPassword(passwordEncoder.encode(password))
-        if(rowsAffected == 0) throw InternalServerErrorException("failed updating root password")
+        if(rowsAffected == 0) throw InternalServerErrorException("failed to update root password")
         return "redirect:/root?successfully-updated-password"
     }
     @PostMapping("/assign-admin")
@@ -44,7 +44,7 @@ class RootPageController(
         var rowsAffected = accountRepository.updateIsAdmin(email, true)
         if(rowsAffected == 0) {
             rowsAffected = inviteRepository.invite(email, InvitationTarget.ADMIN)
-            if(rowsAffected == 0) throw InternalServerErrorException("failed assigning admin privileges for $email")
+            if(rowsAffected == 0) throw InternalServerErrorException("failed to assign admin privileges for $email")
         }
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
@@ -53,7 +53,7 @@ class RootPageController(
         var rowsAffected = accountRepository.updateIsAdmin(email, false)
         if(rowsAffected == 0) {
             rowsAffected = inviteRepository.revoke(email, InvitationTarget.ADMIN)
-            if(rowsAffected == 0) throw InternalServerErrorException("failed revoking admin privileges for $email")
+            if(rowsAffected == 0) throw InternalServerErrorException("failed to revoke admin privileges for $email")
         }
         return ResponseEntity.ok("Successfully revoked admin privileges for $email")
     }

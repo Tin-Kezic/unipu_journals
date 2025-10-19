@@ -27,7 +27,7 @@ class EicOnPublicationController(
                 targetId = publicationId
         )
         return if(rowsAffected == 1) ResponseEntity.ok("eic $email successfully assigned on publication $publicationId")
-        else ResponseEntity.internalServerError().body("failed assigning $email as eic on publication $publicationId")
+        else ResponseEntity.internalServerError().body("failed to assign $email as eic on publication $publicationId")
     }
     @PutMapping("{publicationId}/revoke-eic")
     fun revoke(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
