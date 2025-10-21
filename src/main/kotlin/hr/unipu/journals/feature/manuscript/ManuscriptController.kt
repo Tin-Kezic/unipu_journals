@@ -29,7 +29,6 @@ class ManuscriptController(
         @RequestParam authors: List<AuthorDTO>,
         @RequestParam abstract: String,
         @RequestParam files: List<MultipartFile>,
-
     ): ResponseEntity<String> {
         /*
         publicationRepository.insert(
