@@ -18,11 +18,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.5.3")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
-	implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-mustache:3.5.3")
 	implementation("org.jsoup:jsoup:1.15.3")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.5.3")
+    implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
+    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
 	runtimeOnly("com.h2database:h2:2.2.224")
 	// runtimeOnly("org.postgresql:postgresql:42.7.2")
 	// implementation("org.springframework.session:spring-session-jdbc:3.2.1")
