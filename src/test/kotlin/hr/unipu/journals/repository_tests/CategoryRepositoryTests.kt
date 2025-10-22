@@ -1,4 +1,4 @@
-package hr.unipu.journals.data_jdbc_tests
+package hr.unipu.journals.repository_tests
 
 import hr.unipu.journals.feature.category.CategoryRepository
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -1,4 +1,4 @@
-package hr.unipu.journals.data_jdbc_tests
+package hr.unipu.journals.repository_tests
 
 import hr.unipu.journals.feature.manuscript.Manuscript
 import hr.unipu.journals.feature.manuscript.ManuscriptRepository

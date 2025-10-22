@@ -1,11 +1,9 @@
-package hr.unipu.journals.data_jdbc_tests
+package hr.unipu.journals.repository_tests
 
 import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.assertNotNull
-import org.junit.jupiter.api.assertNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.jdbc.core.JdbcTemplate
