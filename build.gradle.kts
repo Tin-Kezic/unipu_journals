@@ -4,14 +4,8 @@ plugins {
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
-repositories {
-	mavenCentral()
-}
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(24)
-	}
-}
+repositories { mavenCentral() }
+java.toolchain.languageVersion = JavaLanguageVersion.of(24)
 val byteBuddyAgent: Configuration by configurations.creating
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
@@ -36,11 +30,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.13")
     byteBuddyAgent("net.bytebuddy:byte-buddy-agent:1.17.6")
 }
-kotlin {
-	compilerOptions {
-		freeCompilerArgs.add("-Xjsr305=strict")
-	}
-}
+kotlin.compilerOptions.freeCompilerArgs.add("-Xjsr305=strict")
 tasks.test {
 	useJUnitPlatform()
     jvmArgs("-Xshare:off", "-javaagent:${byteBuddyAgent.singleFile}")
