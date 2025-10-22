@@ -5,7 +5,6 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("SELECT * FROM manuscript WHERE section_id = :section_id AND (current_state = :state OR :state IS NULL) ORDER BY id DESC")

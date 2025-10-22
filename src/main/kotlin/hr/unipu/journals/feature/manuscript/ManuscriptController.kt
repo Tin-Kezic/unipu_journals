@@ -1,12 +1,10 @@
 package hr.unipu.journals.feature.manuscript
 
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.submit.AuthorDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
