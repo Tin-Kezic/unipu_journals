@@ -6,10 +6,6 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface AccountRepository: Repository<Account, Int> {
-
-    @Query("SELECT is_admin FROM account WHERE email = :email")
-    fun isAdmin(@Param("email") email: String): Boolean
-
     @Modifying
     @Query("UPDATE account SET is_admin = :is_admin WHERE email = :email")
     fun updateIsAdmin(@Param("email") email: String, @Param("is_admin") isAdmin: Boolean): Int
