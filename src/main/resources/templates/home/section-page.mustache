@@ -99,7 +99,7 @@
     document.getElementById('insert-section-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const sectionTitle = document.querySelector('input[name=insert-section-dialog-input]').value;
-        const response = await fetch(`/api/publication/{{publicationId}}/section/insert?title=${encodeURIComponent(sectionTitle)}`, { method: 'POST' });
+        const response = await fetch(`/api/publication/{{publicationId}}/section?title=${encodeURIComponent(sectionTitle)}`, { method: 'POST' });
         if(!response.ok) { alert('failed to add section'); return; }
         location.reload(true);
     });
@@ -134,7 +134,7 @@
     document.getElementById('update-section-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const newSectionTitle = document.querySelector('input[name="update-section-title-dialog-input"]').value;
-        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}/update-title?title=${encodeURIComponent(newSectionTitle)}`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}?title=${encodeURIComponent(newSectionTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update section title'); return; }
         location.reload(true);
     });
@@ -160,7 +160,7 @@
     });
     document.getElementById('hide-section-dialog-negative').addEventListener('click', () => hideSectionDialog.close());
     document.getElementById('hide-section-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide Section'); return; }
         document.querySelector(`div[data-id="${currentId}"]`).remove();
         hideSectionDialog.close();

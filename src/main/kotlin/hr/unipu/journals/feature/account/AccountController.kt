@@ -22,7 +22,7 @@ class AccountController(
     private val passwordEncoder: PasswordEncoder,
     private val authorizationService: AuthorizationService
 ) {
-    @PostMapping("/insert")
+    @PostMapping
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         var error = ""
         if (accountRepository.existsByEmail(account.email)) error += "email taken"
@@ -43,7 +43,7 @@ class AccountController(
         if(rowsInserted > 0) return ResponseEntity.ok("successfully registered account: $account")
         return ResponseEntity.internalServerError().body("failed to register account: $account")
     }
-    @PutMapping("/update")
+    @PutMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun update(@ModelAttribute request: AccountDTO): ResponseEntity<String> {
         val account = authorizationService.account!!
@@ -69,7 +69,7 @@ class AccountController(
         return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account: $account")
             else ResponseEntity.internalServerError().body("failed to update account: $account")
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
         val rowsAffected = accountRepository.delete(id)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $id")

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api/publication")
+@RequestMapping("/api/publication/{publicationId}/section/{sectionId}/manuscript")
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @PostMapping("{publicationId}/section/{sectionId}/insert")
+    @PostMapping
     fun insert(
         @PathVariable sectionId: Int,
         @RequestParam title: String,
@@ -39,7 +39,7 @@ class ManuscriptController(
          */
         return ResponseEntity.ok("manuscript successfully added")
     }
-    @PutMapping("/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}/update-state")
+    @PutMapping("/{manuscriptId}/state")
     fun updateState(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,

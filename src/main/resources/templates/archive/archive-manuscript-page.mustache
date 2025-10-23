@@ -65,7 +65,7 @@
 
     document.querySelectorAll('button[data-type="unarchive-button"]').forEach(button => {
         button.addEventListener('click', async () => {
-            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${button.dataset.id}/update-state?newState=PUBLISHED`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${button.dataset.id}/state?newState=PUBLISHED`, { method: 'PUT' });
             if(!response.ok) { alert('failed to unarchive Manuscript'); return; }
             document.querySelector(`article[data-id="${button.dataset.id}"]`).remove();
         });

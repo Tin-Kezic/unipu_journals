@@ -38,7 +38,7 @@
                 const publicationSelect = document.querySelector('select[name="publication"]')
                 const sectionSelect = document.querySelector('select[name="section"]')
                 publicationSelect.addEventListener('change', async (event) => {
-                    const response = await fetch(`/api/publication/${publicationSelect.value}/section-titles`, { method: 'GET' });
+                    const response = await fetch(`/api/publication/${publicationSelect.value}/section/titles`, { method: 'GET' });
                     if(!response.ok) { alert('failed to fetch sections'); return; };
                     sectionSelect.innerHTML = '';
                     const sectionTitles = await response.json()

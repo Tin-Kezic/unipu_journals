@@ -62,7 +62,7 @@
 
     document.getElementById('dialog-negative').addEventListener('click', () => dialog.close())
     document.getElementById('dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/category/delete?category=${encodeURIComponent(currentCategory)}`, { method: 'DELETE' });
+        const response = await fetch(`/category?name=${encodeURIComponent(currentCategory)}`, { method: 'DELETE' });
         if(!response.ok) { alert('failed to delete category'); return; }
         document.querySelector(`.remove-user-button[data-category="${currentCategory}"]`).remove();
         dialog.close()
@@ -79,7 +79,7 @@
         event.preventDefault();
         const categoryInput = document.querySelector('input[name="category"]');
         const category = categoryInput.value;
-        const response = await fetch(`/category/insert?category=${encodeURIComponent(category)}`, { method: 'POST' })
+        const response = await fetch(`/category?name=${encodeURIComponent(category)}`, { method: 'POST' })
         if(!response.ok || !category) { alert('failed to add category'); return; }
         const newButton = document.createElement('button');
         newButton.className = 'remove-user-button';

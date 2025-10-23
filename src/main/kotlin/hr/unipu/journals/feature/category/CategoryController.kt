@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/category")
 @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
 class CategoryController(private val categoryRepository: CategoryRepository) {
-    @PostMapping("/insert")
-    fun insert(@RequestParam category: String) = categoryRepository.insert(category)
+    @PostMapping
+    fun insert(@RequestParam name: String) = categoryRepository.insert(name)
 
-    @DeleteMapping("/delete")
-    fun delete(@RequestParam category: String) = categoryRepository.delete(category)
+    @DeleteMapping
+    fun delete(@RequestParam name: String) = categoryRepository.delete(name)
 }
