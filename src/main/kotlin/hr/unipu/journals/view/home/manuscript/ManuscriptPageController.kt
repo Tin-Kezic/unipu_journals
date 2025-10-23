@@ -34,7 +34,11 @@ class ManuscriptPageController(
         if(sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section with id: $sectionId")
         model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId)
-        model["description"] = sectionRepository.description(sectionId)
+
+        val section = sectionRepository.byId(sectionId)
+        model["currentSection"] = section.title
+        model["description"] = section.description
+
         model["publicationId"] = publicationId
         model["sectionId"] = sectionId
         model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId = sectionId, manuscriptState = ManuscriptState.PUBLISHED).map { manuscript ->
@@ -47,7 +51,6 @@ class ManuscriptPageController(
                 description = manuscript.description
             )
         }
-        model["currentSection"] = sectionRepository.title(sectionId)
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["isSectionEditorOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
         return "home/manuscript-page"

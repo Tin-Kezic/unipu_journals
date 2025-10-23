@@ -41,7 +41,7 @@ class ArchiveManuscriptPageController(
                 description = manuscript.description
             )
         }
-        model["currentSection"] = sectionRepository.title(sectionId)
+        model["currentSection"] = sectionRepository.byId(sectionId).title
         return "archive/archive-manuscript-page"
     }
 }
