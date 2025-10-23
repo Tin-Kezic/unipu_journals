@@ -31,7 +31,7 @@ interface PublicationRepository: Repository<Publication, Int> {
     @Query("SELECT title FROM publication WHERE id = :id")
     fun title(@Param("id") id: Int): String
 
-    @Query("SELECT * FROM publication WHERE publication.is_hidden = FALSE")
+    @Query("SELECT * FROM publication WHERE is_hidden = FALSE ORDER BY id DESC")
     fun allPublished(): List<Publication>
 
     @Query("""
