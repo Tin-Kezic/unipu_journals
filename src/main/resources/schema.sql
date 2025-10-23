@@ -48,7 +48,8 @@ CREATE TABLE publication_section (
     description TEXT DEFAULT '',
     publication_id INT NOT NULL,
     is_hidden BOOL NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE
+    FOREIGN KEY (publication_id) REFERENCES publication(id) ON DELETE CASCADE,
+    UNIQUE (publication_id, title)
 );
 CREATE TABLE section_editor_on_section(
     id SERIAL PRIMARY KEY,
