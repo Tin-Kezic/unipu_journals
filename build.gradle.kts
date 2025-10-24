@@ -16,7 +16,7 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.15.3")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.5.3")
-    implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
+    //implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
 	runtimeOnly("com.h2database:h2:2.2.224")
 	// runtimeOnly("org.postgresql:postgresql:42.7.2")
