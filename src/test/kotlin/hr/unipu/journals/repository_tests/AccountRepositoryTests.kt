@@ -1,6 +1,7 @@
 package hr.unipu.journals.repository_tests
 
 import hr.unipu.journals.feature.account.Account
+import hr.unipu.journals.feature.account.AccountDTO
 import hr.unipu.journals.feature.account.AccountRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -18,16 +19,19 @@ class AccountRepositoryTests {
     @Test fun `insert account`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
         assertEquals(1, accountRepository.insert(
-            fullName = "John",
-            title = "Dr.",
-            email = "john@unipu.hr",
-            password = "secure123",
-            affiliation = "University",
-            jobType = "Professor",
-            country = "USA",
-            city = "Cheyenne",
-            address = "200 West 24th Street",
-            zipCode = "82002-0020"
+            AccountDTO(
+                fullName = "John",
+                title = "Dr.",
+                email = "john@unipu.hr",
+                password = "secure123",
+                passwordConfirmation = "secure123",
+                affiliation = "University",
+                jobType = "Professor",
+                country = "USA",
+                city = "Cheyenne",
+                address = "200 West 24th Street",
+                zipCode = "82002-0020"
+            )
         ))
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
     }
@@ -86,16 +90,19 @@ class AccountRepositoryTests {
         )
         accountRepository.update(
             id = 1,
-            fullName = newAccount.fullName,
-            title = newAccount.title,
-            email = newAccount.email,
-            password = newAccount.password,
-            affiliation = newAccount.affiliation,
-            jobType = newAccount.jobType,
-            country = newAccount.country,
-            city = newAccount.city,
-            address = newAccount.address,
-            zipCode = newAccount.zipCode,
+            AccountDTO(
+                fullName = newAccount.fullName,
+                title = newAccount.title,
+                email = newAccount.email,
+                password = newAccount.password,
+                passwordConfirmation = newAccount.password,
+                affiliation = newAccount.affiliation,
+                jobType = newAccount.jobType,
+                country = newAccount.country,
+                city = newAccount.city,
+                address = newAccount.address,
+                zipCode = newAccount.zipCode,
+            )
         )
         assertEquals(newAccount, accountRepository.byEmail(newAccount.email))
     }

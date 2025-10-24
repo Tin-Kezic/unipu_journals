@@ -34,48 +34,28 @@ interface AccountRepository: Repository<Account, Int> {
         INSERT INTO account
         (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code)
         VALUES
-        (:full_name, :title, :email, :password, :affiliation, :job_type, :country, :city, :address, :zip_code)
+        (:dto.full_name, :dto.title, :dto.email, :dto.password, :dto.affiliation, :dto.job_type, :dto.country, :dto.city, :dto.address, :dto.zip_code)
     """)
-    fun insert(
-        @Param("full_name") fullName: String,
-        @Param("title") title: String,
-        @Param("email") email: String,
-        @Param("password") password: String,
-        @Param("affiliation") affiliation: String,
-        @Param("job_type") jobType: String,
-        @Param("country") country: String,
-        @Param("city") city: String,
-        @Param("address") address: String,
-        @Param("zip_code") zipCode: String,
-    ): Int
+    fun insert(@Param("dto") accountDTO: AccountDTO): Int
 
     @Modifying
     @Query("""
         UPDATE account SET
-        full_name = :full_name,
-        title = :title,
-        email = :email,
-        password = :password,
-        affiliation = :affiliation,
-        job_type = :job_type,
-        country = :country,
-        city = :city,
-        address = :address,
-        zip_code = :zip_code
-        WHERE id = :id
+        full_name = :dto.full_name,
+        title = :dto.title,
+        email = :dto.email,
+        password = :dto.password,
+        affiliation = :dto.affiliation,
+        job_type = :dto.job_type,
+        country = :dto.country,
+        city = :dto.city,
+        address = :dto.address,
+        zip_code = :dto.zip_code
+        WHERE id = :dto.id
     """)
     fun update(
         @Param("id") id: Int,
-        @Param("full_name") fullName: String,
-        @Param("title") title: String,
-        @Param("email") email: String,
-        @Param("password") password: String,
-        @Param("affiliation") affiliation: String,
-        @Param("job_type") jobType: String,
-        @Param("country") country: String,
-        @Param("city") city: String,
-        @Param("address") address: String,
-        @Param("zip_code") zipCode: String
+        @Param("dto") accountDTO: AccountDTO
     ): Int
 
     @Modifying

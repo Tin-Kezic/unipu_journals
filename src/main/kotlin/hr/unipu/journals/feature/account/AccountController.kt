@@ -22,24 +22,25 @@ class AccountController(
     private val passwordEncoder: PasswordEncoder,
     private val authorizationService: AuthorizationService
 ) {
+    fun AccountDTO.clean() = this.copy(
+        fullName = Jsoup.clean(this.fullName, Safelist.none()),
+        title = Jsoup.clean(this.title, Safelist.none()),
+        email = Jsoup.clean(this.email, Safelist.none()),
+        password = passwordEncoder.encode(this.password),
+        affiliation = Jsoup.clean(this.affiliation, Safelist.none()),
+        jobType = Jsoup.clean(this.jobType, Safelist.none()),
+        country = Jsoup.clean(this.country, Safelist.none()),
+        city = Jsoup.clean(this.city, Safelist.none()),
+        address = Jsoup.clean(this.address, Safelist.none()),
+        zipCode = Jsoup.clean(this.zipCode, Safelist.none())
+    )
     @PostMapping
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         var error = ""
         if (accountRepository.existsByEmail(account.email)) error += "email taken"
         if (account.password != account.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        val rowsInserted = accountRepository.insert(
-            fullName = Jsoup.clean(account.fullName, Safelist.none()),
-            title = Jsoup.clean(account.title, Safelist.none()),
-            email = Jsoup.clean(account.email, Safelist.none()),
-            password = passwordEncoder.encode(account.password),
-            affiliation = Jsoup.clean(account.affiliation, Safelist.none()),
-            jobType = Jsoup.clean(account.jobType, Safelist.none()),
-            country = Jsoup.clean(account.country, Safelist.none()),
-            city = Jsoup.clean(account.city, Safelist.none()),
-            address = Jsoup.clean(account.address, Safelist.none()),
-            zipCode = Jsoup.clean(account.zipCode, Safelist.none())
-        )
+        val rowsInserted = accountRepository.insert(account.clean())
         if(rowsInserted > 0) return ResponseEntity.ok("successfully registered account: $account")
         return ResponseEntity.internalServerError().body("failed to register account: $account")
     }
@@ -53,21 +54,9 @@ class AccountController(
         if(accountRepository.existsByEmail(request.email) && currentEmail != request.email) error += "email taken"
         if(request.password != request.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        val rowsAffected = accountRepository.update(
-            id = id,
-            fullName = Jsoup.clean(request.fullName, Safelist.none()),
-            title = Jsoup.clean(request.title, Safelist.none()),
-            email = Jsoup.clean(request.email, Safelist.none()),
-            password = passwordEncoder.encode(request.password),
-            affiliation = Jsoup.clean(request.affiliation, Safelist.none()),
-            jobType = Jsoup.clean(request.jobType, Safelist.none()),
-            country = Jsoup.clean(request.country, Safelist.none()),
-            city = Jsoup.clean(request.city, Safelist.none()),
-            address = Jsoup.clean(request.address, Safelist.none()),
-            zipCode = Jsoup.clean(request.zipCode, Safelist.none())
-        )
-        return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account: $account")
-            else ResponseEntity.internalServerError().body("failed to update account: $account")
+        val rowsAffected = accountRepository.update(id, request.clean())
+        return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
+            else ResponseEntity.internalServerError().body("failed to update account: $request")
     }
     @DeleteMapping
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
