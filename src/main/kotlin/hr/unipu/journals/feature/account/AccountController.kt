@@ -56,7 +56,7 @@ class AccountController(
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
         val rowsAffected = accountRepository.update(id, request.clean())
         return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
-            else ResponseEntity.internalServerError().body("failed to update account: $request")
+        else ResponseEntity.internalServerError().body("failed to update account: $request")
     }
     @DeleteMapping
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
