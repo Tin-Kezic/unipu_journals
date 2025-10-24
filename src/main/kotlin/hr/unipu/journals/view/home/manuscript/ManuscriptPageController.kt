@@ -12,11 +12,9 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
 import java.time.format.DateTimeFormatter
 
 @Controller
-@RequestMapping("/publication")
 class ManuscriptPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
@@ -24,7 +22,7 @@ class ManuscriptPageController(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @GetMapping("/{publicationId}/section/{sectionId}")
+    @GetMapping("/publication/{publicationId}/section/{sectionId}")
     fun page(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,

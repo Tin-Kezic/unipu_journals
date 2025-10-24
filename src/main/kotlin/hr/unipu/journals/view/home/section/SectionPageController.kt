@@ -10,16 +10,14 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/publication")
 class SectionPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @GetMapping("/{publicationId}")
+    @GetMapping("/publication/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
         if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication with id $publicationId")
         model["publicationsSidebar"] = publicationRepository.allPublished()
