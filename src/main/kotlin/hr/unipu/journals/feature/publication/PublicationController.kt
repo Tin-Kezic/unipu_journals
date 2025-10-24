@@ -39,7 +39,7 @@ class PublicationController(private val publicationRepository: PublicationReposi
         return if(rowsAffected == 1) ResponseEntity.ok("publication hidden status successfully updated to $isHidden")
         else ResponseEntity.internalServerError().body("failed to update hidden status on publication $publicationId")
     }
-    @DeleteMapping("/{publicationId}/delete")
+    @DeleteMapping("/delete")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun delete(@PathVariable publicationId: Int): ResponseEntity<String> {
         val rowsAffected = publicationRepository.delete(publicationId)
