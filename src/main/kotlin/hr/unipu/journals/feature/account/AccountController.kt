@@ -59,6 +59,7 @@ class AccountController(
         else ResponseEntity.internalServerError().body("failed to update account: $request")
     }
     @DeleteMapping
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun delete(@PathVariable id: Int): ResponseEntity<String> {
         val rowsAffected = accountRepository.delete(id)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $id")
