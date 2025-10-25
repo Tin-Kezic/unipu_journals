@@ -34,24 +34,24 @@ interface AccountRepository: Repository<Account, Int> {
         INSERT INTO account
         (full_name, title, email, password, affiliation, job_type, country, city, address, zip_code)
         VALUES
-        (:dto.full_name, :dto.title, :dto.email, :dto.password, :dto.affiliation, :dto.job_type, :dto.country, :dto.city, :dto.address, :dto.zip_code)
+        (:#{#dto.fullName}, :#{#dto.title}, :#{#dto.email}, :#{#dto.password}, :#{#dto.affiliation}, :#{#dto.jobType}, :#{#dto.country}, :#{#dto.city}, :#{#dto.address}, :#{#dto.zipCode})
     """)
     fun insert(@Param("dto") accountDTO: AccountDTO): Int
 
     @Modifying
     @Query("""
         UPDATE account SET
-        full_name = :dto.full_name,
-        title = :dto.title,
-        email = :dto.email,
-        password = :dto.password,
-        affiliation = :dto.affiliation,
-        job_type = :dto.job_type,
-        country = :dto.country,
-        city = :dto.city,
-        address = :dto.address,
-        zip_code = :dto.zip_code
-        WHERE id = :dto.id
+        full_name = :#{#dto.fullName},
+        title = :#{#dto.title},
+        email = :#{#dto.email},
+        password = :#{#dto.password},
+        affiliation = :#{#dto.affiliation},
+        job_type = :#{#dto.jobType},
+        country = :#{#dto.country},
+        city = :#{#dto.city},
+        address = :#{#dto.address},
+        zip_code = :#{#dto.zipCode}
+        WHERE id = :id
     """)
     fun update(
         @Param("id") id: Int,
