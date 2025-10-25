@@ -22,8 +22,6 @@ class ReviewHistoryPageController(
 ) {
     @GetMapping("/manuscript/{manuscriptId}/review-history/reviewer/{reviewerId}/round/{round}")
     fun page(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
         @PathVariable manuscriptId: Int,
         @PathVariable reviewerId: Int,
         @PathVariable round: Int,
