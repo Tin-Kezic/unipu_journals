@@ -1,9 +1,13 @@
 package hr.unipu.journals.feature.section.core
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
+import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,13 +18,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/publication")
-class SectionController(private val sectionRepository: SectionRepository) {
+class SectionController(
+    private val sectionRepository: SectionRepository,
+    private val authorizationService: AuthorizationService
+) {
 
     @GetMapping("/{publicationTitle}/section/titles")
     fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
     @PostMapping("/{publicationId}/section")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
@@ -36,12 +44,14 @@ class SectionController(private val sectionRepository: SectionRepository) {
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
     @PutMapping("/{publicationId}/section/{sectionId}")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
     fun update(
         @PathVariable sectionId: Int,
         @RequestParam title: String?,
         @RequestParam description: String?,
         @RequestParam isHidden: Boolean?,
     ): ResponseEntity<String> {
+        if(isHidden != null && authorizationService.isAdmin().not()) return ResponseEntity.badRequest().body("unauthorized to change if section $sectionId is hidden")
         return try {
             val rowsAffected = sectionRepository.update(
                 id = sectionId,
