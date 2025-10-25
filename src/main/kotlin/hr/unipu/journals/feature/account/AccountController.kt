@@ -1,6 +1,7 @@
 package hr.unipu.journals.feature.account
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
@@ -35,6 +36,7 @@ class AccountController(
         zipCode = Jsoup.clean(this.zipCode, Safelist.none())
     )
     @PostMapping
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         var error = ""
         if (accountRepository.existsByEmail(account.email)) error += "email taken"
