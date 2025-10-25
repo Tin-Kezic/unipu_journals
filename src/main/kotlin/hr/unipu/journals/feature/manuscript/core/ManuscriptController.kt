@@ -18,6 +18,7 @@ class ManuscriptController(
     private val authorizationService: AuthorizationService
 ) {
     @PostMapping
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(
         @PathVariable sectionId: Int,
         @RequestParam title: String,
