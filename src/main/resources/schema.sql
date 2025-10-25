@@ -24,7 +24,8 @@ CREATE TABLE invite(
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL,
     target invitation_target NOT NULL,
-    target_id INT
+    target_id INT,
+    UNIQUE(email, target, target_id)
 );
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
