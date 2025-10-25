@@ -1,8 +1,10 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.submit.AuthorDTO
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -46,14 +48,36 @@ class ManuscriptController(
         @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript $manuscriptId")
-        if(newState !in listOf(ManuscriptState.HIDDEN, ManuscriptState.ARCHIVED)) return ResponseEntity.badRequest().body("cannot manually change manuscript state to $newState")
-        if(newState == ManuscriptState.ARCHIVED) {
-            if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section $sectionId")
-            if(manuscript.state != ManuscriptState.PUBLISHED) return ResponseEntity.badRequest().body("cannot archive manuscript that is not published")
-        }
-        if(newState == ManuscriptState.HIDDEN) {
-            if(authorizationService.isAdmin()) return ResponseEntity.status(403).body("unauthorized to hide manuscripts")
-            if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
+        when(newState) {
+            ManuscriptState.ARCHIVED -> {
+                if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section $sectionId")
+                if(manuscript.state != ManuscriptState.PUBLISHED) return ResponseEntity.badRequest().body("cannot archive manuscript that is not published")
+            }
+            ManuscriptState.HIDDEN -> {
+                if(authorizationService.isAdmin()) return ResponseEntity.status(403).body("unauthorized to hide manuscripts")
+                if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
+            }
+            ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to $newState")
+            ManuscriptState.AWAITING_EDITOR_REVIEW -> {
+                if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("unauthorized to EiC review manuscripts $manuscriptId")
+                if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from $newState")
+            }
+            ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) return ResponseEntity.status(403).body("unauthorized to initialize round on manuscript $manuscriptId")
+                if(manuscript.state != ManuscriptState.AWAITING_EDITOR_REVIEW) return ResponseEntity.badRequest().body("cannot initialize round from $newState")
+            }
+            ManuscriptState.MINOR, ManuscriptState.MAJOR, ManuscriptState.REJECTED -> {
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
+            }
+            ManuscriptState.PUBLISHED -> when(manuscript.state) {
+                ManuscriptState.HIDDEN -> if(authorizationService.isAdmin().not()) return ResponseEntity.status(403).body("unauthorized to unhide manuscripts")
+                ManuscriptState.ARCHIVED -> if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId).not()) return ResponseEntity.status(403).body("unauthorized to unarchive manuscripts in section $sectionId")
+                ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
+                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
+
+                }
+                else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from $newState")
+            }
         }
         val rowsAffected = manuscriptRepository.updateState(manuscriptId, newState)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully updated state on manuscript: $manuscriptId")
