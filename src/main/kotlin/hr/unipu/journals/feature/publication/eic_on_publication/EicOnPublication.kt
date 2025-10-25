@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.eic_on_publication
+package hr.unipu.journals.feature.publication.eic_on_publication
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table

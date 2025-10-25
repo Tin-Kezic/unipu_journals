@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.eic_on_publication
+package hr.unipu.journals.feature.publication.eic_on_publication
 
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query

@@ -1,6 +1,6 @@
 package hr.unipu.journals.repository_tests
 
-import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
+import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
