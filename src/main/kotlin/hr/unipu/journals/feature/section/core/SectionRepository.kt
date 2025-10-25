@@ -56,6 +56,7 @@ interface SectionRepository: Repository<Section, Int> {
         UPDATE publication_section SET
         title = COALESCE(:title, title),
         description = COALESCE(:description, description),
+        publication_id = COALESCE(:publication_id, publication_id),
         is_hidden = COALESCE(:is_hidden, is_hidden)
         WHERE id = :id
         """)
@@ -63,7 +64,8 @@ interface SectionRepository: Repository<Section, Int> {
         @Param("id") id: Int,
         @Param("title") title: String? = null,
         @Param("description") description: String? = null,
-        @Param("is_hidden") isHidden: Boolean? = null
+        @Param("publication_id") publicationId: Int? = null,
+        @Param("is_hidden") isHidden: Boolean? = null,
     ): Int
 
     @Query("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = :id)")
