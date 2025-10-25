@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.manuscript
+package hr.unipu.journals.feature.manuscript.core
 
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.submit.AuthorDTO

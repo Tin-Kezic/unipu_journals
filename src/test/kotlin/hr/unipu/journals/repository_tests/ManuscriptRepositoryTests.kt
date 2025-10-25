@@ -1,8 +1,8 @@
 package hr.unipu.journals.repository_tests
 
-import hr.unipu.journals.feature.manuscript.Manuscript
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.Manuscript
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
