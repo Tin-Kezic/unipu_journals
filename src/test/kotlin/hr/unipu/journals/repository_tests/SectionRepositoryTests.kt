@@ -20,7 +20,7 @@ class SectionRepositoryTests {
     }
     @Test fun `retrieve section titles by publication title`() {
         assertEquals(
-            listOf("Deep Learning", "Natural Language Processing", "Computer Vision"),
+            listOf("Computer Vision", "Deep Learning", "Natural Language Processing"),
             sectionRepository.allPublishedTitlesByPublicationTitle("Journal of AI Research")
         )
     }

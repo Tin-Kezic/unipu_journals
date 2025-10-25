@@ -17,7 +17,6 @@ interface SectionRepository: Repository<Section, Int> {
         WHERE publication.title = :title
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
-        ORDER BY publication_section.id DESC
     """)
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
