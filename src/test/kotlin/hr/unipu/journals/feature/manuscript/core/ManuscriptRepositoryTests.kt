@@ -261,7 +261,7 @@ class ManuscriptRepositoryTests {
                     "Leveraging real-time health data from wearables through AI.2",
                     11,
                     5,
-                    ManuscriptState.DRAFT,
+                    ManuscriptState.AWAITING_REVIEWER_REVIEW,
                     2,
                     "http://example.com/ms210.pdf",
                     LocalDateTime.of(2007, 9, 28, 13, 28, 0),

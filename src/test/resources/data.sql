@@ -107,7 +107,7 @@ INSERT INTO manuscript (title, description, author_id, category_id, current_stat
 ('Predictive Analytics in Emergency Care', 'Forecasting patient outcomes in emergency rooms using AI.', 10, 4, 'REJECTED', 1, 'http://example.com/ms7.pdf', '2025-09-28 13:28:00', NULL, 45, 5),
 ('AI-Based Mental Health Assessment', 'Assessing mental health using sentiment analysis and behavioral data.', 11, 4, 'ARCHIVED', 1, 'http://example.com/ms8.pdf', '2019-09-28 13:28:00', '2025-06-30 13:30:00', 21, 3),
 ('Clinical Trial Optimization with AI', 'Optimizing patient recruitment and trial design using machine learning.', 10, 5, 'HIDDEN', 1, 'http://example.com/ms9.pdf', '2018-09-28 13:28:00', '2025-07-25 17:45:00', 60, 7),
-('Wearable Technology and AI Integration', 'Leveraging real-time health data from wearables through AI.', 11, 5, 'DRAFT', 1, 'http://example.com/ms10.pdf', '2017-09-28 13:28:00', NULL, 75, 14),
+('Wearable Technology and AI Integration', 'Leveraging real-time health data from wearables through AI.', 11, 5, 'AWAITING_REVIEWER_REVIEW', 1, 'http://example.com/ms10.pdf', '2017-09-28 13:28:00', NULL, 75, 14),
 
 ('Machine Learning for Radiology2', 'A study on using ML to detect anomalies in radiological images.2', 10, 1, 'AWAITING_EIC_REVIEW', 2, 'http://example.com/ms21.pdf', '2016-09-28 13:28:00', NULL, 135, 26),
 ('Deep Learning in Genomics2', 'Analyzes genomic sequences using deep neural networks to predict mutations.2', 11, 1, 'AWAITING_EDITOR_REVIEW', 2, 'http://example.com/ms22.pdf', '2015-09-28 13:28:00', NULL, 246, 34),
@@ -118,7 +118,7 @@ INSERT INTO manuscript (title, description, author_id, category_id, current_stat
 ('Predictive Analytics in Emergency Care2', 'Forecasting patient outcomes in emergency rooms using AI.2', 10, 4, 'REJECTED', 2, 'http://example.com/ms27.pdf', '2010-09-28 13:28:00', NULL, 46, 6),
 ('AI-Based Mental Health Assessment2', 'Assessing mental health using sentiment analysis and behavioral data.2', 11, 4, 'ARCHIVED', 2, 'http://example.com/ms28.pdf', '2009-09-28 13:28:00', '2025-06-30 13:30:00', 22, 4),
 ('Clinical Trial Optimization with AI2', 'Optimizing patient recruitment and trial design using machine learning.2', 10, 5, 'HIDDEN', 2, 'http://example.com/ms29.pdf', '2008-09-28 13:28:00', '2025-07-25 17:45:00', 61, 8),
-('Wearable Technology and AI Integration2', 'Leveraging real-time health data from wearables through AI.2', 11, 5, 'DRAFT', 2, 'http://example.com/ms210.pdf', '2007-09-28 13:28:00', NULL, 76, 15),
+('Wearable Technology and AI Integration2', 'Leveraging real-time health data from wearables through AI.2', 11, 5, 'AWAITING_REVIEWER_REVIEW', 2, 'http://example.com/ms210.pdf', '2007-09-28 13:28:00', NULL, 76, 15),
 ('Manuscript awaiting deletion', 'description of manuscript awaiting deletion', 11, 5, 'REJECTED', 2, 'http://example.com/ms210.pdf', '2007-09-28 13:28:00', NULL, 76, 15);
 INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES
 (1, 11, 'EIC'),

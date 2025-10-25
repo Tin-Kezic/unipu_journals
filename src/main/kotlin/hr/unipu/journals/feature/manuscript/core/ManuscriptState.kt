@@ -9,6 +9,5 @@ enum class ManuscriptState {
     REJECTED,
     PUBLISHED,
     HIDDEN,
-    DRAFT,
     ARCHIVED
 }

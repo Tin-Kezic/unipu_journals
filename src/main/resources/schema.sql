@@ -69,7 +69,6 @@ CREATE TYPE manuscript_state AS ENUM (
     'REJECTED',
     'ARCHIVED',
     'HIDDEN',
-    'DRAFT'
 );
 CREATE TABLE manuscript (
     id SERIAL PRIMARY KEY,
