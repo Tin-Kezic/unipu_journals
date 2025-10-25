@@ -74,7 +74,6 @@ class ManuscriptController(
                 ManuscriptState.ARCHIVED -> if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId).not()) return ResponseEntity.status(403).body("unauthorized to unarchive manuscripts in section $sectionId")
                 ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                     if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
-
                 }
                 else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from $newState")
             }
