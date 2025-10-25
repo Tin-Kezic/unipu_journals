@@ -22,14 +22,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("UPDATE manuscript SET downloads = downloads + 1 WHERE id = :id")
     fun incrementDownloads(@Param("id") id: Int): Int
 
-    @Query("""
-        SELECT publication.id AS publication_id, publication_section.id AS section_id FROM manuscript
-        JOIN publication_section ON manuscript.section_id = publication_section.id
-        JOIN publication ON publication_section.publication_id = publication.id
-        WHERE manuscript.id = :id
-        """)
-    fun publicationIdAndSectionId(@Param("id") manuscriptId: Int): PublicationIdAndSectionIdDTO
-
     @Modifying
     @Query("INSERT INTO manuscript (title, author_id, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
     fun insert(

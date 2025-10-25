@@ -14,18 +14,12 @@ import java.time.format.DateTimeFormatter
 
 @Controller
 class ManuscriptDetailsPageController(
-    private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @GetMapping("/publication/{publicationId}/section/{sectionId}/manuscript/{manuscriptId}")
-    fun page(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
-        @PathVariable manuscriptId: Int,
-        model: Model
-    ): String {
+    @GetMapping("/manuscript/{manuscriptId}")
+    fun page(@PathVariable manuscriptId: Int, model: Model): String {
         val rowsAffected = manuscriptRepository.incrementViews(manuscriptId)
         if(rowsAffected == 0) throw InternalServerErrorException("failed to increment views")
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return "redirect:/404"

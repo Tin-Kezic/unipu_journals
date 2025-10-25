@@ -44,9 +44,4 @@ class PendingReviewPageController(
         model["publicationId"] = publicationId ?: 0
         return "review/pending-review-page"
     }
-    @GetMapping("/navigate-to-manuscript-page")
-    fun navigateToManuscriptPage(@RequestParam manuscriptId: Int): String {
-        val (publicationId, sectionId) = manuscriptRepository.publicationIdAndSectionId(manuscriptId)
-        return "redirect:/publication/$publicationId/section/$sectionId/manuscript/$manuscriptId"
-    }
 }

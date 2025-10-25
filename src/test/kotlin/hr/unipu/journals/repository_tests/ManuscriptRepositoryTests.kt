@@ -28,15 +28,6 @@ class ManuscriptRepositoryTests {
         assertEquals(1, manuscriptRepository.incrementDownloads(1))
         assertEquals(downloads + 1, jdbcTemplate.queryForObject<Int>("SELECT downloads FROM manuscript WHERE id = 1"))
     }
-    @Test fun `retrieve publication id and section id of manuscript by manuscriptId`() {
-        val (publicationId1, sectionId1) = manuscriptRepository.publicationIdAndSectionId(1)
-        assertEquals(1, publicationId1)
-        assertEquals(1, sectionId1)
-
-        val (publicationId3, sectionId3) = manuscriptRepository.publicationIdAndSectionId(3)
-        assertEquals(3, publicationId3)
-        assertEquals(11, sectionId3)
-    }
     @Test fun `insert manuscript`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND author_id = 24 AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
         assertEquals(1, manuscriptRepository.insert("new manuscript", 24, 1, 11, "new file url"))

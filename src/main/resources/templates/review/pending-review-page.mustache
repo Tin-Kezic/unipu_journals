@@ -44,7 +44,7 @@
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
 
         {{#invited}}
-            <article onclick="window.location.replace('/navigate-to-manuscript-page?manuscriptId={{id}}')" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
+            <article onclick="window.location = '/manuscript/{{id}}'" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
                 <div>
                     <p class="yellow-box-text">{{title}}</p>
 
@@ -63,7 +63,7 @@
         <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
 
         {{#pending}}
-            <article onclick="window.location.replace('/navigate-to-manuscript-page?manuscriptId={{id}}')" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
+            <article onclick="window.location = '/manuscript/{{id}}'" class="yellow-box" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
                 <div>
                     <p class="yellow-box-text">{{title}}</p>
 
