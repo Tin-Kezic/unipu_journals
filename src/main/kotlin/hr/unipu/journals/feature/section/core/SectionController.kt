@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.section
+package hr.unipu.journals.feature.section.core
 
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
@@ -26,12 +26,14 @@ class SectionController(private val sectionRepository: SectionRepository) {
         @RequestParam title: String,
     ): ResponseEntity<String> {
         if(title.isEmpty()) return ResponseEntity.badRequest().body("title must not be empty")
-        val rowsAffected = sectionRepository.insert(
-            title = Jsoup.clean(title, Safelist.none()),
-            publicationId = publicationId,
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("account successfully added")
-        else ResponseEntity.internalServerError().body("failed to add section")
+        return try {
+            val rowsAffected = sectionRepository.insert(
+                title = Jsoup.clean(title, Safelist.none()),
+                publicationId = publicationId,
+            )
+            if(rowsAffected == 1) ResponseEntity.ok("account successfully added")
+            else ResponseEntity.internalServerError().body("failed to add section")
+        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
     @PutMapping("/{publicationId}/section/{sectionId}")
     fun update(
@@ -40,13 +42,15 @@ class SectionController(private val sectionRepository: SectionRepository) {
         @RequestParam description: String?,
         @RequestParam isHidden: Boolean?,
     ): ResponseEntity<String> {
-        val rowsAffected = sectionRepository.update(
-            id = sectionId,
-            title = title,
-            description = description,
-            isHidden = isHidden
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("section successfully updated")
-        else ResponseEntity.internalServerError().body("failed to update section")
+        return try {
+            val rowsAffected = sectionRepository.update(
+                id = sectionId,
+                title = title,
+                description = description,
+                isHidden = isHidden
+            )
+            if (rowsAffected == 1) ResponseEntity.ok("section successfully updated")
+            else ResponseEntity.internalServerError().body("failed to update section")
+        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
 }

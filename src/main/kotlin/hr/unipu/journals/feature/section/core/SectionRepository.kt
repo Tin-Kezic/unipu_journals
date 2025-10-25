@@ -1,12 +1,10 @@
-package hr.unipu.journals.feature.section
+package hr.unipu.journals.feature.section.core
 
-import hr.unipu.journals.feature.manuscript.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
-import java.util.Optional
 
 interface SectionRepository: Repository<Section, Int> {
     @Query("SELECT * from publication_section WHERE id = :id")
@@ -15,54 +13,13 @@ interface SectionRepository: Repository<Section, Int> {
     @Query("""
         SELECT DISTINCT publication_section.title FROM publication_section
         JOIN publication ON publication_section.publication_id = publication.id
+        LEFT JOIN manuscript ON manuscript.section_id = publication_section.id
         WHERE publication.title = :title
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
-        """)
+        ORDER BY publication_section.id DESC
+    """)
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
-
-    @Query("""
-        SELECT DISTINCT publication_section.* FROM publication_section
-        JOIN publication ON publication_section.publication_id = publication.id
-        JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
-        AND manuscript.current_state = 'PUBLISHED'
-        ORDER BY publication_section.id DESC
-    """)
-    fun allPublishedByPublicationId(@Param("publication_id") publicationId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Section>
-
-    @Query("""
-        SELECT DISTINCT publication_section.* FROM publication_section
-        JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication_section.publication_id = :publication_id
-        AND (
-            :state IS NULL
-            AND (publication_section.is_hidden = FALSE OR manuscript.current_state = 'PUBLISHED')
-            OR (
-                :state = 'HIDDEN'
-                AND (publication_section.is_hidden = TRUE OR manuscript.current_state = 'HIDDEN')
-            )
-        )
-        ORDER BY publication_section.id DESC
-    """)
-    fun allArchivedByPublicationId(@Param("publication_id") publicationId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Section>
-
-    @Query("""
-        SELECT DISTINCT publication_section.* FROM publication_section
-        JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication_section.publication_id = :publication_id
-        AND (
-            :state IS NULL
-            AND (publication_section.is_hidden = FALSE OR manuscript.current_state = 'PUBLISHED')
-            OR (
-                :state = 'HIDDEN'
-                AND (publication_section.is_hidden = TRUE OR manuscript.current_state = 'HIDDEN')
-            )
-        )
-        ORDER BY publication_section.id DESC
-    """)
-    fun allHiddenByPublicationId(@Param("publication_id") publicationId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Section>
 
     @Query("""
         SELECT DISTINCT publication_section.* FROM publication_section

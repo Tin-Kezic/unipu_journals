@@ -1,10 +1,9 @@
-package hr.unipu.journals.view.root
+package hr.unipu.journals.view
 
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ROOT
-import hr.unipu.journals.view.InternalServerErrorException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.password.PasswordEncoder

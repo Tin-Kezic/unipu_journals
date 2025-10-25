@@ -1,10 +1,12 @@
 package hr.unipu.journals.view.home.manuscript
 
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.AccessDeniedException
 import hr.unipu.journals.view.InternalServerErrorException
+import hr.unipu.journals.view.ResourceNotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -22,7 +24,8 @@ class ManuscriptDetailsPageController(
     fun page(@PathVariable manuscriptId: Int, model: Model): String {
         val rowsAffected = manuscriptRepository.incrementViews(manuscriptId)
         if(rowsAffected == 0) throw InternalServerErrorException("failed to increment views")
-        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return "redirect:/404"
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: throw ResourceNotFoundException("failed to find manuscript $manuscriptId")
+        if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.ARCHIVED) && authorizationService.isAdmin().not() ) throw AccessDeniedException("not authorized to view manuscript")
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY"))

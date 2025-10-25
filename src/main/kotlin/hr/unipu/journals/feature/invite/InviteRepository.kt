@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.manuscript.Manuscript
-import hr.unipu.journals.feature.publication.Publication
+import hr.unipu.journals.feature.manuscript.core.Manuscript
+import hr.unipu.journals.feature.publication.core.Publication
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository

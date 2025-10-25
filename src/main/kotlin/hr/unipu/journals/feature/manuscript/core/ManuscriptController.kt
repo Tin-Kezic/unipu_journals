@@ -2,8 +2,6 @@ package hr.unipu.journals.feature.manuscript.core
 
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.submit.AuthorDTO
-import org.jsoup.Jsoup
-import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -46,7 +44,7 @@ class ManuscriptController(
         @PathVariable manuscriptId: Int,
         @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> {
-        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript with id $manuscriptId")
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript $manuscriptId")
         if(newState !in listOf(ManuscriptState.HIDDEN, ManuscriptState.ARCHIVED)) return ResponseEntity.badRequest().body("cannot manually change manuscript state to $newState")
         if(newState == ManuscriptState.ARCHIVED) {
             if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section $sectionId")

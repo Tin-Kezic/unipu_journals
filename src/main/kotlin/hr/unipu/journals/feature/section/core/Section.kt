@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.section
+package hr.unipu.journals.feature.section.core
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table

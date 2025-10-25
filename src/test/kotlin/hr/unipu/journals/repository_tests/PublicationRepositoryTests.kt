@@ -1,7 +1,7 @@
 package hr.unipu.journals.repository_tests
 
-import hr.unipu.journals.feature.publication.Publication
-import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.feature.publication.core.Publication
+import hr.unipu.journals.feature.publication.core.PublicationRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired

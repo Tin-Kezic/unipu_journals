@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.manuscript
+package hr.unipu.journals.feature.manuscript.core
 
 enum class ManuscriptState {
     AWAITING_EIC_REVIEW,

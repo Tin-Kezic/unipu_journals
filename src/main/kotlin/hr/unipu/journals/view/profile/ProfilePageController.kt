@@ -1,9 +1,9 @@
 package hr.unipu.journals.view.profile
 
 import hr.unipu.journals.feature.account.AccountRepository
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptState
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.security.access.prepost.PreAuthorize
@@ -12,7 +12,6 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
 import java.time.format.DateTimeFormatter
 
 @Controller
@@ -40,7 +39,7 @@ class ProfilePageController(
             model["city"] = profile.city
             model["address"] = profile.address
             model["zipCode"] = profile.zipCode
-        } ?: throw IllegalStateException("no account with id ${account.id} found")
+        } ?: throw IllegalStateException("failed to find account ${account.id}")
 
         model["isAdmin"] = account.isAdmin
         val manuscripts = manuscriptRepository.allByAuthor(accountId)

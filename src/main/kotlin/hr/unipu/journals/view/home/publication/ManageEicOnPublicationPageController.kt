@@ -1,9 +1,9 @@
 package hr.unipu.journals.view.home.publication
 
-import hr.unipu.journals.feature.eic_on_publication.EicOnPublicationRepository
+import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
-import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

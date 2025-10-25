@@ -1,10 +1,10 @@
 package hr.unipu.journals.view.review
 
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.invite.InviteRepository
-import hr.unipu.journals.feature.manuscript.Manuscript
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.feature.manuscript.core.Manuscript
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
 import org.springframework.stereotype.Controller
@@ -33,7 +33,7 @@ class PendingReviewPageController(
         )
     }
     @GetMapping("/review")
-    fun all(@RequestParam publicationId: Int?, model: Model): String {
+    fun page(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
             model["publicationsSidebar"] =
                 publicationRepository.allWithPendingManuscripts(account.id) +

@@ -1,10 +1,10 @@
 package hr.unipu.journals.view.home.manuscript
 
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptState
-import hr.unipu.journals.feature.publication.PublicationRepository
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.ResourceNotFoundException
 import org.springframework.stereotype.Controller
@@ -28,8 +28,8 @@ class ManuscriptPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
-        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication with id $publicationId")
-        if(sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section with id: $sectionId")
+        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
+        if(sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
         model["isAdmin"] = authorizationService.isAdmin()
         model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId)
 

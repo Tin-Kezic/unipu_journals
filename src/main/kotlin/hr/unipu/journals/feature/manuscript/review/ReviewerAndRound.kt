@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.manuscript_review
+package hr.unipu.journals.feature.manuscript.review
 
 data class ReviewerAndRound(
     val reviewerId: Int,

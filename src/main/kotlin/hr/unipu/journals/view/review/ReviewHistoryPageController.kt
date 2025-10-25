@@ -1,12 +1,13 @@
 package hr.unipu.journals.view.review
 
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript_review.ManuscriptReviewRepository
-import hr.unipu.journals.feature.manuscript_review.OneToFive
-import hr.unipu.journals.feature.manuscript_review.Recommendation
-import hr.unipu.journals.feature.manuscript_review.ReviewQuestion
-import hr.unipu.journals.feature.manuscript_review.ReviewerWithRounds
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.OneToFive
+import hr.unipu.journals.feature.manuscript.review.Recommendation
+import hr.unipu.journals.feature.manuscript.review.ReviewQuestion
+import hr.unipu.journals.feature.manuscript.review.ReviewerWithRounds
+import hr.unipu.journals.view.ResourceNotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -28,7 +29,7 @@ class ReviewHistoryPageController(
         model: Model
     ): String {
         model["isUnderReviewAndUserIsAffiliated"] = 0
-        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return "redirect:/404"
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: throw ResourceNotFoundException("failed to find manuscript $manuscriptId")
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd.MM.YYYY"))

@@ -1,6 +1,6 @@
 package hr.unipu.journals.view.archive
 
-import hr.unipu.journals.feature.publication.PublicationRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

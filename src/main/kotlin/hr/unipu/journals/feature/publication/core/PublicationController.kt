@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.publication
+package hr.unipu.journals.feature.publication.core
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR

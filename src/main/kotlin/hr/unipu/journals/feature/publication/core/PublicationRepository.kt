@@ -1,6 +1,5 @@
-package hr.unipu.journals.feature.publication
+package hr.unipu.journals.feature.publication.core
 
-import hr.unipu.journals.feature.manuscript.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository

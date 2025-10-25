@@ -2,8 +2,8 @@ package hr.unipu.journals.view.home.section
 
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
-import hr.unipu.journals.feature.section.SectionRepository
-import hr.unipu.journals.feature.section_editor_on_section.SectionEditorOnSectionRepository
+import hr.unipu.journals.feature.section.core.SectionRepository
+import hr.unipu.journals.feature.section.section_editor_on_section.SectionEditorOnSectionRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

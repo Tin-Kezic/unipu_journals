@@ -1,9 +1,9 @@
 package hr.unipu.journals.view.archive
 
-import hr.unipu.journals.feature.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptState
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
 import org.springframework.stereotype.Controller

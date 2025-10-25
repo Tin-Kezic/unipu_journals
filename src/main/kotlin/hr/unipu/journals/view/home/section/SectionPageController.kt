@@ -1,7 +1,7 @@
 package hr.unipu.journals.view.home.section
 
-import hr.unipu.journals.feature.publication.PublicationRepository
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.ResourceNotFoundException
 import hr.unipu.journals.view.home.ContainerDTO
@@ -19,7 +19,7 @@ class SectionPageController(
 ) {
     @GetMapping("/publication/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
-        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication with id $publicationId")
+        if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isAdmin"] = authorizationService.isAdmin()
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)

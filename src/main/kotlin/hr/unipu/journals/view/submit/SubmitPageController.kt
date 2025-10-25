@@ -1,9 +1,8 @@
 package hr.unipu.journals.view.submit
 
-import hr.unipu.journals.feature.category.CategoryRepository
-import hr.unipu.journals.feature.manuscript.ManuscriptState
-import hr.unipu.journals.feature.publication.PublicationRepository
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.manuscript.category.CategoryRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

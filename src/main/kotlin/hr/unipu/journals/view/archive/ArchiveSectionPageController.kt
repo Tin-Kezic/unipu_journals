@@ -1,8 +1,8 @@
 package hr.unipu.journals.view.archive
 
-import hr.unipu.journals.feature.manuscript.ManuscriptState
-import hr.unipu.journals.feature.publication.PublicationRepository
-import hr.unipu.journals.feature.section.SectionRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.section.core.SectionRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set

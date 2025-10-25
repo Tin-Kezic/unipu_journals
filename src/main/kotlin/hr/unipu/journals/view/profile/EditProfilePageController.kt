@@ -14,7 +14,7 @@ class EditProfilePageController(private val authorizationService: AuthorizationS
     @GetMapping("/profile/{accountId}/edit")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int, model: Model): String {
-        model["account"] = authorizationService.account ?: throw IllegalStateException("account with id $accountId not found")
+        model["account"] = authorizationService.account ?: throw IllegalStateException("failed to find account $accountId")
         return "profile/edit-profile-page"
     }
 }
