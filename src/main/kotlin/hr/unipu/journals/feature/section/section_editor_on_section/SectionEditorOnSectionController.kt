@@ -33,6 +33,7 @@ class SectionEditorOnSectionController(
         else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
     }
     @PutMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
+    @DeleteMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
     fun revoke(
         @PathVariable sectionId: Int,
         @RequestParam email: String
