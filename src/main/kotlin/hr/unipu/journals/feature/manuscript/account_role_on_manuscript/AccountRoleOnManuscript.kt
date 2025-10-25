@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.account_role_on_manuscript
+package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
