@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.category
+package hr.unipu.journals.feature.manuscript.category
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table

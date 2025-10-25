@@ -1,6 +1,6 @@
 package hr.unipu.journals.repository_tests
 
-import hr.unipu.journals.feature.category.CategoryRepository
+import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest

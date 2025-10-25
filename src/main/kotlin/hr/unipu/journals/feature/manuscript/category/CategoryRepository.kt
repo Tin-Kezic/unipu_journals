@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.category
+package hr.unipu.journals.feature.manuscript.category
 
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query

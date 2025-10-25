@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.category
+package hr.unipu.journals.feature.manuscript.category
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import org.springframework.security.access.prepost.PreAuthorize
