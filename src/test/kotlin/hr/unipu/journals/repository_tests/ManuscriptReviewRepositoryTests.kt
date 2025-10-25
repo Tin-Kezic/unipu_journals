@@ -1,11 +1,11 @@
 package hr.unipu.journals.repository_tests
 
-import hr.unipu.journals.feature.manuscript_review.ManuscriptReview
-import hr.unipu.journals.feature.manuscript_review.ManuscriptReviewRepository
-import hr.unipu.journals.feature.manuscript_review.OneToFive
-import hr.unipu.journals.feature.manuscript_review.Recommendation
-import hr.unipu.journals.feature.manuscript_review.ReviewQuestion
-import hr.unipu.journals.feature.manuscript_review.ReviewerAndRound
+import hr.unipu.journals.feature.manuscript.review.ManuscriptReview
+import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.OneToFive
+import hr.unipu.journals.feature.manuscript.review.Recommendation
+import hr.unipu.journals.feature.manuscript.review.ReviewQuestion
+import hr.unipu.journals.feature.manuscript.review.ReviewerAndRound
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import java.time.LocalDateTime
