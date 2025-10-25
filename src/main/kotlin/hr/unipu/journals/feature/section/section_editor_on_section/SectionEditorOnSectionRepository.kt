@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.section_editor_on_section
+package hr.unipu.journals.feature.section.section_editor_on_section
 
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
