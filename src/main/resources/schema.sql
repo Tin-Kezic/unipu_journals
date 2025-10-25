@@ -54,8 +54,8 @@ CREATE TABLE publication_section (
 );
 CREATE TABLE section_editor_on_section(
     id SERIAL PRIMARY KEY,
-    publication_section_id INT NOT NULL,
     section_editor_id INT NOT NULL,
+    publication_section_id INT NOT NULL,
     FOREIGN KEY (publication_section_id) REFERENCES publication_section(id) ON DELETE CASCADE,
     FOREIGN KEY (section_editor_id) REFERENCES account(id) ON DELETE CASCADE
 );

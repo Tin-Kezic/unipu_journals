@@ -17,10 +17,10 @@ interface SectionEditorOnSectionRepository: Repository<SectionEditorOnSection, I
     fun sectionEditorEmailsBySectionId(@Param("publication_section_id") sectionId: Int): List<String>
 
     @Modifying
-    @Query("INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES (:publication_section_id, :SECTION_EDITOR_ID)")
-    fun assign(@Param("publication_section_id") sectionId: Int, @Param("section_editor_id") sectionEditorId: Int): Int
+    @Query("INSERT INTO section_editor_on_section (section_editor_id, publication_section_id) VALUES (:section_editor_id, :publication_section_id)")
+    fun assign(@Param("section_editor_id") sectionEditorId: Int, @Param("publication_section_id") sectionId: Int): Int
 
     @Modifying
-    @Query("DELETE FROM section_editor_on_section WHERE publication_section_id = :publication_section_id AND section_editor_id = :section_editor_id")
-    fun revoke(@Param("publication_section_id") sectionId: Int, @Param("section_editor_id") sectionEditorId: Int): Int
+    @Query("DELETE FROM section_editor_on_section WHERE section_editor_id = :section_editor_id AND publication_section_id = :publication_section_id")
+    fun revoke(@Param("section_editor_id") sectionEditorId: Int, @Param("publication_section_id") sectionId: Int): Int
 }

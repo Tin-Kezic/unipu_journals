@@ -91,9 +91,9 @@ INSERT INTO publication_section (title, description, publication_id, is_hidden) 
 ('Biochemistry', 'Chemical processes within living organisms', 5, FALSE),
 ('Organic Chemistry', 'Organic molecules and reactions', 5, TRUE),
 ('Analytical Chemistry', 'Techniques for analyzing chemical substances', 5, FALSE);
-INSERT INTO section_editor_on_section (publication_section_id, section_editor_id) VALUES
-(1, 9),
-(2, 10);
+INSERT INTO section_editor_on_section (section_editor_id, publication_section_id) VALUES
+(9, 1),
+(10, 2);
 INSERT INTO manuscript (title, description, author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads) VALUES
 ('Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.', 10, 1, 'AWAITING_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', '2025-09-28 13:28:00', NULL, 134, 25),
 ('Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.', 11, 1, 'AWAITING_EDITOR_REVIEW', 7, 'http://example.com/ms2.pdf', '2023-09-28 13:28:00', NULL, 245, 33),
