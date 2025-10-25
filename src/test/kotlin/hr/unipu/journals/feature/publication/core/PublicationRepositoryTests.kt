@@ -1,19 +1,17 @@
 package hr.unipu.journals.feature.publication.core
 
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @DataJdbcTest
 class PublicationRepositoryTests {
-    @Autowired
-    private lateinit var publicationRepository: PublicationRepository
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
+    @Autowired private lateinit var publicationRepository: PublicationRepository
+    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
     @Test
     fun `retrieve all publications which contain pending manuscripts by account id`() {

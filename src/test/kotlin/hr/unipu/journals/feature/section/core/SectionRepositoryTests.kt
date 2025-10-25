@@ -2,23 +2,20 @@ package hr.unipu.journals.feature.section.core
 
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForObject
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @DataJdbcTest
 class SectionRepositoryTests {
-    @Autowired
-    private lateinit var sectionRepository: SectionRepository
-    @Autowired
-    private lateinit var jdbcTemplate: JdbcTemplate
+    @Autowired private lateinit var sectionRepository: SectionRepository
+    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
-    @Test
-    fun `retrieve section title by section id`() {
+    @Test fun `retrieve section title by section id`() {
         assertEquals(
             "Machine Learning",
             sectionRepository.byId(1).title
