@@ -3,7 +3,9 @@ package hr.unipu.journals.feature.publication.eic_on_publication
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/publication/{publicationId}")
+@PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
 class EicOnPublicationController(
     private val eicOnPublicationRepository: EicOnPublicationRepository,
     private val accountRepository: AccountRepository,
