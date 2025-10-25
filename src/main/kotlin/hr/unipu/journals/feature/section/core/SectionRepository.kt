@@ -28,7 +28,7 @@ interface SectionRepository: Repository<Section, Int> {
         AND ((
             publication.is_hidden = FALSE
             AND publication_section.is_hidden = FALSE
-            AND (:state IS NULL OR (:state = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'))
+            AND (:state IS NULL OR (:state != 'HIDDEN' AND manuscript.current_state = :state))
         ) OR (
             :state = 'HIDDEN'
             AND (
