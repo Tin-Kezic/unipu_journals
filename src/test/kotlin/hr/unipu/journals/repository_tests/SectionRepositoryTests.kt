@@ -1,11 +1,17 @@
 package hr.unipu.journals.repository_tests
 
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.section.core.Section
 import hr.unipu.journals.feature.section.core.SectionRepository
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.queryForObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 
 @DataJdbcTest
 class SectionRepositoryTests {
@@ -26,8 +32,66 @@ class SectionRepositoryTests {
     }
     @Test fun `retrieve all sections by publication id`() {
         assertEquals(
-            listOf(),
+            listOf(
+                Section(4, "Computer Vision", "Image processing and visual recognition", 1, false),
+                Section(3, "Natural Language Processing", "Language models and text analysis", 1, false),
+                Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false),
+            ),
             sectionRepository.allByPublicationId(1)
         )
+    }
+    @Test fun `retrieve all sections which contain archived manuscripts by publication id and manuscript state`() {
+        assertEquals(
+            listOf(Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false)),
+            sectionRepository.allByPublicationId(1, ManuscriptState.ARCHIVED)
+        )
+    }
+
+    @Test fun `insert section`() {
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE title = 'new section' AND publication_id = 3)"))
+        sectionRepository.insert("new section", 3)
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE title = 'new section' AND publication_id = 3)"))
+    }
+    @Test fun `update section`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("""
+            SELECT EXISTS (SELECT 1 FROM publication_section
+            WHERE id = 1
+            AND title = 'Machine Learning'
+            AND description = 'ML research and techniques'
+            AND publication_id = 1
+            AND is_hidden = TRUE
+            )""".trimIndent()))
+        sectionRepository.update(
+            id = 1,
+            title = "new Machine Learning",
+            description = "new ML research and techniques",
+            publicationId = 2,
+            isHidden = false
+        )
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("""
+            SELECT EXISTS (SELECT 1 FROM publication_section
+            WHERE id = 1
+            AND title = 'Machine Learning'
+            AND description = 'ML research and techniques'
+            AND publication_id = 1
+            AND is_hidden = TRUE
+            )""".trimIndent()))
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("""
+            SELECT EXISTS (SELECT 1 FROM publication_section
+            WHERE id = 1
+            AND title = 'new Machine Learning'
+            AND description = 'new ML research and techniques'
+            AND publication_id = 2
+            AND is_hidden = FALSE
+            )""".trimIndent()))
+    }
+    @Test fun `check if section exists by id`() {
+        assertTrue(sectionRepository.exists(1))
+        assertFalse(sectionRepository.exists(1000))
+    }
+    @Test fun `delete section by id`() {
+        assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = 1)"))
+        sectionRepository.delete(1)
+        assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = 1)"))
     }
 }
