@@ -32,10 +32,10 @@ class PublicationRepositoryTests {
     @Test fun `retrieve all published publications`() {
         assertEquals(
             listOf(
-                Publication(1, "Journal of AI Research", false),
-                Publication(2, "Nature of Biology", false),
-                Publication(3, "Physics Letters", false),
                 Publication(6, "Published empty publication", false),
+                Publication(3, "Physics Letters", false),
+                Publication(2, "Nature of Biology", false),
+                Publication(1, "Journal of AI Research", false),
             ),
             publicationRepository.allPublished())
     }
