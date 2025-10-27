@@ -27,7 +27,7 @@ class RootPageController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(model: Model): String {
         model["adminEmails"] = accountRepository.allAdminEmails() + inviteRepository.emailsByTarget(InvitationTarget.ADMIN)
-        return "manage/root-page"
+        return "root-page"
     }
     @PostMapping("/update-password")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)

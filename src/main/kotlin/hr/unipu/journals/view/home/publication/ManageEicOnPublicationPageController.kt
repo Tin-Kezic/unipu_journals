@@ -20,6 +20,6 @@ class ManageEicOnPublicationPageController(
     fun page(@PathVariable publicationId: Int, model: Model): String {
         model["currentPublication"] = publicationRepository.title(publicationId)
         model["eicEmails"] = eicOnPublicationRepository.eicEmailsByPublicationId(publicationId) + inviteRepository.emailsByTarget(InvitationTarget.EIC_ON_PUBLICATION, publicationId)
-        return "manage/manage-eic-on-publication-page"
+        return "home/publication/manage-eic-on-publication-page"
     }
 }

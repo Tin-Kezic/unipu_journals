@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class ReviewRoundInitializationPageController() {
     @GetMapping("/manuscript/{manuscriptId}/round-initialization")
-    fun page() = "manage/manage-round-initialization-page"
+    fun page() = "review/round-initialization-page"
 }

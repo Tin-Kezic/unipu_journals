@@ -11,6 +11,6 @@ class ManageCategoryPageController(private val categoryRepository: CategoryRepos
     @GetMapping("/category")
     fun page(model: Model): String {
         model["categories"] = categoryRepository.all()
-        return "manage/manage-category-page"
+        return "submit/manage-category-page"
     }
 }

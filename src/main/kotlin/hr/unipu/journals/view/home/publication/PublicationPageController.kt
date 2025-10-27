@@ -27,6 +27,6 @@ class PublicationPageController(
                 isEditor = isEicOrSuperior
             )
         }.sortedByDescending { it.isEditor }
-        return "home/publication-page"
+        return "home/publication/publication-page"
     }
 }

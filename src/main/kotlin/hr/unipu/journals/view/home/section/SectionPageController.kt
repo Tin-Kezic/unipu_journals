@@ -34,6 +34,6 @@ class SectionPageController(
                 isEditor = isSectionEditorOrSuperior
             )
         }.sortedByDescending { it.isEditor }
-        return "home/section-page"
+        return "home/section/section-page"
     }
 }
