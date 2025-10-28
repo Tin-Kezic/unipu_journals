@@ -46,6 +46,7 @@ class SectionController(
     @PutMapping("/{publicationId}/section/{sectionId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
     fun update(
+        @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         @RequestParam title: String?,
         @RequestParam description: String?,
@@ -55,8 +56,8 @@ class SectionController(
         return try {
             val rowsAffected = sectionRepository.update(
                 id = sectionId,
-                title = title,
-                description = description,
+                title = title?.run { Jsoup.clean(this, Safelist.none()) },
+                description = description?.run { Jsoup.clean(this, Safelist.relaxed()) },
                 isHidden = isHidden
             )
             if (rowsAffected == 1) ResponseEntity.ok("section successfully updated")
