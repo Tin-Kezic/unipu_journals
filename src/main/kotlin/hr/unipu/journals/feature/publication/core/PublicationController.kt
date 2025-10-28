@@ -28,14 +28,14 @@ class PublicationController(private val publicationRepository: PublicationReposi
     @PutMapping("/update-title")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
     fun updateTitle(@PathVariable publicationId: Int, @RequestParam title: String): ResponseEntity<String> {
-        val rowsAffected = publicationRepository.updateTitle(publicationId, Jsoup.clean(title, Safelist.none()))
+        val rowsAffected = publicationRepository.update(publicationId, title = Jsoup.clean(title, Safelist.none()))
         return if(rowsAffected == 1) ResponseEntity.ok("publication $publicationId title successfully updated to $title")
         else ResponseEntity.internalServerError().body("failed to update publication $publicationId")
     }
     @PutMapping("/update-hidden")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun updateHidden(@PathVariable publicationId: Int, @RequestParam isHidden: Boolean): ResponseEntity<String> {
-        val rowsAffected = publicationRepository.updateHidden(publicationId, isHidden)
+        val rowsAffected = publicationRepository.update(publicationId, isHidden = isHidden)
         return if(rowsAffected == 1) ResponseEntity.ok("publication hidden status successfully updated to $isHidden")
         else ResponseEntity.internalServerError().body("failed to update hidden status on publication $publicationId")
     }

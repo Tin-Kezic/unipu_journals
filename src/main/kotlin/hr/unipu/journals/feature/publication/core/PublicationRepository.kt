@@ -58,15 +58,20 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun insert(@Param("title") title: String): Int
 
     @Modifying
-    @Query("UPDATE publication SET title = :title WHERE id = :id")
-    fun updateTitle(@Param("id") id: Int, @Param("title") title: String): Int
+    @Query("""
+        UPDATE publication SET
+        title = COALESCE(:title, title),
+        is_hidden = COALESCE(:is_hidden, is_hidden)
+        WHERE id = :id
+    """)
+    fun update(
+        @Param("id") id: Int,
+        @Param("title") title: String? = null,
+        @Param("is_hidden") isHidden: Boolean? = null,
+    ): Int
 
     @Query("SELECT EXISTS (SELECT 1 FROM publication WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean
-
-    @Modifying
-    @Query("UPDATE publication SET is_hidden = :is_hidden WHERE id = :id")
-    fun updateHidden(@Param("id") id: Int, @Param("is_hidden") isHidden: Boolean): Int
 
     @Modifying
     @Query("DELETE FROM publication WHERE id = :id")

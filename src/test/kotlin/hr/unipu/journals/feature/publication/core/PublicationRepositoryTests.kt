@@ -69,7 +69,7 @@ class PublicationRepositoryTests {
     @Test
     fun `update publication title`() {
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication WHERE title = 'updated publication title')"))
-        assertEquals(1, publicationRepository.updateTitle(1, "updated publication title"))
+        assertEquals(1, publicationRepository.update(1, title = "updated publication title"))
         Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication WHERE title = 'updated publication title')"))
     }
     @Test
@@ -80,7 +80,7 @@ class PublicationRepositoryTests {
     @Test
     fun `update is publication hidden`() {
         Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication WHERE id = 2 AND is_hidden = FALSE)"))
-        assertEquals(1, publicationRepository.updateHidden(2, true))
+        assertEquals(1, publicationRepository.update(2, isHidden = true))
         Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication WHERE id = 2 AND is_hidden = TRUE)"))
     }
     @Test
