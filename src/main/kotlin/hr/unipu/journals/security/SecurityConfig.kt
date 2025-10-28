@@ -14,42 +14,18 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-
-private const val ROLE_ROOT = "ROLE_ROOT"
-private const val ROLE_ADMIN = "ROLE_ADMIN"
-private const val ROOT = "ROOT"
-private const val ADMIN = "ADMIN"
-private const val EIC = "EIC"
-private const val SECTION_EDITOR = "SECTION_EDITOR"
-private const val EDITOR = "EDITOR"
-private const val REVIEWER = "REVIEWER"
-private const val CORRESPONDING_AUTHOR = "CORRESPONDING_AUTHOR"
-private const val AUTHOR = "AUTHOR"
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig {
-    @Bean
-    fun userDetailsService(accountRepository: AccountRepository): UserDetailsService {
-        return UserDetailsService { email ->
-            val account = accountRepository.byEmail(email) ?: throw UsernameNotFoundException("User with email $email not found")
-            if (account.email == "root@unipu.hr") {
-                User(account.email, account.password, listOf(SimpleGrantedAuthority(ROLE_ROOT)))
-            } else {
-                val authorities = mutableListOf<GrantedAuthority>()
-                if (account.isAdmin) authorities.add(SimpleGrantedAuthority(ROLE_ADMIN))
-                User(account.email, account.password, authorities)
-            }
-        }
+    @Bean fun userDetailsService(accountRepository: AccountRepository) = UserDetailsService { email ->
+        val account = accountRepository.byEmail(email) ?: throw UsernameNotFoundException("User with email $email not found")
+        User(account.email, account.password, listOf<GrantedAuthority>())
     }
-    @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(12)
-
-    @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    @Bean fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(12)
+    @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { disable() } // comment out in production
             headers { frameOptions { disable() } } // comment out in production
@@ -67,17 +43,9 @@ class SecurityConfig {
             }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
-                invalidSessionUrl = "/"
                 invalidSessionUrl = "/login.html?invalidSession"
             }
-            authorizeHttpRequests {
-                listOf(
-                    "/submit",
-                    "/review/**",
-                    "/api/publication/{publicationId}/section/{sectionId}/insert",
-                ).forEach { authorize(it, authenticated) }
-                authorize(anyRequest, permitAll)
-            }
+            authorizeHttpRequests { authorize(anyRequest, permitAll) }
         }
         return http.build()
     }
