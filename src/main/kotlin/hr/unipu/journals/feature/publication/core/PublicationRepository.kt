@@ -25,7 +25,7 @@ interface PublicationRepository: Repository<Publication, Int> {
             AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
         ))
     """)
-    fun allWithPendingManuscripts(@Param("account_id") accountId: Int): List<Publication>
+    fun allContainingPendingManuscripts(@Param("account_id") accountId: Int): List<Publication>
 
     @Query("SELECT title FROM publication WHERE id = :id")
     fun title(@Param("id") id: Int): String

@@ -25,7 +25,7 @@ interface InviteRepository: Repository<Invite, Int> {
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
     """)
-    fun allPublicationsWithPendingManuscripts(@Param("email") email: String): List<Publication>
+    fun allPublicationsContainingPendingManuscripts(@Param("email") email: String): List<Publication>
 
     @Query("""
         SELECT DISTINCT manuscript.* FROM invite

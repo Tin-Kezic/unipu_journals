@@ -36,8 +36,8 @@ class PendingReviewPageController(
     fun page(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
             model["publicationsSidebar"] =
-                publicationRepository.allWithPendingManuscripts(account.id) +
-                inviteRepository.allPublicationsWithPendingManuscripts(account.email)
+                publicationRepository.allContainingPendingManuscripts(account.id) +
+                inviteRepository.allPublicationsContainingPendingManuscripts(account.email)
             model["invited"] = inviteRepository.affiliatedManuscripts(account.email, publicationId).toManuscriptDTO()
             model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()
         } ?: throw IllegalStateException("account is null")

@@ -19,9 +19,9 @@ class PublicationRepositoryTests {
             Publication(2, "Nature of Biology", false),
             Publication(3, "Physics Letters", false),
         )
-        assertEquals(publications, publicationRepository.allWithPendingManuscripts(accountId = 25))
-        assertEquals(publications.takeLast(2), publicationRepository.allWithPendingManuscripts(accountId = 26))
-        assertEquals(publications.takeLast(1), publicationRepository.allWithPendingManuscripts(accountId = 27))
+        assertEquals(publications, publicationRepository.allContainingPendingManuscripts(accountId = 25))
+        assertEquals(publications.take(2), publicationRepository.allContainingPendingManuscripts(accountId = 26))
+        assertEquals(publications.take(1), publicationRepository.allContainingPendingManuscripts(accountId = 27))
     }
     @Test fun `retrieve publication title by publication id`() {
         assertEquals("Journal of AI Research", publicationRepository.title(1))
