@@ -29,6 +29,7 @@ class ManuscriptController(
         @RequestParam abstract: String,
         @RequestParam files: List<MultipartFile>,
     ): ResponseEntity<String> {
+        // clean inputs with Jsoup
         /*
         publicationRepository.insert(
             title = Jsoup.clean(title, Safelist.none()),
