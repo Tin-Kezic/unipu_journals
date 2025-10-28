@@ -21,15 +21,13 @@ class SectionRepositoryTests {
             sectionRepository.byId(1).title
         )
     }
-    @Test
-    fun `retrieve section titles by publication title`() {
+    @Test fun `retrieve section titles by publication title`() {
         assertEquals(
             listOf("Computer Vision", "Deep Learning", "Natural Language Processing"),
             sectionRepository.allPublishedTitlesByPublicationTitle("Journal of AI Research")
         )
     }
-    @Test
-    fun `retrieve all sections by publication id`() {
+    @Test fun `retrieve all sections by publication id`() {
         assertEquals(
             listOf(
                 Section(4, "Computer Vision", "Image processing and visual recognition", 1, false),
@@ -39,22 +37,19 @@ class SectionRepositoryTests {
             sectionRepository.allByPublicationId(1)
         )
     }
-    @Test
-    fun `retrieve all sections which contain archived manuscripts by publication id and manuscript state`() {
+    @Test fun `retrieve all sections which contain archived manuscripts by publication id and manuscript state`() {
         assertEquals(
             listOf(Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false)),
             sectionRepository.allByPublicationId(1, ManuscriptState.ARCHIVED)
         )
     }
 
-    @Test
-    fun `insert section`() {
+    @Test fun `insert section`() {
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE title = 'new section' AND publication_id = 3)"))
         sectionRepository.insert("new section", 3)
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE title = 'new section' AND publication_id = 3)"))
     }
-    @Test
-    fun `update section`() {
+    @Test fun `update section`() {
         assertTrue(
             jdbcTemplate.queryForObject<Boolean>(
                 """
@@ -99,13 +94,11 @@ class SectionRepositoryTests {
             )
         )
     }
-    @Test
-    fun `check if section exists by id`() {
+    @Test fun `check if section exists by id`() {
         assertTrue(sectionRepository.exists(1))
         Assertions.assertFalse(sectionRepository.exists(1000))
     }
-    @Test
-    fun `delete section by id`() {
+    @Test fun `delete section by id`() {
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = 1)"))
         sectionRepository.delete(1)
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE id = 1)"))
