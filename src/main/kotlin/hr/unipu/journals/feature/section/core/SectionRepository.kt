@@ -59,7 +59,7 @@ interface SectionRepository: Repository<Section, Int> {
         publication_id = COALESCE(:publication_id, publication_id),
         is_hidden = COALESCE(:is_hidden, is_hidden)
         WHERE id = :id
-        """)
+    """)
     fun update(
         @Param("id") id: Int,
         @Param("title") title: String? = null,
