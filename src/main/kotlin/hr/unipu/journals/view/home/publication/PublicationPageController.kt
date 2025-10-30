@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.home.publication
 
 import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.ContainerDTO
 import org.springframework.stereotype.Controller
@@ -19,6 +20,7 @@ class PublicationPageController(
         model["isAdmin"] = isAdmin
         model["publications"] = publicationRepository.allPublished().map { publication ->
             val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+        model["publications"] = publicationRepository.all(PublicationType.PUBLIC).map { publication ->
             ContainerDTO(
                 id = publication.id,
                 title = publication.title,

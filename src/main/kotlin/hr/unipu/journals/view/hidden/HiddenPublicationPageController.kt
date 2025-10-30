@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.hidden
 
 import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.publication.core.PublicationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 class HiddenPublicationPageController(private val publicationRepository: PublicationRepository) {
     @GetMapping("/hidden")
     fun page(model: Model): String {
-        model["publications"] = publicationRepository.allHidden()
+        model["publications"] = publicationRepository.all(PublicationType.HIDDEN)
         return "hidden/hidden-publication-page"
     }
 }

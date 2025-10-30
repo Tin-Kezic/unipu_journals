@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.home.section
 
 import hr.unipu.journals.feature.publication.core.PublicationRepository
+import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.ResourceNotFoundException
@@ -23,6 +24,7 @@ class SectionPageController(
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isAdmin"] = authorizationService.isAdmin()
         val isAdmin = authorizationService.isAdmin
+        model["publicationsSidebar"] = publicationRepository.all(PublicationType.PUBLIC)
         model["isAdmin"] = isAdmin
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)

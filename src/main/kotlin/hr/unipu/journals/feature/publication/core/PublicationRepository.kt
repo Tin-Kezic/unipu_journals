@@ -1,57 +1,63 @@
 package hr.unipu.journals.feature.publication.core
 
+import hr.unipu.journals.feature.manuscript.category.Category
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface PublicationRepository: Repository<Publication, Int> {
-    @Query("""
-        SELECT DISTINCT publication.* FROM publication
-        JOIN publication_section ON publication.id = publication_section.publication_id
-        JOIN manuscript ON publication_section.id = manuscript.section_id
-        JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE account_role_on_manuscript.account_id = :account_id
-        AND publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
-        AND ((
-            account_role_on_manuscript.account_role = 'EIC'
-            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        ) OR (
-            account_role_on_manuscript.account_role = 'EDITOR'
-            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        ) OR (
-            account_role_on_manuscript.account_role = 'REVIEWER'
-            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-        ))
-    """)
-    fun allContainingPendingManuscripts(@Param("account_id") accountId: Int): List<Publication>
-
     @Query("SELECT title FROM publication WHERE id = :id")
     fun title(@Param("id") id: Int): String
-
-    @Query("SELECT * FROM publication WHERE is_hidden = FALSE ORDER BY id DESC")
-    fun allPublished(): List<Publication>
 
     @Query("""
         SELECT DISTINCT publication.* FROM publication
         LEFT JOIN publication_section ON publication.id = publication_section.publication_id
-        LEFT JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication.is_hidden = TRUE
-        OR publication_section.is_hidden = TRUE
-        OR manuscript.current_state = 'HIDDEN'
-        """)
-    fun allHidden(): List<Publication>
-
-    @Query("""
-        SELECT DISTINCT publication.* FROM publication
-        JOIN publication_section ON publication.id = publication_section.publication_id
-        JOIN manuscript ON manuscript.section_id = publication_section.id
-        WHERE publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
-        AND manuscript.current_state = 'ARCHIVED'
+        LEFT JOIN manuscript ON publication_section.id = manuscript.section_id
+        LEFT JOIN category ON manuscript.category_id = category.id
+        LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        WHERE (manuscript.current_state = :manuscript_state OR :manuscript_state IS NULL)
+        AND (account_role_on_manuscript.account_id = :account_id OR :account_id IS NULL)
+        AND (account_role_on_manuscript.account_role = :affiliation OR :affiliation IS NULL)
+        AND (category.name = :category OR :category IS NULL)
+        AND (
+            :publication_type = 'HIDDEN' AND (
+                publication.is_hidden = TRUE
+                OR publication_section.is_hidden = TRUE
+                OR manuscript.current_state = 'HIDDEN'
+            )
+            OR
+            publication.is_hidden = FALSE AND (
+                :publication_type = 'PUBLIC'
+                OR
+                publication_section.is_hidden = FALSE AND (
+                    :publication_type = 'CONTAINS_ARCHIVED_MANUSCRIPTS'
+                    AND manuscript.current_state = 'ARCHIVED'
+                    OR
+                    :publication_type = 'CONTAINS_PENDING_MANUSCRIPTS'
+                    AND (
+                        account_role_on_manuscript.account_role = 'EIC'
+                        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        OR
+                        account_role_on_manuscript.account_role = 'EDITOR'
+                        AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        OR
+                        account_role_on_manuscript.account_role = 'REVIEWER'
+                        AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                    )
+                )
+            )
+        )
+        ORDER BY publication.title
     """)
-    fun allContainingArchivedManuscripts(): List<Publication>
+    fun all(
+        @Param("publication_type") publicationType: PublicationType,
+        @Param("affiliation") affiliation: Affiliation? = null,
+        @Param("account_id") accountId: Int? = null,
+        @Param("manuscript_state") manuscriptState: ManuscriptState? = null,
+        @Param("category") category: Category? = null
+    ): List<Publication>
 
     @Modifying
     @Query("INSERT INTO publication (title) VALUES (:title)")
