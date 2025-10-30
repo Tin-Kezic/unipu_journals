@@ -17,6 +17,7 @@ interface SectionRepository: Repository<Section, Int> {
         WHERE publication.title = :title
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
+        ORDER BY publication_section.title
     """)
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
@@ -25,19 +26,19 @@ interface SectionRepository: Repository<Section, Int> {
         JOIN publication ON publication_section.publication_id = publication.id
         LEFT JOIN manuscript ON manuscript.section_id = publication_section.id
         WHERE publication.id = :publication_id
-        AND ((
+        AND (
             publication.is_hidden = FALSE
             AND publication_section.is_hidden = FALSE
             AND (:state IS NULL OR (:state != 'HIDDEN' AND manuscript.current_state = :state))
-        ) OR (
+            OR
             :state = 'HIDDEN'
             AND (
                 publication.is_hidden = TRUE
                 OR publication_section.is_hidden = TRUE
                 OR manuscript.current_state = 'HIDDEN'
             )
-        ))
-        ORDER BY publication_section.id DESC
+        )
+        ORDER BY publication_section.title
     """)
     fun allByPublicationId(@Param("publication_id") publicationId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Section>
 
