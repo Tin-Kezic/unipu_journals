@@ -39,6 +39,7 @@ class AuthorizationService(
             ?: throw IllegalStateException("Principal is not an instance of User, principal: ${authentication.principal}")
     }
     val account get(): Account? = user?.username?.let { accountRepository.byEmail(it) }
+    val isAuthenticated get() = SecurityContextHolder.getContext().authentication.principal != "anonymousUser"
 
     val isRoot get() = user?.username == "root@unipu.hr"
     val isAdmin get() = account?.isAdmin ?: false
