@@ -31,6 +31,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("section_id") sectionId: Int,
         @Param("file_url") fileUrl: String
     ): Int
+
     @Query("""
         SELECT DISTINCT manuscript.* FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
@@ -40,16 +41,16 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         AND publication.is_hidden = FALSE
         AND publication_section.is_hidden = FALSE
         AND (publication.id = :publication_id OR :publication_id IS NULL)
-        AND ((
+        AND (
             account_role_on_manuscript.account_role = 'EIC'
             AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        ) OR (
+            OR
             account_role_on_manuscript.account_role = 'EDITOR'
             AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        ) OR (
+            OR
             account_role_on_manuscript.account_role = 'REVIEWER'
             AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-        ))
+        )
     """)
     fun pending(@Param("account_id") accountId: Int, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
 
