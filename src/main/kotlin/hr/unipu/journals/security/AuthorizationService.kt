@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 
 const val AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN = "@authorizationService.isAccountOwnerOrAdmin(#accountId)"
-const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot()"
-const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin()"
+const val AUTHORIZATION_SERVICE_IS_ROOT = "@authorizationService.isRoot"
+const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperior(#publicationId)"
 const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@authorizationService.isSectionEditorOnSectionOrSuperior(#publicationId, #sectionId)"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEicOnManuscript(#manuscriptId)"
@@ -40,9 +40,9 @@ class AuthorizationService(
     }
     val account get(): Account? = user?.username?.let { accountRepository.byEmail(it) }
 
-    fun isRoot(): Boolean = user?.username == "root@unipu.hr"
-    fun isAdmin(): Boolean =  account?.isAdmin ?: false
-    fun isAccountOwnerOrAdmin(accountId: Int): Boolean = accountId == account?.id || isAdmin()
+    val isRoot get() = user?.username == "root@unipu.hr"
+    val isAdmin get() = account?.isAdmin ?: false
+    fun isAccountOwnerOrAdmin(accountId: Int): Boolean = accountId == account?.id || isAdmin
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
