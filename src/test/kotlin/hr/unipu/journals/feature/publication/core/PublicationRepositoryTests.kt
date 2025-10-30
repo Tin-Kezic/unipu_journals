@@ -19,9 +19,9 @@ class PublicationRepositoryTests {
             Publication(2, "Nature of Biology", false),
             Publication(3, "Physics Letters", false),
         )
-        assertEquals(publications, publicationRepository.allContainingPendingManuscripts(accountId = 25))
-        assertEquals(publications.takeLast(2), publicationRepository.allContainingPendingManuscripts(accountId = 26))
-        assertEquals(publications.takeLast(1), publicationRepository.allContainingPendingManuscripts(accountId = 27))
+        assertEquals(publications, publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 25))
+        assertEquals(publications.takeLast(2), publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 26))
+        assertEquals(publications.takeLast(1), publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 27))
     }
     @Test fun `retrieve publication title by publication id`() {
         assertEquals("Journal of AI Research", publicationRepository.title(1))
@@ -29,12 +29,12 @@ class PublicationRepositoryTests {
     @Test fun `retrieve all published publications`() {
         assertEquals(
             listOf(
-                Publication(6, "Published empty publication", false),
-                Publication(3, "Physics Letters", false),
-                Publication(2, "Nature of Biology", false),
                 Publication(1, "Journal of AI Research", false),
+                Publication(2, "Nature of Biology", false),
+                Publication(3, "Physics Letters", false),
+                Publication(6, "Published empty publication", false),
             ),
-            publicationRepository.allPublished()
+            publicationRepository.all(PublicationType.PUBLIC)
         )
     }
     @Test fun `retrieve all publications that are hidden or contain hidden sections or hidden manuscripts`() {
@@ -46,13 +46,13 @@ class PublicationRepositoryTests {
                 Publication(4, "first hidden publication", true),
                 Publication(5, "second hidden publication", true),
             ),
-            publicationRepository.allHidden()
+            publicationRepository.all(PublicationType.HIDDEN)
         )
     }
     @Test fun `retrieve all publications containing archived manuscripts`() {
         assertEquals(
             listOf(Publication(1, "Journal of AI Research", false)),
-            publicationRepository.allContainingArchivedManuscripts()
+            publicationRepository.all(PublicationType.CONTAINS_ARCHIVED_MANUSCRIPTS)
         )
     }
     @Test fun `insert publication`() {
