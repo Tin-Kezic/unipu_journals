@@ -30,7 +30,7 @@ class ManuscriptPageController(
     ): String {
         if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
-        model["isAdmin"] = authorizationService.isAdmin()
+        model["isAdmin"] = authorizationService.isAdmin
         model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId)
 
         val section = sectionRepository.byId(sectionId)

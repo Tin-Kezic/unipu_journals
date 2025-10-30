@@ -26,7 +26,7 @@ class ArchiveManuscriptPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
-        model["isAdmin"] = authorizationService.isAdmin()
+        model["isAdmin"] = authorizationService.isAdmin
         model["sectionsSidebar"] = sectionRepository.allByPublicationId(publicationId, ManuscriptState.ARCHIVED)
         model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId = sectionId, manuscriptState = ManuscriptState.ARCHIVED).map { manuscript ->
             ManuscriptDTO(

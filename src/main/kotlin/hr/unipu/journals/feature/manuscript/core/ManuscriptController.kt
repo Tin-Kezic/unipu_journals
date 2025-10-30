@@ -49,7 +49,7 @@ class ManuscriptController(
         @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript $manuscriptId")
-        val isAdmin = authorizationService.isAdmin()
+        val isAdmin = authorizationService.isAdmin
         val isSectionEditorOnSectionOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
         val isEditorOnManuscriptOrAffiliatedSuperior = authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
         when(newState) {

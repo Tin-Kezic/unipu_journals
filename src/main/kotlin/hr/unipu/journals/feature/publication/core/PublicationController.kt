@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/publication/{publicationId}")
 class PublicationController(private val publicationRepository: PublicationRepository) {
     @PostMapping("/insert")
+        val isAdmin = authorizationService.isAdmin
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun insert(@RequestParam title: String): ResponseEntity<String> {
         if(title.isEmpty()) return ResponseEntity.badRequest().body("title must not be empty")

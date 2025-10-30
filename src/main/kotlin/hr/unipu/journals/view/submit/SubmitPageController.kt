@@ -18,7 +18,7 @@ class SubmitPageController(
 ) {
     @GetMapping("/submit")
     fun page(model: Model): String {
-        model["isAdmin"] = authorizationService.isAdmin()
+        model["isAdmin"] = authorizationService.isAdmin
         model["categories"] = categoryRepository.all()
         model["publications"] = publicationRepository.allPublished().map { it.title }
         model["sections"] = listOf("Section_1", "Section_2", "Section_3")

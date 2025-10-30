@@ -22,6 +22,8 @@ class SectionPageController(
         if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         model["publicationsSidebar"] = publicationRepository.allPublished()
         model["isAdmin"] = authorizationService.isAdmin()
+        val isAdmin = authorizationService.isAdmin
+        model["isAdmin"] = isAdmin
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)
         model["sections"] = sectionRepository.allByPublicationId(publicationId).map { section ->
@@ -32,6 +34,7 @@ class SectionPageController(
                 canHide = authorizationService.isAdmin(),
                 canEdit = isSectionEditorOrSuperior,
                 isEditor = isSectionEditorOrSuperior
+                canHide = isAdmin,
             )
         }.sortedByDescending { it.isEditor }
         return "home/section/section-page"

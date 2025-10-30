@@ -25,7 +25,7 @@ class ManuscriptDetailsPageController(
         val rowsAffected = manuscriptRepository.incrementViews(manuscriptId)
         if(rowsAffected == 0) throw InternalServerErrorException("failed to increment views")
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: throw ResourceNotFoundException("failed to find manuscript $manuscriptId")
-        if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.ARCHIVED) && authorizationService.isAdmin().not() ) throw AccessDeniedException("not authorized to view manuscript")
+        if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.ARCHIVED) && authorizationService.isAdmin.not() ) throw AccessDeniedException("not authorized to view manuscript")
         model["id"] = manuscriptId
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY"))

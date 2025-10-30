@@ -5,5 +5,4 @@ data class ContainerDTO (
     val title: String,
     val canHide: Boolean,
     val canEdit: Boolean,
-    val isEditor: Boolean
 )

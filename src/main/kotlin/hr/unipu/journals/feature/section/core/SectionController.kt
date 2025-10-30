@@ -52,7 +52,7 @@ class SectionController(
         @RequestParam description: String?,
         @RequestParam isHidden: Boolean?,
     ): ResponseEntity<String> {
-        if(isHidden != null && authorizationService.isAdmin().not()) return ResponseEntity.badRequest().body("unauthorized to change if section $sectionId is hidden")
+        if(isHidden != null && authorizationService.isAdmin.not()) return ResponseEntity.badRequest().body("unauthorized to change if section $sectionId is hidden")
         return try {
             val rowsAffected = sectionRepository.update(
                 id = sectionId,
