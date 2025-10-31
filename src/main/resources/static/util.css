@@ -59,11 +59,6 @@ nav ul li a:hover {
 nav ul li a:active {
     text-decoration: underline;
 }
-.search-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
 dialog {
     left: 0; right: 0; top: 0; bottom: 0;
     margin: auto; position: fixed;
