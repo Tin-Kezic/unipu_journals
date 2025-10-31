@@ -6,8 +6,10 @@ import hr.unipu.journals.feature.manuscript.core.Manuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.PublicationType
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -34,6 +36,7 @@ class PendingReviewPageController(
         )
     }
     @GetMapping("/review")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun page(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
             model["publicationsSidebar"] =
