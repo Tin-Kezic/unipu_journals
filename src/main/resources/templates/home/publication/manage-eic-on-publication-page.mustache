@@ -62,7 +62,7 @@
     document.getElementById('dialog-negative').addEventListener('click', () => dialog.close())
     document.getElementById('dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/publication/{{publicationId}}/revoke-eic?email=${encodeURIComponent(currentEmail)}`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to revoke EiC'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`).remove();
         dialog.close()
     });
@@ -79,7 +79,7 @@
         const emailInput = document.querySelector('input[name="email"]');
         const email = emailInput.value;
         const response = await fetch(`/publication/{{publicationId}}/assign-eic?email=${encodeURIComponent(email)}`, { method: 'PUT' })
-        if(!response.ok || !email) { alert('failed to add EiC'); return; }
+        if(!response.ok || !email) { alert(await response.text()); return; }
         const newButton = document.createElement('button');
         newButton.className = 'remove-user-button';
         newButton.dataset.email = email;

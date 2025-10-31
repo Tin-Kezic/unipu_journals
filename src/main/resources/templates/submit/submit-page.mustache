@@ -39,7 +39,7 @@
                 const sectionSelect = document.querySelector('select[name="section"]')
                 publicationSelect.addEventListener('change', async (event) => {
                     const response = await fetch(`/api/publication/${publicationSelect.value}/section/titles`, { method: 'GET' });
-                    if(!response.ok) { alert('failed to fetch sections'); return; };
+                    if(!response.ok) { alert(await response.text()); return; }
                     sectionSelect.innerHTML = '';
                     const sectionTitles = await response.json()
                     sectionTitles.forEach(sectionTitle => {
@@ -184,7 +184,7 @@
                 &abstract=${encodeURIComponent(abstract)}
                 &files=files
             `, { method: 'POST' }); //&files=${encodeURIComponent(Array.from(files))}
-        if(!response.ok) { alert('failed to submit manuscript'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         */
         window.location.href = '/';
     });

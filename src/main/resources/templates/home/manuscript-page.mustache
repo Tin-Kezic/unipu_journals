@@ -102,7 +102,7 @@
         document.getElementById('edit-description-dialog-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
-            if(!response.ok) { alert('failed to add description'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
             description.innerHTML = textarea.value;
             editDescriptionDialog.close();
         });
@@ -130,7 +130,7 @@
         document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
         document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
             const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/state?newState=HIDDEN`, { method: 'PUT' });
-            if(!response.ok) { alert('failed to hide Manuscript'); return; }
+            if(!response.ok) { alert(await response.text()); return; }
             document.querySelector(`article[data-id="${currentId}"]`).remove();
             hideManuscriptDialog.close();
         });
@@ -157,7 +157,7 @@
         document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
         document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
             const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/state?newState=ARCHIVED`, { method: 'PUT' });
-            if(!response.ok) { alert('failed to archive Manuscript'); return; }
+            if(!response.ok) { alert(await response.text()); return; }
             document.querySelector(`article[data-id="${currentId}"]`).remove();
             archiveManuscriptDialog.close();
         });

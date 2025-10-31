@@ -66,7 +66,7 @@
     document.querySelectorAll('button[data-type="unarchive-button"]').forEach(button => {
         button.addEventListener('click', async () => {
             const response = await fetch(`/api/manuscript/${button.dataset.id}/state?newState=PUBLISHED`, { method: 'PUT' });
-            if(!response.ok) { alert('failed to unarchive Manuscript'); return; }
+            if(!response.ok) { alert(await response.text()); return; }
             document.querySelector(`article[data-id="${button.dataset.id}"]`).remove();
         });
     });

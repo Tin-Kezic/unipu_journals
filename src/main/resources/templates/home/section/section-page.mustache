@@ -100,7 +100,7 @@
         event.preventDefault();
         const sectionTitle = document.querySelector('input[name=insert-section-dialog-input]').value;
         const response = await fetch(`/api/publication/{{publicationId}}/section?title=${encodeURIComponent(sectionTitle)}`, { method: 'POST' });
-        if(!response.ok) { alert('failed to add section'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         location.reload(true);
     });
 </script>
@@ -135,7 +135,7 @@
         event.preventDefault();
         const newSectionTitle = document.querySelector('input[name="update-section-title-dialog-input"]').value;
         const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}?title=${encodeURIComponent(newSectionTitle)}`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to update section title'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         location.reload(true);
     });
 </script>
@@ -161,7 +161,7 @@
     document.getElementById('hide-section-dialog-negative').addEventListener('click', () => hideSectionDialog.close());
     document.getElementById('hide-section-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/api/publication/{{publicationId}}/section/${currentId}?isHidden=true`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to hide Section'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`div[data-id="${currentId}"]`).remove();
         hideSectionDialog.close();
     });

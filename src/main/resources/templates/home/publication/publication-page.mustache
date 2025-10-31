@@ -38,7 +38,7 @@
             publicationTypeSelect = document.querySelector('select[name="publication-type"]');
             publicationTypeSelect.addEventListener('change', async () => {
                 const response = await fetch(`/api/publication/${publicationTypeSelect.value}`);
-                if(!response.ok) { alert(`failed to fetch ${publicationTypeSelect.value} publications`);}
+                if(!response.ok) { alert(await response.text()); return; }
                 const responsePublications = await response.json();
                 const publicationsContainer = document.getElementById('publications-container');
                 publicationsContainer.innerHTML = '';
@@ -114,7 +114,7 @@
         event.preventDefault();
         const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
         const response = await fetch(`/api/publication?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
-        if(!response.ok) { alert('failed to add publication'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         location.reload(true);
     });
 </script>
@@ -149,7 +149,7 @@
         event.preventDefault();
         const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
         const response = await fetch(`/api/publication/${currentId}?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to update publication title'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         location.reload(true);
     });
 </script>
@@ -175,7 +175,7 @@
     document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
         const response = await fetch(`/api/publication/${currentId}?isHidden=true`, { method: 'PUT' });
-        if(!response.ok) { alert('failed to hide publication'); return; }
+        if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`div[data-id="${currentId}"]`).remove();
         hidePublicationDialog.close();
     });

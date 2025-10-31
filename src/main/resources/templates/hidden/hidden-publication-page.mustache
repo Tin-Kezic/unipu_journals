@@ -62,13 +62,10 @@
     });
     document.getElementById('dialog-negative').addEventListener('click', () => dialog.close());
     document.getElementById('dialog-positive').addEventListener('click', async () => {
-        if(currentType == 'delete-button') {
-            const response = await fetch(`/api/publication/${currentId}`, { method: 'DELETE' });
-            if(!response.ok) { alert('failed to permanently delete publication'); return; }
-        } else {
-            const response = await fetch(`/api/publication/${currentId}?isHidden=false`, { method: 'PUT' });
-            if(!response.ok) { alert('failed to restore publication'); return; }
-        }
+        const response = (currentType == 'delete-button') ?
+            await fetch(`/api/publication/${currentId}`, { method: 'DELETE' }) :
+            await fetch(`/api/publication/${currentId}?isHidden=false`, { method: 'PUT' });
+        if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`div[id="${currentId}"]`).remove();
         dialog.close();
     });
