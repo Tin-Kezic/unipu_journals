@@ -35,17 +35,19 @@ class RootPageController(
         val passwordConfirmation = body["passwordConfirmation"]
         if(password != passwordConfirmation) return ResponseEntity.badRequest().body("password-mismatch")
         val rowsAffected = accountRepository.updateRootPassword(passwordEncoder.encode(password))
-        if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to update root password")
-        return ResponseEntity.ok("successfully updated password")
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully updated password")
+        else ResponseEntity.internalServerError().body("failed to update root password")
     }
     @PutMapping("/assign-admin")
     fun assignAdmin(@RequestParam email: String): ResponseEntity<String> {
-        var rowsAffected = accountRepository.updateIsAdmin(email, true)
-        if(rowsAffected == 0) {
-            rowsAffected = inviteRepository.invite(email, InvitationTarget.ADMIN)
-            if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to assign admin privileges for $email")
-        }
-        return ResponseEntity.ok("Successfully added admin privileges to $email")
+        try {
+            var rowsAffected = accountRepository.updateIsAdmin(email, true)
+            if(rowsAffected == 0) {
+                rowsAffected = inviteRepository.invite(email, InvitationTarget.ADMIN)
+                if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to assign admin privileges for $email")
+            }
+            return ResponseEntity.ok("Successfully added admin privileges to $email")
+        } catch (_: Exception) { return ResponseEntity.badRequest().body("account already has admin privileges") }
     }
     @PutMapping("/revoke-admin")
     fun revokeAdmin(@RequestParam email: String): ResponseEntity<String> {
