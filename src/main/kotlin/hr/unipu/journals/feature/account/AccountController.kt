@@ -50,21 +50,19 @@ class AccountController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun update(@ModelAttribute request: AccountDTO): ResponseEntity<String> {
         val account = authorizationService.account!!
-        val currentEmail = account.email
-        val id = account.id
         var error = ""
-        if(accountRepository.existsByEmail(request.email) && currentEmail != request.email) error += "email taken"
+        if(accountRepository.existsByEmail(request.email) && account.email != request.email) error += "email taken"
         if(request.password != request.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
-        val rowsAffected = accountRepository.update(id, request.clean())
+        val rowsAffected = accountRepository.update(account.id, request.clean())
         return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
         else ResponseEntity.internalServerError().body("failed to update account: $request")
     }
     @DeleteMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
-    fun delete(@PathVariable id: Int): ResponseEntity<String> {
-        val rowsAffected = accountRepository.delete(id)
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $id")
-        else ResponseEntity.internalServerError().body("failed to delete account $id")
+    fun delete(@PathVariable accountId: Int): ResponseEntity<String> {
+        val rowsAffected = accountRepository.delete(accountId)
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $accountId")
+        else ResponseEntity.internalServerError().body("failed to delete account $accountId")
     }
 }
