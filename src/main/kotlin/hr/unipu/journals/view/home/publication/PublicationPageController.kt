@@ -28,7 +28,7 @@ class PublicationPageController(
                 canEdit = isEicOrSuperior,
                 isEditor = isEicOrSuperior
             )
-        }.sortedByDescending { it.isEditor }
+        }
         return "home/publication/publication-page"
     }
 }

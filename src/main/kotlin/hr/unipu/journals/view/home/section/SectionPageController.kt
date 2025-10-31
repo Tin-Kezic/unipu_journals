@@ -38,7 +38,7 @@ class SectionPageController(
                 isEditor = isSectionEditorOrSuperior
                 canHide = isAdmin,
             )
-        }.sortedByDescending { it.isEditor }
+        }
         return "home/section/section-page"
     }
 }
