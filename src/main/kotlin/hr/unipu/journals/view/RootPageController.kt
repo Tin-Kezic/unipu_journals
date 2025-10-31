@@ -11,39 +11,39 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/root")
+@PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
 class RootPageController(
     private val passwordEncoder: PasswordEncoder,
     private val inviteRepository: InviteRepository,
     private val accountRepository: AccountRepository,
 ) {
     @GetMapping
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
     fun page(model: Model): String {
         model["adminEmails"] = accountRepository.allAdminEmails() + inviteRepository.emailsByTarget(InvitationTarget.ADMIN)
         return "root-page"
     }
-    @PostMapping("/update-password")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
-    fun updatePassword(@RequestParam password: String, @RequestParam passwordConfirmation: String): String {
-        if(password != passwordConfirmation) return "redirect:/root?password-mismatch"
+    @PutMapping("/update-password")
+    fun updatePassword(@RequestBody body: Map<String, String>): ResponseEntity<String> {
+        val password = body["password"]
+        val passwordConfirmation = body["passwordConfirmation"]
+        if(password != passwordConfirmation) return ResponseEntity.badRequest().body("password-mismatch")
         val rowsAffected = accountRepository.updateRootPassword(passwordEncoder.encode(password))
-        if(rowsAffected == 0) throw InternalServerErrorException("failed to update root password")
-        return "redirect:/root?successfully-updated-password"
+        if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to update root password")
+        return ResponseEntity.ok("successfully updated password")
     }
-    @PostMapping("/assign-admin")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ROOT)
+    @PutMapping("/assign-admin")
     fun assignAdmin(@RequestParam email: String): ResponseEntity<String> {
         var rowsAffected = accountRepository.updateIsAdmin(email, true)
         if(rowsAffected == 0) {
             rowsAffected = inviteRepository.invite(email, InvitationTarget.ADMIN)
-            if(rowsAffected == 0) throw InternalServerErrorException("failed to assign admin privileges for $email")
+            if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to assign admin privileges for $email")
         }
         return ResponseEntity.ok("Successfully added admin privileges to $email")
     }
@@ -52,7 +52,7 @@ class RootPageController(
         var rowsAffected = accountRepository.updateIsAdmin(email, false)
         if(rowsAffected == 0) {
             rowsAffected = inviteRepository.revoke(email, InvitationTarget.ADMIN)
-            if(rowsAffected == 0) throw InternalServerErrorException("failed to revoke admin privileges for $email")
+            if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to revoke admin privileges for $email")
         }
         return ResponseEntity.ok("Successfully revoked admin privileges for $email")
     }

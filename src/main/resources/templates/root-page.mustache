@@ -13,7 +13,7 @@
             <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; align-self: flex-start; margin-left: 0.25rem; user-select: none;">Root page</p>
             <div style="max-width: 22.5rem; width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <p style="font-size: 1.8rem; font-weight: normal; margin-top: 2rem; align-self: center; user-select: none;">Update password</p>
-                <form method="post" action="/root/update-password" style="width: 100%;">
+                <form id="update-password-form" style="width: 100%;">
                     <div class="text-field">
                         <label>password</label>
                         <input name="password" type="password" required>
@@ -25,13 +25,13 @@
                     <div style="display: flex; justify-content: center;">
                         <button class="m3-button yellow-button">Update</button>
                     </div>
-                    <p class="error-msg" style="margin-top: 1rem; font-size: 0.9rem; text-align: center; text-decoration: underline;">
+                </form>
+                    <p id="password-mismatch" class="error-msg" style="margin-top: 1rem; font-size: 0.9rem; text-align: center; text-decoration: underline;">
                         Password mismatch.
                     </p>
-                    <p class="error-msg" style="margin-top: 1rem; font-size: 0.9rem; text-align: center; text-decoration: underline; color: green;">
-                        Password changed successfully.
+                    <p id="successfully-updated-password" class="error-msg" style="margin-top: 1rem; font-size: 0.9rem; text-align: center; text-decoration: underline; color: green;">
+                        successfully updated password.
                     </p>
-                </form>
             </div>
         </section>
         <div style="flex: 1; min-width: 18rem; max-width: 32rem; padding: 4rem 2rem 0 2rem; display: flex; flex-direction: column;">
@@ -102,6 +102,33 @@
     }
     document.querySelectorAll('.remove-user-button').forEach(button => {
         button.addEventListener('click', () => dialogOpen(button.dataset.email));
+    });
+    const updatePasswordForm = document.getElementById('update-password-form');
+    const passwordMismatch = document.getElementById('password-mismatch')
+    const successfullyUpdatedPassword = document.getElementById('successfully-updated-password')
+    updatePasswordForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const response = await fetch('/root/update-password', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                password: updatePasswordForm.password.value,
+                passwordConfirmation: updatePasswordForm.passwordConfirmation.value
+            })
+        });
+        updatePasswordForm.password.value = '';
+        updatePasswordForm.passwordConfirmation.value = '';
+        updatePasswordForm.password.focus();
+        if(!response.ok) {
+            if(await response.text() == 'password-mismatch') {
+                passwordMismatch.style.display = 'inline-block';
+                successfullyUpdatedPassword.style.display = 'none';
+            } else alert(await response.text());
+            return; 
+        }
+        passwordMismatch.style.display = 'none';
+        successfullyUpdatedPassword.style.display = 'inline-block';
     });
     document.getElementById('assign-admin-form').addEventListener('submit', async (event) => {
         event.preventDefault();
