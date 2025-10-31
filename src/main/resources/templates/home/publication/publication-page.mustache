@@ -11,7 +11,7 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
     <div style="display: flex; justify-content: left; gap: 1rem;">
-        <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+        <h1 style="font-size: 1.5rem; font-weight: 400;">
             publications
         </h1>
         {{#isAuthenticated}}
@@ -33,13 +33,12 @@
             <option value="PUBLIC">Public</option>
             <option value="archived">Archived</option>
             {{#isAdmin}}<option value="hidden">Hidden</option>{{/isAdmin}}
-            <option value="category">Category</option>
         </select>
         <script>
             publicationTypeSelect = document.querySelector('select[name="publication-type"]');
             publicationTypeSelect.addEventListener('change', async () => {
                 const response = await fetch(`/api/publication/${publicationTypeSelect.value}`);
-                if(!response.ok) { alert(`failed to fetch publications of type ${publicationTypeSelect.value}`);}
+                if(!response.ok) { alert(`failed to fetch ${publicationTypeSelect.value} publications`);}
                 const responsePublications = await response.json();
                 const publicationsContainer = document.getElementById('publications-container');
                 publicationsContainer.innerHTML = '';
