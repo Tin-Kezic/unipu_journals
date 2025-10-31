@@ -18,8 +18,7 @@ class PublicationPageController(
     fun page(model: Model): String {
         val isAdmin = authorizationService.isAdmin
         model["isAdmin"] = isAdmin
-        model["publications"] = publicationRepository.allPublished().map { publication ->
-            val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+        model["isAuthenticated"] = authorizationService.isAuthenticated
         model["publications"] = publicationRepository.all(PublicationType.PUBLIC).map { publication ->
             ContainerDTO(
                 id = publication.id,
