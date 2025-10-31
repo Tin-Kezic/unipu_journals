@@ -43,7 +43,7 @@ class AuthorizationService(
 
     val isRoot get() = user?.username == "root@unipu.hr"
     val isAdmin get() = account?.isAdmin ?: false
-    fun isAccountOwnerOrAdmin(accountId: Int): Boolean = accountId == account?.id || isAdmin
+    fun isAccountOwnerOrAdmin(accountId: Int?): Boolean = accountId == account?.id || isAdmin
     fun isEicOnPublicationOrSuperior(publicationId: Int): Boolean = account?.let {
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
