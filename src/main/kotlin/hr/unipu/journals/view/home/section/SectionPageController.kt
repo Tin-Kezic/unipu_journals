@@ -35,7 +35,6 @@ class SectionPageController(
                 title = section.title,
                 canHide = authorizationService.isAdmin(),
                 canEdit = isSectionEditorOrSuperior,
-                isEditor = isSectionEditorOrSuperior
                 canHide = isAdmin,
             )
         }

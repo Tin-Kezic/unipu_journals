@@ -25,7 +25,6 @@ class PublicationPageController(
                 title = publication.title,
                 canHide = isAdmin,
                 canEdit = isEicOrSuperior,
-                isEditor = isEicOrSuperior
             )
         }
         return "home/publication/publication-page"
