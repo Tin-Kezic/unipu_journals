@@ -24,7 +24,7 @@ class PublicationPageController(
                 id = publication.id,
                 title = publication.title,
                 canHide = isAdmin,
-                canEdit = isEicOrSuperior,
+                canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
             )
         }
         return "home/publication/publication-page"

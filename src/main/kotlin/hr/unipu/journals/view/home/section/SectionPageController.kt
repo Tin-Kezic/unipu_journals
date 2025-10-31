@@ -21,21 +21,17 @@ class SectionPageController(
     @GetMapping("/publication/{publicationId}")
     fun page(@PathVariable publicationId: Int, model: Model): String {
         if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
-        model["publicationsSidebar"] = publicationRepository.allPublished()
-        model["isAdmin"] = authorizationService.isAdmin()
         val isAdmin = authorizationService.isAdmin
         model["publicationsSidebar"] = publicationRepository.all(PublicationType.PUBLIC)
         model["isAdmin"] = isAdmin
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)
         model["sections"] = sectionRepository.allByPublicationId(publicationId).map { section ->
-            val isSectionEditorOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             ContainerDTO(
                 id = section.id,
                 title = section.title,
-                canHide = authorizationService.isAdmin(),
-                canEdit = isSectionEditorOrSuperior,
                 canHide = isAdmin,
+                canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             )
         }
         return "home/section/section-page"
