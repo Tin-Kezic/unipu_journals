@@ -306,13 +306,12 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('Name199', 'Ms.', 'user199@example.com', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University48', 'Author', 'Germany', 'City199', 'Address 199', '00199', FALSE),
 ('Name200', 'Dr.', 'user200@example.com', '$2a$12$VV/Pl7H63e6zYRlwYBygy.44gSa301yyG1/avfr9WPGoazHgG96nC', 'University49', 'Professor', 'USA', 'City200', 'Address 200', '00200', TRUE);
 INSERT INTO invite (email, target, target_id) VALUES
-('root@unipu.hr', 'ADMIN', 1),
+('root@unipu.hr', 'ADMIN', 0),
 ('root@unipu.hr', 'EIC_ON_PUBLICATION', 100),
 ('root@unipu.hr', 'EIC_ON_MANUSCRIPT', 101),
 ('root@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 200),
 ('root@unipu.hr', 'EDITOR_ON_MANUSCRIPT', 102),
 ('root@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 103),
-('root@unipu.hr', 'ADMIN', 2),
 ('root@unipu.hr', 'EIC_ON_PUBLICATION', 104),
 ('root@unipu.hr', 'SECTION_EDITOR_ON_SECTION', 201),
 ('root@unipu.hr', 'REVIEWER_ON_MANUSCRIPT', 105);
