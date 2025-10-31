@@ -10,15 +10,56 @@
 {{>util/header}}
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 1.5rem 1rem 1.5rem;">
-    <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
-        publications
-    </h1>
+    <div style="display: flex; justify-content: left; gap: 1rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 400; user-select: none;">
+            publications
+        </h1>
+        {{#isAuthenticated}}
+        <select name="affiliation" class="dropdown">
+            <option value="NONE">All</option>
+            <option value="EiC on publication">EiC on publication</option>
+            <option value="section editor">Section editor</option>
+            <option value="EiC on manuscript">EiC on manuscript</option>
+            <option value="Editor">Editor on manuscript</option>
+            <option value="Reviewer">Reviewer</option>
+            <option value="Corresponding author">Corresponding Author</option>
+            <option value="Author">Author</option>
+        </select>
+        <script>
+            const affiliation
+        </script>
+        {{/isAuthenticated}}
+        <select name="publication-type" class="dropdown">
+            <option value="PUBLIC">Public</option>
+            <option value="archived">Archived</option>
+            {{#isAdmin}}<option value="hidden">Hidden</option>{{/isAdmin}}
+            <option value="category">Category</option>
+        </select>
+        <script>
+            publicationTypeSelect = document.querySelector('select[name="publication-type"]');
+            publicationTypeSelect.addEventListener('change', async () => {
+                const response = await fetch(`/api/publication/${publicationTypeSelect.value}`);
+                if(!response.ok) { alert(`failed to fetch publications of type ${publicationTypeSelect.value}`);}
+                const responsePublications = await response.json();
+                const publicationsContainer = document.getElementById('publications-container');
+                publicationsContainer.innerHTML = '';
+                switch(publicationTypeSelect.value) {
+                    case 'published':
+                        break;
+                    case 'archived':
+                        break;
+                    case 'hidden':
+                        break;
+                }
+            });
+        </script>
+    </div>
     {{#isAdmin}}
         <button id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add publication</button>
     {{/isAdmin}}
 </div>
 
-<section id="publications" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
+<section id="publications-container" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
         <div
             data-id="{{id}}"
@@ -73,7 +114,7 @@
     document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
-        const response = await fetch(`/api/publication/insert?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
+        const response = await fetch(`/api/publication?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
         if(!response.ok) { alert('failed to add publication'); return; }
         location.reload(true);
     });
@@ -108,7 +149,7 @@
     document.getElementById('update-publication-title-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
         const newPublicationTitle = document.querySelector('input[name="update-publication-title-dialog-input"]').value;
-        const response = await fetch(`/api/publication/${currentId}/update-title?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/${currentId}?title=${encodeURIComponent(newPublicationTitle)}`, { method: 'PUT' });
         if(!response.ok) { alert('failed to update publication title'); return; }
         location.reload(true);
     });
@@ -134,11 +175,20 @@
     });
     document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
     document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/${currentId}?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide publication'); return; }
         document.querySelector(`div[data-id="${currentId}"]`).remove();
         hidePublicationDialog.close();
     });
 </script>
+<style>
+    select {
+        width: 100%;
+        font-size: 1rem;
+        background: inherit;
+        border: 1.2px solid var(--light-gray);
+        border-radius: 0.3rem;
+    }
+</style>
 </body>
 </html>

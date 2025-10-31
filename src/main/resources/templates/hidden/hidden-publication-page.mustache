@@ -63,10 +63,10 @@
     document.getElementById('dialog-negative').addEventListener('click', () => dialog.close());
     document.getElementById('dialog-positive').addEventListener('click', async () => {
         if(currentType == 'delete-button') {
-            const response = await fetch(`/api/publication/${currentId}/delete`, { method: 'DELETE' });
+            const response = await fetch(`/api/publication/${currentId}`, { method: 'DELETE' });
             if(!response.ok) { alert('failed to permanently delete publication'); return; }
         } else {
-            const response = await fetch(`/api/publication/${currentId}/update-hidden?isHidden=false`, { method: 'PUT' });
+            const response = await fetch(`/api/publication/${currentId}?isHidden=false`, { method: 'PUT' });
             if(!response.ok) { alert('failed to restore publication'); return; }
         }
         document.querySelector(`div[id="${currentId}"]`).remove();

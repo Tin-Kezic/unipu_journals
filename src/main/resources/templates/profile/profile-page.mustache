@@ -173,7 +173,7 @@
     });
     document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
     document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-hidden?isHidden=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert('failed to hide Manuscript'); return; }
         document.querySelector(`article[data-id="${currentId}"]`).remove();
         hideManuscriptDialog.close();
