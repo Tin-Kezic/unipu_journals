@@ -36,14 +36,13 @@ class AccountController(
         zipCode = Jsoup.clean(this.zipCode, Safelist.none())
     )
     @PostMapping
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         var error = ""
         if (accountRepository.existsByEmail(account.email)) error += "email taken"
         if (account.password != account.passwordConfirmation) error += " and password mismatch"
         if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
         val rowsInserted = accountRepository.insert(account.clean())
-        if(rowsInserted > 0) return ResponseEntity.ok("successfully registered account: $account")
+        if(rowsInserted == 1) return ResponseEntity.ok("successfully registered account: $account")
         return ResponseEntity.internalServerError().body("failed to register account: $account")
     }
     @PutMapping
