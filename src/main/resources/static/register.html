@@ -73,19 +73,30 @@
 </body>
 <script>
     const form = document.getElementById('register-form');
-    form.addEventListener('submit', async () => {
-        const formData = new FormData(form);
-        const response = await fetch(`/api/account`, { method: 'POST', body: formData });
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const response = await fetch(`/api/account`, {
+            method: 'POST',
+            body: new URLSearchParams({
+                fullName: form.fullName.value,
+                title: form.title.value,
+                email: form.email.value,
+                password: form.password.value,
+                passwordConfirmation: form.passwordConfirmation.value,
+                affiliation: form.affiliation.value,
+                jobType: form.jobType.value,
+                country: form.country.value,
+                city: form.city.value,
+                address: form.address.value,
+                zipCode: form.zipCode.value
+            })
+        });
         if(!response.ok) {
             const error = await response.text();
-            if(error.includes('password-mismatch')) {
-                document.getElementById('password-mismatch').style.display = 'inline-block';
-                document.getElementById('password').focus()
-            }
-            if(error.includes('email-taken')) {
-                document.getElementById('email-taken').style.display = 'inline-block';
-                document.getElementById('email').focus()
-            }
+            document.getElementById('password-mismatch').style.display = error.includes('password mismatch') ? 'inline-block' : 'none';
+            document.getElementById('email-taken').style.display = error.includes('email taken') ? 'inline-block': 'none';
+            if(error.includes('password mismatch')) { document.getElementById('password').focus() }
+            else if(error.includes('email taken')) { document.getElementById('email').focus() }
             return;
         }
         window.location.href = '/login.html';
