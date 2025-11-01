@@ -30,9 +30,7 @@ class RootPageController(
         return "root-page"
     }
     @PutMapping("/update-password")
-    fun updatePassword(@RequestBody body: Map<String, String>): ResponseEntity<String> {
-        val password = body["password"]
-        val passwordConfirmation = body["passwordConfirmation"]
+    fun updatePassword(@RequestParam password: String, @RequestParam passwordConfirmation: String): ResponseEntity<String> {
         if(password != passwordConfirmation) return ResponseEntity.badRequest().body("password-mismatch")
         val rowsAffected = accountRepository.updateRootPassword(passwordEncoder.encode(password))
         return if(rowsAffected == 1) ResponseEntity.ok("successfully updated password")

@@ -111,8 +111,7 @@
 
         const response = await fetch('/root/update-password', {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            body: new URLSearchParams({
                 password: updatePasswordForm.password.value,
                 passwordConfirmation: updatePasswordForm.passwordConfirmation.value
             })
