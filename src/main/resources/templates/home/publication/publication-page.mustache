@@ -30,23 +30,27 @@
         {{/isAuthenticated}}
         <select name="publication-type">
             <option value="PUBLIC">Public</option>
-            <option value="archived">Archived</option>
-            {{#isAdmin}}<option value="hidden">Hidden</option>{{/isAdmin}}
+            <option value="CONTAINS_ARCHIVED_MANUSCRIPTS">Archived</option>
+            {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
         </select>
         <script>
             publicationTypeSelect = document.querySelector('select[name="publication-type"]');
+            affiliationSelect = document.querySelector('select[name="affiliation"]');
             publicationTypeSelect.addEventListener('change', async () => {
-                const response = await fetch(`/api/publication/${publicationTypeSelect.value}`);
+                const response = await fetch(`/api/publication?publicationType=${publicationTypeSelect.value}&affiliation=${affiliationSelect.value}`, { method: 'GET' });
                 if(!response.ok) { alert(await response.text()); return; }
                 const responsePublications = await response.json();
                 const publicationsContainer = document.getElementById('publications-container');
                 publicationsContainer.innerHTML = '';
                 switch(publicationTypeSelect.value) {
-                    case 'published':
+                    case 'PUBLIC':
+                        publicationsContainer.innerHTML = 'PUBLISHED';
                         break;
-                    case 'archived':
+                    case 'CONTAINS_ARCHIVED_MANUSCRIPTS':
+                        publicationsContainer.innerHTML = 'ARCHIVED';
                         break;
-                    case 'hidden':
+                    case 'HIDDEN':
+                        publicationsContainer.innerHTML = 'HIDDEN';
                         break;
                 }
             });
