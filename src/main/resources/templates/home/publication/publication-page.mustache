@@ -24,12 +24,13 @@
             <option value="Reviewer">Reviewer</option>
             <option value="Corresponding author">Corresponding Author</option>
             <option value="Author">Author</option>
+        <select name="affiliation">
         </select>
         <script>
             const affiliation
         </script>
         {{/isAuthenticated}}
-        <select name="publication-type" class="dropdown">
+        <select name="publication-type">
             <option value="PUBLIC">Public</option>
             <option value="archived">Archived</option>
             {{#isAdmin}}<option value="hidden">Hidden</option>{{/isAdmin}}
