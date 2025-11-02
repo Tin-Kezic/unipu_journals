@@ -16,11 +16,32 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN publication_section ON publication.id = publication_section.publication_id
         LEFT JOIN manuscript ON publication_section.id = manuscript.section_id
         LEFT JOIN category ON manuscript.category_id = category.id
+        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (manuscript.current_state = :manuscript_state OR :manuscript_state IS NULL)
         AND (account_role_on_manuscript.account_id = :account_id OR :account_id IS NULL)
-        AND (account_role_on_manuscript.account_role = :affiliation OR :affiliation IS NULL)
         AND (category.name = :category OR :category IS NULL)
+        AND (
+            :affiliation IS NULL
+            OR (
+                :affiliation = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
+                OR
+                :affiliation = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
+                OR
+                account_role_on_manuscript.account_id = :account_id AND (
+                    :affiliation = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                    OR
+                    :affiliation = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    OR
+                    :affiliation = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
+                    OR
+                    :affiliation = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
+                    OR
+                    :affiliation = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                )
+            )
+        )
         AND (
             :publication_type = 'HIDDEN' AND (
                 publication.is_hidden = TRUE
@@ -56,7 +77,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         @Param("affiliation") affiliation: Affiliation? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("manuscript_state") manuscriptState: ManuscriptState? = null,
-        @Param("category") category: Category? = null
+        @Param("category") category: String? = null
     ): List<Publication>
 
     @Modifying
