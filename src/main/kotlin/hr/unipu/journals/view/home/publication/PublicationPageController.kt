@@ -12,13 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class PublicationPageController(
     private val publicationRepository: PublicationRepository,
-    private val authorizationService: AuthorizationService
+    private val authorizationService: AuthorizationService,
+    private val categoryRepository: CategoryRepository
 ) {
     @GetMapping("/")
     fun page(model: Model): String {
         val isAdmin = authorizationService.isAdmin
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
+        model["categories"] = categoryRepository.all()
         model["publications"] = publicationRepository.all(PublicationType.PUBLIC).map { publication ->
             ContainerDTO(
                 id = publication.id,
