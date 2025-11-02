@@ -15,16 +15,15 @@
             publications
         </h1>
         {{#isAuthenticated}}
-        <select name="affiliation" class="dropdown">
-            <option value="NONE">All</option>
-            <option value="EiC on publication">EiC on publication</option>
-            <option value="section editor">Section editor</option>
-            <option value="EiC on manuscript">EiC on manuscript</option>
-            <option value="Editor">Editor on manuscript</option>
-            <option value="Reviewer">Reviewer</option>
-            <option value="Corresponding author">Corresponding Author</option>
-            <option value="Author">Author</option>
         <select name="affiliation">
+            <option value="">All</option>
+            <option value="EIC_ON_PUBLICATION">EiC on publication</option>
+            <option value="SECTION_EDITOR">Section editor</option>
+            <option value="EIC_ON_MANUSCRIPT">EiC on manuscript</option>
+            <option value="EDITOR">Editor on manuscript</option>
+            <option value="REVIEWER">Reviewer</option>
+            <option value="CORRESPONDING_AUTHOR">Corresponding Author</option>
+            <option value="AUTHOR">Author</option>
         </select>
         <script>
             const affiliation
