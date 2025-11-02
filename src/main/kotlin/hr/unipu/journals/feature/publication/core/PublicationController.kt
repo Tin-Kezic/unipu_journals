@@ -2,6 +2,7 @@ package hr.unipu.journals.feature.publication.core
 
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscript
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
+import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
@@ -28,16 +29,25 @@ class PublicationController(
     @GetMapping
     fun publications(
         @RequestParam publicationType: PublicationType,
-        @RequestParam affiliation: ManuscriptRole
+        @RequestParam affiliation: Affiliation?,
+        @RequestParam manuscriptState: ManuscriptState?,
+        @RequestParam category: String?
     ): List<ContainerDTO> {
+        require(affiliation == null || authorizationService.isAuthenticated) // A -> B
+        require(publicationType != PublicationType.CONTAINS_PENDING_MANUSCRIPTS || authorizationService.isAuthenticated) // A -> B
         val isAdmin = authorizationService.isAdmin
-        return publicationRepository.all(PublicationType.PUBLIC).map { publication ->
-            val isEicOrSuperior = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+        return publicationRepository.all(
+            publicationType = publicationType,
+            affiliation = affiliation,
+            accountId = authorizationService.account?.id,
+            manuscriptState = manuscriptState,
+            category = category
+        ).map { publication ->
             ContainerDTO(
                 id = publication.id,
                 title = publication.title,
                 canHide = isAdmin,
-                canEdit = isEicOrSuperior,
+                canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
             )
         }
     }
