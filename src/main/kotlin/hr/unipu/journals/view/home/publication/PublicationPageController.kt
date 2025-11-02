@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.home.publication
 
+import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.security.AuthorizationService
