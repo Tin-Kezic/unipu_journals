@@ -96,7 +96,7 @@
                             <p style="margin-block: 0.5rem;">{{publicationDate}}</p>
                             <p style="margin-top: 0.2rem;">{{description}}</p>
                         </div>
-                        <footer class="yellow-box-buttons">
+                        <footer class="container-buttons">
                             {{#isAdmin}}
                                 <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
                                 <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
@@ -273,7 +273,7 @@
         .m3-button.purple-button {
             text-wrap: wrap !important;
         }
-        .yellow-box-buttons {
+        .container-buttons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;

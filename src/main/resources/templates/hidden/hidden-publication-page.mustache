@@ -19,12 +19,12 @@
     {{#publications}}
         <div
             id="{{id}}"
-            class="yellow-box"
+            class="container"
             onclick="window.location = '/hidden/publication/{{id}}'"
             style="text-decoration: none; color: black; cursor: pointer;"
         >
-            <p class="yellow-box-text">{{title}}</p>
-            <div class="yellow-box-buttons">
+            <p class="container-text">{{title}}</p>
+            <div class="container-buttons">
                 <button id="{{id}}" data-title="{{title}}" data-type="delete-button" onclick="event.stopPropagation()" class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
                 <button id="{{id}}" data-title="{{title}}" data-type="restore-button" onclick="event.stopPropagation()" class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
             </div>

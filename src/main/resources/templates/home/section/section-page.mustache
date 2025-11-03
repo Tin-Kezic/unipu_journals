@@ -46,12 +46,12 @@
             {{#sections}}
                 <div
                     data-id="{{id}}"
-                    class="yellow-box"
+                    class="container"
                     style="cursor: pointer;"
                     onclick="window.location = '/publication/{{publicationId}}/section/{{id}}'"
                 >
-                    <p class="yellow-box-text">{{title}}</p>
-                    <div class="yellow-box-buttons">
+                    <p class="container-text">{{title}}</p>
+                    <div class="container-buttons">
                         {{#canHide}}
                             <button
                                 onclick="event.stopPropagation()"

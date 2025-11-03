@@ -33,8 +33,8 @@
         min-width: 0;
         overflow: hidden;
     ">
-        <article class="yellow-box" style="width: auto; height: auto; max-width: 100%;">
-            <p class="yellow-box-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
+        <article class="container" style="width: auto; height: auto; max-width: 100%;">
+            <p class="container-text">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
 
             <div class="authors" style="display: flex; flex-wrap: wrap;">
                 <button>Rashmi Kariganuru Bheemarao1</button>
@@ -44,7 +44,7 @@
 
             <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem; user-select: none;">Published: 9 June 2025</p>
             <p style="font-weight: 100; font-size: 0.8rem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-            <footer class="yellow-box-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
+            <footer class="container-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
                 <button class="m3-button red-button" style="font-size: 0.8rem; width: fit-content; box-shadow: none; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem;">Delete permanently</button>
                 <button class="m3-button outline-button" style="font-size: 0.8rem; width: fit-content; text-wrap: nowrap; padding: 0.5rem; border-radius: 1rem; background-color: white;">Restore</button>
             </footer>
@@ -78,14 +78,14 @@
 </body>
 
 <style>
-    .yellow-box-buttons {
+    .container-buttons {
         display: flex;
         gap: 0.5rem;
         margin-left: 1rem;
         margin-top: 0.5rem;
     }
 
-    .yellow-box-buttons button {
+    .container-buttons button {
         font-size: clamp(0.7rem, 1.2vw, 0.9rem);
         padding: clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem);
         border-radius: clamp(8px, 2vw, 10rem);
@@ -96,32 +96,32 @@
     }
 
     @media (max-width: 768px) {
-        .yellow-box {
+        .container {
             padding: 1rem !important;
             margin: 0 !important;
         }
 
-        .yellow-box-text {
+        .container-text {
             font-size: 0.9rem !important;
         }
 
-        .yellow-box-buttons {
+        .container-buttons {
             margin-left: 0.5rem;
             gap: 0.4rem;
         }
 
-        .yellow-box-buttons button {
+        .container-buttons button {
             font-size: clamp(0.6rem, 1.8vw, 0.8rem) !important;
             padding: clamp(0.25rem, 0.6vw, 0.4rem) clamp(0.5rem, 1.2vw, 0.8rem) !important;
         }
     }
 
     @media (max-width: 480px) {
-        .yellow-box {
+        .container {
             padding: 0.8rem !important;
         }
 
-        .yellow-box-text {
+        .container-text {
             font-size: 0.8rem !important;
         }
 
@@ -134,7 +134,7 @@
             flex-direction: column;
         }
 
-        .yellow-box-buttons {
+        .container-buttons {
             display: flex;
             flex-direction: column !important;
             gap: 0.3rem;
@@ -142,7 +142,7 @@
             margin-top: 0.3rem;
         }
 
-        .yellow-box-buttons button {
+        .container-buttons button {
             font-size: clamp(0.5rem, 2.5vw, 0.7rem) !important;
             padding: clamp(0.2rem, 0.5vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem) !important;
             width: 100% !important;
