@@ -306,7 +306,7 @@ dialog {
     left: 0.23rem;
     bottom: 0.12rem;
 }
-.yellow-box {
+.container {
     width: 14rem;
     height: 7rem;
     background-color: white;
@@ -321,21 +321,21 @@ dialog {
     flex-direction: column;
     cursor: pointer;
 }
-.yellow-box:hover {
+.container:hover {
     box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .no-hover:hover {
     background-color: white;
     box-shadow: none;
 }
-.yellow-box-buttons {
+.container-buttons {
     margin: auto 0.4rem 0.4rem auto;
     align-self: flex-end;
     display: flex;
     gap: 0.5rem;
     user-select: none;
 }
-.yellow-box-buttons .m3-button {
+.container-buttons .m3-button {
     padding: 0.4rem 0.6rem;
     width: 3rem;
     border-radius: 0.3rem;
