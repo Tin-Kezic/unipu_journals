@@ -14,37 +14,64 @@
         <h1 style="font-size: 1.5rem; font-weight: 400;">
             publications
         </h1>
-        {{#isAuthenticated}}
-        <select name="affiliation">
-            <option value="">All</option>
-            <option value="EIC_ON_PUBLICATION">EiC on publication</option>
-            <option value="SECTION_EDITOR">Section editor</option>
-            <option value="EIC_ON_MANUSCRIPT">EiC on manuscript</option>
-            <option value="EDITOR">Editor on manuscript</option>
-            <option value="REVIEWER">Reviewer</option>
-            <option value="CORRESPONDING_AUTHOR">Corresponding Author</option>
-            <option value="AUTHOR">Author</option>
-        </select>
-        <script>
-        </script>
-        {{/isAuthenticated}}
-        <select name="publication-type">
-            <option value="PUBLIC">Public</option>
-            <option value="CONTAINS_ARCHIVED_MANUSCRIPTS">Archived</option>
-            {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
-        </select>
+        <div>
+            <select aria-label="publication type" name="publication-type">
+                <option value="PUBLIC">Public</option>
+                <option value="CONTAINS_ARCHIVED_MANUSCRIPTS">Archived</option>
+                {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
+            </select>
+            {{#isAuthenticated}}
+            <select aria-label="affiliation" name="affiliation">
+                <option value="">Regardless of affiliation</option>
+                <option value="EIC_ON_PUBLICATION">EiC on publication</option>
+                <option value="SECTION_EDITOR">Section editor</option>
+                <option value="EIC_ON_MANUSCRIPT">EiC on manuscript</option>
+                <option value="EDITOR">Editor on manuscript</option>
+                <option value="REVIEWER">Reviewer</option>
+                <option value="CORRESPONDING_AUTHOR">Corresponding Author</option>
+                <option value="AUTHOR">Author</option>
+            </select>
+            <select aria-label="manuscript state" name="manuscript-state">
+                <option value="">All manuscript states</option>
+                <option value="AWAITING_EIC_REVIEW">Awaiting EiC review</option>
+                <option value="AWAITING_EDITOR_REVIEW">Awaiting Editor review</option>
+                <option value="AWAITING_REVIEWER_REVIEW">Awaiting reviewer review</option>
+                <option value="MINOR">Minor</option>
+                <option value="MAJOR">Major</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="PUBLISHED">Published</option>
+                <option value="HIDDEN">Hidden</option>
+                <option value="ARCHIVED">Archived</option>
+            </select>
+            {{/isAuthenticated}}
+            <select aria-label="category" name="category">
+                <option value="">All categories</option>
+                {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
+            </select>
+        </div>
         <script>
             publicationTypeSelect = document.querySelector('select[name="publication-type"]');
             affiliationSelect = document.querySelector('select[name="affiliation"]');
-            publicationTypeSelect.addEventListener('change', async () => {
-                const response = await fetch(`/api/publication?publicationType=${publicationTypeSelect.value}&affiliation=${affiliationSelect.value}`, { method: 'GET' });
+            manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]')
+            categorySelect = document.querySelector('select[name="category"]');
+            [publicationTypeSelect, affiliationSelect, manuscriptStateSelect, categorySelect].forEach(select => select.addEventListener('change', async () => {
+                const uri = encodeURI(`/api/publication?publicationType=${publicationTypeSelect.value}&affiliation=${affiliationSelect.value}&category=${categorySelect.value}`);
+                const response = await fetch(uri, { method: 'GET' });
                 if(!response.ok) { alert(await response.text()); return; }
                 const responsePublications = await response.json();
                 const publicationsContainer = document.getElementById('publications-container');
                 publicationsContainer.innerHTML = '';
                 switch(publicationTypeSelect.value) {
                     case 'PUBLIC':
-                        publicationsContainer.innerHTML = 'PUBLISHED';
+                        responsePublications.forEach(containerDTO => {
+                            const newPublication = document.createElement('div');
+                            newPublication.dataset.id = containerDTO.id;
+                            newPublication.className = 'container';
+                            newPublication.style.cursor = 'pointer';
+                            newPublication.onclick = displaySections(containerDTO.id);
+                            newPublication.innerHTML = `PUB: ${containerDTO.id}`;
+                            publicationsContainer.appendChild(newPublication);
+                        });
                         break;
                     case 'CONTAINS_ARCHIVED_MANUSCRIPTS':
                         publicationsContainer.innerHTML = 'ARCHIVED';
@@ -53,11 +80,14 @@
                         publicationsContainer.innerHTML = 'HIDDEN';
                         break;
                 }
-            });
+            }));
+            function displaySections(publicationId) {
+
+            }
+            function displayManuscripts(publicationId, sectionId) {
+
+            }
         </script>
-        <select name="category">
-            {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
-        </select>
     </div>
     {{#isAdmin}}
         <button id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none;">+ Add publication</button>
@@ -68,12 +98,12 @@
     {{#publications}}
         <div
             data-id="{{id}}"
-            class="yellow-box"
+            class="container"
             style="cursor: pointer;"
             onclick="window.location = '/publication/{{id}}'
         ">
-            <p class="yellow-box-text" data-id="{{id}}">{{title}}</p>
-            <div class="yellow-box-buttons">
+            <p class="container-text" data-id="{{id}}">{{title}}</p>
+            <div class="container-buttons">
                 {{#canHide}}
                     <button
                         onclick="event.stopPropagation()"
@@ -104,7 +134,7 @@
     <form id="insert-publication-dialog-form">
         <div class="text-field">
             <label>title</label>
-            <input type="text" name="insert-publication-dialog-input">
+            <input aria-label="publication title" type="text" name="insert-publication-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between">
             <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
@@ -131,7 +161,7 @@
     <form id="update-publication-title-dialog-form">
         <div class="text-field">
             <label>title</label>
-            <input type="text" name="update-publication-title-dialog-input">
+            <input aria-label="publication title" type="text" name="update-publication-title-dialog-input">
         </div>
         <div style="display: flex; justify-content: space-between">
             <button id="update-publication-title-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
@@ -188,7 +218,6 @@
 </script>
 <style>
     select {
-        width: 100%;
         font-size: 1rem;
         background: inherit;
         border: 1.2px solid var(--light-gray);
