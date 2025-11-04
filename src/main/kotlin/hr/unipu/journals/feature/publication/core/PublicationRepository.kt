@@ -20,7 +20,6 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (manuscript.current_state = :manuscript_state OR :manuscript_state IS NULL)
-        AND (account_role_on_manuscript.account_id = :account_id OR :account_id IS NULL)
         AND (category.name = :category OR :category IS NULL)
         AND (
             :affiliation IS NULL
@@ -54,6 +53,7 @@ interface PublicationRepository: Repository<Publication, Int> {
                 OR
                 publication_section.is_hidden = FALSE AND (
                     :publication_type = 'CONTAINS_ARCHIVED_MANUSCRIPTS'
+                    AND account_role_on_manuscript.account_id = :account_id
                     AND manuscript.current_state = 'ARCHIVED'
                     OR
                     :publication_type = 'CONTAINS_PENDING_MANUSCRIPTS'
