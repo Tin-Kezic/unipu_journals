@@ -55,8 +55,14 @@
             manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]')
             categorySelect = document.querySelector('select[name="category"]');
             [publicationTypeSelect, affiliationSelect, manuscriptStateSelect, categorySelect].forEach(select => select.addEventListener('change', async () => {
-                const uri = encodeURI(`/api/publication?publicationType=${publicationTypeSelect.value}&affiliation=${affiliationSelect.value}&category=${categorySelect.value}`);
-                const response = await fetch(uri, { method: 'GET' });
+                const params = new URLSearchParams({
+                    publicationType: publicationTypeSelect.value,
+                    affiliation: affiliationSelect.value,
+                    manuscriptState: manuscriptStateSelect.value,
+                });
+                // category is added separately because it's of type string and gets converted to '' instead of null like the other params which are enumerations
+                if(categorySelect.value) params.set('category', categorySelect.value);
+                const response = await fetch(`/api/publication?${params}`, { method: 'GET' });
                 if(!response.ok) { alert(await response.text()); return; }
                 const responsePublications = await response.json();
                 const publicationsContainer = document.getElementById('publications-container');
