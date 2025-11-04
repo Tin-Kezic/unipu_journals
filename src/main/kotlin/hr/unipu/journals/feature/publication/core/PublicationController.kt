@@ -42,14 +42,12 @@ class PublicationController(
             accountId = authorizationService.account?.id,
             manuscriptState = manuscriptState,
             category = category
-        ).map { publication ->
-            ContainerDTO(
-                id = publication.id,
-                title = publication.title,
-                canHide = isAdmin,
-                canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
-            )
-        }
+        ).map { publication -> ContainerDTO(
+            id = publication.id,
+            title = publication.title,
+            canHide = isAdmin,
+            canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+        )}
     }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
