@@ -29,8 +29,8 @@ INSERT INTO account (full_name, title, email, password, affiliation, job_type, c
 ('new section editor', 'Mr.NSE', 'new.section.editor@unipu.hr', 'new_section_editor_password', 'new section editor Affiliation', 'new section editor job type', 'new section editor country', 'new section editor city', 'new section editor address', 'new section editor zip code', false),
 ('revoke section editor', 'Mr.NSE', 'revoke.section.editor@unipu.hr', 'revoke_section_editor_password', 'revoke section editor Affiliation', 'revoke section editor job type', 'revoke section editor country', 'revoke section editor city', 'revoke section editor address', 'revoke section editor zip code', false);
 INSERT INTO invite (email, target, target_id) VALUES
-('invited.admin1@unipu.hr', 'ADMIN', NULL),
-('invited.admin2@unipu.hr', 'ADMIN', NULL),
+('invited.admin1@unipu.hr', 'ADMIN', 0),
+('invited.admin2@unipu.hr', 'ADMIN', 0),
 ('invited.eic.on.publication1@unipu.hr', 'EIC_ON_PUBLICATION', 1),
 ('invited.eic.on.publication2@unipu.hr', 'EIC_ON_PUBLICATION', 2),
 ('invited.eic.on.publication3@unipu.hr', 'EIC_ON_PUBLICATION', 3),
