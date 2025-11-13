@@ -267,12 +267,6 @@ dialog {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-.sidebar-button input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
 .sidebar-button {
     display: flex;
     align-items: center;
