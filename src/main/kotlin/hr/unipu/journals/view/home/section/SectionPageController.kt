@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.home.section
 
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.feature.section.core.SectionRepository
@@ -22,7 +23,7 @@ class SectionPageController(
     fun page(@PathVariable publicationId: Int, model: Model): String {
         if(publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         val isAdmin = authorizationService.isAdmin
-        model["publicationsSidebar"] = publicationRepository.all(PublicationType.PUBLIC)
+        model["publicationsSidebar"] = publicationRepository.all(ManuscriptStateFilter.PUBLISHED)
         model["isAdmin"] = isAdmin
         model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)

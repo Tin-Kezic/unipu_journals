@@ -1,8 +1,6 @@
 package hr.unipu.journals.feature.publication.core
 
-import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscript
-import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
-import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
@@ -28,20 +26,21 @@ class PublicationController(
 ) {
     @GetMapping
     fun publications(
-        @RequestParam publicationType: PublicationType,
+        @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam affiliation: Affiliation?,
-        @RequestParam manuscriptState: ManuscriptState?,
-        @RequestParam category: String?
+        @RequestParam category: String?,
+        @RequestParam sorting: Sorting?
     ): List<ContainerDTO> {
         require(affiliation == null || authorizationService.isAuthenticated) // A -> B
-        require(publicationType != PublicationType.CONTAINS_PENDING_MANUSCRIPTS || authorizationService.isAuthenticated) // A -> B
+        require(manuscriptStateFilter != ManuscriptStateFilter.ALL_AWAITING_REVIEW || authorizationService.isAuthenticated) // A -> B
         val isAdmin = authorizationService.isAdmin
+        if(manuscriptStateFilter == ManuscriptStateFilter.HIDDEN) require(authorizationService.isAdmin)
         return publicationRepository.all(
-            publicationType = publicationType,
+            manuscriptStateFilter = manuscriptStateFilter,
             affiliation = affiliation,
             accountId = authorizationService.account?.id,
-            manuscriptState = manuscriptState,
-            category = category
+            category = category,
+            sorting = sorting
         ).map { publication -> ContainerDTO(
             id = publication.id,
             title = publication.title,

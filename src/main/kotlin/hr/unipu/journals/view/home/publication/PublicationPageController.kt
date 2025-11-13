@@ -1,6 +1,7 @@
 package hr.unipu.journals.view.home.publication
 
 import hr.unipu.journals.feature.manuscript.category.CategoryRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.security.AuthorizationService
@@ -22,7 +23,7 @@ class PublicationPageController(
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
         model["categories"] = categoryRepository.all()
-        model["publications"] = publicationRepository.all(PublicationType.PUBLIC).map { publication ->
+        model["publications"] = publicationRepository.all(ManuscriptStateFilter.PUBLISHED).map { publication ->
             ContainerDTO(
                 id = publication.id,
                 title = publication.title,

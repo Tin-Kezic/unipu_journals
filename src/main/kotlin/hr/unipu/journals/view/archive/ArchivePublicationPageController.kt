@@ -1,7 +1,7 @@
 package hr.unipu.journals.view.archive
 
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
-import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -15,7 +15,7 @@ class ArchivePublicationPageController(
 ) {
     @GetMapping("/archive")
     fun page(model: Model): String {
-        model["publications"] = publicationRepository.all(PublicationType.CONTAINS_ARCHIVED_MANUSCRIPTS).map { publication ->
+        model["publications"] = publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW).map { publication ->
             ArchiveContainerDTO(
                 id = publication.id,
                 title = publication.title,

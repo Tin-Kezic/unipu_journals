@@ -1,7 +1,6 @@
 package hr.unipu.journals.feature.publication.core
 
-import hr.unipu.journals.feature.manuscript.category.Category
-import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -16,12 +15,54 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN publication_section ON publication.id = publication_section.publication_id
         LEFT JOIN manuscript ON publication_section.id = manuscript.section_id
         LEFT JOIN category ON manuscript.category_id = category.id
-        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
-        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id
+        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE (manuscript.current_state = :manuscript_state OR :manuscript_state IS NULL)
-        AND (category.name = :category OR :category IS NULL)
+        WHERE (category.name = :category OR :category IS NULL)
         AND (
+            :manuscript_state_filter = 'HIDDEN' AND (
+                publication.is_hidden = TRUE
+                OR publication_section.is_hidden = TRUE
+                OR manuscript.current_state = 'HIDDEN'
+            )
+            OR publication.is_hidden = FALSE AND (
+                :manuscript_state_filter = 'PUBLISHED'
+                OR
+                publication_section.is_hidden = FALSE AND (
+                    :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
+                    OR
+                    account_role_on_manuscript.account_id = :account_id AND (
+                        :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
+                        OR
+                        :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
+                            account_role_on_manuscript.account_role = 'EIC'
+                            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                            OR
+                            account_role_on_manuscript.account_role = 'EDITOR'
+                            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                            OR
+                            account_role_on_manuscript.account_role = 'REVIEWER'
+                            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                        )
+                        OR
+                        :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_EIC_REVIEW'
+                            AND account_role_on_manuscript.account_role = 'EIC'
+                        )
+                        OR
+                        :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
+                            AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                        )
+                        OR
+                        :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                            AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                        )
+                    )
+                )
+            )
+        ) AND (
             :affiliation IS NULL
             OR (
                 :affiliation = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
@@ -41,43 +82,14 @@ interface PublicationRepository: Repository<Publication, Int> {
                 )
             )
         )
-        AND (
-            :publication_type = 'HIDDEN' AND (
-                publication.is_hidden = TRUE
-                OR publication_section.is_hidden = TRUE
-                OR manuscript.current_state = 'HIDDEN'
-            )
-            OR
-            publication.is_hidden = FALSE AND (
-                :publication_type = 'PUBLIC'
-                OR
-                publication_section.is_hidden = FALSE AND (
-                    :publication_type = 'CONTAINS_ARCHIVED_MANUSCRIPTS'
-                    AND account_role_on_manuscript.account_id = :account_id
-                    AND manuscript.current_state = 'ARCHIVED'
-                    OR
-                    :publication_type = 'CONTAINS_PENDING_MANUSCRIPTS'
-                    AND (
-                        account_role_on_manuscript.account_role = 'EIC'
-                        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-                        OR
-                        account_role_on_manuscript.account_role = 'EDITOR'
-                        AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-                        OR
-                        account_role_on_manuscript.account_role = 'REVIEWER'
-                        AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-                    )
-                )
-            )
-        )
         ORDER BY publication.title
     """)
     fun all(
-        @Param("publication_type") publicationType: PublicationType,
+        @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("affiliation") affiliation: Affiliation? = null,
         @Param("account_id") accountId: Int? = null,
-        @Param("manuscript_state") manuscriptState: ManuscriptState? = null,
-        @Param("category") category: String? = null
+        @Param("category") category: String? = null,
+        @Param("sorting") sorting: Sorting? = null
     ): List<Publication>
 
     @Modifying

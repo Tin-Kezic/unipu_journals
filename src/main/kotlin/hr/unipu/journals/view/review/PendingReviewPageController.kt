@@ -4,8 +4,8 @@ import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRo
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.core.Manuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
-import hr.unipu.journals.feature.publication.core.PublicationType
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
@@ -40,7 +40,7 @@ class PendingReviewPageController(
     fun page(@RequestParam publicationId: Int?, model: Model): String {
         authorizationService.account?.let { account ->
             model["publicationsSidebar"] =
-                publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = account.id) +
+                publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = account.id) +
                 inviteRepository.allPublicationsContainingPendingManuscripts(account.email)
             model["invited"] = inviteRepository.affiliatedManuscripts(account.email, publicationId).toManuscriptDTO()
             model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()

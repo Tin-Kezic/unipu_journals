@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.publication.core
 
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -19,9 +20,34 @@ class PublicationRepositoryTests {
             Publication(2, "Nature of Biology", false),
             Publication(3, "Physics Letters", false),
         )
-        assertEquals(publications, publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 25))
-        assertEquals(publications.takeLast(2), publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 26))
-        assertEquals(publications.takeLast(1), publicationRepository.all(PublicationType.CONTAINS_PENDING_MANUSCRIPTS, accountId = 27))
+        assertEquals(publications, publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 25))
+        assertEquals(publications.takeLast(2), publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 26))
+        assertEquals(publications.takeLast(1), publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 27))
+    }
+    @Test fun `retrieve all public publications with manuscript state`() {
+        assertEquals(
+            listOf(Publication(1, "Journal of AI Research", false)),
+            publicationRepository.all(ManuscriptStateFilter.ARCHIVED)
+        )
+    }
+    @Test fun `retrieve all public publications with category`() {
+        assertEquals(
+            listOf(
+                Publication(1, "Journal of AI Research", false),
+                Publication(2, "Nature of Biology", false),
+            ),
+            publicationRepository.all(ManuscriptStateFilter.PUBLISHED, category = "Computer Science")
+        )
+    }
+    @Test fun `retrieve all public publications with affiliation`() {
+        assertEquals(
+            listOf(Publication(1, "Journal of AI Research", false), Publication(3, "Physics Letters", false)),
+            publicationRepository.all(ManuscriptStateFilter.PUBLISHED, Affiliation.EIC_ON_PUBLICATION, 7)
+        )
+        assertEquals(
+            listOf(Publication(2, "Nature of Biology", false)),
+            publicationRepository.all(ManuscriptStateFilter.AWAITING_EDITOR_REVIEW, Affiliation.EDITOR, 14)
+        )
     }
     @Test fun `retrieve publication title by publication id`() {
         assertEquals("Journal of AI Research", publicationRepository.title(1))
@@ -34,7 +60,7 @@ class PublicationRepositoryTests {
                 Publication(3, "Physics Letters", false),
                 Publication(6, "Published empty publication", false),
             ),
-            publicationRepository.all(PublicationType.PUBLIC)
+            publicationRepository.all(ManuscriptStateFilter.PUBLISHED)
         )
     }
     @Test fun `retrieve all publications that are hidden or contain hidden sections or hidden manuscripts`() {
@@ -46,13 +72,13 @@ class PublicationRepositoryTests {
                 Publication(4, "first hidden publication", true),
                 Publication(5, "second hidden publication", true),
             ),
-            publicationRepository.all(PublicationType.HIDDEN)
+            publicationRepository.all(ManuscriptStateFilter.HIDDEN)
         )
     }
     @Test fun `retrieve all publications containing archived manuscripts`() {
         assertEquals(
             listOf(Publication(1, "Journal of AI Research", false)),
-            publicationRepository.all(PublicationType.CONTAINS_ARCHIVED_MANUSCRIPTS)
+            publicationRepository.all(ManuscriptStateFilter.ARCHIVED)
         )
     }
     @Test fun `insert publication`() {
