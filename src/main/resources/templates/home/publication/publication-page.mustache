@@ -43,9 +43,8 @@
         <option value="ALPHABETICAL_A_Z">Alphabetical (A-Z)</option>
         <option value="ALPHABETICAL_Z_A">Alphabetical (Z-A)</option>
         <option value="PUBLICATION_NEW">Newest publications</option>
-        <option value="PUBLICATION_OLD">Oldest publication</option>
-        <option value="VIEWS">Views</option>
-        <option value="DOWNLOADS">Downloads</option>
+        <option value="PUBLICATION_OLD">Oldest publications</option>
+        <option value="VIEWS">Most viewed</option>
     </select>
     <script>
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
@@ -152,7 +151,7 @@
         {{^isAdmin}}Publications{{/isAdmin}}
         <aside id="publications-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
             {{#publications}}
-                <div class="sidebar-button" data-type="publication" data-id="{{id}}">
+                <div class="sidebar-button" data-type="publication" data-id="{{id}}" style="display: flex; justify-content: space-between;">
                     <span style="overflow-wrap: break-word;
                         max-width: 
                         {{#isEicOnPublicationOrAdmin}} 80%; {{/isEicOnPublicationOrAdmin}}
@@ -173,7 +172,7 @@
     {{^isEicOnPublicationOrAdmin}}<legend id="sections-legend">Sections</legend>{{/isEicOnPublicationOrAdmin}}
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
         {{#publications}}
-            <div class="sidebar-button" data-type="section" data-id="{{id}}" style="font-size: small; padding: 0.5rem">
+            <div class="sidebar-button" data-type="section" data-id="{{id}}" style="display: flex; justify-content: space-between; font-size: small; padding: 0.5rem;">
                 <span style="
                     overflow-wrap: break-word;
                     max-width: 
@@ -185,6 +184,7 @@
         {{/publications}}
     </aside>
     </div>
+    <style>div:hover svg { fill: white; }</style>
 </main>
 <!--
     <div style="margin-left: 1rem; height: 100%;">

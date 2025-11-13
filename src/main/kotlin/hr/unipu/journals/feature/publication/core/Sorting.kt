@@ -5,6 +5,5 @@ enum class Sorting {
     ALPHABETICAL_Z_A,
     PUBLICATION_NEW,
     PUBLICATION_OLD,
-    VIEWS,
-    DOWNLOADS
+    VIEWS
 }
