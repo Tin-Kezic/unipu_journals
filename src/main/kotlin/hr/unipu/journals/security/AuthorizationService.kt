@@ -16,10 +16,10 @@ const val AUTHORIZATION_SERVICE_IS_ADMIN = "@authorizationService.isAdmin"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR = "@authorizationService.isEicOnPublicationOrSuperior(#publicationId)"
 const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@authorizationService.isSectionEditorOnSectionOrSuperior(#publicationId, #sectionId)"
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEicOnManuscript(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(#publicationId, #sectionId, #manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(#publicationId, #sectionId, #manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(#publicationId, #sectionId, #manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrAffiliatedSuperior(#publicationId, #sectionId, #manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
+const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_AUTHENTICATED = "isAuthenticated()"
 
 @Service
@@ -58,15 +58,15 @@ class AuthorizationService(
         accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.EDITOR, it, manuscriptId)
                 || isEicOnManuscript(manuscriptId)
     } ?: false
-    fun isReviewerOnManuscriptOrAffiliatedSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.id?.let {
+    fun isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {
         accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, it, manuscriptId)
                 || isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
     } ?: false
-    fun isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.id?.let {
+    fun isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {
         accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, it, manuscriptId)
                 || isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
     } ?: false
-    fun isAuthorOnManuscriptOrAffiliatedSuperior(publicationId: Int, sectionId: Int, manuscriptId: Int): Boolean = account?.id?.let {
+    fun isAuthorOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {
         accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.AUTHOR, it, manuscriptId)
                 || isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
     } ?: false
