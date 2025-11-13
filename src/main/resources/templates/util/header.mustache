@@ -40,6 +40,8 @@
     header {
         width: 100%;
         display: flex;
+        flex: 0 0 auto;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         padding: 1vh 3vw;
@@ -50,14 +52,64 @@
         top: 0;
         flex-wrap: wrap;
     }
-    @media (max-width: 1008px) {
-        .logo-button, .search-container, .m3-button.purple-outline-button {
-            order: 1;
-        }
-        nav {
-            order: 2;
-            flex:100%;
-            margin-top: 0.5rem;
-        }
+    .search-bar {
+        padding: 1vh 1vw;
+        padding-right: 2.25rem;
+        margin: 0 1vw;
+        border: none;
+        border-radius: 1rem;
+        background-color: white;
+        color: var(--gray);
+        font-size: 1rem;
+    }
+    .search-bar:focus {
+        outline: none;
+        box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.2);
+    }
+    .purple-outline-button {
+        color: white;
+        background-color: var(--purple);
+        border: 0.1rem solid white;
+        padding: 0.8rem 1rem;
+        box-shadow: none;
+        user-select: none;
+    }
+    .purple-outline-button:hover {
+        background-color: var(--purple);
+    }
+    .logo-button {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        max-height: 6vh;
+        color: white;
+        border: none;
+        cursor: pointer;
+        user-select: none;
+    }
+    nav ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+    nav ul li {
+        margin: 0 0.5rem;
+    container}
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-size: 1.1rem;
+        transition: all 0.3s ease-in-out;
+        max-height: 6vh;
+        flex-wrap: wrap;
+    }
+    nav ul li a:hover {
+        color: var(--yellow);
+    }
+    nav ul li a:active {
+        text-decoration: underline;
     }
 </style>

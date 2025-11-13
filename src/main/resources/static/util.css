@@ -19,65 +19,11 @@
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
 }
-body {
-    background-attachment: scroll;
-    background-size: cover;
-    background-position: center;
-}
-.logo-button {
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    max-height: 6vh;
-    color: white;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-}
-nav ul {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-}
-nav ul li {
-    margin: 0 0.5rem;
-}
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-size: 1.1rem;
-    transition: all 0.3s ease-in-out;
-    max-height: 6vh;
-    flex-wrap: wrap;
-}
-nav ul li a:hover {
-    color: var(--yellow);
-}
-nav ul li a:active {
-    text-decoration: underline;
-}
 dialog {
     left: 0; right: 0; top: 0; bottom: 0;
     margin: auto; position: fixed;
     padding: 1.5rem;
     border: none; border-radius: 0.5rem;
-}
-.search-bar {
-    padding: 1vh 1vw;
-    padding-right: 2.25rem;
-    margin: 0 1vw;
-    border: none;
-    border-radius: 1rem;
-    background-color: white;
-    color: var(--gray);
-    font-size: 1rem;
-}
-.search-bar:focus {
-    outline: none;
-    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.2);
 }
 .fa-solid.fa-magnifying-glass {
     font-size: 1rem;
@@ -140,14 +86,6 @@ dialog {
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
     user-select: none;
 }
-.dark-purple-white-outline-button {
-    background-color: var(--purple);
-    color: white;
-    border: 0.1rem solid white;
-    padding: 0.8rem 1rem;
-    box-shadow: none;
-    user-select: none;
-}
 .purple-outline-button {
     background-color: var(--purple);
     border: 0.1rem solid white;
@@ -176,18 +114,6 @@ dialog {
 .orange-button:active {
     background-color: var(--orange);
     color: black;
-}
-.pale-yellow-button {
-    background-color: white;
-    color: var(--beige);
-    border: 0.1rem solid var(--beige);
-    box-shadow: none;
-    user-select: none;
-}
-.pale-yellow-button:hover {
-    background-color: var(--purple);
-    color: white;
-    user-select: none;
 }
 .text-field {
     position: relative;
@@ -341,65 +267,28 @@ dialog {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-#snackbar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 13vw;
-    background-color: white;
-    color: black;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-    text-align: center;
-    border-radius: 1rem;
-    padding: 12px;
-    position: fixed;
-    z-index: 1;
-    right: 5%;
-    bottom: 1.8rem;
-    user-select: none;
-}
-.fa-circle-check {
-    color: var(--green);
-}
-#snackbar.show {
-    visibility: visible;
-    -webkit-animation: fade-in 0.5s, fade-out 0.5s 2.5s;
-    animation: fade-in 0.5s, fadeout 0.5s 2.5s;
-}
-@keyframes fade-in {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-}
-@keyframes fade-out {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-}
 .sidebar-button input[type="radio"] {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
-.sidebar-button .sidebar-button-title {
+.sidebar-button {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 15rem;
-    height: 2.5rem;
-    padding: 1rem 0.75rem 0.8rem;
+    word-wrap: break-word;
+    height: auto;
+    padding: 0.7rem;
     font-size: 1rem;
     background: white;
     border: 1.3px solid var(--light-gray);
     cursor: pointer;
+    flex-wrap: wrap;
 }
-.sidebar-button-title:hover {
+.sidebar-button:hover {
     background: var(--purple);
     color: white;
-}
-.sidebar-button .sidebar-button-title:active {
-    transform: scale(0.98);
-    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
 }
 .authors {
     display: inline-flex;
