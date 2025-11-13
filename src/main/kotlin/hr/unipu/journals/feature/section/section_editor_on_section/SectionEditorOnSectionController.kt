@@ -3,7 +3,7 @@ package hr.unipu.journals.feature.section.section_editor_on_section
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,7 +21,7 @@ class SectionEditorOnSectionController(
     private val inviteRepository: InviteRepository
 ) {
     @PutMapping("{publicationId}/section/{sectionId}/assign-section-editor")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun assign(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
@@ -38,7 +38,7 @@ class SectionEditorOnSectionController(
         else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
     }
     @DeleteMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun revoke(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,

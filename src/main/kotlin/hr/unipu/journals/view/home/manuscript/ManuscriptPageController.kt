@@ -49,7 +49,7 @@ class ManuscriptPageController(
                 description = manuscript.description
             )
         }
-        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
+        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrAdmin(publicationId)
         model["isSectionEditorOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
         return "home/manuscript-page"
     }

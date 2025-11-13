@@ -2,7 +2,7 @@ package hr.unipu.journals.feature.publication.core
 
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.ContainerDTO
 import org.jsoup.Jsoup
@@ -45,7 +45,7 @@ class PublicationController(
             id = publication.id,
             title = publication.title,
             canHide = isAdmin,
-            canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+            canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
         )}
     }
     @PostMapping
@@ -57,7 +57,7 @@ class PublicationController(
         else ResponseEntity.internalServerError().body("failed to insert publication")
     }
     @PutMapping("/{publicationId}")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun update(@PathVariable publicationId: Int, @RequestParam title: String?, @RequestParam isHidden: Boolean?): ResponseEntity<String> {
         val rowsAffected = publicationRepository.update(
             publicationId,

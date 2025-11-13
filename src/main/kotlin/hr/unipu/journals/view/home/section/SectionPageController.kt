@@ -25,7 +25,7 @@ class SectionPageController(
         val isAdmin = authorizationService.isAdmin
         model["publicationsSidebar"] = publicationRepository.all(ManuscriptStateFilter.PUBLISHED)
         model["isAdmin"] = isAdmin
-        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrSuperior(publicationId)
+        model["isEicOrSuperior"] = authorizationService.isEicOnPublicationOrAdmin(publicationId)
         model["currentPublication"] = publicationRepository.title(publicationId)
         model["sections"] = sectionRepository.allByPublicationId(publicationId).map { section ->
             ContainerDTO(

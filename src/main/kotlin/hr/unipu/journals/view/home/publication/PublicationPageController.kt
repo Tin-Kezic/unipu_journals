@@ -22,13 +22,14 @@ class PublicationPageController(
         val isAdmin = authorizationService.isAdmin
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
+        model["isEicOnPublicationOrAdmin"] = authorizationService.isEicOnPublicationOrAdmin(publicationId ?: publications.first().id)
         model["categories"] = categoryRepository.all()
         model["publications"] = publicationRepository.all(ManuscriptStateFilter.PUBLISHED).map { publication ->
             ContainerDTO(
                 id = publication.id,
                 title = publication.title,
                 canHide = isAdmin,
-                canEdit = authorizationService.isEicOnPublicationOrSuperior(publication.id)
+                canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
             )
         }
         return "home/publication/publication-page"

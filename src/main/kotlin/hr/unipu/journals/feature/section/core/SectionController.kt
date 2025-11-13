@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.section.core
 
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
@@ -28,7 +28,7 @@ class SectionController(
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
     @PostMapping("/{publicationId}/section")
-    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_SUPERIOR)
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun insert(
         @PathVariable publicationId: Int,
         @RequestParam title: String,
