@@ -6,8 +6,8 @@ enum class ManuscriptState {
     AWAITING_REVIEWER_REVIEW,
     MINOR,
     MAJOR,
-    REJECTED,
     PUBLISHED,
-    HIDDEN,
-    ARCHIVED
+    REJECTED,
+    ARCHIVED,
+    HIDDEN
 }
