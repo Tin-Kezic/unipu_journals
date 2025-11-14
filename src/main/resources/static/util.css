@@ -180,9 +180,6 @@ dialog {
 .remove-user-button .fa-user-minus:hover {
     color: white;
 }
-.pale-yellow-checkbox-button {
-
-}
 .pale-yellow-checkbox-button input {
     position: absolute;
     opacity: 0;
