@@ -8,7 +8,7 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.manuscript.ManuscriptDTO
+import hr.unipu.journals.view.home.ManuscriptDTO
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
