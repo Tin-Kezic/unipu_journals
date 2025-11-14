@@ -41,7 +41,7 @@
                     const response = await fetch(`/api/publication/${publicationSelect.value}/section/titles`, { method: 'GET' });
                     if(!response.ok) { alert(await response.text()); return; }
                     sectionSelect.innerHTML = '';
-                    const sectionTitles = await response.json()
+                    const sectionTitles = await response.json();
                     sectionTitles.forEach(sectionTitle => {
                         newOption = document.createElement('option');
                         newOption.value = sectionTitle;
