@@ -112,6 +112,7 @@ dialog {
     color: black;
 }
 .orange-button:active {
+.orange-button:hover, .orange-button:active {
     background-color: var(--orange);
     color: black;
 }
