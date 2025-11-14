@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home.section
+package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository

@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home.publication
+package hr.unipu.journals.view.home
 
 import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.invite.InvitationTarget

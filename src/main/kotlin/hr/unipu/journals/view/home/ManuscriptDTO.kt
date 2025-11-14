@@ -1,4 +1,4 @@
-package hr.unipu.journals.view.home.manuscript
+package hr.unipu.journals.view.home
 
 data class ManuscriptDTO (
     val id: Int,
