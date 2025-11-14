@@ -1,16 +1,7 @@
 package hr.unipu.journals.view
 
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.archive.ArchiveManuscriptPageController
-import hr.unipu.journals.view.archive.ArchivePublicationPageController
-import hr.unipu.journals.view.archive.ArchiveSectionPageController
-import hr.unipu.journals.view.hidden.HiddenManuscriptPageController
-import hr.unipu.journals.view.hidden.HiddenPublicationPageController
-import hr.unipu.journals.view.hidden.HiddenSectionPageController
-import hr.unipu.journals.view.home.manuscript.ManuscriptDetailsPageController
-import hr.unipu.journals.view.home.manuscript.ManuscriptPageController
-import hr.unipu.journals.view.home.section.SectionPageController
-import hr.unipu.journals.view.home.publication.PublicationPageController
+import hr.unipu.journals.view.home.PublicationPageController
 import hr.unipu.journals.view.profile.EditProfilePageController
 import hr.unipu.journals.view.profile.ProfilePageController
 import hr.unipu.journals.view.review.EicInitialReviewPageController
@@ -27,17 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute
 // Because @ModelAttribute methods in @ControllerAdvice execute before every handler,
 // limit usage to controllers whose handlers render views with headers.
 @ControllerAdvice(assignableTypes = [
-    ArchiveManuscriptPageController::class,
-    ArchivePublicationPageController::class,
-    ArchiveSectionPageController::class,
     ContactPageController::class,
-    HiddenManuscriptPageController::class,
-    HiddenPublicationPageController::class,
-    HiddenSectionPageController::class,
-    ManuscriptDetailsPageController::class,
-    ManuscriptPageController::class,
     PublicationPageController::class,
-    SectionPageController::class,
     EditProfilePageController::class,
     ProfilePageController::class,
     EicInitialReviewPageController::class,
