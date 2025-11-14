@@ -10,7 +10,7 @@
 {{>util/header}}
 <div class="content">
     <aside style="flex: 0 0 300px;">
-        <section class="container" style="padding-block: 2.4rem; flex-direction: row; user-select: none;">
+        <section class="container" style="padding-block: 2.4rem; flex-direction: row;">
             {{#reviewerWithRounds}}
                 <div style="display: flex; flex-direction: column; align-items: center; margin-left: 0.8rem;">
                         <button style="text-decoration: underline; background-color: inherit; border: none;">Reviewer {{reviewer}}</button>
@@ -24,13 +24,13 @@
             {{/reviewerWithRounds}}
         </section>
 
-        <div class="container" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; user-select: none;">
+        <div class="container" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
             <p style="font-size: 1.5rem;">Review {{round}}</p>
             <p style="font-size: 0.9rem; color: var(--light-gray);">{{submissionDate}}</p>
         </div>
 
         <section class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p>Reviewer's comment</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="{{reviewerCommentFileUrl}}">download</a>
@@ -38,7 +38,7 @@
             </div>
             <section class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">{{reviewerComment}}</section>
             <br>
-            <div style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p>Author's reply</p>
                 <div class="pdf-container" style="padding-inline: 1rem; background-color: white;">
                     <a href="{{authorResponseFileUrl}}">download</a>
@@ -62,7 +62,7 @@
                 {{/isUnderReviewAndViewerIsAffiliated}}
             </div>
 
-            <fieldset style="border: none; user-select: none;">
+            <fieldset style="border: none;">
                 <section class="Recommendations">
                     <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
                         <div class="container rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100;">

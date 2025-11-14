@@ -11,7 +11,7 @@
 {{>util/header}}
 
 <section>
-    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem; user-select: none;">Review</h1>
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin: 2rem 0 1rem 1rem;">Review</h1>
 </section>
 
 <div class="layout" style="display: flex; align-items: flex-start;">
@@ -41,7 +41,7 @@
         overflow: hidden;
         margin-top: -2.7rem;
     ">
-        <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Invited</p>
+        <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
 
         {{#invited}}
             <article onclick="window.location = '/manuscript/{{id}}'" class="container" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">
@@ -60,7 +60,7 @@
             </article>
         {{/invited}}
         <br>
-        <p style="font-size: 1.5rem; font-weight: 400; user-select: none;">Pending</p>
+        <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
 
         {{#pending}}
             <article onclick="window.location = '/manuscript/{{id}}'" class="container" style="width: auto; height: auto; max-width: 100%; display: flex; flex-direction: row;">

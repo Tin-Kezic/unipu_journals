@@ -19,7 +19,7 @@
         <br>
         <a href="/logout" class="m3-button purple-button" style="text-decoration: none;">Log out</a>
         <br><br><br><br>
-        <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center; user-select: none;">
+        <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center;">
             <div class="dropdown sort" style="width: 11rem; text-align: center;">
                 <div style="display: flex; justify-content: center; align-items: center; height: 2.7rem; padding-block: 1.7rem; font-size: 1rem; background: white; border: 1.5px solid var(--purple); border-radius: 0.3rem; margin-bottom: 0.3rem;">
                     <span>Most recent</span>
@@ -48,7 +48,7 @@
     </aside>
     <main>
         <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-            <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem; user-select: none;">
+            <div style="display: flex; flex-direction: row; align-items: center; margin-top: 1rem; gap: 1rem;">
                 <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Submitted manuscripts</button>
                 <p style="font-size: 2rem; font-weight: lighter;">|</p>
                 <button class="manuscript-button" style="background-color: inherit; border: none; cursor: pointer; font-size: 1.5rem; font-weight: lighter;">Reviewed manuscripts</button>
@@ -60,7 +60,7 @@
             {{/isAdmin}}
         </div>
         {{#minor-major}}
-            <div class="manuscript-container-yellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
+            <div class="manuscript-container-yellow" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: var(--yellow); border: 1.3px solid var(--beige); border-radius: 0.4rem; width: 100%; overflow-wrap: break-word; overflow: auto; margin-top: 1.2rem;">
                 <article>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
                         <div>
@@ -83,7 +83,7 @@
             <br>
         {{/minor-major}}
         {{#manuscripts}}
-            <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: white; border: 1.3px solid var(--beige); border-radius: 0.4rem; user-select: none; width: 100%; overflow-wrap: break-word; overflow: auto;">
+            <div class="manuscript-container" style="padding: 0.8rem; min-height: 8rem; max-height: 10rem; background-color: white; border: 1.3px solid var(--beige); border-radius: 0.4rem; width: 100%; overflow-wrap: break-word; overflow: auto;">
                 <article data-id="{{id}}">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
                         <div>
