@@ -187,28 +187,6 @@
     <style>div:hover svg { fill: white; }</style>
 </main>
 <!--
-    <div style="margin-left: 1rem; height: 100%;">
-    {{#isEicOnPublicationOrAdmin}}<button id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;">+ Add Section</button>{{/isEicOnPublicationOrAdmin}}
-    {{^isEicOnPublicationOrAdmin}}<legend id="sections-legend">Sections</legend>{{/isEicOnPublicationOrAdmin}}
-
-        <fieldset style="height: 100%;">
-        <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
-                {{#publications}}
-                    <input type="radio" value="{{id}}" name="section" class="sidebar-button" data-type="section" data-id="{{id}}" style="font-size: small; padding: 0.5rem">
-                        <span style="
-                            overflow-wrap: break-word;
-                            max-width: 
-                            {{#isSectionEditorOnSectionOrSuperior}} 80%; {{/isSectionEditorOnSectionOrSuperior}}
-                            {{^isSectionEditorOnSectionOrSuperior}} 100%; {{/isSectionEditorOnSectionOrSuperior}}
-                        ">{{title}}</span>
-                        {{#isSectionEditorOnSectionOrSuperior}}<svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="24px" fill="var(--light-gray)"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z"/></svg>{{/isSectionEditorOnSectionOrSuperior}}
-                    </input>
-                {{/publications}}
-        </aside>
-        </fieldset>
-    </div>
--->
-<!--
 <section id="publications-container" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
     {{#publications}}
         <div
