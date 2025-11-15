@@ -265,24 +265,6 @@ dialog {
     border-radius: 0.3rem;
     min-height: 2rem;
 }
-.sidebar-button {
-    display: flex;
-    align-items: center;
-    width: 15rem;
-    word-wrap: break-word;
-    height: auto;
-    padding: 0.7rem;
-    font-size: 1rem;
-    background: white;
-    border: 1.3px solid var(--light-gray);
-    cursor: pointer;
-    flex-wrap: wrap;
-}
-.sidebar-button input:checked ~ svg, .sidebar-button:hover svg { fill: white; }
-.sidebar-button:has(input:checked), .sidebar-button:hover {
-    background: var(--purple);
-    color: white;
-}
 .authors {
     display: inline-flex;
     align-items: center;
