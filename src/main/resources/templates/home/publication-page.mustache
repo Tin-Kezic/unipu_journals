@@ -48,7 +48,10 @@
     </select>
     <script>
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
+
+        {{#isAuthenticated}}
         affiliationSelect = document.querySelector('select[name="affiliation"]');
+        {{/isAuthenticated}}
         manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
         categorySelect = document.querySelector('select[name="category"]');
         sortingSelect = document.querySelector('select[name="sorting"]');
@@ -62,7 +65,7 @@
                 super();
             }
         }
-        [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
+        [{{#isAuthenticated}}affiliationSelect,{{/isAuthenticated}} manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
             const params = new URLSearchParams({
                 affiliation: affiliationSelect.value,
                 manuscriptStateFilter: manuscriptStateSelect.value,
