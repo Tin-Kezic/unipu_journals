@@ -201,42 +201,7 @@
     </div>
     <style>div:hover svg { fill: white; }</style>
 </main>
-<!--
-<section id="publications-container" style="flex-direction: row; gap: 1rem; display: flex; flex-wrap: wrap; margin: 1rem 1.5rem;">
-    {{#publications}}
-        <div
-            data-id="{{id}}"
-            class="container"
-            style="cursor: pointer;"
-            onclick="window.location = '/publication/{{id}}'
-        ">
-            <p class="container-text" data-id="{{id}}">{{title}}</p>
-            <div class="container-buttons">
-                {{#canHide}}
-                    <button
-                        onclick="event.stopPropagation()"
-                        data-type="hide-button"
-                        data-id="{{id}}"
-                        data-title="{{title}}"
-                        class="m3-button purple-button"
-                        style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-                    >Hide</button>
-                {{/canHide}}
-                {{#canEdit}}
-                    <button
-                        onclick="event.stopPropagation()"
-                        data-type="edit-button"
-                        data-id="{{id}}"
-                        data-title="{{title}}"
-                        class="m3-button"
-                        style="font-size: 0.8rem; width: 3.8rem; box-shadow: none;"
-                    >Edit</button>
-                {{/canEdit}}
-            </div>
-        </div>
-    {{/publications}}
-</section>
--->
+
 {{#isAdmin}}
 <dialog id="insert-publication-dialog" closedby="any">
     <p id="insert-publication-dialog-message">Add publication</p>
