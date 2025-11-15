@@ -3,6 +3,7 @@ package hr.unipu.journals.feature.section.core
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.home.ContainerDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.dao.DataIntegrityViolationException
@@ -22,11 +23,23 @@ class SectionController(
     private val sectionRepository: SectionRepository,
     private val authorizationService: AuthorizationService
 ) {
-
     @GetMapping("/{publicationTitle}/section/titles")
     fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
+    @GetMapping("/{publicationId}/sections")
+    fun all(@PathVariable publicationId: Int): List<ContainerDTO> {
+        val isAdmin = authorizationService.isAdmin
+        return sectionRepository.allByPublicationId(publicationId).map { section ->
+            ContainerDTO(
+                id = section.id,
+                title = section.title,
+                canHide = isAdmin,
+                canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
+            )
+        }
+    }
+
     @PostMapping("/{publicationId}/section")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun insert(
