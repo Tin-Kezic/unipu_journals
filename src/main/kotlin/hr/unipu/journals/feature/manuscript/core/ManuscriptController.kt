@@ -1,10 +1,13 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.view.home.ManuscriptDTO
 import hr.unipu.journals.view.submit.AuthorDTO
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -12,13 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.time.format.DateTimeFormatter
 
 @RestController
-@RequestMapping("/api/publication/{publicationId}/section/{sectionId}/manuscript")
+@RequestMapping("/api/publication/{publicationId}/section/{sectionId}")
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
-    private val authorizationService: AuthorizationService
+    private val authorizationService: AuthorizationService,
+    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 ) {
+    @GetMapping("/manuscripts")
+    fun all(@PathVariable sectionId: Int): List<ManuscriptDTO> {
+        return manuscriptRepository.allBySectionId(sectionId).map { manuscript ->
+            ManuscriptDTO(
+                id = manuscript.id,
+                title = manuscript.title,
+                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
+                fileUrl = manuscript.fileUrl,
+                publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
+                description = manuscript.description
+            )
+        }
+    }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(
@@ -41,7 +59,7 @@ class ManuscriptController(
          */
         return ResponseEntity.ok("manuscript successfully added")
     }
-    @PutMapping("/{manuscriptId}/state")
+    @PutMapping("/manuscript/{manuscriptId}/state")
     fun updateState(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
