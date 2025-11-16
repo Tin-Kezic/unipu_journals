@@ -62,7 +62,7 @@ class PublicationPageController(
             )
         }
         val selectedSectionId = sectionId ?: sections.first().id
-        model["description"] =  sectionId?.let { sectionRepository.byId(it).description } ?: ""
+        model["description"] = sectionRepository.byId(selectedSectionId).description
         model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId = selectedSectionId, manuscriptState = ManuscriptState.PUBLISHED).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
