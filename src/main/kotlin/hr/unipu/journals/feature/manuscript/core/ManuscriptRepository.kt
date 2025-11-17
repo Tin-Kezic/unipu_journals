@@ -14,7 +14,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun allByAuthorId(@Param("author_id") authorId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Manuscript>
 
     @Modifying
-    @Transactional
     @Query("UPDATE manuscript SET views = views + 1 WHERE id = :id")
     fun incrementViews(@Param("id") id: Int): Int
 
