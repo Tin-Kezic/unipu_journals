@@ -31,8 +31,8 @@ class SectionRepositoryTests {
         assertEquals(
             listOf(
                 Section(4, "Computer Vision", "Image processing and visual recognition", 1, false),
-                Section(3, "Natural Language Processing", "Language models and text analysis", 1, false),
                 Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false),
+                Section(3, "Natural Language Processing", "Language models and text analysis", 1, false),
             ),
             sectionRepository.allByPublicationId(1)
         )
