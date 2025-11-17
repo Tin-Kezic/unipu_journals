@@ -18,10 +18,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun incrementViews(@Param("id") id: Int): Int
 
     @Modifying
-    @Query("UPDATE manuscript SET downloads = downloads + 1 WHERE id = :id")
-    fun incrementDownloads(@Param("id") id: Int): Int
-
-    @Modifying
     @Query("INSERT INTO manuscript (title, author_id, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
     fun insert(
         @Param("title") title: String,
