@@ -39,7 +39,7 @@ class PublicationPageController(
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
 
-        // warning: both of these are wrong and a proper approach would require each element to store it's own values
+        // todo. fix
         model["isEicOnPublicationOrAdmin"] = authorizationService.isEicOnPublicationOrAdmin(selectedPublicationId)
         model["isSectionEditorOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId ?: 0, sectionId ?: 0)
 
