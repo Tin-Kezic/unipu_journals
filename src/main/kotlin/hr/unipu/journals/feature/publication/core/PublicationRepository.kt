@@ -18,6 +18,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        LEFT JOIN account on :account_id = account.id
         WHERE (category.name = :category OR :category IS NULL)
         AND (
             :manuscript_state_filter = 'HIDDEN' AND (
@@ -26,7 +27,10 @@ interface PublicationRepository: Repository<Publication, Int> {
                 OR manuscript.current_state = 'HIDDEN'
             )
             OR publication.is_hidden = FALSE AND (
-                :manuscript_state_filter = 'PUBLISHED'
+                :manuscript_state_filter = 'PUBLISHED' AND (
+                    EXISTS (SELECT 1 FROM publication_section ps WHERE ps.publication_id = publication.id AND ps.is_hidden = FALSE)
+                    OR eic_on_publication.eic_id = :account_id OR account.is_admin
+                )
                 OR
                 publication_section.is_hidden = FALSE AND (
                     :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
