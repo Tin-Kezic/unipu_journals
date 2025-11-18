@@ -58,9 +58,17 @@ class PublicationRepositoryTests {
                 Publication(1, "Journal of AI Research", false),
                 Publication(2, "Nature of Biology", false),
                 Publication(3, "Physics Letters", false),
-                Publication(6, "Published empty publication", false),
             ),
             publicationRepository.all(ManuscriptStateFilter.PUBLISHED)
+        )
+        assertEquals(
+            listOf(
+                Publication(1, "Journal of AI Research", false),
+                Publication(2, "Nature of Biology", false),
+                Publication(3, "Physics Letters", false),
+                Publication(6, "Published empty publication", false),
+            ),
+            publicationRepository.all(ManuscriptStateFilter.PUBLISHED, accountId = 2)
         )
     }
     @Test fun `retrieve all publications that are hidden or contain hidden sections or hidden manuscripts`() {
