@@ -50,8 +50,8 @@
     <select aria-label="sorting" name="sorting">
         <option value="ALPHABETICAL_A_Z">Alphabetical (A-Z)</option>
         <option value="ALPHABETICAL_Z_A">Alphabetical (Z-A)</option>
-        <option value="PUBLICATION_NEW">Newest publications</option>
-        <option value="PUBLICATION_OLD">Oldest publications</option>
+        <option value="NEWEST">Newest publications</option>
+        <option value="OLDEST">Oldest publications</option>
         <option value="VIEWS">Most viewed</option>
     </select>
     <script>
@@ -60,26 +60,14 @@
         manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
         categorySelect = document.querySelector('select[name="category"]');
         sortingSelect = document.querySelector('select[name="sorting"]');
-        class SidebarElement extends HTMLElement {
-            constructor() {
-                super();
-            }
-        }
-        class Manuscript extends HTMLElement {
-            constructor() {
-                super();
-            }
-        }
-        [{{#isAuthenticated}}affiliationSelect,{{/isAuthenticated}} manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
-            const params = new URLSearchParams({
-                affiliation: affiliationSelect.value,
-                manuscriptStateFilter: manuscriptStateSelect.value,
-                sorting: sortingSelect.value
-            });
-            // category is added separately because it's of type string and gets converted to '' instead of null like the other params which are enumerations
-            if(categorySelect.value) params.set('category', categorySelect.value);
-            const response = await fetch(`/api/publication?${params}`, { method: 'GET' });
+        const params = () => new URLSearchParams({
+            affiliation: affiliationSelect.value,
+            manuscriptStateFilter: manuscriptStateSelect.value,
+            sorting: sortingSelect.value,
+            ...(categorySelect.value && { category: categorySelect.value })
+        });
         [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
+            const response = await fetch(`/api/publication?${params()}`, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();
             const publicationsContainer = document.getElementById('publications-container');
