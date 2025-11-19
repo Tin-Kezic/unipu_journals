@@ -33,8 +33,7 @@
         <option value="ARCHIVED">Archived</option>
         {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
     </select>
-    {{#isAuthenticated}}
-    <select aria-label="affiliation" name="affiliation">
+    <select aria-label="affiliation" name="affiliation" {{^isAuthenticated}}hidden{{/isAuthenticated}}>
         <option value="">Regardless of affiliation</option>
         <option value="EIC_ON_PUBLICATION">EiC on publication</option>
         <option value="SECTION_EDITOR">Section editor</option>
@@ -44,7 +43,6 @@
         <option value="CORRESPONDING_AUTHOR">Corresponding Author</option>
         <option value="AUTHOR">Author</option>
     </select>
-    {{/isAuthenticated}}
     <select aria-label="category" name="category">
         <option value="">All categories</option>
         {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
@@ -58,10 +56,7 @@
     </select>
     <script>
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
-
-        {{#isAuthenticated}}
         affiliationSelect = document.querySelector('select[name="affiliation"]');
-        {{/isAuthenticated}}
         manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
         categorySelect = document.querySelector('select[name="category"]');
         sortingSelect = document.querySelector('select[name="sorting"]');
@@ -84,6 +79,7 @@
             // category is added separately because it's of type string and gets converted to '' instead of null like the other params which are enumerations
             if(categorySelect.value) params.set('category', categorySelect.value);
             const response = await fetch(`/api/publication?${params}`, { method: 'GET' });
+        [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();
             const publicationsContainer = document.getElementById('publications-container');
