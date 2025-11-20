@@ -34,15 +34,10 @@ class PublicationPageController(
         if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
         val isAdmin = authorizationService.isAdmin
-        val publications = publicationRepository.all(ManuscriptStateFilter.PUBLISHED)
+        val publications = publicationRepository.all(ManuscriptStateFilter.PUBLISHED, accountId = authorizationService.account?.id)
         val selectedPublicationId = publicationId ?: publications.first().id
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
-
-        // todo. fix
-        model["isEicOnPublicationOrAdmin"] = authorizationService.isEicOnPublicationOrAdmin(selectedPublicationId)
-        model["isSectionEditorOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId ?: 0, sectionId ?: 0)
-
         model["categories"] = categoryRepository.all()
         model["publications"] = publications.map { publication ->
             ContainerDTO(
@@ -61,7 +56,17 @@ class PublicationPageController(
                 canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(selectedPublicationId, section.id)
             )
         }
-        val selectedSectionId = sectionId ?: sections.first().id
+        model["isEicOnPublicationOrAdmin"] = authorizationService.isEicOnPublicationOrAdmin(selectedPublicationId)
+        model["selectedPublicationId"] = selectedPublicationId
+        val selectedSectionId = sectionId ?: if(sections.isNotEmpty()) sections.first().id else {
+            model["selectedSectionId"] = -1
+            model["description"] = ""
+            model["manuscripts"] = listOf<ManuscriptDTO>()
+            model["isSectionEditorOnSectionOrSuperior"] = false
+            return "home/publication-page"
+        }
+        model["selectedSectionId"] = selectedSectionId
+        model["isSectionEditorOnSectionOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(selectedPublicationId, selectedSectionId)
         model["description"] = sectionRepository.byId(selectedSectionId).description
         model["manuscripts"] = manuscriptRepository.allBySectionId(sectionId = selectedSectionId, manuscriptState = ManuscriptState.PUBLISHED).map { manuscript ->
             ManuscriptDTO(
