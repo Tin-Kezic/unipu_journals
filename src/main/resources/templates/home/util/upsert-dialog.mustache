@@ -1,0 +1,42 @@
+<dialog id="upsert-dialog" closedby="any">
+    <p id="upsert-dialog-message"></p>
+    <form id="upsert-dialog-form">
+        <div class="text-field">
+            <label for="upsert-dialog-input">title</label>
+            <input id="upsert-dialog-input" name="upsert-dialog-input" type="text">
+        </div>
+        <div style="display: flex; justify-content: space-between">
+            <button id="upsert-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+        </div>
+    </form>
+</dialog>
+<script>
+    const upsertDialog = document.getElementById('upsert-dialog');
+    const upsertDialogMessage = document.getElementById('upsert-dialog-message');
+    const upsertDialogForm = document.getElementById('upsert-dialog-form');
+    const upsertDialogInput = document.querySelector('input[name="upsert-dialog-input"]');
+    const upsertDialogNegative = document.getElementById('upsert-dialog-negative');
+    let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainer;
+    function openUpsertDialog(message, method, submitUrl, reloadUrl, container) {
+        upsertDialogMessage.innerHTML = message;
+        upsertDialogMethod = method;
+        upsertDialogSubmitUrl = submitUrl;
+        upsertDialogReloadUrl = reloadUrl;
+        upsertDialogContainer = container;
+        upsertDialog.showModal();
+    }
+    upsertDialogNegative.addEventListener('click', () => upsertDialog.close());
+    upsertDialogForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const input = document.getElementById('upsert-dialog-input');
+        const upsertResponse = await fetch(upsertDialogSubmitUrl + encodeURIComponent(input.value), { method: upsertDialogMethod });
+        if(!upsertResponse.ok) { alert(await upsertResponse.text()); return; }
+        const reloadResponse = await fetch(upsertDialogReloadUrl, { method: 'GET' });
+        if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
+        const items = await reloadResponse.json();
+        renderItems(items, upsertDialogContainer);
+        upsertDialogInput.value = '';
+        upsertDialog.close();
+    })
+</script>
