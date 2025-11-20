@@ -52,9 +52,14 @@ class PublicationController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun insert(@RequestParam title: String): ResponseEntity<String> {
         if(title.isEmpty()) return ResponseEntity.badRequest().body("title must not be empty")
-        val rowsAffected = publicationRepository.insert(Jsoup.clean(title, Safelist.none()))
-        return if(rowsAffected == 1) ResponseEntity.ok("publication successfully added")
-        else ResponseEntity.internalServerError().body("failed to insert publication")
+        return try {
+            val rowsAffected = publicationRepository.insert(Jsoup.clean(title, Safelist.none()))
+            if(rowsAffected == 1) ResponseEntity.ok("publication successfully added")
+            else ResponseEntity.internalServerError().body("failed to insert publication")
+        } catch (e: Exception) {
+            if(e.message?.contains("Unique index") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
+            else ResponseEntity.internalServerError().body("failed to insert publication")
+        }
     }
     @PutMapping("/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
