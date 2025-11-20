@@ -1,21 +1,19 @@
 <script>
 class SidebarButton extends HTMLElement {
-  static observedAttributes = ['id', 'type', 'title', 'is-overseeing', 'font-size'];
-  constructor() {
-    super();
-  }
-  connectedCallback() { this.render(); }
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) this.render();
+  static observedAttributes = ['id', 'type', 'title', 'can-edit', 'font-size'];
+  constructor() { super(); }
+  connectedCallback() {
+    this.render();
+    this.setupEventListeners();
   }
   render() {
-    const id = this.getAttribute('id');
-    const type = this.getAttribute('type');
-    const title = this.getAttribute('title');
-    const isOverseeing = this.getAttribute('is-overseeing');
-    const fontSize = this.getAttribute('font-size') || 'medium'
-
-    const style = `
+    this.id = this.getAttribute('id');
+    this.type = this.getAttribute('type');
+    this.title = this.getAttribute('title');
+    this.fontSize = this.getAttribute('font-size') || 'medium';
+    this.isOverseeing = this.hasAttribute('can-edit') || {{isAdmin}};
+    this.innerHTML = `
+      <style>
         .sidebar-button {
             display: flex;
             justify-content: space-between;
@@ -34,25 +32,51 @@ class SidebarButton extends HTMLElement {
             background: var(--purple);
             color: white;
         }
-    `;
-    const html = `
+      </style>
       <label class="sidebar-button">
-        <input type="radio" name="${type}" value="${id}" hidden>
-        <span style="overflow-wrap: break-word; max-width: ${isOverseeing ? '80%' : '100%'}; font-size: ${fontSize}">${title}</span>
-        ${isOverseeing ? `
-          <svg data-type="${type}-options" data-id="${id}" 
-               xmlns="http://www.w3.org/2000/svg" height="${fontSize == 'small' ? '18px' : '24px'}" viewBox="0 -960 960 960" width="24px" 
+        <input type="radio" name="${this.type}" value="${this.id}" hidden>
+        <span style="overflow-wrap: break-word; max-width: ${this.isOverseeing ? '80%' : '100%'}; font-size: ${this.fontSize}">${this.title}</span>
+        ${this.isOverseeing ? `
+          <svg data-type="${this.type}-options" data-id="${this.id}" 
+               xmlns="http://www.w3.org/2000/svg" height="${this.fontSize == 'small' ? '18px' : '24px'}" viewBox="0 -960 960 960" width="24px" 
                fill="var(--light-gray)">
             <path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z"/>
           </svg>
         ` : ''}
       </label>
     `;
-    this.innerHTML = `
-      <style>${style}</style>
-      ${html}
-    `;
   }
+  _removeOldListeners() {
+    if(this._clickHandler) {
+      this.querySelector('input[type="radio"]').removeEventListener('change', this._clickHandler);
+      this._clickHandler = null;
+    }
+    if(this._optionsClickHandler) {
+      this.querySelector('svg')?.removeEventListener('click', this._optionsClickHandler);
+      this._optionsClickHandler = null;
+    }
+  }
+  setupEventListeners() {
+    this._removeOldListeners();
+    this._clickHandler = (e) => {
+      this.dispatchEvent(new CustomEvent('sidebar-button-click', {
+        detail: {
+          id: this.id,
+          type: this.type,
+          title: this.title,
+          isOverseeing: this.isOverseeing
+        },
+        bubbles: true
+      }));
+    }
+    this.querySelector('input[type="radio"]').addEventListener('change', this._clickHandler);
+    this.querySelector('svg')?.addEventListener('click', this._optionsClickHandler);
+
+    // todo.
+    this._optionsClickHandler = (e) => {
+    }
+  }
+  disconnectedCallBack() { this._removeOldListeners(); }
 }
 customElements.define('sidebar-button', SidebarButton);
 </script>
