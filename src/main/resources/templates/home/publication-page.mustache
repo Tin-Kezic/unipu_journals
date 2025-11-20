@@ -9,6 +9,7 @@
 <body style="height: 100%; overflow: hidden; display: flex; flex-direction: column;">
 {{>util/header}}
 {{>home/util/sidebar-button}}
+{{>home/util/upsert-dialog}}
 
 <style>
     select {
@@ -55,6 +56,26 @@
         <option value="VIEWS">Most viewed</option>
     </select>
     <script>
+        function renderItems(items, containerId) {
+            const container = document.getElementById(containerId);
+            const type = containerId.includes('publication') ? 'publication' : 'section';
+            container.innerHTML = '';
+            items.forEach(item => {
+                const newElement = document.createElement('sidebar-button');
+                newElement.setAttribute('id', item.id);
+                newElement.setAttribute('type', type);
+                if(type == 'section') newElement.setAttribute('font-size', 'small');
+                newElement.setAttribute('title', item.title);
+                newElement.setAttribute('is-overseeing', item.canEdit || item.canHide);
+                container.appendChild(newElement);
+            });
+        }
+        function fetchPublications() {
+        }
+        function fetchSections() {
+        }
+        function fetchManuscripts() {
+        }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
         affiliationSelect = document.querySelector('select[name="affiliation"]');
         manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
@@ -133,87 +154,122 @@
                     break;
             }
         }));
-        function displaySections(publicationId) {
-
-        }
-        function displayManuscripts(publicationId, sectionId) {
-
-        }
     </script>
 </div>
 <main style="display: flex; flex: 1; overflow: hidden;">
     <div style="margin-left: 1rem; height: 100%;">
-        {{#isAdmin}}<button id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;">+ Add publication</button>{{/isAdmin}}
-        {{^isAdmin}}Publications{{/isAdmin}}
+        <div style="width: 15rem;">
+            {{#isAdmin}}<button onclick="openUpsertDialog('Add publication', 'POST', '/api/publication?title=', `/api/publication?${params()}`, 'publications-sidebar')" id="add-publication" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;">+ Add publication</button>{{/isAdmin}}
+            {{^isAdmin}}Publications{{/isAdmin}}
+        </div>
         <aside id="publications-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
             {{#publications}}
-                <sidebar-button id="{{id}}" type="publication" title="{{title}}" is-overseeing= "{{canEdit}} || {{canHide}}"></sidebar-button>
+                <sidebar-button id="{{id}}" type="publication" title="{{title}}" {{#canEdit}}can-edit{{/canEdit}}></sidebar-button>
             {{/publications}}
         </aside>
     </div>
-    <script>
-        let currentPublication;
-        document.querySelectorAll('input[name="publication"]').forEach(input => input.addEventListener('change', async () => {
-            currentPublication = input.value;
-            const response = await fetch(`/api/publication/${currentPublication}/sections`, { method: 'GET' });
-            if(!response.ok) { alert(await response.text()); return; }
-            const sectionsSidebar = document.getElementById('sections-sidebar');
-            sectionsSidebar.innerHTML = '';
-            const sections = await response.json();
-            sections.forEach(section => {
-                const newSection = document.createElement('sidebar-button');
-                newSection.setAttribute('id', section.id);
-                newSection.setAttribute('type', 'section');
-                newSection.setAttribute('font-size', 'small');
-                newSection.setAttribute('title', section.title);
-                newSection.setAttribute('is-overseeing', section.canEdit || section.canHide);
-                sectionsSidebar.appendChild(newSection);
-            });
-        }));
-        document.querySelectorAll('svg[data-type="publication-options"]').forEach(svg => svg.addEventListener('click', () => {
-            document.getElementById('sections-sidebar').innerHTML = 'ah';
-        }));
-    </script>
     <div style="margin-left: 1rem; height: 100%;">
-    {{#isEicOnPublicationOrAdmin}}<button id="add-section" class="m3-button purple-button"  style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;">+ Add Section</button>{{/isEicOnPublicationOrAdmin}}
-    {{^isEicOnPublicationOrAdmin}}<legend id="sections-legend">Sections</legend>{{/isEicOnPublicationOrAdmin}}
+        <div style="width: 15rem;">
+            <button
+                onclick="openUpsertDialog('Add section', 'POST', `/api/publication/${currentPublication}/section?title=`, `/api/publication/${currentPublication}/sections?${params()}`, 'sections-sidebar')"
+                id="add-section"
+                class="m3-button purple-button"
+                style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;"
+                {{^isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}
+            >+ Add Section</button>
+            <legend id="sections-legend" {{#isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}>Sections</legend>
+        </div>
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
         {{#sections}}
-            <sidebar-button id="{{id}}" type="section" title="{{title}}" is-overseeing="{{canEdit}} || {{canHide}}" font-size="small"></sidebar-button>
+            <sidebar-button id="{{id}}" type="section" title="{{title}}"font-size="small" {{#canEdit}}can-edit{{/canEdit}}></sidebar-button>
         {{/sections}}
     </aside>
     </div>
-    <style>div:hover svg { fill: white; }</style>
+    <script>
+        let currentPublication = {{selectedPublicationId}},
+        currentSection = {{selectedSectionId}};
+        document.querySelector('input[name="publication"]');
+        document.addEventListener('sidebar-button-click', async (event) => {
+            const { id, type, title, isOverseeing } = event.detail;
+            type == 'publication' ? currentPublication = id : currentSection = id;
+            const url = `/api/publication/${currentPublication}/sections${type == 'section' ? `/${currentSection}/manuscripts` : ''}`
+            const response = await fetch(url, { method: 'GET' });
+            if(!response.ok) { alert(await response.text()); return; }
+            const items = await response.json();
+            const container = type == 'publication' ? 'sections-sidebar': 'manuscripts-container';
+            renderItems(items, container);
+            if(type == 'publication') {
+                if(isOverseeing) {
+                    document.getElementById('add-section').hidden = false;
+                    document.getElementById('sections-legend').hidden = true;
+                } else {
+                    document.getElementById('add-section').hidden = true;
+                    document.getElementById('sections-legend').hidden = false;
+                }
+            }
+        });
+    </script>
+    <script>
+        document.querySelectorAll('input[name="section"]').forEach(input => input.addEventListener('change', async () => {
+            const response = await fetch(`/api/publication/${currentPublication}/section/${input.value}`, { method: 'GET' });
+            if(!response.ok) { alert(await response.text()); return; }
+            const manuscriptsContainer = document.getElementById('manuscripts-container');
+            manuscriptsContainer.innerHTML = '';
+            const manuscripts = await response.json();
+            manuscripts.forEach(manuscript => {
+                const newManuscript = document.createElement('sidebar-button');
+                newManuscript.setAttribute('id', manuscript.id);
+                newManuscript.setAttribute('title', manuscript.title);
+                //newManuscript.setAttribute('is-overseeing', (put login here));
+                ManuscriptsSidebar.appendChild(newManuscript);
+            });
+        }));
+        document.querySelectorAll('svg[data-type="section-options"]').forEach(svg => svg.addEventListener('click', () => {
+            document.getElementById('sections-sidebar').innerHTML = 'ah';
+        }));
+    </script>
+
+    <section style="
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin: 0 1.5rem 1rem 1.5rem;
+        min-width: 0;
+        overflow: hidden;
+    ">
+        <div>
+            <legend id="sections-legend">Manuscripts</legend>
+            <article class="container no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
+                <p id="description" class="container-text">{{{description}}}</p>
+                {{#isEicOnPublicationOrAdmin}}
+                    <footer style="display: flex; justify-content: flex-end;">
+                        <button id="edit-description-button" class="m3-button purple-button" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
+                    </footer>
+                {{/isEicOnPublicationOrAdmin}}
+            </article>
+        </div>
+        {{#manuscripts}}
+            <article data-id="{{id}}" onclick="window.location = '/manuscript/{{id}}'" class="container" style="width: auto; height: auto; max-width: 100%;">
+                <p class="container-text">{{title}}</p>
+
+                <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
+
+                <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
+                <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
+                {{#isSectionEditorOrSuperior}}
+                    <footer class="container-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
+                        {{#isAdmin}}
+                            <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>
+                        {{/isAdmin}}
+                        <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                    </footer>
+                {{/isSectionEditorOrSuperior}}
+            </article>
+        {{/manuscripts}}
+    </section>
 </main>
-
-{{#isAdmin}}
-<dialog id="insert-publication-dialog" closedby="any">
-    <p id="insert-publication-dialog-message">Add publication</p>
-    <form id="insert-publication-dialog-form">
-        <div class="text-field">
-            <label>title</label>
-            <input aria-label="publication title" type="text" name="insert-publication-dialog-input">
-        </div>
-        <div style="display: flex; justify-content: space-between">
-            <button id="insert-publication-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
-        </div>
-    </form>
-</dialog>
-<script>
-    const insertPublicationDialog = document.getElementById('insert-publication-dialog');
-    document.getElementById('add-publication').addEventListener('click', () => insertPublicationDialog.showModal());
-    document.getElementById('insert-publication-dialog-negative').addEventListener('click', () => insertPublicationDialog.close());
-    document.getElementById('insert-publication-dialog-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const publicationTitle = document.querySelector('input[name=insert-publication-dialog-input]').value;
-        const response = await fetch(`/api/publication?title=${encodeURIComponent(publicationTitle)}`, { method: 'POST' });
-        if(!response.ok) { alert(await response.text()); return; }
-        location.reload(true);
-    });
-</script>
-{{/isAdmin}}
-
 <dialog id="update-publication-title-dialog" closedby="any">
     <p id="update-publication-title-dialog-message"></p>
     <form id="update-publication-title-dialog-form">
