@@ -44,7 +44,7 @@
                     <a href="{{authorResponseFileUrl}}">download</a>
                 </div>
             </div>
-            <section class="container " style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">{{authorResponse}}</section>
+            <section class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">{{authorResponse}}</section>
         </section>
     </aside>
 
@@ -149,65 +149,65 @@
                             <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; margin-top: 0.5rem; gap: 1rem;">
                                 <p style="flex: 1;">Does the introduction provide sufficient background and include all relevant references?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="intro-yes" name="intro" value="yes" disabled {{#sufficientBackground1}}checked{{/sufficientBackground1}}>
+                                    <input type="radio" id="intro-yes" name="intro" value="yes" disabled hidden {{#sufficientBackground1}}checked{{/sufficientBackground1}}>
                                     <label for="intro-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="intro-impr" name="intro" value="improved" disabled {{#sufficientBackground2}}checked{{/sufficientBackground2}}>
+                                    <input type="radio" id="intro-impr" name="intro" value="improved" disabled hidden {{#sufficientBackground2}}checked{{/sufficientBackground2}}>
                                     <label for="intro-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="intro-must" name="intro" value="must" disabled {{#sufficientBackground3}}checked{{/sufficientBackground3}}>
+                                    <input type="radio" id="intro-must" name="intro" value="must" disabled hidden {{#sufficientBackground3}}checked{{/sufficientBackground3}}>
                                     <label for="intro-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
                             <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
                                 <p style="flex: 1;">Is the research design appropriate?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="design-yes" name="design" value="yes" disabled {{#appropriateResearchDesign1}}checked{{/appropriateResearchDesign1}}>
+                                    <input type="radio" id="design-yes" name="design" value="yes" disabled hidden {{#appropriateResearchDesign1}}checked{{/appropriateResearchDesign1}}>
                                     <label for="design-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="design-impr" name="design" value="improved" disabled {{#appropriateResearchDesign2}}checked{{/appropriateResearchDesign2}}>
+                                    <input type="radio" id="design-impr" name="design" value="improved" disabled hidden {{#appropriateResearchDesign2}}checked{{/appropriateResearchDesign2}}>
                                     <label for="design-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="design-must" name="design" value="must" disabled {{#appropriateResearchDesign3}}checked{{/appropriateResearchDesign3}}>
+                                    <input type="radio" id="design-must" name="design" value="must" disabled hidden {{#appropriateResearchDesign3}}checked{{/appropriateResearchDesign3}}>
                                     <label for="design-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
                             <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
                                 <p style="flex: 1;">Are the methods adequately described?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="methods-yes" name="methods" value="yes" disabled {{#adequatelyDescribed1}}checked{{/adequatelyDescribed1}}>
+                                    <input type="radio" id="methods-yes" name="methods" value="yes" disabled hidden {{#adequatelyDescribed1}}checked{{/adequatelyDescribed1}}>
                                     <label for="methods-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="methods-impr" name="methods" value="improved" disabled {{#adequatelyDescribed2}}checked{{/adequatelyDescribed2}}>
+                                    <input type="radio" id="methods-impr" name="methods" value="improved" disabled hidden {{#adequatelyDescribed2}}checked{{/adequatelyDescribed2}}>
                                     <label for="methods-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="methods-must" name="methods" value="must" disabled {{#adequatelyDescribed3}}checked{{/adequatelyDescribed3}}>
+                                    <input type="radio" id="methods-must" name="methods" value="must" disabled hidden {{#adequatelyDescribed3}}checked{{/adequatelyDescribed3}}>
                                     <label for="methods-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
                             <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
                                 <p style="flex: 1;">Are the results clearly presented?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="results-yes" name="results" value="yes" disabled {{#clearlyPresented1}}checked{{/clearlyPresented1}}>
+                                    <input type="radio" id="results-yes" name="results" value="yes" disabled hidden {{#clearlyPresented1}}checked{{/clearlyPresented1}}>
                                     <label for="results-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="results-impr" name="results" value="improved" disabled {{#clearlyPresented2}}checked{{/clearlyPresented2}}>
+                                    <input type="radio" id="results-impr" name="results" value="improved" disabled hidden {{#clearlyPresented2}}checked{{/clearlyPresented2}}>
                                     <label for="results-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="results-must" name="results" value="must" disabled {{#clearlyPresented3}}checked{{/clearlyPresented3}}>
+                                    <input type="radio" id="results-must" name="results" value="must" disabled hidden {{#clearlyPresented3}}checked{{/clearlyPresented3}}>
                                     <label for="results-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
                             <div class="check-question" style="display: flex; align-items: center; gap: 1rem;">
                                 <p style="flex: 1;">Are the conclusions supported by the results?</p>
                                 <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="conclusions-yes" name="conclusions" value="yes" disabled {{#supportedConclusions1}}checked{{/supportedConclusions1}}>
+                                    <input type="radio" id="conclusions-yes" name="conclusions" value="yes" disabled hidden {{#supportedConclusions1}}checked{{/supportedConclusions1}}>
                                     <label for="conclusions-yes" class="checkbox">Yes</label>
 
-                                    <input type="radio" id="conclusions-impr" name="conclusions" value="improved" disabled {{#supportedConclusions2}}checked{{/supportedConclusions2}}>
+                                    <input type="radio" id="conclusions-impr" name="conclusions" value="improved" disabled hidden {{#supportedConclusions2}}checked{{/supportedConclusions2}}>
                                     <label for="conclusions-impr" class="checkbox">Can be improved</label>
 
-                                    <input type="radio" id="conclusions-must" name="conclusions" value="must" disabled {{#supportedConclusions3}}checked{{/supportedConclusions3}}>
+                                    <input type="radio" id="conclusions-must" name="conclusions" value="must" disabled hidden {{#supportedConclusions3}}checked{{/supportedConclusions3}}>
                                     <label for="conclusions-must" class="checkbox">Must be improved</label>
                                 </div>
                             </div>
@@ -215,18 +215,18 @@
                     </div>
                     <br>
                     <section class="comments-section">
-                        <div style="display: flex; gap: 2rem; align-items: flex-start; margin-top: -0.5rem;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; margin-top: -0.5rem;">
                             <div style="flex: 0.8;">
                                 <div class="container" style="padding: 0.7rem 1.5rem; font-weight: 100;">
                                     <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                                         <span>Do you have any conflict of interest regarding this manuscript?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="conflict_interest" value="yes" disabled {{#conflict}}checked{{/conflict}}>
+                                                <input type="radio" name="conflict_interest" value="yes" disabled hidden {{#conflict}}checked{{/conflict}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="conflict_interest" value="no" disabled {{^conflict}}checked{{/conflict}}>
+                                                <input type="radio" name="conflict_interest" value="no" disabled hidden {{^conflict}}checked{{/conflict}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -235,11 +235,11 @@
                                         <span>Did you detect plagiarism?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="plagiarism" value="yes" disabled {{#plagiarism}}checked{{/plagiarism}}>
+                                                <input type="radio" name="plagiarism" value="yes" disabled hidden {{#plagiarism}}checked{{/plagiarism}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="plagiarism" value="no" disabled {{^plagiarism}}checked{{/plagiarism}}>
+                                                <input type="radio" name="plagiarism" value="no" disabled hidden {{^plagiarism}}checked{{/plagiarism}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -248,11 +248,11 @@
                                         <span>Did you detect inappropriate use of LLM tools?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="llm_used" value="yes" disabled {{#llm}}checked{{/llm}}>
+                                                <input type="radio" name="llm_used" value="yes" disabled hidden {{#llm}}checked{{/llm}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="llm_used" value="no" disabled {{^llm}}checked{{/llm}}>
+                                                <input type="radio" name="llm_used" value="no" disabled hidden {{^llm}}checked{{/llm}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -261,11 +261,11 @@
                                         <span>Did you detect inappropriate self-citations by the authors?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="self_citation" value="yes" disabled {{#selfCitation}}checked{{/selfCitation}}>
+                                                <input type="radio" name="self_citation" value="yes" disabled hidden {{#selfCitation}}checked{{/selfCitation}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="self_citation" value="no" disabled {{^selfCitation}}checked{{/selfCitation}}>
+                                                <input type="radio" name="self_citation" value="no" disabled hidden {{^selfCitation}}checked{{/selfCitation}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -274,11 +274,11 @@
                                         <span>Are the references appropriate and relevant?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="references" value="yes" disabled {{#appropriateReferences}}checked{{/appropriateReferences}}>
+                                                <input type="radio" name="references" value="yes" disabled hidden {{#appropriateReferences}}checked{{/appropriateReferences}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="references" value="no" disabled {{^appropriateReferences}}checked{{/appropriateReferences}}>
+                                                <input type="radio" name="references" value="no" disabled hidden {{^appropriateReferences}}checked{{/appropriateReferences}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -287,11 +287,11 @@
                                         <span>Do you have any other ethical concerns?</span>
                                         <div style="display: flex; gap: 0.5rem;">
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="ethical_concerns" value="yes" disabled {{#ethicalConcerns}}checked{{/ethicalConcerns}}>
+                                                <input type="radio" name="ethical_concerns" value="yes" disabled hidden {{#ethicalConcerns}}checked{{/ethicalConcerns}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                                             </label>
                                             <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="ethical_concerns" value="no" disabled {{^ethicalConcerns}}checked{{/ethicalConcerns}}>
+                                                <input type="radio" name="ethical_concerns" value="no" disabled hidden {{^ethicalConcerns}}checked{{/ethicalConcerns}}>
                                                 <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                                             </label>
                                         </div>
@@ -324,10 +324,6 @@
         align-items: flex-start;
         gap: 1rem;
         padding: 1rem;
-    }
-    main {
-        flex: 1;
-
     }
     .container {
         cursor: default;
@@ -362,40 +358,12 @@
         white-space: nowrap;
         padding: 0.2rem 0.5rem;
     }
-    .download-button:hover {
-        color: var(--purple) !important;
-    }
-    .orange-button:hover {
-        background-color: var(--orange);
-    }
-    .orange-button:active {
-        background-color: var(--orange);
-    }
-    .orange-button:nth-child(1):hover,
-    .orange-button:nth-child(1):active {
-        background-color: var(--green) !important;
-        color: black;
-    }
-    .orange-button:nth-child(2):hover,
-    .orange-button:nth-child(2):active {
-        background-color: var(--yellow) !important;
-        color: black !important;
-    }
-    .orange-button:nth-child(4):hover,
-    .orange-button:nth-child(4):active {
-        background-color: var(--pink) !important;
-        color: black;
-    }
     @media screen and (max-width: 1300px) {
         .content {
             display: flex;
             flex-direction: column;
         }
         .container .article {
-            width: 96vw !important;
-            max-width: 100vw !important;
-        }
-        .recommendations-description {
             width: 96vw !important;
             max-width: 100vw !important;
         }
@@ -425,23 +393,14 @@
             max-width: 87vw !important;
             min-width: auto !important;
         }
-        .orange-button {
-            padding-inline: 1.5rem !important;
-            font-size: clamp(0.7rem, 2vw, 1rem) !important;
-            white-space: nowrap;
-            min-width: 0;
-        }
         .comments-section > div:last-child {
             gap: 1rem !important;
         }
-        .container .article-box {
+        .container {
             order: 1;
             width: 96vw !important;
             max-width: 100vw !important;
             margin-bottom: 1rem;
-        }
-        #comment {
-            width: 95vw !important;
         }
     }
 </style>
