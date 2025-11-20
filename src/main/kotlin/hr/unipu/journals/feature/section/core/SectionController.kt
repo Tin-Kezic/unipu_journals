@@ -39,7 +39,6 @@ class SectionController(
             )
         }
     }
-
     @PostMapping("/{publicationId}/section")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun insert(
@@ -52,7 +51,7 @@ class SectionController(
                 title = Jsoup.clean(title, Safelist.none()),
                 publicationId = publicationId,
             )
-            if(rowsAffected == 1) ResponseEntity.ok("account successfully added")
+            if(rowsAffected == 1) ResponseEntity.ok("section successfully added")
             else ResponseEntity.internalServerError().body("failed to add section")
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
