@@ -61,6 +61,7 @@
             const container = document.getElementById(containerId);
             const type = containerId.replace(/s-.*$/, ''); // publication(s-container) -> publication; section(s-container) -> section; manuscript(s-container) -> manuscript
             container.innerHTML = '';
+            if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
             items.forEach((item, index)  => {
                 const newElement = document.createElement('sidebar-button');
                 newElement.setAttribute('id', `${type}-${item.id}`);
@@ -225,7 +226,6 @@
         document.addEventListener('sidebar-button-option-click', async (event) => {
             const { id, title, canEdit, canHide } = event.detail;
             const idValue = id.replace(/^.*-/, '');
-            console.log(idValue);
             openOptionsDialog(title, [
                 canEdit && {name: 'Rename', onClick: () => {
                     if(id.includes('publication')) 
