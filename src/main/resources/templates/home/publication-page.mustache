@@ -57,11 +57,11 @@
         <option value="VIEWS">Most viewed</option>
     </select>
     <script>
-        function renderItems(items, containerId) {
+        function renderItems(items, containerId, clickFirst) {
             const container = document.getElementById(containerId);
             const type = containerId.replace(/s-.*$/, ''); // publication(s-container) -> publication; section(s-container) -> section; manuscript(s-container) -> manuscript
             container.innerHTML = '';
-            items.forEach((item, index) => {
+            items.forEach((item, index)  => {
                 const newElement = document.createElement('sidebar-button');
                 newElement.setAttribute('id', `${type}-${item.id}`);
                 newElement.setAttribute('type', type);
@@ -70,7 +70,7 @@
                 newElement.setAttribute('can-edit', item.canEdit);
                 newElement.setAttribute('can-hide', item.canHide);
                 container.appendChild(newElement);
-                if(index == 0 && type != 'manuscript') newElement.querySelector('input').click();
+                if(index == 0 && clickFirst) newElement.querySelector('input').click();
             });
         }
         function fetchPublications() {
@@ -210,7 +210,8 @@
             if(!response.ok) { alert(await response.text()); return; }
             const items = await response.json();
             const container = type == 'publication' ? 'sections-sidebar': 'manuscripts-container';
-            renderItems(items, container);
+            const clickFirst = type == 'publication'
+            renderItems(items, container, clickFirst);
             if(type == 'publication') {
                 if(isOverseeing) {
                     document.getElementById('add-section').hidden = false;
