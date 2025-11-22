@@ -36,6 +36,16 @@
         if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
         const items = await reloadResponse.json();
         renderItems(items, upsertDialogContainer);
+        {
+            const upsertedSidebarButton = document.querySelector(`sidebar-button[title="${input.value}"]`);
+            const sidebarRect = upsertDialogContainer.getBoundingClientRect();
+            const upsertedSidebarButtonRect = upsertedSidebarButton.getBoundingClientRect();
+            const currentScroll = upsertDialogContainer.scrollTop;
+            const offsetTop = upsertedSidebarButtonRect.top - sidebarRect.top + currentScroll;
+            const targetScroll = offsetTop - (upsertDialogContainer.clientHeight / 2) + (upsertedSidebarButtonRect.height / 2);
+            upsertDialogContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            upsertedSidebarButton.querySelector('input').click();
+        }
         upsertDialogInput.value = '';
         upsertDialog.close();
     })

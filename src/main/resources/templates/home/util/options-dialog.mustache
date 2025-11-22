@@ -1,39 +1,25 @@
 <dialog id="options-dialog" closedby="any">
-    <p id="options-dialog-message"></p>
-    <div id="options-dialog-container"></div>
+    <p id="options-dialog-message" style="text-align: center; margin-bottom: 0.5rem;"></p>
+    <div id="options-dialog-container" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+    <button id="options-dialog-negative" class="sidebar-button" style="display: flex; justify-content: center; margin-top: 0.5rem;">Cancel</button>
 </dialog>
 <script>
     const optionsDialog = document.getElementById('options-dialog');
     const optionsDialogMessage = document.getElementById('options-dialog-message');
     const optionsDialogContainer = document.getElementById('options-dialog-container');
+    document.getElementById('options-dialog-negative').addEventListener('click', () => optionsDialog.close());
     function openOptionsDialog(title, options) {
-        optionsDialogMessage = title;
-        for(const { title, onClick } of options) {
+        optionsDialogContainer.innerHTML = '';
+        optionsDialogMessage.innerHTML = title;
+        for(const { name, onClick } of options) {
             const newButton = document.createElement('button');
-            newButton.id = `options-dialog-option-${title}`;
-            newButton.className = 'm3-button';
-            newButton.onClick = onClick;
+            newButton.id = `options-dialog-option-${name}`;
+            newButton.innerHTML = name;
+            newButton.className = 'sidebar-button';
+            newButton.onclick = () => { onClick(); optionsDialog.close(); };
+            newButton.style = 'display: flex; justify-content: center;';
             optionsDialogContainer.append(newButton);
-            /*
-            <button id="upsert-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
-            */
         }
         optionsDialog.showModal();
     }
-    /*
-    upsertDialogNegative.addEventListener('click', () => upsertDialog.close());
-    upsertDialogForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const input = document.getElementById('upsert-dialog-input');
-        const upsertResponse = await fetch(_submitUrl + encodeURIComponent(input.value), { method: _method });
-        if(!upsertResponse.ok) { alert(await upsertResponse.text()); return; }
-        const reloadResponse = await fetch(_reloadUrl, { method: 'GET' });
-        if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
-        const items = await reloadResponse.json();
-        renderItems(items, _container);
-        upsertDialogInput.value = '';
-        upsertDialog.close();
-    })
-    */
 </script>
