@@ -64,13 +64,18 @@ class PublicationController(
     @PutMapping("/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun update(@PathVariable publicationId: Int, @RequestParam title: String?, @RequestParam isHidden: Boolean?): ResponseEntity<String> {
-        val rowsAffected = publicationRepository.update(
-            publicationId,
-            title = title?.run { Jsoup.clean(title, Safelist.none()) },
-            isHidden = isHidden
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully updated publication $publicationId")
-        else ResponseEntity.internalServerError().body("failed to update publication $publicationId")
+        return try {
+            val rowsAffected = publicationRepository.update(
+                publicationId,
+                title = title?.run { Jsoup.clean(title, Safelist.none()) },
+                isHidden = isHidden
+            )
+            if(rowsAffected == 1) ResponseEntity.ok("successfully updated publication $publicationId")
+            else ResponseEntity.internalServerError().body("failed to update publication $publicationId")
+        } catch (e: Exception) {
+            if(e.message?.contains("Unique index") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
+            else ResponseEntity.internalServerError().body("failed to update publication")
+        }
     }
     @DeleteMapping("/{publicationId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
