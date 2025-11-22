@@ -62,14 +62,20 @@
             const type = containerId.replace(/s-.*$/, ''); // publication(s-container) -> publication; section(s-container) -> section; manuscript(s-container) -> manuscript
             container.innerHTML = '';
             if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
-            items.forEach((item, index)  => {
+            if(type == 'manuscript') items.forEach((manuscript, index) => {
+                container.innerHTML = 'implement manuscripts rendering'
+            });
+            else items.forEach((sidebarButton, index)  => {
                 const newElement = document.createElement('sidebar-button');
-                newElement.setAttribute('id', `${type}-${item.id}`);
+                newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
                 newElement.setAttribute('type', type);
-                if(type == 'section') newElement.setAttribute('font-size', 'small');
-                newElement.setAttribute('title', item.title);
-                newElement.setAttribute('can-edit', item.canEdit);
-                newElement.setAttribute('can-hide', item.canHide);
+                if(type == 'section') {
+                    newElement.setAttribute('font-size', 'small');
+                    newElement.setAttribute('description', sidebarButton.description);
+                }
+                newElement.setAttribute('title', sidebarButton.title);
+                newElement.setAttribute('can-edit', sidebarButton.canEdit);
+                newElement.setAttribute('can-hide', sidebarButton.canHide);
                 container.appendChild(newElement);
                 if(index == 0 && clickFirst) newElement.querySelector('input').click();
             });
@@ -192,7 +198,7 @@
         </div>
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
         {{#sections}}
-            <sidebar-button id="section-{{id}}" type="section" title="{{title}}" font-size="small" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
+            <sidebar-button id="section-{{id}}" type="section" title="{{title}}" description="{{description}}" font-size="small" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
         {{/sections}}
     </aside>
     </div>
@@ -209,9 +215,14 @@
             const url = `/api/publication/${currentPublicationId}/section${type == 'section' ? `/${currentSectionId}/manuscripts` : `s?${params()}`}`
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
+            if(type == 'section') {
+                console.log(document.getElementById(id));
+                console.log(document.getElementById('description'));
+                document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
+            }
             const items = await response.json();
             const container = type == 'publication' ? 'sections-sidebar': 'manuscripts-container';
-            const clickFirst = type == 'publication'
+            const clickFirst = type == 'publication';
             renderItems(items, container, clickFirst);
             if(type == 'publication') {
                 if(isOverseeing) {

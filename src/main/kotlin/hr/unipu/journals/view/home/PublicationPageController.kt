@@ -52,6 +52,7 @@ class PublicationPageController(
             ContainerDTO(
                 id = section.id,
                 title = section.title,
+                description = section.description,
                 canHide = isAdmin,
                 canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(selectedPublicationId, section.id)
             )
