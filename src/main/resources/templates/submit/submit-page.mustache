@@ -98,7 +98,7 @@
                         <button onclick="this.parentNode.remove()" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Remove</button>
 
                         <label class="pale-yellow-checkbox-button">
-                            <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author">
+                            <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author" hidden>
                             <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
                         </label>
                     `;
@@ -106,7 +106,7 @@
                 });
             </script>
             <label class="pale-yellow-checkbox-button">
-                <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author">
+                <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author" hidden>
                 <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
             </label>
         </div>
