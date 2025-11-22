@@ -17,13 +17,13 @@
     const upsertDialogForm = document.getElementById('upsert-dialog-form');
     const upsertDialogInput = document.querySelector('input[name="upsert-dialog-input"]');
     const upsertDialogNegative = document.getElementById('upsert-dialog-negative');
-    let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainer;
-    function openUpsertDialog(message, method, submitUrl, reloadUrl, container) {
+    let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainerId;
+    function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId) {
         upsertDialogMessage.innerHTML = message;
         upsertDialogMethod = method;
         upsertDialogSubmitUrl = submitUrl;
         upsertDialogReloadUrl = reloadUrl;
-        upsertDialogContainer = container;
+        upsertDialogContainerId = containerId;
         upsertDialog.showModal();
     }
     upsertDialogNegative.addEventListener('click', () => upsertDialog.close());
@@ -35,16 +35,22 @@
         const reloadResponse = await fetch(upsertDialogReloadUrl, { method: 'GET' });
         if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
         const items = await reloadResponse.json();
-        renderItems(items, upsertDialogContainer);
+        renderItems(items, upsertDialogContainerId);
         {
             const upsertedSidebarButton = document.querySelector(`sidebar-button[title="${input.value}"]`);
-            const sidebarRect = upsertDialogContainer.getBoundingClientRect();
+            const sidebar = document.getElementById(upsertDialogContainerId)
+            const sidebarRect = sidebar.getBoundingClientRect();
             const upsertedSidebarButtonRect = upsertedSidebarButton.getBoundingClientRect();
-            const currentScroll = upsertDialogContainer.scrollTop;
+            const currentScroll = sidebar.scrollTop;
             const offsetTop = upsertedSidebarButtonRect.top - sidebarRect.top + currentScroll;
-            const targetScroll = offsetTop - (upsertDialogContainer.clientHeight / 2) + (upsertedSidebarButtonRect.height / 2);
-            upsertDialogContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
-            upsertedSidebarButton.querySelector('input').click();
+            const targetScroll = offsetTop - (sidebar.clientHeight / 2) + (upsertedSidebarButtonRect.height / 2);
+            sidebar.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            upsertedSidebarButtonInput = upsertedSidebarButton.querySelector('input');
+            switch(upsertDialogMethod) {
+                case 'POST': upsertedSidebarButtonInput.click(); break;
+                case 'PUT': upsertedSidebarButtonInput.checked = true; break;
+                default: console.log('invalid method');
+            }
         }
         upsertDialogInput.value = '';
         upsertDialog.close();
