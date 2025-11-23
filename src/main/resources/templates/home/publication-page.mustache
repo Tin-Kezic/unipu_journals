@@ -59,7 +59,7 @@
     <script>
         function renderItems(items, containerId, clickFirst) {
             const container = document.getElementById(containerId);
-            const type = containerId.replace(/s-.*$/, ''); // publication(s-container) -> publication; section(s-container) -> section; manuscript(s-container) -> manuscript
+            const type = containerId.replace(/s-.*$/, '');
             container.innerHTML = '';
             if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
             if(type === 'manuscript') items.forEach((manuscript, index) => {
