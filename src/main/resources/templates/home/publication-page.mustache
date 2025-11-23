@@ -229,6 +229,7 @@
         document.addEventListener('sidebar-button-option-click', async (event) => {
             const { id, title, canEdit, canHide } = event.detail;
             const idValue = id.replace(/^.*-/, '');
+            const type = id.replace(/-.*$/, '');
             openOptionsDialog(title, [
                 canEdit && {name: 'Rename', onClick: () => {
                     if(id.includes('publication')) 
@@ -243,6 +244,9 @@
                     else if(id.includes('section'))
                         openBooleanDialog(`Hide ${title}`, 'DELETE', `/api/publication/${currentPublicationId}/section/${id}`, `/api/publication/${currentPublicationId}/sections?${params()}`, 'sections-sidebar');
                     else console.log('invalid id passed');
+                }},
+                (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
+                    openUpsertDialog(`Edit description of ${title}`, 'PUT', ``, ``, ``);
                 }}
             ].filter(Boolean));
         });
