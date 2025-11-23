@@ -250,7 +250,7 @@
                         openBooleanDialog(`Hide ${title}`, 'DELETE', `/api/publication/${currentPublicationId}/section/${id}`, `/api/publication/${currentPublicationId}/sections?${params()}`, 'sections-sidebar');
                     else console.log('invalid id passed');
                 }}
-            ].filter(Boolean))
+            ].filter(Boolean));
         });
     </script>
 
