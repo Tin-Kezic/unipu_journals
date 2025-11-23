@@ -62,14 +62,14 @@
             const type = containerId.replace(/s-.*$/, ''); // publication(s-container) -> publication; section(s-container) -> section; manuscript(s-container) -> manuscript
             container.innerHTML = '';
             if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
-            if(type == 'manuscript') items.forEach((manuscript, index) => {
+            if(type === 'manuscript') items.forEach((manuscript, index) => {
                 container.innerHTML = 'implement manuscripts rendering'
             });
             else items.forEach((sidebarButton, index)  => {
                 const newElement = document.createElement('sidebar-button');
                 newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
                 newElement.setAttribute('type', type);
-                if(type == 'section') {
+                if(type === 'section') {
                     newElement.setAttribute('font-size', 'small');
                     newElement.setAttribute('description', sidebarButton.description);
                 }
@@ -77,7 +77,7 @@
                 newElement.setAttribute('can-edit', sidebarButton.canEdit);
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
                 container.appendChild(newElement);
-                if(index == 0 && clickFirst) newElement.querySelector('input').click();
+                if(index === 0 && clickFirst) newElement.querySelector('input').click();
             });
         }
         function fetchPublications() {
@@ -211,20 +211,18 @@
             const { id, title, isOverseeing } = event.detail;
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
-            type == 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
-            const url = `/api/publication/${currentPublicationId}/section${type == 'section' ? `/${currentSectionId}/manuscripts` : `s?${params()}`}`
+            type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
+            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : `s?${params()}`}`
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
-            if(type == 'section') {
-                console.log(document.getElementById(id));
-                console.log(document.getElementById('description'));
+            if(type === 'section') {
                 document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
             }
             const items = await response.json();
-            const container = type == 'publication' ? 'sections-sidebar': 'manuscripts-container';
-            const clickFirst = type == 'publication';
+            const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
+            const clickFirst = type === 'publication';
             renderItems(items, container, clickFirst);
-            if(type == 'publication') {
+            if(type === 'publication') {
                 if(isOverseeing) {
                     document.getElementById('add-section').hidden = false;
                     document.getElementById('sections-legend').hidden = true;
