@@ -77,4 +77,10 @@ class SectionController(
             else ResponseEntity.internalServerError().body("failed to update section")
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
+    @DeleteMapping("/{publicationId}/section/{sectionId}")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
+    fun delete(@PathVariable sectionId: Int): ResponseEntity<String> {
+        sectionRepository.delete(sectionId)
+        return ResponseEntity.ok("successfully deleted section $sectionId")
+    }
 }
