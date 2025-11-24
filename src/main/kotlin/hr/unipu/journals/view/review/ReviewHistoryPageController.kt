@@ -36,7 +36,7 @@ class ReviewHistoryPageController(
         model["publicationDate"] = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd.MM.YYYY")) ?: "no publication date"
         model["authors"] = accountRoleOnManuscriptRepository.authors(manuscript.id)
         model["abstract"] = manuscript.description
-        model["fileUrl"] = manuscript.fileUrl
+        model["downloadUrl"] = manuscript.downloadUrl
         model["views"] = manuscript.views
         model["downloads"] = manuscript.downloads
         model["reviewerWithRounds"] = manuscriptReviewRepository.reviewersAndRounds(manuscriptId)

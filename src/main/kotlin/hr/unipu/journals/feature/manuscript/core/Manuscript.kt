@@ -15,7 +15,7 @@ data class Manuscript(
     @Column("current_state")
     val state: ManuscriptState,
     val sectionId: Int,
-    val fileUrl: String,
+    val downloadUrl: String,
     val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
     val views: Int,
