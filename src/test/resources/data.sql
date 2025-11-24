@@ -97,7 +97,7 @@ INSERT INTO section_editor_on_section (section_editor_id, publication_section_id
 (9, 1),
 (10, 2),
 (29, 4);
-INSERT INTO manuscript (title, description, author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads) VALUES
+INSERT INTO manuscript (title, description, author_id, category_id, current_state, section_id, download_url, submission_date, publication_date, views, downloads) VALUES
 ('Machine Learning for Radiology', 'A study on using ML to detect anomalies in radiological images.', 10, 1, 'AWAITING_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', '2025-09-28 13:28:00', NULL, 134, 25),
 ('Deep Learning in Genomics', 'Analyzes genomic sequences using deep neural networks to predict mutations.', 11, 1, 'AWAITING_EDITOR_REVIEW', 7, 'http://example.com/ms2.pdf', '2023-09-28 13:28:00', NULL, 245, 33),
 ('Natural Language Processing in Clinical Notes', 'Extracting insights from unstructured clinical data using NLP.', 10, 2, 'AWAITING_REVIEWER_REVIEW', 11, 'http://example.com/ms3.pdf', '2022-09-28 13:28:00' , NULL, 310, 47),

@@ -41,7 +41,7 @@ INSERT INTO section_editor_on_section (publication_section_id, section_editor_id
 (3, 2),
 (4, 7),
 (5, 2);
-INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
+INSERT INTO manuscript (author_id, category_id, current_state, section_id, download_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (4, 1, 'AWAITING_EIC_REVIEW', 1, 'http://example.com/ms1.pdf', CURRENT_TIMESTAMP, NULL, 12, 3, 'Artificial Intelligence in Healthcare', 'Explores how AI models improve diagnostics and personalized medicine.'),
 (4, 2, 'MINOR', 2, 'http://example.com/ms2.pdf', CURRENT_TIMESTAMP, NULL, 5, 1, 'Sustainable Agriculture Practices', 'Examines eco-friendly farming techniques to increase yield with minimal environmental impact.'),
 (5, 3, 'AWAITING_REVIEWER_REVIEW', 3, 'http://example.com/ms3.pdf', CURRENT_TIMESTAMP, NULL, 22, 5, 'Cybersecurity in IoT Devices', 'Analyzes vulnerabilities and proposes solutions for connected smart devices.'),
@@ -1321,7 +1321,7 @@ VALUES
 (4, 93),
 (105, 60),
 (101, 110);
-INSERT INTO manuscript (author_id, category_id, current_state, section_id, file_url, submission_date, publication_date, views, downloads, title, description) VALUES
+INSERT INTO manuscript (author_id, category_id, current_state, section_id, download_url, submission_date, publication_date, views, downloads, title, description) VALUES
 (108, 46, 'REJECTED', 57, 'http://files.example.com/manuscript1.pdf', '2022-12-23 14:47:50', NULL, 975, 132, 'Climate Change and Renewable Energy', 'Investigates renewable solutions to mitigate global warming effects.'),
 (150, 94, 'REJECTED', 83, 'http://files.example.com/manuscript2.pdf', '2023-02-17 15:49:26', NULL, 568, 28, 'Cybersecurity in IoT Devices', 'Analyzes vulnerabilities and proposes solutions for connected smart devices.'),
 (160, 87, 'HIDDEN', 163, 'http://files.example.com/manuscript3.pdf', '2024-03-24 22:10:06', NULL, 100, 214, 'Quantum Computing Algorithms', 'Discusses error correction and scalability in quantum systems.'),

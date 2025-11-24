@@ -78,7 +78,7 @@ CREATE TABLE manuscript (
     category_id INT,
     current_state manuscript_state NOT NULL DEFAULT 'AWAITING_EIC_REVIEW',
     section_id INT NOT NULL,
-    file_url TEXT NOT NULL,
+    download_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     publication_date TIMESTAMP,
     views INT NOT NULL DEFAULT 0,
