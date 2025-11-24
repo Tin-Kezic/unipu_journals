@@ -10,6 +10,7 @@
 {{>util/header}}
 {{>home/util/sidebar-button}}
 {{>home/util/upsert-dialog}}
+{{>home/util/boolean-dialog}}
 {{>home/util/options-dialog}}
 
 <style>
@@ -231,22 +232,26 @@
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             openOptionsDialog(title, [
-                canEdit && {name: 'Rename', onClick: () => {
-                    if(id.includes('publication')) 
-                        openUpsertDialog(`Rename ${title}`, 'PUT', `/api/publication/${idValue}?title=`, `/api/publication?${params()}`, 'publications-sidebar');
-                    else if(id.includes('section'))
-                        openUpsertDialog(`Rename ${title}`, 'PUT', `/api/publication/${currentPublicationId}/section/${idValue}?title=`, `/api/publication/${currentPublicationId}/sections?${params()}`, 'sections-sidebar');
-                    else console.log('invalid id passed');
-                }},
-                canHide && {name: 'Hide', onClick: () => {
-                    if(id.includes('publication')) 
-                        openBooleanDialog(`Hide ${title}`, 'DELETE', `/api/publication/${id}`, `/api/publication?${params()}`, 'publications-sidebar');
-                    else if(id.includes('section'))
-                        openBooleanDialog(`Hide ${title}`, 'DELETE', `/api/publication/${currentPublicationId}/section/${id}`, `/api/publication/${currentPublicationId}/sections?${params()}`, 'sections-sidebar');
-                    else console.log('invalid id passed');
-                }},
+                canEdit && {name: 'Rename', onClick: () => openUpsertDialog(
+                    `Rename ${title}`,
+                    'PUT',
+                    `/api/publication/${currentPublicationId}${type === 'section' ? `/section/${currentSectionId}` : ''}?title=`,
+                    `/api/publication${type === 'section' ? `/${currentPublicationId}/sections` : ''}?${params()}`,
+                    `${type}s-sidebar`
+                )},
+                canHide && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
+                    const response = await fetch(`/api/publication/${currentPublicationId}${type == 'section' ? `/section/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });
+                    if(!response.ok) { alert(await response.text()); return; }
+                    const buttonToRemove = document.getElementById(id);
+                    const previousButton = buttonToRemove.previousSibling?.previousSibling;
+                    const nextButton = buttonToRemove.nextSibling?.nextSibling;
+                    if(previousButton) previousButton.querySelector('input').click();
+                    else if(nextButton) nextButton.querySelector('input').click();
+                    else document.getElementById('manuscripts-container').innerHTML = '';
+                    buttonToRemove.remove();
+                })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
-                    openUpsertDialog(`Edit description of ${title}`, 'PUT', ``, ``, ``);
+                    openTextAreaDialog(`Edit description of ${title}`, 'PUT', ``, ``, ``);
                 }}
             ].filter(Boolean));
         });
@@ -296,31 +301,5 @@
     </section>
 </main>
 
-<dialog id="hide-publication-dialog" closedby="any">
-    <p id="hide-publication-dialog-message"></p>
-    <br>
-    <div style="display: flex; justify-content: space-between">
-        <button id="hide-publication-dialog-negative" class="m3-button outline-button">Cancel</button>
-        <button id="hide-publication-dialog-positive" class="m3-button red-button" style="margin-left: 1rem; padding-inline: 1.7rem;">Hide</button>
-    </div>
-</dialog>
-<script>
-    const hidePublicationDialog = document.getElementById('hide-publication-dialog');
-    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
-    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
-        button.addEventListener('click', () => {
-            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
-            currentId = button.dataset.id;
-            hidePublicationDialog.showModal();
-        });
-    });
-    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
-    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/${currentId}?isHidden=true`, { method: 'PUT' });
-        if(!response.ok) { alert(await response.text()); return; }
-        document.querySelector(`div[data-id="${currentId}"]`).remove();
-        hidePublicationDialog.close();
-    });
-</script>
 </body>
 </html>
