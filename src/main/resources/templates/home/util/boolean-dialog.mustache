@@ -1,0 +1,36 @@
+<dialog id="boolean-dialog" closedby="any">
+    <p id="boolean-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="boolean-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="boolean-dialog-positive" class="m3-button red-button" style="margin-left: 1rem; padding-inline: 1.7rem;"></button>
+    </div>
+</dialog>
+<script>
+    const booleanDialog = document.getElementById('boolean-dialog');
+    const booleanDialogPositive = document.getElementById('boolean-dialog-positive');
+    document.getElementById('boolean-dialog-negative').addEventListener('click', () => booleanDialog.close());
+    function openBooleanDialog(message, positiveText, onPositive) {
+        booleanDialogPositive.innerHTML = message;
+        booleanDialogPositive.onclick = () => { onPositive(); booleanDialog.close(); }
+        booleanDialog.showModal();
+    }
+    /*
+    const hidePublicationDialog = document.getElementById('hide-publication-dialog');
+    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
+    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
+        button.addEventListener('click', () => {
+            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
+            currentId = button.dataset.id;
+            hidePublicationDialog.showModal();
+        });
+    });
+    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
+    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
+        const response = await fetch(`/api/publication/${currentId}?isHidden=true`, { method: 'PUT' });
+        if(!response.ok) { alert(await response.text()); return; }
+        document.querySelector(`div[data-id="${currentId}"]`).remove();
+        hidePublicationDialog.close();
+    });
+    */
+</script>
