@@ -75,7 +75,7 @@ class PublicationPageController(
                 title = manuscript.title,
                 authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
                 downloadUrl = manuscript.downloadUrl,
-                submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",,
+                submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 description = manuscript.description
             )
