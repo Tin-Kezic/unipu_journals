@@ -16,7 +16,7 @@
                         <button style="text-decoration: underline; background-color: inherit; border: none;">Reviewer {{reviewer}}</button>
                         <div style="display: flex; flex-direction: column;">
                         {{#rounds}}
-                            <button onclick="window.location = '/manuscript/{{manuscriptId}}/review-history/reviewer/{{reviewer}}/round/{{.}}'"
+                            <button onclick="window.location='/manuscript/{{manuscriptId}}/review-history/reviewer/{{reviewer}}/round/{{.}}'"
                                     style="cursor: pointer; background-color: inherit; border: none;">round_{{.}}</button>
                         {{/rounds}}
                         </div>
