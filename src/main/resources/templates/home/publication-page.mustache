@@ -9,6 +9,7 @@
 <body style="height: 100%; overflow: hidden; display: flex; flex-direction: column;">
 {{>util/header}}
 {{>home/util/sidebar-button}}
+{{>home/util/manuscript}}
 {{>home/util/upsert-dialog}}
 {{>home/util/boolean-dialog}}
 {{>home/util/options-dialog}}
@@ -65,7 +66,15 @@
             container.innerHTML = '';
             if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
             if(type === 'manuscript') items.forEach((manuscript, index) => {
-                container.innerHTML = 'implement manuscripts rendering'
+                const newManuscript = document.createElement('manuscript-element');
+                newManuscript.setAttribute('id', manuscript.id);
+                newManuscript.setAttribute('title', manuscript.title);
+                newManuscript.setAttribute('description', manuscript.description);
+                newManuscript.setAttribute('authors', manuscript.authors);
+                newManuscript.setAttribute('download-url', manuscript.link);
+                newManuscript.setAttribute('submission-date', manuscript.submissionDate);
+                newManuscript.setAttribute('publication-date', manuscript.publicationDate);
+                container.appendChild(newManuscript);
             });
             else items.forEach((sidebarButton, index)  => {
                 const newElement = document.createElement('sidebar-button');
@@ -281,24 +290,9 @@
                 <p id="description" class="container-text">{{{description}}}</p>
             </article>
         </div>
-        <div id="manuscripts-container">
+        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
             {{#manuscripts}}
-                <article data-id="{{id}}" onclick="window.location = '/manuscript/{{id}}'" class="container" style="width: auto; height: auto; max-width: 100%;">
-                    <p class="container-text">{{title}}</p>
-
-                    <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
-
-                    <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">{{publicationDate}}</p>
-                    <p style="font-weight: 100; font-size: 0.8rem">{{description}}</p>
-                    {{#isSectionEditorOrSuperior}}
-                        <footer class="container-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
-                            {{#isAdmin}}
-                                <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>
-                            {{/isAdmin}}
-                            <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
-                        </footer>
-                    {{/isSectionEditorOrSuperior}}
-                </article>
+                <manuscript-element id="{{id}}" title="{{title}}" description="{{description}}" authors="{{authors}}" download-url="{{downloadUrl}}" submission-date="{{submissionDate}}" publication-date="{{publicationDate}}" ></manuscript-element>
             {{/manuscripts}}
         </div>
     </section>
