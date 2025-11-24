@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
@@ -22,7 +23,8 @@ import java.time.format.DateTimeFormatter
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
-    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
+    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val objectMapper: ObjectMapper
 ) {
     @GetMapping("/manuscripts")
     fun all(@PathVariable sectionId: Int): List<ManuscriptDTO> {
@@ -30,7 +32,7 @@ class ManuscriptController(
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
-                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
+                authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
                 downloadUrl = manuscript.downloadUrl,
                 submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",

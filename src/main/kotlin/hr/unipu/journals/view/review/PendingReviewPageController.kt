@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.review
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.core.Manuscript
@@ -23,13 +24,14 @@ class PendingReviewPageController(
     private val manuscriptRepository: ManuscriptRepository,
     private val inviteRepository: InviteRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val authorizationService: AuthorizationService
+    private val authorizationService: AuthorizationService,
+    private val objectMapper: ObjectMapper
 ) {
     fun List<Manuscript>.toManuscriptDTO() = this.map { manuscript ->
         ManuscriptDTO(
             id = manuscript.id,
             title = manuscript.title,
-            authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
+            authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
             downloadUrl = manuscript.downloadUrl,
             submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
             publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",

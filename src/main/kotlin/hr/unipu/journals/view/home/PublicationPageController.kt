@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.home
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
@@ -23,7 +24,8 @@ class PublicationPageController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val objectMapper: ObjectMapper
 ) {
     @GetMapping("/")
     fun page(
@@ -73,7 +75,7 @@ class PublicationPageController(
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
-                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
+                authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
                 downloadUrl = manuscript.downloadUrl,
                 submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
