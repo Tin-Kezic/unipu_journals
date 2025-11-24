@@ -1,14 +1,13 @@
-
-<dialog id="upsert-dialog" closedby="any">
-    <p id="upsert-dialog-message"></p>
-    <form id="upsert-dialog-form">
+<dialog id="textarea-dialog" closedby="any">
+    <p id="textarea-dialog-message"></p>
+    <form id="textarea-dialog-form">
         <div class="text-field">
-            <label for="upsert-dialog-textarea">title</label>
-            <textarea id="upsert-dialog-textarea" name="upsert-dialog-input" type="text">
+            <label for="textarea-dialog-textarea">description</label>
+            <textarea id="textarea-dialog-textarea" name="textarea-dialog-input" type="text" style="width: 25rem; height: 12.5rem; padding: 1rem; font-size: medium;"></textarea>
         </div>
         <div style="display: flex; justify-content: space-between">
-            <button id="upsert-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
-            <button class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;">Add</button>
+            <button id="textarea-dialog-negative" class="m3-button outline-button" type="button">Cancel</button>
+            <button id="textarea-dialog-positive" class="m3-button purple-button" style="box-shadow: none; padding-inline: 1.8rem;"></button>
         </div>
     </form>
 </dialog>
@@ -16,28 +15,20 @@
     const textareaDialog = document.getElementById('textarea-dialog');
     const textareaDialogMessage = document.getElementById('textarea-dialog-message');
     const textareaDialogForm = document.getElementById('textarea-dialog-form');
-    const textareaDialogInput = document.querySelector('input[name="textarea-dialog-textarea"]');
-    const textareaDialogNegative = document.getElementById('textarea-dialog-negative');
-    let textareaDialogMethod, textareaDialogSubmitUrl, textareaDialogReloadUrl, textareaDialogContainerId;
-    function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId) {
+    const textareaDialogTextarea = document.getElementById('textarea-dialog-textarea');
+    const textareaDialogPositive = document.getElementById('textarea-dialog-positive');
+    document.getElementById('textarea-dialog-negative').addEventListener('click', () => textareaDialog.close());
+    let textareaDialogOnSubmit;
+    function openTextareaDialog(message, positiveText, textareaValue, onSubmit) {
         textareaDialogMessage.innerHTML = message;
-        textareaDialogMethod = method;
-        textareaDialogSubmitUrl = submitUrl;
-        textareaDialogReloadUrl = reloadUrl;
-        textareaDialogContainerId = containerId;
+        textareaDialogPositive.innerHTML = positiveText;
+        textareaDialogTextarea.value = textareaValue;
+        textareaDialogOnSubmit = onSubmit;
         textareaDialog.showModal();
     }
-    textareaDialogNegative.addEventListener('click', () => textareaDialog.close());
     textareaDialogForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const input = document.getElementById('textarea-dialog-input');
-        const textareaResponse = await fetch(textareaDialogSubmitUrl + encodeURIComponent(input.value), { method: upsertDialogMethod });
-        if(!textareaResponse.ok) { alert(await upsertResponse.text()); return; }
-        const reloadResponse = await fetch(textareaDialogReloadUrl, { method: 'GET' });
-        if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
-        const items = await reloadResponse.json();
-        renderItems(items, textareaDialogContainerId);
-        textareaDialogInput.value = '';
+        textareaDialogOnSubmit();
         textareaDialog.close();
-    })
+    });
 </script>

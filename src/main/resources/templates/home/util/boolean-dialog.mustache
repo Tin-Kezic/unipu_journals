@@ -8,29 +8,13 @@
 </dialog>
 <script>
     const booleanDialog = document.getElementById('boolean-dialog');
+    const booleanDialogMessage = document.getElementById('boolean-dialog-message');
     const booleanDialogPositive = document.getElementById('boolean-dialog-positive');
     document.getElementById('boolean-dialog-negative').addEventListener('click', () => booleanDialog.close());
     function openBooleanDialog(message, positiveText, onPositive) {
-        booleanDialogPositive.innerHTML = message;
+        booleanDialogMessage.innerHTML = message
+        booleanDialogPositive.innerHTML = positiveText;
         booleanDialogPositive.onclick = () => { onPositive(); booleanDialog.close(); }
         booleanDialog.showModal();
     }
-    /*
-    const hidePublicationDialog = document.getElementById('hide-publication-dialog');
-    const hidePublicationDialogMessage = document.getElementById('hide-publication-dialog-message');
-    document.querySelectorAll('button[data-type="hide-button"]').forEach(button => {
-        button.addEventListener('click', () => {
-            hidePublicationDialogMessage.innerHTML = `Hide <b>${button.dataset.title}</b>?`;
-            currentId = button.dataset.id;
-            hidePublicationDialog.showModal();
-        });
-    });
-    document.getElementById('hide-publication-dialog-negative').addEventListener('click', () => hidePublicationDialog.close());
-    document.getElementById('hide-publication-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/${currentId}?isHidden=true`, { method: 'PUT' });
-        if(!response.ok) { alert(await response.text()); return; }
-        document.querySelector(`div[data-id="${currentId}"]`).remove();
-        hidePublicationDialog.close();
-    });
-    */
 </script>

@@ -12,6 +12,7 @@
 {{>home/util/upsert-dialog}}
 {{>home/util/boolean-dialog}}
 {{>home/util/options-dialog}}
+{{>home/util/textarea-dialog}}
 
 <style>
     select {
@@ -251,7 +252,14 @@
                     buttonToRemove.remove();
                 })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
-                    openTextAreaDialog(`Edit description of ${title}`, 'PUT', ``, ``, ``);
+                    const description = document.getElementById('description');
+                    openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {
+                        const textarea = document.getElementById('textarea-dialog-textarea');
+                        const response = await fetch(`/api/publication/${currentPublicationId}/section/${currentSectionId}?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
+                        if(!response.ok) { alert(await response.text()); return; }
+                        document.getElementById(id).setAttribute('description', textarea.value);
+                        description.innerHTML = textarea.value;
+                    });
                 }}
             ].filter(Boolean));
         });
@@ -271,11 +279,6 @@
             <legend id="sections-legend">Manuscripts</legend>
             <article class="container no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
                 <p id="description" class="container-text">{{{description}}}</p>
-                {{#isEicOnPublicationOrAdmin}}
-                    <footer style="display: flex; justify-content: flex-end;">
-                        <button id="edit-description-button" class="m3-button purple-button" style="box-shadow: none; margin-top: 1.5rem; padding-inline: 2rem; padding-block: 0.4rem; border-radius: 7px; font-size: 1.5rem;">Edit</button>
-                    </footer>
-                {{/isEicOnPublicationOrAdmin}}
             </article>
         </div>
         <div id="manuscripts-container">
