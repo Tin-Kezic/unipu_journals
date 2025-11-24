@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.section.core
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
@@ -9,6 +10,7 @@ import org.jsoup.safety.Safelist
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -65,7 +67,7 @@ class SectionController(
         @RequestParam description: String?,
         @RequestParam isHidden: Boolean?,
     ): ResponseEntity<String> {
-        if(isHidden != null && authorizationService.isAdmin.not()) return ResponseEntity.badRequest().body("unauthorized to change if section $sectionId is hidden")
+        require(isHidden == null || authorizationService.isAdmin)
         return try {
             val rowsAffected = sectionRepository.update(
                 id = sectionId,
