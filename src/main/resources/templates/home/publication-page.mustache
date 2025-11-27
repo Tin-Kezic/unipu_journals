@@ -247,7 +247,8 @@
                     'PUT',
                     `/api/publication/${currentPublicationId}${type === 'section' ? `/section/${currentSectionId}` : ''}?title=`,
                     `/api/publication${type === 'section' ? `/${currentPublicationId}/sections` : ''}?${params()}`,
-                    `${type}s-sidebar`
+                    `${type}s-sidebar`,
+                    title
                 )},
                 canHide && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
                     const response = await fetch(`/api/publication/${currentPublicationId}${type == 'section' ? `/section/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });

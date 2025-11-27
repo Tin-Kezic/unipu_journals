@@ -19,9 +19,10 @@
     const upsertDialogPositive = document.getElementById('upsert-dialog-positive');
     document.getElementById('upsert-dialog-negative').addEventListener('click', () => upsertDialog.close());
     let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainerId;
-    function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId) {
+    function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId, inputValue) {
         upsertDialogMessage.innerHTML = message;
         upsertDialogMethod = method;
+        upsertDialogInput.value = inputValue;
         upsertDialogPositive.innerHTML = method == 'POST' ? 'Add' : 'Update';
         upsertDialogSubmitUrl = submitUrl;
         upsertDialogReloadUrl = reloadUrl;
