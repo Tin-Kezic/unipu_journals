@@ -270,7 +270,11 @@
                         document.getElementById(id).setAttribute('description', textarea.value);
                         description.innerHTML = textarea.value;
                     });
-                }}
+                }},
+                {{isAdmin}} && {
+                    name: 'Manage editors',
+                    onClick: () => window.location = `/publication/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `section/${currentSectionId}/manage-section-editor-on-section`}`
+                }
             ].filter(Boolean));
         });
     </script>
