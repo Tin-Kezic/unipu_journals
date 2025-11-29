@@ -217,7 +217,7 @@
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
-            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : 's'}?${params()}`;
+            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : ''}?${params()}`;
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             if(type === 'section') {

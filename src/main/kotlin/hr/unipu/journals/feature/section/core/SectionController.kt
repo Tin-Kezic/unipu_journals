@@ -32,7 +32,7 @@ class SectionController(
     fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
-    @GetMapping("/{publicationId}/sections")
+    @GetMapping("/{publicationId}/section")
     fun all(
         @PathVariable publicationId: Int,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
