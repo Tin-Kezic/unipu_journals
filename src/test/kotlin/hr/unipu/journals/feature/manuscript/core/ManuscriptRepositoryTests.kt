@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.feature.publication.core.Affiliation
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -20,57 +21,33 @@ class ManuscriptRepositoryTests {
         assertEquals(views + 1, jdbcTemplate.queryForObject<Int>("SELECT views FROM manuscript WHERE id = 1"))
     }
     @Test fun `insert manuscript`() {
-        Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND author_id = 24 AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
-        assertEquals(1, manuscriptRepository.insert("new manuscript", 24, 1, 11, "new file url"))
-        Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND author_id = 24 AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
+        Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
+        assertEquals(1, manuscriptRepository.insert("new manuscript", 1, 11, "new file url"))
+        Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript'  AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
     }
     @Test fun `retrieve manuscripts pending review for account by account id where parent section and publication isn't hidden`() {
         assertEquals(
             listOf(
                 // manuscript 1 is not present because it's section is hidden
-                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47),
-                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135, 26)
+                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245),
+                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135),
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310),
             ),
-            manuscriptRepository.pending(25)
+            manuscriptRepository.all(manuscriptStateFilter = ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 25)
         )
         assertEquals(
             listOf(
-                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47)
+                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245),
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310)
             ),
-            manuscriptRepository.pending(26)
+            manuscriptRepository.all(manuscriptStateFilter = ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 26)
         )
         assertEquals(
             listOf(
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47)
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310)
             ),
-            manuscriptRepository.pending(27)
+            manuscriptRepository.all(manuscriptStateFilter = ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 27)
         )
-    }
-    @Test
-    fun `retrieve manuscripts pending review for account by account id where parent section and publication isn't hidden by publication id`() {
-        assertEquals(
-            listOf(
-                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135, 26)
-            ),
-            manuscriptRepository.pending(25, 1)
-        )
-        assertEquals(
-            listOf(
-                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33)
-            ),
-            manuscriptRepository.pending(25, 2)
-        )
-        assertEquals(
-            listOf(
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47)
-            ),
-            manuscriptRepository.pending(25, 3)
-        )
-        assertEquals(listOf<Manuscript>(), manuscriptRepository.pending(26, 1))
-        assertEquals(listOf<Manuscript>(), manuscriptRepository.pending(27, 1))
-        assertEquals(listOf<Manuscript>(), manuscriptRepository.pending(27, 2))
     }
     @Test
     fun `check if manuscript exists by id`() {
@@ -92,7 +69,7 @@ class ManuscriptRepositoryTests {
     @Test
     fun `retrieve manuscript by id`() {
         assertEquals(
-            Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245, 33),
+            Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245),
             manuscriptRepository.byId(2)
         )
     }
@@ -100,56 +77,46 @@ class ManuscriptRepositoryTests {
     fun `retrieve all manuscripts contained in certain section by section id`() {
         assertEquals(
             listOf(
-                Manuscript(21, "Manuscript awaiting deletion", "description of manuscript awaiting deletion", 11, 5, ManuscriptState.REJECTED, 2, "http://example.com/ms210.pdf", LocalDateTime.of(2007, 9, 28, 13, 28, 0), null, 76, 15),
-                Manuscript(20, "Wearable Technology and AI Integration2", "Leveraging real-time health data from wearables through AI.2", 11, 5, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms210.pdf", LocalDateTime.of(2007, 9, 28, 13, 28, 0), null, 76, 15),
-                Manuscript(19, "Clinical Trial Optimization with AI2", "Optimizing patient recruitment and trial design using machine learning.2", 10, 5, ManuscriptState.HIDDEN, 2, "http://example.com/ms29.pdf", LocalDateTime.of(2008, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 7, 25, 17, 45, 0), 61, 8),
-                Manuscript(18, "AI-Based Mental Health Assessment2", "Assessing mental health using sentiment analysis and behavioral data.2", 11, 4, ManuscriptState.ARCHIVED, 2, "http://example.com/ms28.pdf", LocalDateTime.of(2009, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 30, 0), 22, 4),
-                Manuscript(17, "Predictive Analytics in Emergency Care2", "Forecasting patient outcomes in emergency rooms using AI.2", 10, 4, ManuscriptState.REJECTED, 2, "http://example.com/ms27.pdf", LocalDateTime.of(2010, 9, 28, 13, 28, 0), null, 46, 6),
-                Manuscript(16, "AI in Medical Decision Making2", "Examining the implications of autonomous decision systems in healthcare.2", 11, 3, ManuscriptState.PUBLISHED, 2, "http://example.com/ms26.pdf", LocalDateTime.of(2011, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 32, 16), 513, 89),
-                Manuscript(15, "Reinforcement Learning in Surgery2", "Simulating surgical procedures using reinforcement learning algorithms.2", 10, 3, ManuscriptState.MAJOR, 2, "http://example.com/ms25.pdf", LocalDateTime.of(2012, 9, 28, 13, 28, 0), null, 88, 13),
-                Manuscript(14, "AI-Powered Drug Discovery2", "Accelerating pharmaceutical research through predictive modeling.2", 11, 2, ManuscriptState.MINOR, 2, "http://example.com/ms24.pdf", LocalDateTime.of(2013, 9, 28, 13, 28, 0), null, 99, 20),
-                Manuscript(13, "Natural Language Processing in Clinical Notes2", "Extracting insights from unstructured clinical data using NLP.2", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms23.pdf", LocalDateTime.of(2014, 9, 28, 13, 28, 0), null, 311, 48),
-                Manuscript(12, "Deep Learning in Genomics2", "Analyzes genomic sequences using deep neural networks to predict mutations.2", 11, 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 2, "http://example.com/ms22.pdf", LocalDateTime.of(2015, 9, 28, 13, 28, 0), null, 246, 34),
-                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135, 26)
+                Manuscript(16, "AI in Medical Decision Making2", "Examining the implications of autonomous decision systems in healthcare.2", 3, ManuscriptState.PUBLISHED, 2, "http://example.com/ms26.pdf", LocalDateTime.of(2011, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 32, 16), 513),
+                Manuscript(18, "AI-Based Mental Health Assessment2", "Assessing mental health using sentiment analysis and behavioral data.2", 4, ManuscriptState.ARCHIVED, 2, "http://example.com/ms28.pdf", LocalDateTime.of(2009, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 30, 0), 22),
+                Manuscript(14, "AI-Powered Drug Discovery2", "Accelerating pharmaceutical research through predictive modeling.2", 2, ManuscriptState.MINOR, 2, "http://example.com/ms24.pdf", LocalDateTime.of(2013, 9, 28, 13, 28, 0), null, 99),
+                Manuscript(19, "Clinical Trial Optimization with AI2", "Optimizing patient recruitment and trial design using machine learning.2", 5, ManuscriptState.HIDDEN, 2, "http://example.com/ms29.pdf", LocalDateTime.of(2008, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 7, 25, 17, 45, 0), 61),
+                Manuscript(12, "Deep Learning in Genomics2", "Analyzes genomic sequences using deep neural networks to predict mutations.2", 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 2, "http://example.com/ms22.pdf", LocalDateTime.of(2015, 9, 28, 13, 28, 0), null, 246),
+                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135),
+                Manuscript(21, "Manuscript awaiting deletion", "description of manuscript awaiting deletion", 5, ManuscriptState.REJECTED, 2, "http://example.com/ms210.pdf", LocalDateTime.of(2007, 9, 28, 13, 28, 0), null, 76),
+                Manuscript(13, "Natural Language Processing in Clinical Notes2", "Extracting insights from unstructured clinical data using NLP.2", 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms23.pdf", LocalDateTime.of(2014, 9, 28, 13, 28, 0), null, 348),
+                Manuscript(17, "Predictive Analytics in Emergency Care2", "Forecasting patient outcomes in emergency rooms using AI.2", 4, ManuscriptState.REJECTED, 2, "http://example.com/ms27.pdf", LocalDateTime.of(2010, 9, 28, 13, 28, 0), null, 46),
+                Manuscript(15, "Reinforcement Learning in Surgery2", "Simulating surgical procedures using reinforcement learning algorithms.2", 3, ManuscriptState.MAJOR, 2, "http://example.com/ms25.pdf", LocalDateTime.of(2012, 9, 28, 13, 28, 0), null, 88),
+                Manuscript(20, "Wearable Technology and AI Integration2", "Leveraging real-time health data from wearables through AI.2", 5, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms210.pdf", LocalDateTime.of(2007, 9, 28, 13, 28, 0), null, 76),
             ),
-            manuscriptRepository.allBySectionId(sectionId = 2)
+            manuscriptRepository.all(sectionId = 2)
         )
     }
     @Test
     fun `retrieve all manuscripts contained in certain section by section id and manuscript state`() {
         assertEquals(
             listOf(
-                Manuscript(16, "AI in Medical Decision Making2", "Examining the implications of autonomous decision systems in healthcare.2", 11, 3, ManuscriptState.PUBLISHED, 2, "http://example.com/ms26.pdf", LocalDateTime.of(2011, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 32, 16), 513, 89),
+                Manuscript(16, "AI in Medical Decision Making2", "Examining the implications of autonomous decision systems in healthcare.2", 3, ManuscriptState.PUBLISHED, 2, "http://example.com/ms26.pdf", LocalDateTime.of(2011, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 6, 30, 13, 32, 16), 513),
             ),
-            manuscriptRepository.allBySectionId(sectionId = 2, ManuscriptState.PUBLISHED)
+            manuscriptRepository.all(sectionId = 2, manuscriptStateFilter = ManuscriptStateFilter.PUBLISHED)
         )
     }
     @Test
     fun `retrieve all manuscripts by author id`() {
         assertEquals(
-            listOf(
-                Manuscript(19, "Clinical Trial Optimization with AI2", "Optimizing patient recruitment and trial design using machine learning.2", 10, 5, ManuscriptState.HIDDEN, 2, "http://example.com/ms29.pdf", LocalDateTime.of(2008, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 7, 25, 17, 45, 0), 61, 8),
-                Manuscript(17, "Predictive Analytics in Emergency Care2", "Forecasting patient outcomes in emergency rooms using AI.2", 10, 4, ManuscriptState.REJECTED, 2, "http://example.com/ms27.pdf", LocalDateTime.of(2010, 9, 28, 13, 28, 0), null, 46, 6),
-                Manuscript(15, "Reinforcement Learning in Surgery2", "Simulating surgical procedures using reinforcement learning algorithms.2", 10, 3, ManuscriptState.MAJOR, 2, "http://example.com/ms25.pdf", LocalDateTime.of(2012, 9, 28, 13, 28, 0), null, 88, 13),
-                Manuscript(13, "Natural Language Processing in Clinical Notes2", "Extracting insights from unstructured clinical data using NLP.2", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms23.pdf", LocalDateTime.of(2014, 9, 28, 13, 28, 0), null, 311, 48),
-                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135, 26),
-                Manuscript(9, "Clinical Trial Optimization with AI", "Optimizing patient recruitment and trial design using machine learning.", 10, 5, ManuscriptState.HIDDEN, 1, "http://example.com/ms9.pdf", LocalDateTime.of(2018, 9, 28, 13, 28, 0), LocalDateTime.of(2025, 7, 25, 17, 45, 0), 60, 7),
-                Manuscript(7, "Predictive Analytics in Emergency Care", "Forecasting patient outcomes in emergency rooms using AI.", 10, 4, ManuscriptState.REJECTED, 1, "http://example.com/ms7.pdf", LocalDateTime.of(2025, 9, 28, 13, 28, 0), null, 45, 5),
-                Manuscript(5, "Reinforcement Learning in Surgery", "Simulating surgical procedures using reinforcement learning algorithms.", 10, 3, ManuscriptState.MAJOR, 1, "http://example.com/ms5.pdf", LocalDateTime.of(2021, 9, 28, 13, 28, 0), null, 87, 12),
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47),
-                Manuscript(1, "Machine Learning for Radiology", "A study on using ML to detect anomalies in radiological images.", 10, 1, ManuscriptState.AWAITING_EIC_REVIEW, 1, "http://example.com/ms1.pdf", LocalDateTime.of(2025, 9, 28, 13, 28, 0), null, 134, 25)
-            ),
-            manuscriptRepository.allByAuthorId(authorId = 10)
+            listOf(Manuscript(1, "Machine Learning for Radiology", "A study on using ML to detect anomalies in radiological images.", 1, ManuscriptState.AWAITING_EIC_REVIEW, 1, "http://example.com/ms1.pdf", LocalDateTime.of(2025, 9, 28, 13, 28, 0), null, 134)),
+            manuscriptRepository.all(accountId = 19, affiliation = Affiliation.AUTHOR)
         )
     }
     @Test
     fun `retrieve all manuscripts by author id and manuscript state`() {
         assertEquals(
             listOf(
-                Manuscript(13, "Natural Language Processing in Clinical Notes2", "Extracting insights from unstructured clinical data using NLP.2", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 2, "http://example.com/ms23.pdf", LocalDateTime.of(2014, 9, 28, 13, 28, 0), null, 311, 48),
-                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 10, 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0), null, 310, 47),
+                Manuscript(2, "Deep Learning in Genomics", "Analyzes genomic sequences using deep neural networks to predict mutations.", 1, ManuscriptState.AWAITING_EDITOR_REVIEW, 7, "http://example.com/ms2.pdf", LocalDateTime.of(2023, 9, 28, 13, 28, 0), null, 245),
+                Manuscript(11, "Machine Learning for Radiology2", "A study on using ML to detect anomalies in radiological images.2", 1, ManuscriptState.AWAITING_EIC_REVIEW, 2, "http://example.com/ms21.pdf", LocalDateTime.of(2016, 9, 28, 13, 28, 0), null, 135),
+                Manuscript(3, "Natural Language Processing in Clinical Notes", "Extracting insights from unstructured clinical data using NLP.", 2, ManuscriptState.AWAITING_REVIEWER_REVIEW, 11, "http://example.com/ms3.pdf", LocalDateTime.of(2022, 9, 28, 13, 28, 0) , null, 310),
             ),
-            manuscriptRepository.allByAuthorId(authorId = 10, ManuscriptState.AWAITING_REVIEWER_REVIEW)
+            manuscriptRepository.all(manuscriptStateFilter = ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = 25)
         )
     }
 }

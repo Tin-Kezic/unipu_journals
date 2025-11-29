@@ -46,7 +46,7 @@ class PendingReviewPageController(
                 publicationRepository.all(ManuscriptStateFilter.ALL_AWAITING_REVIEW, accountId = account.id) +
                 inviteRepository.allPublicationsContainingPendingManuscripts(account.email)
             model["invited"] = inviteRepository.affiliatedManuscripts(account.email, publicationId).toManuscriptDTO()
-            model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()
+            //model["pending"] = manuscriptRepository.pending(account.id, publicationId).toManuscriptDTO()
         } ?: throw IllegalStateException("account is null")
         model["publicationId"] = publicationId ?: 0
         return "review/pending-review-page"

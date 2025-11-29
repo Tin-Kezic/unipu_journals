@@ -2,6 +2,8 @@ package hr.unipu.journals.feature.manuscript.core
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.ManuscriptDTO
@@ -27,8 +29,21 @@ class ManuscriptController(
     private val objectMapper: ObjectMapper
 ) {
     @GetMapping("/manuscripts")
-    fun all(@PathVariable sectionId: Int): List<ManuscriptDTO> {
-        return manuscriptRepository.allBySectionId(sectionId).map { manuscript ->
+    fun all(
+        @PathVariable sectionId: Int,
+        @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
+        @RequestParam affiliation: Affiliation?,
+        @RequestParam category: String?,
+        @RequestParam sorting: Sorting?
+    ): List<ManuscriptDTO> {
+        return manuscriptRepository.all(
+            sectionId = sectionId,
+            manuscriptStateFilter = manuscriptStateFilter,
+            affiliation = affiliation,
+            accountId = authorizationService.account?.id,
+            category = category,
+            sorting = sorting
+        ).map { manuscript ->
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,

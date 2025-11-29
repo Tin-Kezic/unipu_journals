@@ -74,7 +74,6 @@ CREATE TABLE manuscript (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL DEFAULT '',
-    author_id INT,
     category_id INT,
     current_state manuscript_state NOT NULL DEFAULT 'AWAITING_EIC_REVIEW',
     section_id INT NOT NULL,
@@ -82,8 +81,6 @@ CREATE TABLE manuscript (
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     publication_date TIMESTAMP,
     views INT NOT NULL DEFAULT 0,
-    downloads INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (author_id) REFERENCES account(id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL,
     FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
 );

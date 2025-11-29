@@ -1,5 +1,8 @@
 package hr.unipu.journals.feature.section.core
 
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
+import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
@@ -30,9 +33,22 @@ class SectionController(
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
     @GetMapping("/{publicationId}/sections")
-    fun all(@PathVariable publicationId: Int): List<ContainerDTO> {
+    fun all(
+        @PathVariable publicationId: Int,
+        @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
+        @RequestParam affiliation: Affiliation?,
+        @RequestParam category: String?,
+        @RequestParam sorting: Sorting?
+    ): List<ContainerDTO> {
         val isAdmin = authorizationService.isAdmin
-        return sectionRepository.allByPublicationId(publicationId).map { section ->
+        return sectionRepository.all(
+            publicationId = publicationId,
+            manuscriptStateFilter = manuscriptStateFilter,
+            affiliation = affiliation,
+            accountId = authorizationService.account?.id,
+            category = category,
+            sorting = sorting
+        ).map { section ->
             ContainerDTO(
                 id = section.id,
                 title = section.title,

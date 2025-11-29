@@ -97,10 +97,10 @@
         categorySelect = document.querySelector('select[name="category"]');
         sortingSelect = document.querySelector('select[name="sorting"]');
         const params = () => new URLSearchParams({
-            affiliation: affiliationSelect.value,
             manuscriptStateFilter: manuscriptStateSelect.value,
+            affiliation: affiliationSelect.value,
+            ...(categorySelect.value && { category: categorySelect.value }),
             sorting: sortingSelect.value,
-            ...(categorySelect.value && { category: categorySelect.value })
         });
         [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
             const response = await fetch(`/api/publication?${params()}`, { method: 'GET' });
@@ -217,7 +217,7 @@
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
-            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : `s?${params()}`}`;
+            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : 's'}?${params()}`;
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             if(type === 'section') {

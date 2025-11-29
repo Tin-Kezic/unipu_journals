@@ -1,5 +1,8 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Publication
+import hr.unipu.journals.feature.publication.core.Sorting
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -7,47 +10,99 @@ import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
-    @Query("SELECT * FROM manuscript WHERE section_id = :section_id AND (current_state = :state OR :state IS NULL) ORDER BY id DESC")
-    fun allBySectionId(@Param("section_id") sectionId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Manuscript>
-
-    @Query("SELECT * FROM manuscript WHERE author_id = :author_id AND (current_state = :state OR :state IS NULL) ORDER BY id DESC")
-    fun allByAuthorId(@Param("author_id") authorId: Int, @Param("state") manuscriptState: ManuscriptState? = null): List<Manuscript>
+    @Query("""
+        SELECT DISTINCT manuscript.* FROM manuscript
+        JOIN publication_section ON manuscript.section_id = publication_section.id
+        JOIN publication ON publication.id = publication_section.publication_id
+        LEFT JOIN category ON manuscript.category_id = category.id
+        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
+        LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        JOIN account ON :account_id = account.id OR :account_id IS NULL
+        WHERE (category.name = :category OR :category IS NULL)
+        AND (publication_section.id = :section_id OR :section_id IS NULL)
+        AND (
+            :manuscript_state_filter IS NULL
+            OR
+            :manuscript_state_filter = 'HIDDEN' AND (
+                publication.is_hidden = TRUE
+                OR publication_section.is_hidden = TRUE
+                OR manuscript.current_state = 'HIDDEN'
+            )
+            OR publication.is_hidden = FALSE AND publication_section.is_hidden = FALSE AND (
+                :manuscript_state_filter = 'PUBLISHED' AND manuscript.current_state = 'PUBLISHED' AND (
+                    EXISTS (SELECT 1 FROM publication_section ps WHERE ps.publication_id = publication.id AND ps.is_hidden = FALSE)
+                    OR eic_on_publication.eic_id = :account_id OR account.is_admin
+                )
+                OR
+                :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
+                OR account_role_on_manuscript.account_id = :account_id AND (
+                    :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
+                    OR
+                    :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
+                        account_role_on_manuscript.account_role = 'EIC' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        OR
+                        account_role_on_manuscript.account_role = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        OR
+                        account_role_on_manuscript.account_role = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                    )
+                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
+                        manuscript.current_state = 'AWAITING_EIC_REVIEW'
+                        AND account_role_on_manuscript.account_role = 'EIC'
+                    )
+                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
+                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
+                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                    )
+                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
+                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                    )
+                )
+            )
+        ) AND (
+            :affiliation IS NULL
+            OR (
+                :affiliation = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
+                OR
+                :affiliation = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
+                OR
+                account_role_on_manuscript.account_id = :account_id AND (
+                    :affiliation = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                    OR
+                    :affiliation = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    OR
+                    :affiliation = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
+                    OR
+                    :affiliation = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
+                    OR
+                    :affiliation = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                )
+            )
+        )
+        ORDER BY manuscript.title
+    """)
+    fun all(
+        @Param("section_id") sectionId: Int? = null,
+        @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter? = null,
+        @Param("affiliation") affiliation: Affiliation? = null,
+        @Param("account_id") accountId: Int? = null,
+        @Param("category") category: String? = null,
+        @Param("sorting") sorting: Sorting? = null
+    ): List<Manuscript>
 
     @Modifying
     @Query("UPDATE manuscript SET views = views + 1 WHERE id = :id")
     fun incrementViews(@Param("id") id: Int): Int
 
     @Modifying
-    @Query("INSERT INTO manuscript (title, author_id, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
+    @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
     fun insert(
         @Param("title") title: String,
-        @Param("author_id") authorId: Int,
         @Param("category_id") categoryId: Int,
         @Param("section_id") sectionId: Int,
         @Param("file_url") fileUrl: String
     ): Int
-
-    @Query("""
-        SELECT DISTINCT manuscript.* FROM manuscript
-        JOIN publication_section ON manuscript.section_id = publication_section.id
-        JOIN publication ON publication_section.publication_id = publication.id
-        JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE account_role_on_manuscript.account_id = :account_id
-        AND publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
-        AND (publication.id = :publication_id OR :publication_id IS NULL)
-        AND (
-            account_role_on_manuscript.account_role = 'EIC'
-            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-            OR
-            account_role_on_manuscript.account_role = 'EDITOR'
-            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-            OR
-            account_role_on_manuscript.account_role = 'REVIEWER'
-            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-        )
-    """)
-    fun pending(@Param("account_id") accountId: Int, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
 
     @Query("SELECT EXISTS (SELECT 1 FROM manuscript WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean
@@ -62,11 +117,4 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
 
     @Query("SELECT * FROM manuscript WHERE id = :id")
     fun byId(@Param("id") manuscriptId: Int): Manuscript?
-
-    @Query("""
-        SELECT manuscript.* FROM manuscript
-        JOIN account ON manuscript.author_id = account.id
-        WHERE manuscript.author_id = account.id
-    """)
-    fun allByAuthor(@Param("id") authorId: Int): List<Manuscript>
 }

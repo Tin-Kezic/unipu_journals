@@ -42,7 +42,7 @@ class ProfilePageController(
         } ?: throw IllegalStateException("failed to find account ${account.id}")
 
         model["isAdmin"] = account.isAdmin
-        val manuscripts = manuscriptRepository.allByAuthor(accountId)
+        val manuscripts = manuscriptRepository.all(accountId = accountId)
         model["minor-major"] = manuscripts
             .filter { manuscript -> manuscript.state == ManuscriptState.MINOR || manuscript.state == ManuscriptState.MAJOR }
             .map { manuscript ->

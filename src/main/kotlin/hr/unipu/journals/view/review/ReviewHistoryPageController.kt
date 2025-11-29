@@ -38,7 +38,6 @@ class ReviewHistoryPageController(
         model["abstract"] = manuscript.description
         model["downloadUrl"] = manuscript.downloadUrl
         model["views"] = manuscript.views
-        model["downloads"] = manuscript.downloads
         model["reviewerWithRounds"] = manuscriptReviewRepository.reviewersAndRounds(manuscriptId)
             .groupBy { it.reviewerId }
             .map { (reviewer, rounds) -> ReviewerWithRounds(reviewer, rounds.map { it.round }) }

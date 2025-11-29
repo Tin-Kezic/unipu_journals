@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.section.core
 
-import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -34,16 +34,15 @@ class SectionRepositoryTests {
                 Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false),
                 Section(3, "Natural Language Processing", "Language models and text analysis", 1, false),
             ),
-            sectionRepository.allByPublicationId(1)
+            sectionRepository.all(publicationId = 1, manuscriptStateFilter =  ManuscriptStateFilter.PUBLISHED)
         )
     }
     @Test fun `retrieve all sections which contain archived manuscripts by publication id and manuscript state`() {
         assertEquals(
             listOf(Section(2, "Deep Learning", "Neural networks and deep learning models", 1, false)),
-            sectionRepository.allByPublicationId(1, ManuscriptState.ARCHIVED)
+            sectionRepository.all(publicationId = 1, manuscriptStateFilter = ManuscriptStateFilter.ARCHIVED)
         )
     }
-
     @Test fun `insert section`() {
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM publication_section WHERE title = 'new section' AND publication_id = 3)"))
         sectionRepository.insert("new section", 3)

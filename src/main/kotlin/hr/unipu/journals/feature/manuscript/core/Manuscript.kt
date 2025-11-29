@@ -10,7 +10,6 @@ data class Manuscript(
     @Id val id: Int,
     val title: String,
     val description: String,
-    val authorId: Int,
     val categoryId: Int,
     @Column("current_state")
     val state: ManuscriptState,
@@ -19,5 +18,4 @@ data class Manuscript(
     val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
     val views: Int,
-    val downloads: Int,
 )

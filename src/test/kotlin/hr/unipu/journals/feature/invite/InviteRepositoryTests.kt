@@ -67,7 +67,6 @@ class InviteRepositoryTests {
                     id = 2,
                     title = "Deep Learning in Genomics",
                     description = "Analyzes genomic sequences using deep neural networks to predict mutations.",
-                    authorId = 11,
                     categoryId = 1,
                     state = ManuscriptState.AWAITING_EDITOR_REVIEW,
                     sectionId = 7,
@@ -75,13 +74,11 @@ class InviteRepositoryTests {
                     submissionDate = LocalDateTime.of(2023, 9, 28, 13, 28, 0),
                     publicationDate = null,
                     views = 245,
-                    downloads = 33
                 ),
                 Manuscript(
                     id = 3,
                     title = "Natural Language Processing in Clinical Notes",
                     description = "Extracting insights from unstructured clinical data using NLP.",
-                    authorId = 10,
                     categoryId = 2,
                     state = ManuscriptState.AWAITING_REVIEWER_REVIEW,
                     sectionId = 11,
@@ -89,7 +86,6 @@ class InviteRepositoryTests {
                     submissionDate = LocalDateTime.of(2022, 9, 28, 13, 28, 0),
                     publicationDate = null,
                     views = 310,
-                    downloads = 47
                 )
             ),
             inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
