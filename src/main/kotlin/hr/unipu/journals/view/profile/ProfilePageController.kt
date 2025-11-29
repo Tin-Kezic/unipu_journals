@@ -21,7 +21,7 @@ class ProfilePageController(
     private val accountRepository: AccountRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 ) {
-    @GetMapping("/profile/{accountId}")
+    @GetMapping("/profiles/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(
         @PathVariable accountId: Int,

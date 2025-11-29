@@ -23,7 +23,7 @@
             </select>
 
             {{#isAdmin}}
-                <a href="/category" type="button" class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Manage</a>
+                <a href="/categories" type="button" class="m3-button purple-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Manage</a>
             {{/isAdmin}}
 
             <select name="publication" class="dropdown">
@@ -38,7 +38,7 @@
                 const publicationSelect = document.querySelector('select[name="publication"]')
                 const sectionSelect = document.querySelector('select[name="section"]')
                 publicationSelect.addEventListener('change', async (event) => {
-                    const response = await fetch(`/api/publication/${publicationSelect.value}/section/titles`, { method: 'GET' });
+                    const response = await fetch(`/api/publications/${publicationSelect.value}/sections/titles`, { method: 'GET' });
                     if(!response.ok) { alert(await response.text()); return; }
                     sectionSelect.innerHTML = '';
                     const sectionTitles = await response.json();
@@ -172,7 +172,7 @@
         })
         /* consideration: using { body: data }
         const response = await fetch(`
-            /api/publication/${publication}/section/${section}/insert
+            /api/publications/${publication}/sections/${section}/insert
                 ?title=${encodeURIComponent(title)}
                 &category=${encodeURIComponent(category)}
                 &authors=${encodeURIComponent(authors)}

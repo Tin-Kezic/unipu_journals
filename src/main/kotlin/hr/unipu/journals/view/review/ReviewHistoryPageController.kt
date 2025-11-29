@@ -21,7 +21,7 @@ class ReviewHistoryPageController(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val manuscriptReviewRepository: ManuscriptReviewRepository
 ) {
-    @GetMapping("/manuscript/{manuscriptId}/review-history/reviewer/{reviewerId}/round/{round}")
+    @GetMapping("/manuscripts/{manuscriptId}/review-history/reviewer/{reviewerId}/round/{round}")
     fun page(
         @PathVariable manuscriptId: Int,
         @PathVariable reviewerId: Int,

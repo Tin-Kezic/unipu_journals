@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/categories")
 @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
 class CategoryController(private val categoryRepository: CategoryRepository) {
     @PostMapping

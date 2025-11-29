@@ -6,7 +6,7 @@
             <li><a href="/">publications</a></li>
             <li><a href="/review">review</a></li>
             <li><a href="/submit">submit</a></li>
-            <li><a href="/contact">contact</a></li>
+            <li><a href="/contacts">contact</a></li>
         </ul>
     </nav>
 
@@ -18,7 +18,7 @@
     </div>
 
     {{#is-logged-in}}
-        <a href="/profile/{{header-profile-id}}" class="m3-button purple-outline-button" style="border: none; padding: 0.1rem 0.5rem; text-decoration: none;">
+        <a href="/profiles/{{header-profile-id}}" class="m3-button purple-outline-button" style="border: none; padding: 0.1rem 0.5rem; text-decoration: none;">
             {{header-profile-full-name}}
             <br>
             <span style="color: lightgrey">{{header-profile-title}}</span>

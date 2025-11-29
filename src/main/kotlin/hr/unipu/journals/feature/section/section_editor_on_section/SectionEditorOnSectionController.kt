@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/publication")
+@RequestMapping("/publications")
 class SectionEditorOnSectionController(
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val accountRepository: AccountRepository,
     private val inviteRepository: InviteRepository
 ) {
-    @PutMapping("{publicationId}/section/{sectionId}/assign-section-editor")
+    @PutMapping("{publicationId}/sections/{sectionId}/assign-section-editor")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun assign(
         @PathVariable publicationId: Int,
@@ -37,7 +37,7 @@ class SectionEditorOnSectionController(
         return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
         else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
     }
-    @DeleteMapping("{publicationId}/section/{sectionId}/revoke-section-editor")
+    @DeleteMapping("{publicationId}/sections/{sectionId}/revoke-section-editor")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun revoke(
         @PathVariable publicationId: Int,

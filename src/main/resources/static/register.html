@@ -75,7 +75,7 @@
     const form = document.getElementById('register-form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const response = await fetch(`/api/account`, {
+        const response = await fetch(`api/accounts`, {
             method: 'POST',
             body: new URLSearchParams({
                 fullName: form.fullName.value,

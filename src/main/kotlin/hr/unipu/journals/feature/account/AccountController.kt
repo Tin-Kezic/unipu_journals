@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("api/accounts")
 class AccountController(
     private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder,

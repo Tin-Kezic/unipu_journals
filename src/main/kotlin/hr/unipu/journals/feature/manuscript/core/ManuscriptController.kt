@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.format.DateTimeFormatter
 
 @RestController
-@RequestMapping("/api/publication/{publicationId}/section/{sectionId}")
+@RequestMapping("/api/publications/{publicationId}/sections/{sectionId}")
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
@@ -77,7 +77,7 @@ class ManuscriptController(
          */
         return ResponseEntity.ok("manuscript successfully added")
     }
-    @PutMapping("/manuscript/{manuscriptId}/state")
+    @PutMapping("/manuscripts/{manuscriptId}/state")
     fun updateState(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,

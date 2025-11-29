@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
 class ManageCategoryPageController(private val categoryRepository: CategoryRepository) {
-    @GetMapping("/category")
+    @GetMapping("/categories")
     fun page(model: Model): String {
         model["categories"] = categoryRepository.all()
         return "submit/manage-category-page"

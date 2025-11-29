@@ -16,7 +16,7 @@ class ManageSectionEditorOnSectionPageController(
     private val sectionEditorOnSectionRepository: SectionEditorOnSectionRepository,
     private val inviteRepository: InviteRepository
 ) {
-    @GetMapping("/publication/{publicationId}/section/{sectionId}/manage-section-editor-on-section")
+    @GetMapping("/publications/{publicationId}/sections/{sectionId}/manage-section-editor-on-section")
     fun page(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,

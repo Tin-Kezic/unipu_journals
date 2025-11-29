@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/publication")
+@RequestMapping("/api/publications")
 class PublicationController(
     private val publicationRepository: PublicationRepository,
     private val authorizationService: AuthorizationService

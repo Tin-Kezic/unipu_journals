@@ -23,16 +23,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/publication")
+@RequestMapping("/api/publications")
 class SectionController(
     private val sectionRepository: SectionRepository,
     private val authorizationService: AuthorizationService
 ) {
-    @GetMapping("/{publicationTitle}/section/titles")
+    @GetMapping("/{publicationTitle}/sections/titles")
     fun sectionTitles(@PathVariable publicationTitle: String): List<String> {
         return sectionRepository.allPublishedTitlesByPublicationTitle(publicationTitle)
     }
-    @GetMapping("/{publicationId}/section")
+    @GetMapping("/{publicationId}/sections")
     fun all(
         @PathVariable publicationId: Int,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
@@ -58,7 +58,7 @@ class SectionController(
             )
         }
     }
-    @PostMapping("/{publicationId}/section")
+    @PostMapping("/{publicationId}/sections")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
     fun insert(
         @PathVariable publicationId: Int,
@@ -74,7 +74,7 @@ class SectionController(
             else ResponseEntity.internalServerError().body("failed to add section")
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
-    @PutMapping("/{publicationId}/section/{sectionId}")
+    @PutMapping("/{publicationId}/sections/{sectionId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
     fun update(
         @PathVariable publicationId: Int,
@@ -95,7 +95,7 @@ class SectionController(
             else ResponseEntity.internalServerError().body("failed to update section")
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
-    @DeleteMapping("/{publicationId}/section/{sectionId}")
+    @DeleteMapping("/{publicationId}/sections/{sectionId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun delete(@PathVariable sectionId: Int): ResponseEntity<String> {
         sectionRepository.delete(sectionId)

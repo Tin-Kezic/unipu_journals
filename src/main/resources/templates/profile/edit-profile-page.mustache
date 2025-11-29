@@ -65,7 +65,7 @@
                 const form = document.getElementById('update-account-form');
                 const formData = new FormData(form);
                 form.addEventListener('submit', async () => {
-                    const response = fetch('/api/account', { method: 'PUT', body: formData });
+                    const response = fetch('api/accounts', { method: 'PUT', body: formData });
                     if(!response.ok) {
                         const error = await response.text();
                         if(error.includes('password-mismatch')) {
@@ -78,7 +78,7 @@
                         }
                         return;
                     }
-                    window.location.href = '/profile/{{id}}';
+                    window.location.href = '/profiles/{{id}}';
     });
             </script>
         {{/account}}

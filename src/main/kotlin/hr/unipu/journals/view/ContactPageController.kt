@@ -7,6 +7,6 @@ private var description = ""
 
 @Controller
 class ContactPageController() {
-    @GetMapping("/contact")
+    @GetMapping("/contacts")
     fun page() = "contact"
 }

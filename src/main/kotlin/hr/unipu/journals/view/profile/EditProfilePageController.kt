@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class EditProfilePageController(private val authorizationService: AuthorizationService) {
-    @GetMapping("/profile/{accountId}/edit")
+    @GetMapping("/profiles/{accountId}/edit")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(@PathVariable accountId: Int, model: Model): String {
         model["account"] = authorizationService.account ?: throw IllegalStateException("failed to find account $accountId")

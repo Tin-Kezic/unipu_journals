@@ -59,7 +59,7 @@
 
     document.getElementById('dialog-negative').addEventListener('click', () => dialog.close())
     document.getElementById('dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/publication/{{publicationId}}/section/{{sectionId}}/revoke-section-editor?email=${encodeURIComponent(currentEmail)}`, { method: 'DELETE' });
+        const response = await fetch(`/publications/{{publicationId}}/sections/{{sectionId}}/revoke-section-editor?email=${encodeURIComponent(currentEmail)}`, { method: 'DELETE' });
         if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`).remove();
         dialog.close()
@@ -76,7 +76,7 @@
         event.preventDefault();
         const emailInput = document.querySelector('input[name="email"]');
         const email = emailInput.value;
-        const response = await fetch(`/publication/{{publicationId}}/section/{{sectionId}}/assign-section-editor?email=${encodeURIComponent(email)}`, { method: 'PUT' })
+        const response = await fetch(`/publications/{{publicationId}}/sections/{{sectionId}}/assign-section-editor?email=${encodeURIComponent(email)}`, { method: 'PUT' })
         if(!response.ok || !email) { alert(await response.text()); return; }
         const newButton = document.createElement('button');
         newButton.className = 'remove-user-button';

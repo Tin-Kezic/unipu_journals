@@ -15,7 +15,7 @@
     <aside style="margin-right: 4rem; margin-top: 30vh; display: flex; flex-direction: column; align-items: center;">
         <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
         <br>
-        <a href="/profile/{{accountId}}/edit" class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem; text-decoration: none;">Edit profile</a>
+        <a href="/profiles/{{accountId}}/edit" class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem; text-decoration: none;">Edit profile</a>
         <br>
         <a href="/logout" class="m3-button purple-button" style="text-decoration: none;">Log out</a>
         <br><br><br><br>
@@ -125,7 +125,7 @@
     document.getElementById('delete-profile-button').addEventListener('click', () => deleteProfileDialog.showModal());
     document.getElementById('delete-profile-dialog-negative').addEventListener('click', () => deleteProfileDialog.close());
     document.getElementById('delete-profile-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/profile/{{accountId}}/delete`, { method: 'DELETE' });
+        const response = await fetch(`/profiles/{{accountId}}/delete`, { method: 'DELETE' });
         if(!response.ok) { alert('failed to delete account'); return; }
         window.location.href = '/';
     });
@@ -173,7 +173,7 @@
     });
     document.getElementById('hide-manuscript-dialog-negative').addEventListener('click', () => hideManuscriptDialog.close());
     document.getElementById('hide-manuscript-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}?isHidden=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publications/{{publicationId}}/sections/{{sectionId}}/manuscripts/${currentId}?isHidden=true`, { method: 'PUT' });
         if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`article[data-id="${currentId}"]`).remove();
         hideManuscriptDialog.close();
@@ -200,7 +200,7 @@
     });
     document.getElementById('archive-manuscript-dialog-negative').addEventListener('click', () => archiveManuscriptDialog.close());
     document.getElementById('archive-manuscript-dialog-positive').addEventListener('click', async () => {
-        const response = await fetch(`/api/publication/{{publicationId}}/section/{{sectionId}}/manuscript/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
+        const response = await fetch(`/api/publications/{{publicationId}}/sections/{{sectionId}}/manuscripts/${currentId}/update-archived?isArchived=true`, { method: 'PUT' });
         if(!response.ok) { alert(await response.text()); return; }
         document.querySelector(`article[data-id="${currentId}"]`).remove();
         archiveManuscriptDialog.close();

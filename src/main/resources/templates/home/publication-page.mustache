@@ -103,7 +103,7 @@
             sorting: sortingSelect.value,
         });
         [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
-            const response = await fetch(`/api/publication?${params()}`, { method: 'GET' });
+            const response = await fetch(`/api/publications?${params()}`, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();
             const publicationsContainer = document.getElementById('publications-container');
@@ -177,7 +177,7 @@
             {{#isAdmin}}
                 <button
                     id="add-publication"
-                    onclick="openUpsertDialog('Add publication', 'POST', '/api/publication?title=', `/api/publication?${params()}`, 'publications-sidebar')"
+                    onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar')"
                     class="m3-button purple-button"
                     style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;"
                 >+ Add publication</button>
@@ -194,7 +194,7 @@
         <div style="width: 15rem;">
             <button
                 id="add-section"
-                onclick="openUpsertDialog('Add section', 'POST', `/api/publication/${currentPublicationId}/section?title=`, `/api/publication/${currentPublicationId}/sections?${params()}`, 'sections-sidebar')"
+                onclick="openUpsertDialog('Add section', 'POST', `/api/publications/${currentPublicationId}/sections?title=`, `/api/publications/${currentPublicationId}/sections?${params()}`, 'sections-sidebar')"
                 class="m3-button purple-button"
                 style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;"
                 {{^isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}
@@ -217,7 +217,7 @@
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
-            const url = `/api/publication/${currentPublicationId}/section${type === 'section' ? `/${currentSectionId}/manuscripts` : ''}?${params()}`;
+            const url = `/api/publications/${currentPublicationId}/sections${type === 'section' ? `/${currentSectionId}/manuscripts` : ''}?${params()}`;
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             if(type === 'section') {
@@ -245,13 +245,13 @@
                 canEdit && {name: 'Rename', onClick: () => openUpsertDialog(
                     `Rename ${title}`,
                     'PUT',
-                    `/api/publication/${currentPublicationId}${type === 'section' ? `/section/${currentSectionId}` : ''}?title=`,
-                    `/api/publication${type === 'section' ? `/${currentPublicationId}/sections` : ''}?${params()}`,
+                    `/api/publications/${currentPublicationId}${type === 'section' ? `/sections/${currentSectionId}` : ''}?title=`,
+                    `/api/publications${type === 'section' ? `/${currentPublicationId}/sections` : ''}?${params()}`,
                     `${type}s-sidebar`,
                     title
                 )},
                 canHide && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
-                    const response = await fetch(`/api/publication/${currentPublicationId}${type == 'section' ? `/section/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });
+                    const response = await fetch(`/api/publications/${currentPublicationId}${type == 'section' ? `/sections/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
                     const buttonToRemove = document.getElementById(id);
                     const previousButton = buttonToRemove.previousSibling?.previousSibling;
@@ -265,7 +265,7 @@
                     const description = document.getElementById('description');
                     openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {
                         const textarea = document.getElementById('textarea-dialog-textarea');
-                        const response = await fetch(`/api/publication/${currentPublicationId}/section/${currentSectionId}?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
+                        const response = await fetch(`/api/publications/${currentPublicationId}/sections/${currentSectionId}?description=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
                         if(!response.ok) { alert(await response.text()); return; }
                         document.getElementById(id).setAttribute('description', textarea.value);
                         description.innerHTML = textarea.value;
