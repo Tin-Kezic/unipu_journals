@@ -60,6 +60,13 @@
         <option value="VIEWS">Most viewed</option>
     </select>
     <script>
+        const selectParams = new URLSearchParams(window.location.search);
+        document.querySelector('select[name="manuscript-state"]').value = selectParams.get('manuscriptStateFilter') || 'PUBLISHED';
+        document.querySelector('select[name="affiliation"]').value = selectParams.get('affiliation') || '';
+        document.querySelector('select[name="category"]').value = selectParams.get('category') || '';
+        document.querySelector('select[name="sorting"]').value = selectParams.get('sorting') || 'ALPHABETICAL_A_Z';
+    </script>
+    <script>
         function renderItems(items, containerId, clickFirst) {
             const container = document.getElementById(containerId);
             const type = containerId.replace(/s-.*$/, '');
