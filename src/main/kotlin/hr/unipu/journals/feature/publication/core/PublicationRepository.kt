@@ -18,7 +18,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        LEFT JOIN account on :account_id = account.id
+        LEFT JOIN account ON :account_id = account.id
         WHERE (category.name = :category OR :category IS NULL)
         AND (
             :manuscript_state_filter = 'HIDDEN' AND (
