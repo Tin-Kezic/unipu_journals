@@ -48,6 +48,20 @@ class PublicationPageController(
             category = category,
             sorting = sorting
         )
+        if(publications.isEmpty()) {
+            model["isAdmin"] = isAdmin
+            model["isAuthenticated"] = authorizationService.isAuthenticated
+            model["categories"] = categoryRepository.all()
+            model["publications"] = listOf<Publication>()
+            model["sections"] = listOf<Section>()
+            model["isEicOnPublicationOrAdmin"] = isAdmin
+            model["selectedPublicationId"] = -1
+            model["selectedSectionId"] = -1
+            model["description"] = ""
+            model["manuscripts"] = listOf<ManuscriptDTO>()
+            model["isSectionEditorOnSectionOrSuperior"] = false
+            return "home/publication-page"
+        }
         val selectedPublicationId = publicationId ?: publications.first().id
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
