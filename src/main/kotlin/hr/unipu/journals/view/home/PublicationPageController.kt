@@ -6,8 +6,10 @@ import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Publication
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Sorting
+import hr.unipu.journals.feature.section.core.Section
 import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.ResourceNotFoundException
@@ -37,7 +39,7 @@ class PublicationPageController(
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?,
-        ): String {
+    ): String {
         if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
         val isAdmin = authorizationService.isAdmin
