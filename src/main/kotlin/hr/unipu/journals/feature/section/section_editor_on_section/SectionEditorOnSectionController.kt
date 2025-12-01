@@ -27,15 +27,22 @@ class SectionEditorOnSectionController(
         @PathVariable sectionId: Int,
         @RequestParam email: String
     ): ResponseEntity<String> {
-        val rowsAffected = accountRepository.byEmail(email)?.let {
-            sectionEditorOnSectionRepository.assign(sectionId, it.id)
-        } ?: inviteRepository.invite(
-            email = email,
-            target = InvitationTarget.SECTION_EDITOR_ON_SECTION,
-            targetId = sectionId
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
-        else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
+        try {
+            val rowsAffected = accountRepository.byEmail(email)?.let {
+                sectionEditorOnSectionRepository.assign(sectionId, it.id)
+            } ?: inviteRepository.invite(
+                email = email,
+                target = InvitationTarget.SECTION_EDITOR_ON_SECTION,
+                targetId = sectionId
+            )
+            return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
+            else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
+        } catch (e: Exception) {
+            return if(e.message?.contains("duplicate") ?: false)
+                ResponseEntity.badRequest().body("$email is already section editor")
+            else
+                ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
+        }
     }
     @DeleteMapping("{publicationId}/sections/{sectionId}/revoke-section-editor")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)
