@@ -279,7 +279,7 @@
                 }},
                 {{isAdmin}} && {
                     name: 'Manage editors',
-                    onClick: () => window.location = `/publication/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `section/${currentSectionId}/manage-section-editor-on-section`}`
+                    onClick: () => window.location = `/publications/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `sections/${currentSectionId}/manage-section-editor-on-section`}`
                 }
             ].filter(Boolean));
         });
