@@ -29,6 +29,7 @@ interface AccountRepository: Repository<Account, Int> {
     @Query("SELECT email FROM account WHERE is_admin = TRUE")
     fun allAdminEmails(): List<String>
 
+    // todo. check if postgresql migration broke dto param
     @Modifying
     @Query("""
         INSERT INTO account
@@ -38,6 +39,7 @@ interface AccountRepository: Repository<Account, Int> {
     """)
     fun insert(@Param("dto") accountDTO: AccountDTO): Int
 
+    // todo. check if postgresql migration broke dto param
     @Modifying
     @Query("""
         UPDATE account SET

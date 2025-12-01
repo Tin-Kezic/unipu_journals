@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
+    // todo. check if postgresql migration broke manuscript_state_filter, affiliation & sorting params
     @Query("""
         SELECT DISTINCT manuscript.* FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
@@ -108,7 +109,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun exists(@Param("id") id: Int): Boolean
 
     @Modifying
-    @Query("UPDATE manuscript SET current_state = :state WHERE id = :id")
+    @Query("UPDATE manuscript SET current_state = :state::manuscript_state WHERE id = :id")
     fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState): Int
 
     @Modifying

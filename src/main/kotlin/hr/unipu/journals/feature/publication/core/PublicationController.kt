@@ -40,7 +40,7 @@ class PublicationController(
             affiliation = affiliation,
             accountId = authorizationService.account?.id,
             category = category,
-            sorting = sorting
+            sorting = sorting ?: Sorting.ALPHABETICAL_A_Z
         ).map { publication -> ContainerDTO(
             id = publication.id,
             title = publication.title,
@@ -57,7 +57,7 @@ class PublicationController(
             if(rowsAffected == 1) ResponseEntity.ok("publication successfully added")
             else ResponseEntity.internalServerError().body("failed to insert publication")
         } catch (e: Exception) {
-            if(e.message?.contains("Unique index") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
+            if(e.message?.contains("duplicate") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
             else ResponseEntity.internalServerError().body("failed to insert publication")
         }
     }
@@ -73,7 +73,7 @@ class PublicationController(
             if(rowsAffected == 1) ResponseEntity.ok("successfully updated publication $publicationId")
             else ResponseEntity.internalServerError().body("failed to update publication $publicationId")
         } catch (e: Exception) {
-            if(e.message?.contains("Unique index") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
+            if(e.message?.contains("duplicate") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
             else ResponseEntity.internalServerError().body("failed to update publication")
         }
     }

@@ -23,7 +23,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun correspondingAuthor(@Param("manuscript_id") manuscriptId: Int): String
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript
-        WHERE account_role_on_manuscript.account_role = :account_role
+        WHERE account_role_on_manuscript.account_role = :account_role::manuscript_role
         AND account_role_on_manuscript.account_id = :account_id
         AND account_role_on_manuscript.manuscript_id = :manuscript_id
         )

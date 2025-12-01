@@ -60,6 +60,7 @@
         <option value="VIEWS">Most viewed</option>
     </select>
     <script>
+        const searchParams = new URLSearchParams(window.location.search);
         document.querySelector('select[name="manuscript-state"]').value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
         document.querySelector('select[name="affiliation"]').value = searchParams.get('affiliation') || '';
         document.querySelector('select[name="category"]').value = searchParams.get('category') || '';
@@ -108,34 +109,49 @@
             ...(categorySelect.value && { category: categorySelect.value }),
             sorting: sortingSelect.value,
         });
-        [affiliationSelect, manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
+        [manuscriptStateSelect, affiliationSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
             const response = await fetch(`/api/publications?${params()}`, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();
-            const publicationsContainer = document.getElementById('publications-container');
+            const publicationsContainer = document.getElementById('publications-sidebar');
             publicationsContainer.innerHTML = '';
+            console.log(sortingSelect.value)
+            responsePublications.forEach(containerDTO => {
+                const newPublication = document.createElement('sidebar-button');
+                newPublication.setAttribute('id', `publication-${containerDTO.id}`);
+                newPublication.setAttribute('title', containerDTO.title);
+                newPublication.setAttribute('can-edit', containerDTO.canEdit);
+                newPublication.setAttribute('can-hide', containerDTO.canHide);
+                publicationsContainer.appendChild(newPublication);
+            });
+            {
+                if(responsePublications.length == 0) {
+                    document.getElementById('sections-sidebar').innerHTML = '';
+                    document.getElementById('manuscripts-container').innerHTML = '';
+                } else {
+                    const button = document.getElementById(`publication-${currentPublicationId}`) ?? document.getElementById(`publication-${responsePublications[0].id}`);
+                    const sidebar = document.getElementById('publications-sidebar');
+                    const sidebarRect = sidebar.getBoundingClientRect();
+                    const buttonRect = button.getBoundingClientRect();
+                    const currentScroll = sidebar.scrollTop;
+                    const offsetTop = buttonRect.top - sidebarRect.top + currentScroll;
+                    const targetScroll = offsetTop - (sidebar.clientHeight / 2) + (buttonRect.height / 2);
+                    sidebar.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                    button.querySelector('input').click();
+                }
+            }
+            /*
             switch(manuscriptStateSelect.value) {
                 case 'PUBLISHED':
-                    responsePublications.forEach(containerDTO => {
-                        const newPublication = document.createElement('div');
-                        newPublication.dataset.id = containerDTO.id;
-                        newPublication.className = 'container';
-                        newPublication.style.cursor = 'pointer';
-                        newPublication.onclick = displaSections(containerDTO.id);
-                        newPublication.innerHTML = `PUB: ${containerDTO.id}`;
-                        publicationsContainer.appendChild(newPublication);
-                    });
                     break;
                 case 'ALL_AWAITING_REVIEW':
                     responsePublications.forEach(containerDTO => {
-                        /*
                             in case of the awaiting cases being equivalent use the fall through approach
                             case 1:
                             case 2:
                             case 3: x
                                 ...
                             is equivalent to case 1, 2, 3: x
-                        */
                     });
                     break;
                 case 'AWAITING_EIC_REVIEW':
@@ -174,6 +190,7 @@
                     });
                     break;
             }
+            */
         }));
     </script>
 </div>
@@ -183,7 +200,7 @@
             {{#isAdmin}}
                 <button
                     id="add-publication"
-                    onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar')"
+                    onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar', '')"
                     class="m3-button purple-button"
                     style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;"
                 >+ Add publication</button>
@@ -192,7 +209,7 @@
         </div>
         <aside id="publications-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
             {{#publications}}
-                <sidebar-button id="publication-{{id}}" type="publication" title="{{title}}" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
+                <sidebar-button id="publication-{{id}}" title="{{title}}" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
             {{/publications}}
         </aside>
     </div>
@@ -200,7 +217,7 @@
         <div style="width: 15rem;">
             <button
                 id="add-section"
-                onclick="openUpsertDialog('Add section', 'POST', `/api/publications/${currentPublicationId}/sections?title=`, `/api/publications/${currentPublicationId}/sections?${params()}`, 'sections-sidebar')"
+                onclick="openUpsertDialog('Add section', 'POST', `/api/publications/${currentPublicationId}/sections?title=`, `/api/publications/${currentPublicationId}/sections?${params()}`, 'sections-sidebar', '')"
                 class="m3-button purple-button"
                 style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;"
                 {{^isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}
@@ -209,15 +226,15 @@
         </div>
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
         {{#sections}}
-            <sidebar-button id="section-{{id}}" type="section" title="{{title}}" description="{{description}}" font-size="small" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
+            <sidebar-button id="section-{{id}}" title="{{title}}" description="{{description}}" font-size="small" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
         {{/sections}}
     </aside>
     </div>
     <script>
         let currentPublicationId = {{selectedPublicationId}};
         let currentSectionId = {{selectedSectionId}};
-        document.getElementById(`publication-${currentPublicationId}`).querySelector('input').click();
-        document.getElementById(`section-${currentSectionId}`).querySelector('input').click();
+        document.getElementById(`publication-${currentPublicationId}`)?.querySelector('input').click();
+        document.getElementById(`section-${currentSectionId}`)?.querySelector('input').click();
         document.addEventListener('sidebar-button-click', async (event) => {
             const { id, title, isOverseeing } = event.detail;
             const idValue = id.replace(/^.*-/, '');

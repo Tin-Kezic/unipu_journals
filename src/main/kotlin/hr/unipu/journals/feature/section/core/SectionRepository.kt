@@ -24,6 +24,7 @@ interface SectionRepository: Repository<Section, Int> {
     """)
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
+    // todo. check if postgresql migration broke manuscript_state_filter, affiliation & sorting params
     @Query("""
         SELECT DISTINCT publication_section.* FROM publication_section
         JOIN publication ON publication.id = publication_section.publication_id

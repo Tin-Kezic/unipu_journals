@@ -12,7 +12,7 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM invite WHERE email = :email AND target = 'ADMIN')")
     fun isAdmin(@Param("email") email: String): Boolean
 
-    @Query("SELECT invite.email FROM invite WHERE invite.target = :target AND (invite.target_id = :target_id OR :target_id IS NULL)")
+    @Query("SELECT invite.email FROM invite WHERE invite.target = :target::invitation_target AND (invite.target_id = :target_id OR :target_id IS NULL)")
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
     @Query("""
@@ -42,10 +42,10 @@ interface InviteRepository: Repository<Invite, Int> {
     fun affiliatedManuscripts(@Param("email") email: String, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
 
     @Modifying
-    @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target, :target_id)")
+    @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target::invitation_target, :target_id)")
     fun invite(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int = 0): Int
 
     @Modifying
-    @Query("DELETE FROM invite WHERE email = :email AND target = :target AND (target_id = :target_id OR :target_id IS NULL)")
+    @Query("DELETE FROM invite WHERE email = :email AND target = :target::invitation_target AND (target_id = :target_id OR :target_id IS NULL)")
     fun revoke(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): Int
 }

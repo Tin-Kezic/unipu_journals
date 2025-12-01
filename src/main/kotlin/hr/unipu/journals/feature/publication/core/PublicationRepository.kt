@@ -11,7 +11,7 @@ interface PublicationRepository: Repository<Publication, Int> {
     fun title(@Param("id") id: Int): String
 
     @Query("""
-        SELECT DISTINCT publication.* FROM publication
+        SELECT publication.* FROM publication
         LEFT JOIN publication_section ON publication.id = publication_section.publication_id
         LEFT JOIN manuscript ON publication_section.id = manuscript.section_id
         LEFT JOIN category ON manuscript.category_id = category.id
@@ -86,14 +86,31 @@ interface PublicationRepository: Repository<Publication, Int> {
                 )
             )
         )
-        ORDER BY publication.title
+        AND (
+            :sorting NOT IN ('NEWEST', 'OLDEST')
+            OR EXISTS (
+                SELECT 1
+                FROM manuscript m2
+                JOIN publication_section ps2 ON ps2.id = m2.section_id
+                WHERE ps2.publication_id = publication.id
+                AND (m2.publication_date IS NOT NULL OR m2.submission_date IS NOT NULL)
+                AND m2.current_state = :manuscript_state_filter::manuscript_state
+            ) 
+        )
+        GROUP BY publication.id
+        ORDER BY 
+            CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication.title END,
+            CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN publication.title END DESC,
+            CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END,
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
+            CASE WHEN :sorting = 'VIEWS' THEN MAX(manuscript.views) END
     """)
     fun all(
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("affiliation") affiliation: Affiliation? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
-        @Param("sorting") sorting: Sorting? = null
+        @Param("sorting") sorting: Sorting? = Sorting.ALPHABETICAL_A_Z
     ): List<Publication>
 
     @Modifying

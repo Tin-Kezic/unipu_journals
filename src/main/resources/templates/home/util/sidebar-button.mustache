@@ -1,6 +1,6 @@
 <script>
 class SidebarButton extends HTMLElement {
-  static observedAttributes = ['id', 'type', 'font-size', 'title', 'can-edit', 'can-hide'];
+  static observedAttributes = ['id', 'font-size', 'title', 'can-edit', 'can-hide'];
   constructor() { super(); }
   connectedCallback() {
     this.render();
@@ -14,7 +14,7 @@ class SidebarButton extends HTMLElement {
   }
   render() {
     this._id = this.getAttribute('id').replace(/^.*-/, '');
-    this._type = this.getAttribute('type');
+    this._type = this.getAttribute('id').replace(/-.*/, '');
     this._title = this.getAttribute('title');
     this._fontSize = this.getAttribute('font-size');
     this._canEdit = this.getAttribute('can-edit') === 'true';

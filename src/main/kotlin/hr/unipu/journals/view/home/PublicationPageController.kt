@@ -38,7 +38,7 @@ class PublicationPageController(
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter = ManuscriptStateFilter.PUBLISHED,
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
-        @RequestParam sorting: Sorting?,
+        @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
     ): String {
         if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
@@ -57,8 +57,8 @@ class PublicationPageController(
             model["publications"] = listOf<Publication>()
             model["sections"] = listOf<Section>()
             model["isEicOnPublicationOrAdmin"] = isAdmin
-            model["selectedPublicationId"] = -1
-            model["selectedSectionId"] = -1
+            model["selectedPublicationId"] = null
+            model["selectedSectionId"] = null
             model["description"] = ""
             model["manuscripts"] = listOf<ManuscriptDTO>()
             model["isSectionEditorOnSectionOrSuperior"] = false
