@@ -30,6 +30,15 @@ interface PublicationRepository: Repository<Publication, Int> {
                 :manuscript_state_filter = 'PUBLISHED' AND (
                     EXISTS (SELECT 1 FROM publication_section ps WHERE ps.publication_id = publication.id AND ps.is_hidden = FALSE)
                     OR eic_on_publication.eic_id = :account_id OR account.is_admin
+                ) AND (
+                    :category IS NULL
+                    OR
+                    EXISTS (
+                        SELECT 1 FROM manuscript m
+                        JOIN category c on c.name = :category
+                        WHERE m.category_id = category.id
+                        and m.current_state = :manuscript_state_filter::manuscript_state
+                    )
                 )
                 OR
                 publication_section.is_hidden = FALSE AND (
