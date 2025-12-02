@@ -115,19 +115,12 @@
             const responsePublications = await response.json();
             const publicationsContainer = document.getElementById('publications-sidebar');
             publicationsContainer.innerHTML = '';
-            console.log(sortingSelect.value)
-            responsePublications.forEach(containerDTO => {
-                const newPublication = document.createElement('sidebar-button');
-                newPublication.setAttribute('id', `publication-${containerDTO.id}`);
-                newPublication.setAttribute('title', containerDTO.title);
-                newPublication.setAttribute('can-edit', containerDTO.canEdit);
-                newPublication.setAttribute('can-hide', containerDTO.canHide);
-                publicationsContainer.appendChild(newPublication);
-            });
+            renderItems(responsePublications, 'publications-sidebar');
             {
                 if(responsePublications.length == 0) {
                     document.getElementById('sections-sidebar').innerHTML = '';
                     document.getElementById('manuscripts-container').innerHTML = '';
+                    document.getElementById('description').innerHTML = '';
                 } else {
                     const button = document.getElementById(`publication-${currentPublicationId}`) ?? document.getElementById(`publication-${responsePublications[0].id}`);
                     const sidebar = document.getElementById('publications-sidebar');
@@ -243,9 +236,6 @@
             const url = `/api/publications/${currentPublicationId}/sections${type === 'section' ? `/${currentSectionId}/manuscripts` : ''}?${params()}`;
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
-            if(type === 'section') {
-                document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
-            }
             const items = await response.json();
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
             const clickFirst = type === 'publication';
@@ -259,6 +249,8 @@
                     document.getElementById('sections-legend').hidden = false;
                 }
             }
+            if(type == 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
+            if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
         document.addEventListener('sidebar-button-option-click', async (event) => {
             const { id, title, canEdit, canHide } = event.detail;
