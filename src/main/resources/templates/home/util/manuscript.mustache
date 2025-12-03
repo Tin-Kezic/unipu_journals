@@ -10,16 +10,16 @@ class Manuscript extends HTMLElement {
     this._id = this.getAttribute('id').replace(/^.*-/, '');
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
-    this._authors = JSON.parse(this.getAttribute('authors'));
+    this._authors = JSON.parse(this.getAttribute('authors')?.replace(', ]', ']') || '[]');
     this._submissionDate = this.getAttribute('submission-date');
     this._publicationDate = this.getAttribute('publication-date');
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this.innerHTML = `
-      <article data-id="${this._id}" onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
+      <article data-id="${this._id}" onclick="navigate('${this._downloadUrl}')" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
-        <div class="authors" style="display: flex; flex-wrap: wrap;">
-          ${this._authors.map(author => `<button>${this._author}</button>`).join('')}
+        <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+          ${this._authors?.map(author => `<button>${author}</button>`).join('') || 'empty'}
         </div>
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
           ${this._publicationDate ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}

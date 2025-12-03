@@ -77,7 +77,7 @@
                 newManuscript.setAttribute('id', manuscript.id);
                 newManuscript.setAttribute('title', manuscript.title);
                 newManuscript.setAttribute('description', manuscript.description);
-                newManuscript.setAttribute('authors', manuscript.authors);
+                newManuscript.setAttribute('authors', JSON.stringify(manuscript.authors));
                 newManuscript.setAttribute('download-url', manuscript.link);
                 newManuscript.setAttribute('submission-date', manuscript.submissionDate);
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
