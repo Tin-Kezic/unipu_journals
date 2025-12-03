@@ -31,7 +31,7 @@ class PendingReviewPageController(
         ManuscriptDTO(
             id = manuscript.id,
             title = manuscript.title,
-            authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
+            authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
             downloadUrl = manuscript.downloadUrl,
             submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
             publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",

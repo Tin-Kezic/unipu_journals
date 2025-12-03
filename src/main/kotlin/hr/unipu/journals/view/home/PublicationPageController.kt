@@ -24,11 +24,8 @@ import java.time.format.DateTimeFormatter
 class PublicationPageController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
-    private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
-    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val categoryRepository: CategoryRepository,
-    private val objectMapper: ObjectMapper
 ) {
     @GetMapping("/")
     fun page(
@@ -50,21 +47,6 @@ class PublicationPageController(
             category = category,
             sorting = sorting
         )
-        if(publications.isEmpty()) {
-            model["isAdmin"] = isAdmin
-            model["isAuthenticated"] = authorizationService.isAuthenticated
-            model["categories"] = categoryRepository.all()
-            model["publications"] = listOf<Publication>()
-            model["sections"] = listOf<Section>()
-            model["isEicOnPublicationOrAdmin"] = isAdmin
-            model["selectedPublicationId"] = null
-            model["selectedSectionId"] = null
-            model["description"] = ""
-            model["manuscripts"] = listOf<ManuscriptDTO>()
-            model["isSectionEditorOnSectionOrSuperior"] = false
-            return "home/publication-page"
-        }
-        val selectedPublicationId = publicationId ?: publications.first().id
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
         model["categories"] = categoryRepository.all()
@@ -74,49 +56,8 @@ class PublicationPageController(
             canHide = isAdmin,
             canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
         )}
-        val sections = sectionRepository.all(
-            publicationId = selectedPublicationId,
-            manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
-            accountId = authorizationService.account?.id,
-            category = category,
-            sorting = sorting
-        )
-        model["sections"] = sections.map { section -> ContainerDTO(
-            id = section.id,
-            title = section.title,
-            description = section.description,
-            canHide = isAdmin,
-            canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(selectedPublicationId, section.id)
-        )}
-        model["isEicOnPublicationOrAdmin"] = authorizationService.isEicOnPublicationOrAdmin(selectedPublicationId)
-        model["selectedPublicationId"] = selectedPublicationId
-        val selectedSectionId = sectionId ?: if(sections.isNotEmpty()) sections.first().id else {
-            model["selectedSectionId"] = -1
-            model["description"] = ""
-            model["manuscripts"] = listOf<ManuscriptDTO>()
-            model["isSectionEditorOnSectionOrSuperior"] = false
-            return "home/publication-page"
-        }
-        model["selectedSectionId"] = selectedSectionId
-        model["isSectionEditorOnSectionOrSuperior"] = authorizationService.isSectionEditorOnSectionOrSuperior(selectedPublicationId, selectedSectionId)
-        model["description"] = sectionRepository.byId(selectedSectionId).description
-        model["manuscripts"] = manuscriptRepository.all(
-            sectionId = selectedSectionId,
-            manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
-            accountId = authorizationService.account?.id,
-            category = category,
-            sorting = sorting
-        ).map { manuscript -> ManuscriptDTO(
-            id = manuscript.id,
-            title = manuscript.title,
-            authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
-            downloadUrl = manuscript.downloadUrl,
-            submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
-            publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
-            description = manuscript.description
-        )}
+        model["selectedPublicationId"] = publicationId ?: publications.first().id
+        model["selectedSectionId"] = sectionId ?: 1
         return "home/publication-page"
     }
 }

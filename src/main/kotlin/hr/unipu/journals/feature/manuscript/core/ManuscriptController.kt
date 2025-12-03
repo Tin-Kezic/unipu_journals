@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.publication.core.Affiliation
 import hr.unipu.journals.feature.publication.core.Sorting
@@ -26,7 +25,6 @@ class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val objectMapper: ObjectMapper
 ) {
     @GetMapping
     fun all(
@@ -47,7 +45,7 @@ class ManuscriptController(
             ManuscriptDTO(
                 id = manuscript.id,
                 title = manuscript.title,
-                authors = objectMapper.writeValueAsString(accountRoleOnManuscriptRepository.authors(manuscript.id)),
+                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
                 downloadUrl = manuscript.downloadUrl,
                 submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
                 publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",

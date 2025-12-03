@@ -86,7 +86,7 @@
         document.querySelector('select[name="sorting"]').value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
     </script>
     <script>
-        function renderItems(items, containerId, clickFirst) {
+        function renderItems(items, containerId) {
             const container = document.getElementById(containerId);
             const type = containerId.replace(/s-.*$/, '');
             container.innerHTML = '';
@@ -115,8 +115,12 @@
                 newElement.setAttribute('can-edit', sidebarButton.canEdit);
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
                 container.appendChild(newElement);
-                if(index === 0 && clickFirst) newElement.querySelector('input').click();
             });
+            if(type == 'section') {
+                const searchParamSectionId = searchParams.get('sectionId');
+                if(searchParamSectionId) document.getElementById(`section-${searchParamSectionId}`).querySelector('input').click();
+                else document.getElementById(`section-${items[0].id}`).querySelector('input').click();
+            }
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
         affiliationSelect = document.querySelector('select[name="affiliation"]');
@@ -237,17 +241,11 @@
             >+ Add Section</button>
             <legend id="sections-legend" {{#isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}>Sections</legend>
         </div>
-        <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
-        {{#sections}}
-            <sidebar-button id="section-{{id}}" title="{{title}}" description="{{description}}" font-size="small" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
-        {{/sections}}
-    </aside>
+        <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;"></aside>
     </div>
     <script>
         let currentPublicationId = {{selectedPublicationId}};
         let currentSectionId = {{selectedSectionId}};
-        document.getElementById(`publication-${currentPublicationId}`)?.querySelector('input').click();
-        document.getElementById(`section-${currentSectionId}`)?.querySelector('input').click();
         document.addEventListener('sidebar-button-click', async (event) => {
             const { id, title, isOverseeing } = event.detail;
             const idValue = id.replace(/^.*-/, '');
@@ -258,8 +256,7 @@
             if(!response.ok) { alert(await response.text()); return; }
             const items = await response.json();
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
-            const clickFirst = type === 'publication';
-            renderItems(items, container, clickFirst);
+            renderItems(items, container);
             if(type === 'publication') {
                 if(isOverseeing) {
                     document.getElementById('add-section').hidden = false;
@@ -269,7 +266,7 @@
                     document.getElementById('sections-legend').hidden = false;
                 }
             }
-            if(type == 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
+            if(type === 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
             if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
         document.addEventListener('sidebar-button-option-click', async (event) => {
@@ -308,7 +305,7 @@
                 }},
                 {{isAdmin}} && {
                     name: 'Manage editors',
-                    onClick: () => window.location = `/publications/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `sections/${currentSectionId}/manage-section-editor-on-section`}`
+                    onClick: () => navigate(`/publications/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `sections/${currentSectionId}/manage-section-editor-on-section`}`)
                 }
             ].filter(Boolean));
         });
@@ -327,16 +324,12 @@
         <div>
             <legend id="sections-legend">Manuscripts</legend>
             <article class="container no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
-                <p id="description" class="container-text">{{{description}}}</p>
+                <p id="description" class="container-text"></p>
             </article>
         </div>
-        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
-            {{#manuscripts}}
-                <manuscript-element id="{{id}}" title="{{title}}" description="{{description}}" authors="{{authors}}" download-url="{{downloadUrl}}" submission-date="{{submissionDate}}" publication-date="{{publicationDate}}" ></manuscript-element>
-            {{/manuscripts}}
-        </div>
+        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
     </section>
 </main>
-
+<script>document.getElementById(`publication-${currentPublicationId}`)?.querySelector('input').click();</script>
 </body>
 </html>
