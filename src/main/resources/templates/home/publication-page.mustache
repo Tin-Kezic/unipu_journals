@@ -121,6 +121,7 @@
                 else document.getElementById(`section-${items[0].id}`).querySelector('input').click();
                 scrollSidebarToCurrentlySelectedElement('section');
             }
+            updateUrl();
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
         affiliationSelect = document.querySelector('select[name="affiliation"]');
@@ -140,7 +141,6 @@
             const publicationsContainer = document.getElementById('publications-sidebar');
             publicationsContainer.innerHTML = '';
             renderItems(responsePublications, 'publications-sidebar');
-            updateUrl();
             {
                 if(responsePublications.length == 0) {
                     document.getElementById('sections-sidebar').innerHTML = '';
@@ -248,7 +248,6 @@
             const items = await response.json();
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
             renderItems(items, container);
-            updateUrl();
             if(type === 'publication') {
                 if(isOverseeing) {
                     document.getElementById('add-section').hidden = false;
