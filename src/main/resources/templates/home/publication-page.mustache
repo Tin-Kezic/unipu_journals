@@ -16,20 +16,8 @@
 {{>home/util/textarea-dialog}}
 
 <script>
-    document.addEventListener('click', event => {
-        const link = event.target.closest('a');
-        if (!link) return;
-        event.preventDefault();
-        const currentUrlWithParams = `/?publicationId=${encodeURIComponent(currentPublicationId)}&sectionId=${encodeURIComponent(currentSectionId)}&${params()}`;
-        const currentUrl = `/${window.location.search}`;
-        if (currentUrl !== currentUrlWithParams) window.history.pushState({}, '', currentUrlWithParams);
-        window.location = link.href;
-    });
-    function navigate(url) {
-        const currentUrlWithParams = `/?publicationId=${encodeURIComponent(currentPublicationId)}&sectionId=${encodeURIComponent(currentSectionId)}&${params()}`;
-        const currentUrl = `/${window.location.search}`;
-        if (currentUrl !== currentUrlWithParams) window.history.pushState({}, '', currentUrlWithParams);
-        window.location = url;
+    function updateUrl() {
+        history.replaceState(null, '', `/?publicationId=${encodeURIComponent(currentPublicationId)}&sectionId=${encodeURIComponent(currentSectionId)}&${params()}`);
     }
 </script>
 
@@ -117,7 +105,8 @@
             });
             if(type == 'section') {
                 const searchParamSectionId = searchParams.get('sectionId');
-                if(searchParamSectionId) document.getElementById(`section-${searchParamSectionId}`).querySelector('input').click();
+                const section = document.getElementById(`section-${searchParamSectionId}`);
+                if(searchParamSectionId && section) section.querySelector('input').click();
                 else document.getElementById(`section-${items[0].id}`).querySelector('input').click();
             }
         }
@@ -139,6 +128,7 @@
             const publicationsContainer = document.getElementById('publications-sidebar');
             publicationsContainer.innerHTML = '';
             renderItems(responsePublications, 'publications-sidebar');
+            updateUrl();
             {
                 if(responsePublications.length == 0) {
                     document.getElementById('sections-sidebar').innerHTML = '';
@@ -238,7 +228,7 @@
                 style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;"
                 {{^isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}
             >+ Add Section</button>
-            <legend id="sections-legend" {{#isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}>Sections</legend>
+            <span id="sections-span" {{#isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}>Sections</span>
         </div>
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;"></aside>
     </div>
@@ -256,13 +246,14 @@
             const items = await response.json();
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
             renderItems(items, container);
+            updateUrl();
             if(type === 'publication') {
                 if(isOverseeing) {
                     document.getElementById('add-section').hidden = false;
-                    document.getElementById('sections-legend').hidden = true;
+                    document.getElementById('sections-span').hidden = true;
                 } else {
                     document.getElementById('add-section').hidden = true;
-                    document.getElementById('sections-legend').hidden = false;
+                    document.getElementById('sections-span').hidden = false;
                 }
             }
             if(type === 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
@@ -321,7 +312,7 @@
         overflow: hidden;
     ">
         <div>
-            <legend id="sections-legend">Manuscripts</legend>
+            <span id="manuscripts-span">Manuscripts</span>
             <article class="container no-hover" style="width: auto; height: auto; cursor: default; max-width: 100%; border-color: var(--purple);">
                 <p id="description" class="container-text"></p>
             </article>
