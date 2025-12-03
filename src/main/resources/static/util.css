@@ -4,7 +4,7 @@
     --orange: #ffc284;
     --yellow: #ffe08a;
     --green: #7aed80;
-    --purple: black; /*#6b66a1;*/
+    --primary: black; /*#6b66a1;*/
     --dark-blue: #152e60;
     --blue: #407cff;
     --light-blue: #b0c6ff;
@@ -54,7 +54,7 @@ dialog {
 
 }
 .purple-button {
-    background-color: var(--purple);
+    background-color: var(--primary);
     color: white;
 
 }
@@ -87,7 +87,7 @@ dialog {
 
 }
 .purple-outline-button {
-    background-color: var(--purple);
+    background-color: var(--primary);
     border: 0.1rem solid white;
     color: white;
     padding: 0.8rem 1rem;
@@ -95,7 +95,7 @@ dialog {
 
 }
 .purple-outline-button:hover {
-    background-color: var(--purple);
+    background-color: var(--primary);
 }
 .orange-button {
     background-color: white;
@@ -190,7 +190,7 @@ dialog {
     cursor: pointer;
 }
 .pale-yellow-checkbox-button input:checked + .checkbox {
-    background: var(--purple);
+    background: var(--primary);
     color: white;
 }
 .blue-checkbox {
