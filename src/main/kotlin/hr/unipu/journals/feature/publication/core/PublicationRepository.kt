@@ -28,8 +28,16 @@ interface PublicationRepository: Repository<Publication, Int> {
             )
             OR publication.is_hidden = FALSE AND (
                 :manuscript_state_filter = 'PUBLISHED' AND (
-                    EXISTS (SELECT 1 FROM publication_section ps WHERE ps.publication_id = publication.id AND ps.is_hidden = FALSE)
-                    OR eic_on_publication.eic_id = :account_id OR account.is_admin
+                    EXISTS (
+                        SELECT 1 FROM publication_section ps
+                        JOIN manuscript m ON m.section_id = ps.id
+                        WHERE ps.publication_id = publication.id
+                        AND ps.is_hidden = FALSE
+                        AND m.current_state = :manuscript_state_filter::manuscript_state
+                    )
+                    OR account.is_admin
+                    OR eic_on_publication.eic_id = :account_id
+                    OR section_editor_on_section.section_editor_id = :account_id
                 ) AND (
                     :category IS NULL
                     OR
@@ -37,7 +45,7 @@ interface PublicationRepository: Repository<Publication, Int> {
                         SELECT 1 FROM manuscript m
                         JOIN category c on c.name = :category
                         WHERE m.category_id = category.id
-                        and m.current_state = :manuscript_state_filter::manuscript_state
+                        AND m.current_state = :manuscript_state_filter::manuscript_state
                     )
                 )
                 OR
@@ -48,29 +56,20 @@ interface PublicationRepository: Repository<Publication, Int> {
                         :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
                         OR
                         :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
-                            account_role_on_manuscript.account_role = 'EIC'
-                            AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                            account_role_on_manuscript.account_role = 'EIC' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
                             OR
-                            account_role_on_manuscript.account_role = 'EDITOR'
-                            AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                            account_role_on_manuscript.account_role = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
                             OR
-                            account_role_on_manuscript.account_role = 'REVIEWER'
-                            AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                            account_role_on_manuscript.account_role = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                         )
-                        OR
-                        :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                            manuscript.current_state = 'AWAITING_EIC_REVIEW'
-                            AND account_role_on_manuscript.account_role = 'EIC'
+                        OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_EIC_REVIEW' AND account_role_on_manuscript.account_role = 'EIC'
                         )
-                        OR
-                        :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                            manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
-                            AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                        OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
                         )
-                        OR
-                        :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                            manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-                            AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                        OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
+                            manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
                         )
                     )
                 )
@@ -99,15 +98,15 @@ interface PublicationRepository: Repository<Publication, Int> {
             :sorting NOT IN ('NEWEST', 'OLDEST')
             OR EXISTS (
                 SELECT 1
-                FROM manuscript m2
-                JOIN publication_section ps2 ON ps2.id = m2.section_id
-                WHERE ps2.publication_id = publication.id
-                AND (m2.publication_date IS NOT NULL OR m2.submission_date IS NOT NULL)
-                AND m2.current_state = :manuscript_state_filter::manuscript_state
+                FROM manuscript m
+                JOIN publication_section ps ON ps.id = m.section_id
+                WHERE ps.publication_id = publication.id
+                AND (m.publication_date IS NOT NULL OR m.submission_date IS NOT NULL)
+                AND m.current_state = :manuscript_state_filter::manuscript_state
             ) 
         )
         GROUP BY publication.id
-        ORDER BY 
+        ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN publication.title END DESC,
             CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,

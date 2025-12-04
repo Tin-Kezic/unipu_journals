@@ -25,29 +25,46 @@ interface SectionRepository: Repository<Section, Int> {
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
     @Query("""
-        SELECT DISTINCT publication_section.* FROM publication_section
+        SELECT publication_section.* FROM publication_section
         JOIN publication ON publication.id = publication_section.publication_id
         LEFT JOIN manuscript on manuscript.section_id = publication_section.id
         LEFT JOIN category ON manuscript.category_id = category.id
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        JOIN account ON :account_id = account.id OR :account_id IS NULL
+        LEFT JOIN account ON :account_id = account.id
         WHERE (category.name = :category OR :category IS NULL)
         AND (publication.id = :publication_id OR :publication_id IS NULL)
         AND (
-            :manuscript_state_filter IS NULL
-            OR
             :manuscript_state_filter = 'HIDDEN' AND (
                 publication.is_hidden = TRUE
                 OR publication_section.is_hidden = TRUE
                 OR manuscript.current_state = 'HIDDEN'
             )
             OR publication.is_hidden = FALSE AND publication_section.is_hidden = FALSE AND (
-                :manuscript_state_filter = 'PUBLISHED'
+                :manuscript_state_filter = 'PUBLISHED' AND (
+                    EXISTS (
+                        SELECT 1 FROM manuscript m
+                        WHERE m.section_id = publication_section.id
+                        AND m.current_state = :manuscript_state_filter::manuscript_state
+                    )
+                    OR account.is_admin
+                    OR eic_on_publication.eic_id = :account_id
+                    OR section_editor_on_section.section_editor_id = :account_id
+                ) AND (
+                    :category IS NULL
+                    OR
+                    EXISTS (
+                        SELECT 1 FROM manuscript m
+                        JOIN category c on c.name = :category
+                        WHERE m.category_id = category.id
+                        AND m.current_state = :manuscript_state_filter::manuscript_state
+                    )
+                )
                 OR
                 :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
-                OR account_role_on_manuscript.account_id = :account_id AND (
+                OR
+                account_role_on_manuscript.account_id = :account_id AND (
                     :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
                     OR
                     :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
@@ -58,16 +75,13 @@ interface SectionRepository: Repository<Section, Int> {
                         account_role_on_manuscript.account_role = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                     )
                     OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EIC_REVIEW'
-                        AND account_role_on_manuscript.account_role = 'EIC'
+                        manuscript.current_state = 'AWAITING_EIC_REVIEW' AND account_role_on_manuscript.account_role = 'EIC'
                     )
                     OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
-                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
                     )
                     OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
                     )
                 )
             )
@@ -91,7 +105,24 @@ interface SectionRepository: Repository<Section, Int> {
                 )
             )
         )
-        ORDER BY publication_section.title
+        AND (
+            :sorting NOT IN ('NEWEST', 'OLDEST')
+            OR EXISTS (
+                SELECT 1
+                FROM manuscript m
+                JOIN publication_section ps ON ps.id = m.section_id
+                WHERE ps.publication_id = publication.id
+                AND (m.publication_date IS NOT NULL OR m.submission_date IS NOT NULL)
+                AND m.current_state = :manuscript_state_filter::manuscript_state
+            ) 
+        )
+        GROUP BY publication_section.id
+        ORDER BY
+            CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication_section.title END,
+            CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN publication_section.title END DESC,
+            CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END,
+            CASE WHEN :sorting = 'VIEWS' THEN MAX(manuscript.views) END
     """)
     fun all(
         @Param("publication_id") publicationId: Int,
