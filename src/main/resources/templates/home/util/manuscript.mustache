@@ -19,7 +19,7 @@ class Manuscript extends HTMLElement {
       <article data-id="${this._id}" onclick="navigate('${this._downloadUrl}')" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
         <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
-          ${this._authors?.map(author => `<button>${author}</button>`).join('') || 'empty'}
+          ${this._authors?.map(author => `<button>${author}</button>`).join('')}
         </div>
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
           ${this._publicationDate ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
