@@ -22,6 +22,10 @@
     function scrollSidebarToCurrentlySelectedElement(type) {
         const button = document.getElementById(`${type}-${type === 'publication' ? currentPublicationId : currentSectionId}`);
         const sidebar = document.getElementById(`${type}s-sidebar`);
+        if(!button) {
+            sidebar.firstElementChild.querySelector('input').click();
+            return;
+        }
         const sidebarRect = sidebar.getBoundingClientRect();
         const buttonRect = button.getBoundingClientRect();
         const currentScroll = sidebar.scrollTop;
@@ -114,12 +118,14 @@
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
                 container.appendChild(newElement);
             });
-            if(type == 'section') {
+            if(type === 'section') {
                 const searchParamSectionId = searchParams.get('sectionId');
                 const section = document.getElementById(`section-${searchParamSectionId}`);
                 if(searchParamSectionId && section) section.querySelector('input').click();
-                else document.getElementById(`section-${items[0].id}`).querySelector('input').click();
-                scrollSidebarToCurrentlySelectedElement('section');
+                else if(items[0]) {
+                    document.getElementById(`section-${items[0].id}`).querySelector('input').click();
+                    scrollSidebarToCurrentlySelectedElement('section');
+                }
             }
             updateUrl();
         }
@@ -205,15 +211,14 @@
 <main style="display: flex; flex: 1; overflow: hidden;">
     <div style="margin-left: 1rem; height: 100%;">
         <div style="width: 15rem;">
-            {{#isAdmin}}
-                <button
-                    id="add-publication"
-                    onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar', '')"
-                    class="m3-button purple-button"
-                    style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;"
-                >+ Add publication</button>
-            {{/isAdmin}}
-            {{^isAdmin}}Publications{{/isAdmin}}
+            <button
+                id="add-publication"
+                onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar', '')"
+                class="m3-button purple-button"
+                style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;"
+                {{#isAdmin}}hidden{{/isAdmin}}
+            >+ Add publication</button>
+            <span id="publications-span" {{#isAdmin}}hidden{{/isAdmin}}>Publications</span>
         </div>
         <aside id="publications-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
             {{#publications}}
@@ -249,7 +254,14 @@
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
             renderItems(items, container);
             if(type === 'publication') {
-                if(isOverseeing) {
+                if({{isAdmin}} && manuscriptStateSelect.value == 'PUBLISHED') {
+                    document.getElementById('add-publication').hidden = false;
+                    document.getElementById('publications-span').hidden = true;
+                } else {
+                    document.getElementById('add-publication').hidden = true;
+                    document.getElementById('publications-span').hidden = false;
+                }
+                if(isOverseeing && manuscriptStateSelect.value == 'PUBLISHED') {
                     document.getElementById('add-section').hidden = false;
                     document.getElementById('sections-span').hidden = true;
                 } else {
@@ -273,7 +285,7 @@
                     `${type}s-sidebar`,
                     title
                 )},
-                canHide && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
+                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
                     const response = await fetch(`/api/publications/${currentPublicationId}${type == 'section' ? `/sections/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
                     const buttonToRemove = document.getElementById(id);
@@ -283,6 +295,9 @@
                     else if(nextButton) nextButton.querySelector('input').click();
                     else document.getElementById('manuscripts-container').innerHTML = '';
                     buttonToRemove.remove();
+                })},
+                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => {
+                    // todo. implement unhiding
                 })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
                     const description = document.getElementById('description');
