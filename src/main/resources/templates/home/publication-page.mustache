@@ -272,6 +272,17 @@
             if(type === 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
             if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
+        async function updateHidden(isHidden) {
+            const response = await fetch(`/api/publications/${currentPublicationId}${type == 'section' ? `/sections/${currentSectionId}` : ''}?isHidden=${isHidden}`, { method: 'PUT' });
+            if(!response.ok) { alert(await response.text()); return; }
+            const buttonToRemove = document.getElementById(id);
+            const previousButton = buttonToRemove.previousSibling?.previousSibling;
+            const nextButton = buttonToRemove.nextSibling?.nextSibling;
+            if(previousButton) previousButton.querySelector('input').click();
+            else if(nextButton) nextButton.querySelector('input').click();
+            else document.getElementById('manuscripts-container').innerHTML = '';
+            buttonToRemove.remove();
+        }
         document.addEventListener('sidebar-button-option-click', async (event) => {
             const { id, title, canEdit, canHide } = event.detail;
             const idValue = id.replace(/^.*-/, '');
@@ -285,20 +296,8 @@
                     `${type}s-sidebar`,
                     title
                 )},
-                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => {
-                    const response = await fetch(`/api/publications/${currentPublicationId}${type == 'section' ? `/sections/${currentSectionId}` : ''}?isHidden=true`, { method: 'PUT' });
-                    if(!response.ok) { alert(await response.text()); return; }
-                    const buttonToRemove = document.getElementById(id);
-                    const previousButton = buttonToRemove.previousSibling?.previousSibling;
-                    const nextButton = buttonToRemove.nextSibling?.nextSibling;
-                    if(previousButton) previousButton.querySelector('input').click();
-                    else if(nextButton) nextButton.querySelector('input').click();
-                    else document.getElementById('manuscripts-container').innerHTML = '';
-                    buttonToRemove.remove();
-                })},
-                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => {
-                    // todo. implement unhiding
-                })},
+                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(true); })},
+                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(false); })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
                     const description = document.getElementById('description');
                     openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {
