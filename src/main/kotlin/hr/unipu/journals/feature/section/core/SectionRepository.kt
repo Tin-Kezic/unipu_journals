@@ -29,8 +29,8 @@ interface SectionRepository: Repository<Section, Int> {
         JOIN publication ON publication.id = publication_section.publication_id
         LEFT JOIN manuscript on manuscript.section_id = publication_section.id
         LEFT JOIN category ON manuscript.category_id = category.id
-        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id AND :affiliation IS NOT NULL
-        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
+        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         LEFT JOIN account ON :account_id = account.id
         WHERE (category.name = :category OR :category IS NULL)
