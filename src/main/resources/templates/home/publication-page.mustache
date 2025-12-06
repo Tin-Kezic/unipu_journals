@@ -23,7 +23,7 @@
         const button = document.getElementById(`${type}-${type === 'publication' ? currentPublicationId : currentSectionId}`);
         const sidebar = document.getElementById(`${type}s-sidebar`);
         if(!button) {
-            sidebar.firstElementChild.querySelector('input').click();
+            sidebar.firstElementChild?.querySelector('input').click();
             return;
         }
         const sidebarRect = sidebar.getBoundingClientRect();
