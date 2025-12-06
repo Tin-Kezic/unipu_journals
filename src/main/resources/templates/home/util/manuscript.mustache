@@ -16,7 +16,7 @@ class Manuscript extends HTMLElement {
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this.innerHTML = `
-      <article data-id="${this._id}" onclick="navigate('${this._downloadUrl}')" class="container" style="width: auto; height: auto; max-width: 100%;">
+      <article data-id="${this._id}" onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
         <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
           ${this._authors?.map(author => `<button>${author}</button>`).join('')}
