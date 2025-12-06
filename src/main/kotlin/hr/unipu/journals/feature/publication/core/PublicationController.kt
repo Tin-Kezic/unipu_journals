@@ -4,7 +4,6 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ContainerDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
@@ -30,7 +29,7 @@ class PublicationController(
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
-    ): List<ContainerDTO> {
+    ): List<Map<String, Any>> {
         require(affiliation == null || authorizationService.isAuthenticated) // A -> B
         require(manuscriptStateFilter != ManuscriptStateFilter.ALL_AWAITING_REVIEW || authorizationService.isAuthenticated) // A -> B
         val isAdmin = authorizationService.isAdmin
@@ -41,11 +40,11 @@ class PublicationController(
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting ?: Sorting.ALPHABETICAL_A_Z
-        ).map { publication -> ContainerDTO(
-            id = publication.id,
-            title = publication.title,
-            canHide = isAdmin,
-            canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
+        ).map { publication -> mapOf(
+            "id" to publication.id,
+            "title" to publication.title,
+            "canHide" to isAdmin,
+            "canEdit" to authorizationService.isEicOnPublicationOrAdmin(publication.id)
         )}
     }
     @PostMapping

@@ -7,7 +7,6 @@ import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ContainerDTO
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.dao.DataIntegrityViolationException
@@ -39,7 +38,7 @@ class SectionController(
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
-    ): List<ContainerDTO> {
+    ): List<Map<String, Any>> {
         val isAdmin = authorizationService.isAdmin
         return sectionRepository.all(
             publicationId = publicationId,
@@ -48,13 +47,12 @@ class SectionController(
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting
-        ).map { section ->
-            ContainerDTO(
-                id = section.id,
-                title = section.title,
-                description = section.description,
-                canHide = isAdmin,
-                canEdit = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
+        ).map { section -> mapOf(
+                "id" to section.id,
+                "title" to section.title,
+                "description" to section.description!!,
+                "canHide" to isAdmin,
+                "canEdit" to authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
             )
         }
     }
