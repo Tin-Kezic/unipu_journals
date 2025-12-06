@@ -38,22 +38,6 @@
         if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
         const items = await reloadResponse.json();
         renderItems(items, upsertDialogContainerId);
-        {
-            const upsertedSidebarButton = document.querySelector(`sidebar-button[title="${input.value}"]`);
-            const sidebar = document.getElementById(upsertDialogContainerId)
-            const sidebarRect = sidebar.getBoundingClientRect();
-            const upsertedSidebarButtonRect = upsertedSidebarButton.getBoundingClientRect();
-            const currentScroll = sidebar.scrollTop;
-            const offsetTop = upsertedSidebarButtonRect.top - sidebarRect.top + currentScroll;
-            const targetScroll = offsetTop - (sidebar.clientHeight / 2) + (upsertedSidebarButtonRect.height / 2);
-            sidebar.scrollTo({ top: targetScroll, behavior: 'smooth' });
-            upsertedSidebarButtonInput = upsertedSidebarButton.querySelector('input');
-            switch(upsertDialogMethod) {
-                case 'POST': upsertedSidebarButtonInput.click(); break;
-                case 'PUT': upsertedSidebarButtonInput.checked = true; break;
-                default: console.log('invalid method');
-            }
-        }
         upsertDialogInput.value = '';
         upsertDialog.close();
     });
