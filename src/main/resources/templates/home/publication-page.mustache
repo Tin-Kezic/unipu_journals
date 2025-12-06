@@ -27,7 +27,7 @@
         const button = document.getElementById(`${type}-${type === 'publication' ? currentPublicationId : currentSectionId}`);
         const sidebar = document.getElementById(`${type}s-sidebar`);
         if(!button) {
-            sidebar.firstElementChild?.querySelector('input').click();
+            sidebar?.firstElementChild?.querySelector('input').click();
             return;
         }
         const sidebarRect = sidebar.getBoundingClientRect();
@@ -96,7 +96,15 @@
             const container = document.getElementById(containerId);
             const type = containerId.replace(/s-.*$/, '');
             container.innerHTML = '';
-            if(items.length === 0) document.getElementById('manuscripts-container').innerHTML = '';
+            if(items.length === 0) {
+                switch(type) {
+                    case 'publication':
+                        document.getElementById('description').innerHTML = '';
+                        document.getElementById('sections-sidebar').innerHTML = '';
+                    case 'section':
+                        document.getElementById('manuscripts-container').innerHTML = '';
+                }
+            }
             if(type === 'manuscript') items.forEach(manuscript => {
                 const newManuscript = document.createElement('manuscript-element');
                 newManuscript.setAttribute('id', manuscript.id);
@@ -120,14 +128,7 @@
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
                 container.appendChild(newElement);
             });
-            if(type === 'section') {
-                const currentSection = document.getElementById(`section-${currentSectionId}`);
-                if(currentSection) currentSection.querySelector('input').click();
-                else if(items[0]) {
-                    document.getElementById(`section-${items[0].id}`).querySelector('input').click();
-                    scrollSidebarToCurrentlySelectedElement('section');
-                }
-            }
+            scrollSidebarToCurrentlySelectedElement(type);
             updateUrl();
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
@@ -248,29 +249,19 @@
             const container = type === 'publication' ? 'sections-sidebar': 'manuscripts-container';
             renderItems(items, container);
             if(type === 'publication') {
-                if({{isAdmin}} && manuscriptStateSelect.value == 'PUBLISHED') {
-                    document.getElementById('add-publication').hidden = false;
-                    document.getElementById('publications-span').hidden = true;
-                } else {
-                    document.getElementById('add-publication').hidden = true;
-                    document.getElementById('publications-span').hidden = false;
-                }
-                if(isOverseeing && manuscriptStateSelect.value == 'PUBLISHED') {
-                    document.getElementById('add-section').hidden = false;
-                    document.getElementById('sections-span').hidden = true;
-                } else {
-                    document.getElementById('add-section').hidden = true;
-                    document.getElementById('sections-span').hidden = false;
-                }
+                document.getElementById('add-publication').hidden = !({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('publications-span').hidden = ({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('add-section').hidden = !(isOverseeing && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('sections-span').hidden = (isOverseeing && manuscriptStateSelect.value === 'PUBLISHED');
             }
             if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
-        async function updateHidden(isHidden) {
+        async function updateHidden(id, type, isHidden) {
             const response = await fetch(`/api/publications/${currentPublicationId}${type == 'section' ? `/sections/${currentSectionId}` : ''}?isHidden=${isHidden}`, { method: 'PUT' });
             if(!response.ok) { alert(await response.text()); return; }
             const buttonToRemove = document.getElementById(id);
-            const previousButton = buttonToRemove.previousSibling?.previousSibling;
-            const nextButton = buttonToRemove.nextSibling?.nextSibling;
+            const previousButton = buttonToRemove.previousElementSibling;
+            const nextButton = buttonToRemove.nextElementSibling;
             if(previousButton) previousButton.querySelector('input').click();
             else if(nextButton) nextButton.querySelector('input').click();
             else document.getElementById('manuscripts-container').innerHTML = '';
@@ -289,8 +280,8 @@
                     `${type}s-sidebar`,
                     title
                 )},
-                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(true); })},
-                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(false); })},
+                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(id, type, true); })},
+                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(id, type, false); })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
                     const description = document.getElementById('description');
                     openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {
