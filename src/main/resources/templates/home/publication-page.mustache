@@ -121,7 +121,7 @@
             if(type === 'section') {
                 const searchParamSectionId = searchParams.get('sectionId');
                 const section = document.getElementById(`section-${searchParamSectionId}`);
-                if(searchParamSectionId && section) section.querySelector('input').click();
+                if(section) section.querySelector('input').click();
                 else if(items[0]) {
                     document.getElementById(`section-${items[0].id}`).querySelector('input').click();
                     scrollSidebarToCurrentlySelectedElement('section');
