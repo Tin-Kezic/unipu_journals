@@ -111,7 +111,6 @@
             else items.forEach(sidebarButton  => {
                 const newElement = document.createElement('sidebar-button');
                 newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
-                newElement.setAttribute('type', type);
                 if(type === 'section') {
                     newElement.setAttribute('font-size', 'small');
                     newElement.setAttribute('description', sidebarButton.description);
