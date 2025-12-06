@@ -241,8 +241,6 @@
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;"></aside>
     </div>
     <script>
-        let currentPublicationId = {{selectedPublicationId}};
-        let currentSectionId = {{selectedSectionId}};
         let currentPublicationId = searchParams.get('publicationId');
         let currentSectionId = searchParams.get('sectionId');
         document.addEventListener('sidebar-button-click', async (event) => {
