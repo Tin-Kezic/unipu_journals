@@ -148,13 +148,6 @@
             const publicationsContainer = document.getElementById('publications-sidebar');
             publicationsContainer.innerHTML = '';
             renderItems(responsePublications, 'publications-sidebar');
-            {
-                if(responsePublications.length == 0) {
-                    document.getElementById('sections-sidebar').innerHTML = '';
-                    document.getElementById('manuscripts-container').innerHTML = '';
-                    document.getElementById('description').innerHTML = '';
-                } else scrollSidebarToCurrentlySelectedElement('publication');
-            }
             /*
             switch(manuscriptStateSelect.value) {
                 case 'PUBLISHED':
@@ -270,7 +263,6 @@
                     document.getElementById('sections-span').hidden = false;
                 }
             }
-            if(type === 'publication' && items.length == 0) document.getElementById('description').innerHTML = '';
             if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
         async function updateHidden(isHidden) {
