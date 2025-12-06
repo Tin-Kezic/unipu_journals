@@ -56,8 +56,6 @@ class PublicationPageController(
             canHide = isAdmin,
             canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
         )}
-        model["selectedPublicationId"] = publicationId ?: publications.first().id
-        model["selectedSectionId"] = sectionId ?: 1
         return "home/publication-page"
     }
 }

@@ -242,6 +242,8 @@
     <script>
         let currentPublicationId = {{selectedPublicationId}};
         let currentSectionId = {{selectedSectionId}};
+        let currentPublicationId = searchParams.get('publicationId');
+        let currentSectionId = searchParams.get('sectionId');
         document.addEventListener('sidebar-button-click', async (event) => {
             const { id, title, isOverseeing } = event.detail;
             const idValue = id.replace(/^.*-/, '');
