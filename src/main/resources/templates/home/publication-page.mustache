@@ -17,7 +17,11 @@
 
 <script>
     function updateUrl() {
-        history.replaceState(null, '', `/?publicationId=${encodeURIComponent(currentPublicationId)}&sectionId=${encodeURIComponent(currentSectionId)}&${params()}`);
+        const publicationIdAndSectionIdParams = new URLSearchParams({
+            publicationId: currentPublicationId,
+            ...(currentSectionId && { sectionId: currentSectionId})
+        });
+        history.replaceState(null, '', `/?${publicationIdAndSectionIdParams}&${params()}`);
     }
     function scrollSidebarToCurrentlySelectedElement(type) {
         const button = document.getElementById(`${type}-${type === 'publication' ? currentPublicationId : currentSectionId}`);
