@@ -44,7 +44,6 @@ interface PublicationRepository: Repository<Publication, Int> {
                     EXISTS (
                         SELECT 1 FROM manuscript m
                         WHERE m.category_id = category.id
-                        AND m.current_state = :manuscript_state_filter::manuscript_state
                     )
                 )
                 OR
