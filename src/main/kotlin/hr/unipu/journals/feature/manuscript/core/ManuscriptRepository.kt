@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
-        SELECT DISTINCT manuscript.* FROM manuscript
+        SELECT manuscript.* FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication.id = publication_section.publication_id
         LEFT JOIN category ON manuscript.category_id = category.id
@@ -80,7 +80,12 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                 )
             )
         )
-        ORDER BY manuscript.title
+        GROUP BY manuscript.id
+        ORDER BY
+            CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
+            CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,
+            CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END
     """)
     fun all(
         @Param("section_id") sectionId: Int? = null,
