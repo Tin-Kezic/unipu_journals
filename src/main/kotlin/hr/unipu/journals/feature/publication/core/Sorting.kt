@@ -5,5 +5,4 @@ enum class Sorting {
     ALPHABETICAL_Z_A,
     NEWEST,
     OLDEST,
-    VIEWS
 }

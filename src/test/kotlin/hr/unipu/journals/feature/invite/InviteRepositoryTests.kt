@@ -73,7 +73,6 @@ class InviteRepositoryTests {
                     downloadUrl = "http://example.com/ms2.pdf",
                     submissionDate = LocalDateTime.of(2023, 9, 28, 13, 28, 0),
                     publicationDate = null,
-                    views = 245,
                 ),
                 Manuscript(
                     id = 3,
@@ -85,7 +84,6 @@ class InviteRepositoryTests {
                     downloadUrl = "http://example.com/ms3.pdf",
                     submissionDate = LocalDateTime.of(2022, 9, 28, 13, 28, 0),
                     publicationDate = null,
-                    views = 310,
                 )
             ),
             inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")

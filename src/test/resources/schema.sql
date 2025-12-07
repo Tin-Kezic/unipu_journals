@@ -80,7 +80,6 @@ CREATE TABLE manuscript (
     download_url TEXT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     publication_date TIMESTAMP,
-    views INT NOT NULL DEFAULT 0,
     FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL,
     FOREIGN KEY (section_id) REFERENCES publication_section(id) ON DELETE CASCADE
 );

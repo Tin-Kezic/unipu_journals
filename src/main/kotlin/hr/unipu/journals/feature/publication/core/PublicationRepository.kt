@@ -108,8 +108,7 @@ interface PublicationRepository: Repository<Publication, Int> {
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN publication.title END DESC,
             CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
-            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END,
-            CASE WHEN :sorting = 'VIEWS' THEN MAX(manuscript.views) END
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END
     """)
     fun all(
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,

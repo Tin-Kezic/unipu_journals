@@ -92,10 +92,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     ): List<Manuscript>
 
     @Modifying
-    @Query("UPDATE manuscript SET views = views + 1 WHERE id = :id")
-    fun incrementViews(@Param("id") id: Int): Int
-
-    @Modifying
     @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :category_id, :section_id, :file_url)")
     fun insert(
         @Param("title") title: String,

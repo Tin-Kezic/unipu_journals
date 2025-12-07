@@ -15,11 +15,6 @@ class ManuscriptRepositoryTests {
     @Autowired private lateinit var manuscriptRepository: ManuscriptRepository
     @Autowired private lateinit var jdbcTemplate: JdbcTemplate
 
-    @Test fun `increment views by manuscript id`() {
-        val views = jdbcTemplate.queryForObject<Int>("SELECT views FROM manuscript WHERE id = 1")
-        assertEquals(1, manuscriptRepository.incrementViews(1))
-        assertEquals(views + 1, jdbcTemplate.queryForObject<Int>("SELECT views FROM manuscript WHERE id = 1"))
-    }
     @Test fun `insert manuscript`() {
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM manuscript WHERE title = 'new manuscript' AND category_id = 1 AND section_id = 11 AND file_url = 'new file url')"))
         assertEquals(1, manuscriptRepository.insert("new manuscript", 1, 11, "new file url"))

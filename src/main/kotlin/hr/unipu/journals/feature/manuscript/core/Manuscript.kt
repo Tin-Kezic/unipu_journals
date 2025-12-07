@@ -17,5 +17,4 @@ data class Manuscript(
     val downloadUrl: String,
     val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
-    val views: Int,
 )
