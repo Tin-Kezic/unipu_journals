@@ -1,6 +1,6 @@
 <script>
 class Manuscript extends HTMLElement {
-  static observedAttributes = ['id', 'title', 'description', 'authors', 'downloadUrl', 'submissionDate', 'publicationDate'];
+  static observedAttributes = ['id', 'title', 'description', 'authors', 'download-url', 'submission-date', 'publication-date'];
   constructor() { super(); }
   connectedCallback() { this.render(); }
   attributeChangedCallback(name, oldValue, newValue) {
@@ -11,10 +11,10 @@ class Manuscript extends HTMLElement {
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
     this._authors = JSON.parse(this.getAttribute('authors')?.replace(', ]', ']') || '[]');
-    this._submissionDate = this.getAttribute('submissionDate');
-    this._publicationDate = this.getAttribute('publicationDate');
+    this._submissionDate = this.getAttribute('submission-date');
+    this._publicationDate = this.getAttribute('publication-date');
     this._date = this.getAttribute('date');
-    this._downloadUrl = this.getAttribute('downloadUrl');
+    this._downloadUrl = this.getAttribute('download-url');
     this.innerHTML = `
       <article data-id="${this._id}" onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
