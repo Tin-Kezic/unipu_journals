@@ -96,7 +96,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun incrementViews(@Param("id") id: Int): Int
 
     @Modifying
-    @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :author_id, :category_id, :section_id, :file_url)")
+    @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :category_id, :section_id, :file_url)")
     fun insert(
         @Param("title") title: String,
         @Param("category_id") categoryId: Int,
