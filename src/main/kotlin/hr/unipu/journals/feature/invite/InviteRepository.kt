@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.invite
 
 import hr.unipu.journals.feature.manuscript.core.Manuscript
-import hr.unipu.journals.feature.publication.core.Publication
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -19,15 +19,33 @@ interface InviteRepository: Repository<Invite, Int> {
         SELECT DISTINCT manuscript.* FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
-        JOIN publication ON publication_section.publication_id = publication.id
-        WHERE invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR_ON_MANUSCRIPT', 'REVIEWER_ON_MANUSCRIPT')
-        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-        AND publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
+        WHERE publication_section.is_hidden = FALSE
+        AND publication_section.id = :publication_section_id
         AND invite.email = :email
-        AND (publication.id = :publication_id OR :publication_id IS NULL)
+        AND (
+            :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
+                invite.target = 'EIC_ON_MANUSCRIPT' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                OR
+                invite.target = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                OR
+                invite.target = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+            )
+            OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
+                manuscript.current_state = 'AWAITING_EIC_REVIEW' AND invite.target = 'EIC_ON_MANUSCRIPT'
+            )
+            OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
+                manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND invite.target = 'EDITOR'
+            )
+            OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
+                manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND invite.target = 'REVIEWER'
+            )
+        )
     """)
-    fun affiliatedManuscripts(@Param("email") email: String, @Param("publication_id") publicationId: Int? = null): List<Manuscript>
+    fun affiliatedManuscripts(
+        @Param("email") email: String,
+        @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
+        @Param("publication_section_id") publicationSectionId: Int,
+    ): List<Manuscript>
 
     @Modifying
     @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target::invitation_target, :target_id)")
