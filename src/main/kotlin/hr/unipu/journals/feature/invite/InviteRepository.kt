@@ -44,7 +44,7 @@ interface InviteRepository: Repository<Invite, Int> {
     fun affiliatedManuscripts(
         @Param("email") email: String,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
-        @Param("section_id") publicationSectionId: Int,
+        @Param("section_id") sectionId: Int,
     ): List<Manuscript>
 
     @Modifying
