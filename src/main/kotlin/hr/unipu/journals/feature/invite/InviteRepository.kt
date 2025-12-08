@@ -20,7 +20,7 @@ interface InviteRepository: Repository<Invite, Int> {
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
         WHERE publication_section.is_hidden = FALSE
-        AND publication_section.id = :publication_section_id
+        AND publication_section.id = :section_id
         AND invite.email = :email
         AND (
             :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
@@ -44,7 +44,7 @@ interface InviteRepository: Repository<Invite, Int> {
     fun affiliatedManuscripts(
         @Param("email") email: String,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
-        @Param("publication_section_id") publicationSectionId: Int,
+        @Param("section_id") publicationSectionId: Int,
     ): List<Manuscript>
 
     @Modifying
