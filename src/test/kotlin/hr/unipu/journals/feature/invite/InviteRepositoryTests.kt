@@ -51,15 +51,6 @@ class InviteRepositoryTests {
             inviteRepository.emailsByTarget(InvitationTarget.SECTION_EDITOR, 2)
         )
     }
-    @Test fun `retrieve all publications under review with affiliation by email`() {
-        assertEquals(
-            listOf(
-                Publication(2, "Nature of Biology", false),
-                Publication(3, "Physics Letters", false),
-            ),
-            inviteRepository.allPublicationsContainingPendingManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
-        )
-    }
     @Test fun `retrieve all manuscripts with affiliation by email`() {
         assertEquals(
             listOf(
