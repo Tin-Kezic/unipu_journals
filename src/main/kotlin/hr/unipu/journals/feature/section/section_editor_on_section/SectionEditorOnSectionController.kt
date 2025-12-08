@@ -32,7 +32,7 @@ class SectionEditorOnSectionController(
                 sectionEditorOnSectionRepository.assign(sectionId, it.id)
             } ?: inviteRepository.invite(
                 email = email,
-                target = InvitationTarget.SECTION_EDITOR_ON_SECTION,
+                target = InvitationTarget.SECTION_EDITOR,
                 targetId = sectionId
             )
             return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
@@ -55,7 +55,7 @@ class SectionEditorOnSectionController(
             sectionEditorOnSectionRepository.revoke(sectionId, it.id)
         } ?: inviteRepository.revoke(
             email = email,
-            target = InvitationTarget.SECTION_EDITOR_ON_SECTION,
+            target = InvitationTarget.SECTION_EDITOR,
             targetId = sectionId
         )
         return if(rowsAffected == 1) ResponseEntity.ok("successfully revoked section editor $email on section $sectionId")
