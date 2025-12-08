@@ -1,11 +1,11 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.publication.core.Affiliation
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.home.ManuscriptDTO
 import hr.unipu.journals.view.submit.AuthorDTO
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/api/publications/{publicationId}/sections/{sectionId}/manuscripts")
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
+    private val inviteRepository: InviteRepository,
     private val authorizationService: AuthorizationService,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
 ) {
@@ -33,25 +33,36 @@ class ManuscriptController(
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
-    ): List<ManuscriptDTO> {
-        return manuscriptRepository.all(
+    ): List<Map<String, Any?>> {
+        fun List<Manuscript>.toDto(type: String? = null): List<Map<String, Any?>> = this.map { manuscript -> buildMap {
+            type?.let { put("type", it) }
+            put("type", type)
+            put("id", manuscript.id)
+            put("title", manuscript.title)
+            put("authors", accountRoleOnManuscriptRepository.authors(manuscript.id))
+            put("downloadUrl", manuscript.downloadUrl)
+            put("submissionDate", manuscript.submissionDate)
+            put("publicationDate", manuscript.publicationDate)
+            put("description", manuscript.description)
+        }}
+        val manuscripts = manuscriptRepository.all(
             sectionId = sectionId,
             manuscriptStateFilter = manuscriptStateFilter,
             affiliation = affiliation,
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting
-        ).map { manuscript ->
-            ManuscriptDTO(
-                id = manuscript.id,
-                title = manuscript.title,
-                authors = accountRoleOnManuscriptRepository.authors(manuscript.id),
-                downloadUrl = manuscript.downloadUrl,
-                submissionDate = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
-                publicationDate = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd MMM YYYY")) ?: "no publication date",
-                description = manuscript.description
-            )
+        )
+        if(manuscriptStateFilter.name.contains("AWAITING")) {
+            val pending = manuscripts.toDto("pending")
+            val invited = inviteRepository.affiliatedManuscripts(
+                email = authorizationService.account?.email ?: "",
+                manuscriptStateFilter = manuscriptStateFilter,
+                sectionId = sectionId
+            ).toDto("invited")
+            return pending + invited
         }
+        return manuscripts.toDto()
     }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
