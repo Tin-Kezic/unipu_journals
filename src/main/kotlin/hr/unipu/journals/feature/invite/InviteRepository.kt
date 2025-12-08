@@ -16,18 +16,6 @@ interface InviteRepository: Repository<Invite, Int> {
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
     @Query("""
-        SELECT DISTINCT publication.* FROM invite
-        JOIN manuscript ON invite.target_id = manuscript.id
-        JOIN publication_section ON manuscript.section_id = publication_section.id
-        JOIN publication ON publication_section.publication_id = publication.id
-        WHERE invite.email = :email
-        AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW', 'MINOR', 'MAJOR')
-        AND publication.is_hidden = FALSE
-        AND publication_section.is_hidden = FALSE
-    """)
-    fun allPublicationsContainingPendingManuscripts(@Param("email") email: String): List<Publication>
-
-    @Query("""
         SELECT DISTINCT manuscript.* FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
