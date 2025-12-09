@@ -2,6 +2,7 @@ package hr.unipu.journals.feature.invite
 
 import hr.unipu.journals.feature.manuscript.core.Manuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Publication
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -77,7 +78,23 @@ class InviteRepositoryTests {
                     publicationDate = null,
                 )
             ),
-            inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr")
+            inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr", ManuscriptStateFilter.ALL_AWAITING_REVIEW, 7)
+        )
+        assertEquals(
+            listOf(
+                Manuscript(
+                    id = 3,
+                    title = "Natural Language Processing in Clinical Notes",
+                    description = "Extracting insights from unstructured clinical data using NLP.",
+                    categoryId = 2,
+                    state = ManuscriptState.AWAITING_REVIEWER_REVIEW,
+                    sectionId = 11,
+                    downloadUrl = "http://example.com/ms3.pdf",
+                    submissionDate = LocalDateTime.of(2022, 9, 28, 13, 28, 0),
+                    publicationDate = null,
+                )
+            ),
+            inviteRepository.affiliatedManuscripts("invited.manuscript.role.1.2.3@unipu.hr", ManuscriptStateFilter.ALL_AWAITING_REVIEW, 11)
         )
     }
     @Test fun `invite admin`() {
