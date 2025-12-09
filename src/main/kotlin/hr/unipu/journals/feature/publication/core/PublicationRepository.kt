@@ -19,7 +19,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         LEFT JOIN account ON :account_id = account.id
-        WHERE (category.name = :category OR :category IS NULL)
+        WHERE (:category IS NULL OR category.name = :category AND manuscript.category_id = category.id)
         AND (
             :manuscript_state_filter = 'HIDDEN' AND (
                 publication.is_hidden = TRUE
@@ -28,23 +28,10 @@ interface PublicationRepository: Repository<Publication, Int> {
             )
             OR publication.is_hidden = FALSE AND (
                 :manuscript_state_filter = 'PUBLISHED' AND (
-                    EXISTS (
-                        SELECT 1 FROM publication_section ps
-                        JOIN manuscript m ON m.section_id = ps.id
-                        WHERE ps.publication_id = publication.id
-                        AND ps.is_hidden = FALSE
-                        AND m.current_state = :manuscript_state_filter::manuscript_state
-                    )
+                    publication_section.is_hidden = FALSE AND manuscript.current_state = :manuscript_state_filter::manuscript_state
                     OR account.is_admin
                     OR eic_on_publication.eic_id = :account_id
                     OR section_editor_on_section.section_editor_id = :account_id
-                ) AND (
-                    :category IS NULL
-                    OR
-                    EXISTS (
-                        SELECT 1 FROM manuscript m
-                        WHERE m.category_id = category.id
-                    )
                 )
                 OR
                 publication_section.is_hidden = FALSE AND (
@@ -94,14 +81,9 @@ interface PublicationRepository: Repository<Publication, Int> {
         )
         AND (
             :sorting NOT IN ('NEWEST', 'OLDEST')
-            OR EXISTS (
-                SELECT 1
-                FROM manuscript m
-                JOIN publication_section ps ON ps.id = m.section_id
-                WHERE ps.publication_id = publication.id
-                AND (m.publication_date IS NOT NULL OR m.submission_date IS NOT NULL)
-                AND m.current_state = :manuscript_state_filter::manuscript_state
-            ) 
+            OR
+            manuscript.publication_date IS NOT NULL OR manuscript.submission_date IS NOT NULL
+            AND manuscript.current_state = :manuscript_state_filter::manuscript_state
         )
         GROUP BY publication.id
         ORDER BY
