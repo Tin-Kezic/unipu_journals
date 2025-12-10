@@ -80,17 +80,6 @@ dialog {
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
-.purple-outline-button {
-    background-color: var(--primary);
-    border: 0.1rem solid white;
-    color: white;
-    padding: 0.8rem 1rem;
-    box-shadow: none;
-
-}
-.purple-outline-button:hover {
-    background-color: var(--primary);
-}
 .orange-button {
     background-color: white;
     border: 0.08rem solid var(--beige);
