@@ -10,7 +10,7 @@ class Manuscript extends HTMLElement {
     this._id = this.getAttribute('id').replace(/^.*-/, '');
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
-    this._authors = JSON.parse(this.getAttribute('authors')?.replace(', ]', ']') || '[]');
+    this._authors = JSON.parse(this.getAttribute('authors'));
     this._submissionDate = this.getAttribute('submission-date');
     this._publicationDate = this.getAttribute('publication-date');
     this._date = this.getAttribute('date');
