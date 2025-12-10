@@ -20,7 +20,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         LEFT JOIN account ON :account_id = account.id
         LEFT JOIN invite on invite.target_id = manuscript.id
-        WHERE (:category IS NULL OR category.name = :category AND manuscript.category_id = category.id)
+        WHERE (:category IS NULL OR category.name = :category)
         AND (
             :manuscript_state_filter = 'HIDDEN' AND (
                 publication.is_hidden = TRUE
@@ -49,36 +49,30 @@ interface PublicationRepository: Repository<Publication, Int> {
                     :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
                         manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
                             account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EIC'
-                            OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT'
+                            OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT' AND invite.email = account.email
                         )
                         OR
                         manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
                             account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EDITOR'
-                            OR invite.target_id = manuscript.id AND invite.target = 'EDITOR'
+                            OR invite.target_id = manuscript.id AND invite.target = 'EDITOR' AND invite.email = account.email
                         )
                         OR
                         manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND (
                             account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'REVIEWER'
-                            OR invite.target_id = manuscript.id AND invite.target = 'REVIEWER'
+                            OR invite.target_id = manuscript.id AND invite.target = 'REVIEWER' AND invite.email = account.email
                         )
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EIC_REVIEW' AND (
-                            account_role_on_manuscript.account_role = 'EIC'
-                            OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT'
-                        )
+                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND manuscript.current_state = 'AWAITING_EIC_REVIEW' AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EIC'
+                        OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT' AND invite.email = account.email
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND (
-                            account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
-                            OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR')
-                        )
+                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                        OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR') AND invite.email = account.email
                     )
-                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND (
-                            account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
-                            OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
-                        )
+                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                        OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER') AND invite.email = account.email
                     )
                 )
             )
