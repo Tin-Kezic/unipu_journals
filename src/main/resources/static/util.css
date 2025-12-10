@@ -42,7 +42,6 @@ dialog {
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 0.25rem 0.4rem rgba(0, 0, 0, 0.3);
-
 }
 .m3-button:active {
     transform: scale(0.98);
@@ -51,12 +50,10 @@ dialog {
 .yellow-button {
     background-color: var(--yellow);
     color: black;
-
 }
 .purple-button {
     background-color: var(--primary);
     color: white;
-
 }
 .outline-button {
     background-color: transparent;
@@ -65,26 +62,22 @@ dialog {
     padding: 0.7rem 1rem;
     font-size: 1rem;
     box-shadow: none;
-
 }
 .red-button {
     background-color: var(--red);
     color: white;
     padding: 0.8rem 1rem;
     box-shadow: none;
-
 }
 .light-red-button {
     background-color: var(--pink);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
-
 }
 .green-button {
     background-color: var(--green);
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
-
 }
 .purple-outline-button {
     background-color: var(--primary);
@@ -124,7 +117,6 @@ dialog {
     color: var(--light-gray);
     background-color: white;
     padding: 0 0.25rem;
-
 }
 .text-field input {
     width: 100%;
@@ -143,7 +135,6 @@ dialog {
     color: var(--red);
     margin-top: 0.25rem;
     display: none;
-
 }
 .error-msg.show {
     display: block;
