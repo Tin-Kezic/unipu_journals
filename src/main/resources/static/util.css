@@ -76,6 +76,7 @@ dialog {
 }
 .green-button {
     background-color: var(--green);
+    color: white;
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
