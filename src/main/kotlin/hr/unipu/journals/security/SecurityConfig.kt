@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
@@ -27,8 +28,8 @@ class SecurityConfig {
     @Bean fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(12)
     @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
-            csrf { disable() } // comment out in production
-            headers { frameOptions { disable() } } // comment out in production
+            csrf { disable() } // todo. comment out in production
+            headers { frameOptions { disable() } } // todo. comment out in production
             formLogin {
                 loginPage = "/login.html"
                 loginProcessingUrl = "/login"
