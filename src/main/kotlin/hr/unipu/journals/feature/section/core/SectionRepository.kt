@@ -33,7 +33,8 @@ interface SectionRepository: Repository<Section, Int> {
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         LEFT JOIN account ON :account_id = account.id
-        WHERE (category.name = :category OR :category IS NULL)
+        LEFT JOIN invite on invite.target_id = manuscript.id
+        WHERE (:category IS NULL OR category.name = :category AND manuscript.category_id = category.id)
         AND (publication.id = :publication_id OR :publication_id IS NULL)
         AND (
             :manuscript_state_filter = 'HIDDEN' AND (
@@ -43,43 +44,54 @@ interface SectionRepository: Repository<Section, Int> {
             )
             OR publication.is_hidden = FALSE AND publication_section.is_hidden = FALSE AND (
                 :manuscript_state_filter = 'PUBLISHED' AND (
-                    EXISTS (
-                        SELECT 1 FROM manuscript m
-                        WHERE m.section_id = publication_section.id
-                        AND m.current_state = :manuscript_state_filter::manuscript_state
-                    )
+                    manuscript.current_state = :manuscript_state_filter::manuscript_state
                     OR account.is_admin
                     OR eic_on_publication.eic_id = :account_id
                     OR section_editor_on_section.section_editor_id = :account_id
-                ) AND (
-                    :category IS NULL
-                    OR
-                    EXISTS (
-                        SELECT 1 FROM manuscript m
-                        WHERE m.category_id = category.id
-                    )
                 )
                 OR
                 :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
                 OR
                 account_role_on_manuscript.account_id = :account_id AND (
-                    :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
+                    :manuscript_state_filter = 'MINOR_MAJOR' AND manuscript.current_state IN ('MINOR', 'MAJOR')
                     OR
-                    :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
-                        account_role_on_manuscript.account_role = 'EIC' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-                        OR
-                        account_role_on_manuscript.account_role = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
-                        OR
-                        account_role_on_manuscript.account_role = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                    :manuscript_state_filter = 'REJECTED' AND manuscript.current_state = 'REJECTED'
+                )
+                OR
+                :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
+                OR
+                :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
+                    manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EIC'
+                        OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT'
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EIC_REVIEW' AND account_role_on_manuscript.account_role = 'EIC'
+                    OR
+                    manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EDITOR'
+                        OR invite.target_id = manuscript.id AND invite.target = 'EDITOR'
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                    OR
+                    manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND (
+                        account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'REVIEWER'
+                        OR invite.target_id = manuscript.id AND invite.target = 'REVIEWER'
                     )
-                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                )
+                OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
+                    manuscript.current_state = 'AWAITING_EIC_REVIEW' AND (
+                        account_role_on_manuscript.account_role = 'EIC'
+                        OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT'
+                    )
+                )
+                OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
+                    manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND (
+                        account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
+                        OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR')
+                    )
+                )
+                OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
+                    manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND (
+                        account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
+                        OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
                     )
                 )
             )
@@ -105,14 +117,9 @@ interface SectionRepository: Repository<Section, Int> {
         )
         AND (
             :sorting NOT IN ('NEWEST', 'OLDEST')
-            OR EXISTS (
-                SELECT 1
-                FROM manuscript m
-                JOIN publication_section ps ON ps.id = m.section_id
-                WHERE ps.publication_id = publication.id
-                AND (m.publication_date IS NOT NULL OR m.submission_date IS NOT NULL)
-                AND m.current_state = :manuscript_state_filter::manuscript_state
-            ) 
+            OR
+            manuscript.publication_date IS NOT NULL OR manuscript.submission_date IS NOT NULL
+            AND manuscript.current_state = :manuscript_state_filter::manuscript_state
         )
         GROUP BY publication_section.id
         ORDER BY
