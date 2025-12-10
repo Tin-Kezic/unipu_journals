@@ -146,7 +146,6 @@
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();
             const publicationsContainer = document.getElementById('publications-sidebar');
-            publicationsContainer.innerHTML = '';
             renderItems(responsePublications, 'publications-sidebar');
         }));
     </script>
