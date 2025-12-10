@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/api/publications/{publicationId}/sections/{sectionId}/manuscripts")
@@ -41,8 +42,8 @@ class ManuscriptController(
             put("title", manuscript.title)
             put("authors", accountRoleOnManuscriptRepository.authors(manuscript.id))
             put("downloadUrl", manuscript.downloadUrl)
-            put("submissionDate", manuscript.submissionDate)
-            put("publicationDate", manuscript.publicationDate)
+            put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("description", manuscript.description)
         }}
         val manuscripts = manuscriptRepository.all(
