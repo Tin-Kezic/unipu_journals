@@ -15,6 +15,7 @@ class Manuscript extends HTMLElement {
     this._publicationDate = this.getAttribute('publication-date');
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
+    this._isOverseeing = this.getAttribute('is-overseeing');
     this._options = this.getAttribute('options');
     this.innerHTML = `
       <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
