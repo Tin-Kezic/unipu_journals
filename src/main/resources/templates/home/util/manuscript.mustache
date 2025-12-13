@@ -2,9 +2,15 @@
 class Manuscript extends HTMLElement {
   static observedAttributes = ['id', 'title', 'description', 'authors', 'download-url', 'submission-date', 'publication-date', 'options'];
   constructor() { super(); }
-  connectedCallback() { this.render(); }
+  connectedCallback() {
+    this.render();
+    this.setupEventListeners();
+  }
   attributeChangedCallback(name, oldValue, newValue) {
-    if(newValue != oldValue) this.render();
+    if(newValue != oldValue) {
+      this.render();
+      this.setupEventListeners();
+    }
   }
   render() {
     this._id = this.getAttribute('id');
@@ -33,6 +39,48 @@ class Manuscript extends HTMLElement {
       </article>
     `;
   }
+  _removeOldListeners() {
+    if(this._acceptHandler) {
+      this.querySelector('button[data-type="accept"]')?.removeEventListener('click', this._acceptHandler);
+      this._acceptHandler = null;
+    }
+    if(this._declineHandler) {
+      this.querySelector('button[data-type="decline"]')?.removeEventListener('click', this._declineHandler);
+      this._declineHandler = null;
+    }
+    if(this._republishHandler) {
+      this.querySelector('button[data-type="republish"]')?.removeEventListener('click', this._republishHandler);
+      this._declineHandler = null;
+    }
+    if(this._archiveHandler) {
+      this.querySelector('button[data-type="archive"]')?.removeEventListener('click', this._archiveHandler);
+      this._archiveHandler= null;
+    }
+    if(this._hideHandler) {
+      this.querySelector('button[data-type="hide"]')?.removeEventListener('click', this._hideHandler);
+      this._hideHandler = null;
+    }
+  }
+  basicDispatch(name) {
+      this.dispatchEvent(new CustomEvent(name, {
+        detail: { id: this._id },
+        bubbles: true
+      }))
+  }
+  setupEventListeners() {
+    this._removeOldListeners();
+    this._acceptHandler = () => this.basicDispatch('manuscript-invite-accepted');
+    this._declineHandler = () => this.basicDispatch('manuscript-invite-declined');
+    this._republishHandler = () => this.basicDispatch('manuscript-republished');
+    this._archiveHandler = () => this.basicDispatch('manuscript-archived');
+    this._hideHandler = () => this.basicDispatch('manuscript-hidden');
+    this.querySelector('button[data-type="accept"]')?.addEventListener('click', this._acceptHandler);
+    this.querySelector('button[data-type="decline"]')?.addEventListener('click', this._declineHandler);
+    this.querySelector('button[data-type="republish"]')?.addEventListener('click', this._republishHandler);
+    this.querySelector('button[data-type="archive"]')?.addEventListener('click', this._archiveHandler);
+    this.querySelector('button[data-type="hide"]')?.addEventListener('click', this._hideHandler);
+  }
+  disconnectedCallback() { this._removeOldListeners(); }
 }
 customElements.define('manuscript-element', Manuscript);
 </script>
