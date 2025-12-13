@@ -89,7 +89,7 @@ class ManuscriptController(
          */
         return ResponseEntity.ok("manuscript successfully added")
     }
-    @PutMapping("/{manuscriptId}/state")
+    @PutMapping("/{manuscriptId}")
     fun updateState(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
