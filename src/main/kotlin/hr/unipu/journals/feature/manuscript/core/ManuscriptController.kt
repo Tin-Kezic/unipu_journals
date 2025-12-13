@@ -29,6 +29,7 @@ class ManuscriptController(
 ) {
     @GetMapping
     fun all(
+        @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam affiliation: Affiliation?,
