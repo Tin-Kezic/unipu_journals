@@ -318,7 +318,14 @@
                 <p id="description" class="container-text"></p>
             </article>
         </div>
-        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;"></div>
+        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
+            <!-- on manuscriptStateSelect.includes('AWAITING'):
+                <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
+                <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+                <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
+                <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+            -->
+        </div>
     </section>
 </main>
 <script>
