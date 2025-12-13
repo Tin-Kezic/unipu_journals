@@ -45,6 +45,7 @@ class ManuscriptController(
             put("downloadUrl", manuscript.downloadUrl)
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("isOverseeing", authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
             put("description", manuscript.description)
         }}
         val manuscripts = manuscriptRepository.all(
