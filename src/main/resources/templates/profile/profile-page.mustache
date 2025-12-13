@@ -73,8 +73,8 @@
                             <p style="margin-top: 0.2rem;">{{description}}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 0.3rem; justify-content: flex-end; margin-left: 0.3rem; margin-top: 1.5rem;">
-                            <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
-                            <button class="m3-button outline-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
+                            <button class="m3-button outlined-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px; text-wrap: nowrap;">see review</button>
+                            <button class="m3-button outlined-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 1rem; background-color: white; border-width: 1px;">resubmit</button>
                         </div>
                     </div>
                 </article>
@@ -97,7 +97,7 @@
                         </div>
                         <footer class="container-buttons">
                             {{#isAdmin}}
-                                <button onclick="event.stopPropagation()" class="m3-button outline-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
+                                <button onclick="event.stopPropagation()" class="m3-button outlined-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
                                 <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
                             {{/isAdmin}}
                         </footer>
@@ -113,7 +113,7 @@
     <p id="delete-profile-dialog-message">delete account <b>{{fullName}}</b>?</p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button type="button" id="delete-profile-dialog-negative" class="m3-button outline-button">cancel</button>
+        <button type="button" id="delete-profile-dialog-negative" class="m3-button outlined-button">cancel</button>
         <div style="display: flex; justify-content: flex-end">
             <button id="delete-profile-dialog-positive" class="m3-button red-button" style="padding-inline: 1.2rem;">delete</button>
         </div>
@@ -142,7 +142,7 @@
     <p>zip code: {{zipCode}}</p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button type="button" id="view-profile-dialog-negative" class="m3-button outline-button">close</button>
+        <button type="button" id="view-profile-dialog-negative" class="m3-button outlined-button">close</button>
     </div>
 </dialog>
 <script>
@@ -155,7 +155,7 @@
     <p id="hide-manuscript-dialog-message"></p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button id="hide-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="hide-manuscript-dialog-negative" class="m3-button outlined-button">Cancel</button>
         <button id="hide-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Hide</button>
     </div>
 </dialog>
@@ -183,7 +183,7 @@
     <p id="archive-manuscript-dialog-message"></p>
     <br>
     <div style="display: flex; justify-content: space-between">
-        <button id="archive-manuscript-dialog-negative" class="m3-button outline-button">Cancel</button>
+        <button id="archive-manuscript-dialog-negative" class="m3-button outlined-button">Cancel</button>
         <button id="archive-manuscript-dialog-positive" class="m3-button red-button" style="margin-left: 1rem;">Archive</button>
     </div>
 </dialog>

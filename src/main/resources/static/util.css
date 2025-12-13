@@ -55,7 +55,7 @@ dialog {
     background-color: var(--primary);
     color: white;
 }
-.outline-button {
+.outlined-button {
     background-color: transparent;
     color: black;
     border: 0.13rem solid black;
