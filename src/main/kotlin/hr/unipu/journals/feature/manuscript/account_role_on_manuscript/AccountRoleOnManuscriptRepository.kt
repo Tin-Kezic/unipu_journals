@@ -35,5 +35,11 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         @Param("account_id") accountId: Int,
         @Param("manuscript_id") manuscriptId: Int,
     ): Boolean
+    @Query("INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES (:manuscript_id, :account_id, :account_role)")
+    fun assign(
+        @Param("account_role") accountRole: ManuscriptRole,
+        @Param("account_id") accountId: Int,
+        @Param("manuscript_id") manuscriptId: Int,
+    )
 }
 
