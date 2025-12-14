@@ -327,6 +327,49 @@
             -->
         </div>
     </section>
+    <script>
+        document.addEventListener('manuscript-invite-accepted', async (event) => {
+            const { id, title } = event.detail;
+            openBooleanDialog(`Accept ${title}`, 'Accept', async (event) => {
+                const response = await fetch(`/api/invite?accept=true&target=${encodeURIComponent()}&targetId=${id}`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById('manuscripts-container-pending').appendChild(document.getElementById(id));
+            });
+        });
+        document.addEventListener('manuscript-invite-declined', async (event) => {
+            const { id, title } = event.detail;
+            openBooleanDialog(`Decline ${title}`, 'Decline', async (event) => {
+                const response = await fetch(`/api/invite?accept=false&target=${encodeURIComponent()}&targetId=${id}`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById(id).remove();
+            });
+        });
+        document.addEventListener('manuscript-republished', async (event) => {
+            const { id, title } = event.detail;
+            openBooleanDialog(`Republish ${title}`, 'Republish', async (event) => {
+                const response = await fetch(`/api/publications/${currentPublicationId}/sections/${currentSectionId}/manuscripts/${id}?newState=PUBLISHED`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById(id).remove();
+            });
+        });
+        document.addEventListener('manuscript-archived', async (event) => {
+            const { id, title } = event.detail;
+            openBooleanDialog(`Archive ${title}`, 'Archive', async (event) => {
+                const response = await fetch(`/api/publications/${currentPublicationId}/sections/${currentSectionId}/manuscripts/${id}?newState=ARCHIVED`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById(id).remove();
+            });
+        });
+        document.addEventListener('manuscript-hidden', async (event) => {
+            const { id, title } = event.detail;
+            openBooleanDialog(`Hide ${title}`, 'Hide', async (event) => {
+                const response = await fetch(`/api/publications/${currentPublicationId}/sections/${currentSectionId}/manuscripts/${id}?newState=HIDDEN`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById(id).remove();
+            });
+        });
+
+    </script>
 </main>
 <script>
     document.getElementById(`publication-${currentPublicationId}`)?.querySelector('input').click();
