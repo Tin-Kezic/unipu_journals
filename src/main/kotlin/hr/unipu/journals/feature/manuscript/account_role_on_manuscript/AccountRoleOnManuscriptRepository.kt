@@ -5,6 +5,8 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript, Int> {
+    @Query("SELECT account_role FROM account_role_on_manuscript WHERE account_id = :account_id AND target_id = :target_id")
+    fun role(@Param("account_id") accountId: Int, @Param("target_id") targetId: Int): List<ManuscriptRole>
     @Query("""
         SELECT DISTINCT account.full_name FROM account_role_on_manuscript
         JOIN account ON account.id = account_role_on_manuscript.account_id
