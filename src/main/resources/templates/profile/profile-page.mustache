@@ -17,7 +17,7 @@
         <br>
         <a href="/profiles/{{accountId}}/edit" class="m3-button yellow-button" style="text-wrap: nowrap; padding-inline: 9rem; text-decoration: none;">Edit profile</a>
         <br>
-        <a href="/logout" class="m3-button purple-button" style="text-decoration: none;">Log out</a>
+        <a href="/logout" class="m3-button primary-button" style="text-decoration: none;">Log out</a>
         <br><br><br><br>
         <div style="display: flex; flex-direction: row; gap: 1rem; justify-content: center;">
             <div class="dropdown sort" style="width: 11rem; text-align: center;">
@@ -98,7 +98,7 @@
                         <footer class="container-buttons">
                             {{#isAdmin}}
                                 <button onclick="event.stopPropagation()" class="m3-button outlined-button" data-type="hide-button" data-id="{{id}}" data-title="{{title}}" style="width: auto; border-radius: 10rem; box-shadow: none; border-width: 1px; border-color: var(--beige);">Hide</button>
-                                <button onclick="event.stopPropagation()" class="m3-button purple-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
+                                <button onclick="event.stopPropagation()" class="m3-button primary-button" data-type="archive-button" data-id="{{id}}" data-title="{{title}}" style="box-shadow: none; width: auto; border-radius: 10rem; padding-block: 0.523rem; text-wrap: nowrap;">Move to archive</button>
                             {{/isAdmin}}
                         </footer>
                     </div>
@@ -269,7 +269,7 @@
         .wrapper aside {
             margin-top: 1rem !important;
         }
-        .m3-button.purple-button {
+        .m3-button.primary-button {
             text-wrap: wrap !important;
         }
         .container-buttons {

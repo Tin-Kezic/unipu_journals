@@ -51,9 +51,10 @@ dialog {
     background-color: var(--yellow);
     color: black;
 }
-.purple-button {
+.primary-button {
     background-color: var(--primary);
     color: white;
+    box-shadow: none;
 }
 .outlined-button {
     background-color: transparent;
