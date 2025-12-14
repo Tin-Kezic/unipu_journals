@@ -331,6 +331,13 @@
 <script>
     document.getElementById(`publication-${currentPublicationId}`)?.querySelector('input').click();
     scrollSidebarToCurrentlySelectedElement('publication');
+
+    // spring session default: 30min
+    {{#isAuthenticated}}
+        setTimeout(() => {
+            window.location.href = "/login.html";
+        }, 1800000);
+    {{/isAuthenticated}}
 </script>
 </body>
 </html>
