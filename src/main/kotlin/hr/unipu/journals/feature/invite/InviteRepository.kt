@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.manuscript.core.Manuscript
+import hr.unipu.journals.feature.manuscript.core.InvitedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -16,10 +16,11 @@ interface InviteRepository: Repository<Invite, Int> {
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
     @Query("""
-        SELECT DISTINCT manuscript.* FROM invite
+        SELECT DISTINCT invite.target, manuscript.* FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
-        WHERE publication_section.is_hidden = FALSE
+        JOIN publication on publication_section.publication_id = publication.id
+        WHERE publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
         AND publication_section.id = :section_id
         AND invite.email = :email
         AND (
@@ -41,11 +42,11 @@ interface InviteRepository: Repository<Invite, Int> {
             )
         )
     """)
-    fun affiliatedManuscripts(
+    fun invitedManuscripts(
         @Param("email") email: String,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("section_id") sectionId: Int,
-    ): List<Manuscript>
+    ): List<InvitedManuscript>
 
     @Modifying
     @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target::invitation_target, :target_id)")
