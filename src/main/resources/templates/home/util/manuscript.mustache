@@ -22,6 +22,7 @@ class Manuscript extends HTMLElement {
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this._isOverseeing = this.getAttribute('is-overseeing');
+    this._role = this.getAttribute('role');
     this._options = this.getAttribute('options');
     this.innerHTML = `
       <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
@@ -29,6 +30,9 @@ class Manuscript extends HTMLElement {
         <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
           ${this._authors?.map(author => `<button>${author}</button>`).join('')}
         </div>
+        <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
+          ${this._role && !['null', 'undefined'].includes(this._role) ? `Affiliation: ${this._role}` : ''}
+        </p>
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
           ${this._publicationDate && this._publicationDate !== 'null' ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
         </p>
@@ -65,7 +69,8 @@ class Manuscript extends HTMLElement {
       this.dispatchEvent(new CustomEvent(name, {
         detail: {
           id: this._id,
-          title: this._title
+          title: this._title,
+          ...(name.includes('invite') && { role: this._role })
         },
         bubbles: true
       }))
