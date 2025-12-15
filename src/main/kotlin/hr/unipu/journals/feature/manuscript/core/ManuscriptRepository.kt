@@ -85,7 +85,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,
             CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
-            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MIN(manuscript.publication_date), MIN(manuscript.submission_date)) END
     """)
     fun all(
         @Param("section_id") sectionId: Int? = null,

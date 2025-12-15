@@ -96,18 +96,12 @@ interface PublicationRepository: Repository<Publication, Int> {
                 )
             )
         )
-        AND (
-            :sorting NOT IN ('NEWEST', 'OLDEST')
-            OR
-            manuscript.publication_date IS NOT NULL OR manuscript.submission_date IS NOT NULL
-            AND manuscript.current_state = :manuscript_state_filter::manuscript_state
-        )
         GROUP BY publication.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN publication.title END DESC,
             CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
-            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(MIN(manuscript.publication_date), MIN(manuscript.submission_date)) END
     """)
     fun all(
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
