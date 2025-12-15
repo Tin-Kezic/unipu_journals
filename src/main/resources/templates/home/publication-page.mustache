@@ -330,17 +330,18 @@
     </section>
     <script>
         document.addEventListener('manuscript-invite-accepted', async (event) => {
-            const { id, title } = event.detail;
+            const { id, title, role } = event.detail;
             openBooleanDialog(`Accept ${title}`, 'Accept', async (event) => {
-                const response = await fetch(`/api/invite?accept=true&target=${encodeURIComponent()}&targetId=${id}`, { method: 'PUT' });
+                const response = await fetch(`/api/invite?accept=true&target=${encodeURIComponent(role)}&targetId=${id}`, { method: 'PUT' });
                 if(!response.ok) { alert(await response.text()); return; }
+                if(role === 'EIC_ON_MANUSCRIPT') document.getElementById(id).setAttribute('role', 'EIC');
                 document.getElementById('manuscripts-container-pending').appendChild(document.getElementById(id));
             });
         });
         document.addEventListener('manuscript-invite-declined', async (event) => {
-            const { id, title } = event.detail;
+            const { id, title, role } = event.detail;
             openBooleanDialog(`Decline ${title}`, 'Decline', async (event) => {
-                const response = await fetch(`/api/invite?accept=false&target=${encodeURIComponent()}&targetId=${id}`, { method: 'PUT' });
+                const response = await fetch(`/api/invite?accept=false&target=${encodeURIComponent(role)}&targetId=${id}`, { method: 'PUT' });
                 if(!response.ok) { alert(await response.text()); return; }
                 document.getElementById(id).remove();
             });
