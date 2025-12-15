@@ -36,36 +36,57 @@ class ManuscriptController(
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
     ): List<Map<String, Any?>> {
-        fun List<Manuscript>.toDto(type: String? = null): List<Map<String, Any?>> = this.map { manuscript -> buildMap {
-            type?.let { put("type", it) }
-            put("type", type)
-            put("id", manuscript.id)
-            put("title", manuscript.title)
-            put("authors", accountRoleOnManuscriptRepository.authors(manuscript.id))
-            put("downloadUrl", manuscript.downloadUrl)
-            put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-            put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-            put("isOverseeing", authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
-            put("description", manuscript.description)
-        }}
         val manuscripts = manuscriptRepository.all(
             sectionId = sectionId,
             manuscriptStateFilter = manuscriptStateFilter,
             affiliation = affiliation,
-            accountId = authorizationService.account?.id,
+            accountId = authorizationService.account!!.id,
             category = category,
             sorting = sorting
         )
         if(manuscriptStateFilter.name.contains("AWAITING")) {
-            val pending = manuscripts.toDto("pending")
-            val invited = inviteRepository.affiliatedManuscripts(
-                email = authorizationService.account?.email ?: "",
+            val pending = accountRoleOnManuscriptRepository.affiliatedManuscripts(
+                id = authorizationService.account!!.id,
                 manuscriptStateFilter = manuscriptStateFilter,
                 sectionId = sectionId
-            ).toDto("invited")
+            ).map { affiliatedManuscript -> mapOf(
+                "type" to "pending",
+                "role" to affiliatedManuscript.accountRole,
+                "id" to affiliatedManuscript.id,
+                "title" to affiliatedManuscript.title,
+                "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),
+                "downloadUrl" to affiliatedManuscript.downloadUrl,
+                "submissionDate" to affiliatedManuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "publicationDate" to affiliatedManuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "description" to affiliatedManuscript.description,
+            )}
+            val invited = inviteRepository.invitedManuscripts(
+                email = authorizationService.account!!.email,
+                manuscriptStateFilter = manuscriptStateFilter,
+                sectionId = sectionId
+            ).map { invitedManuscript -> mapOf(
+                "type" to "invited",
+                "role" to invitedManuscript.target,
+                "id" to invitedManuscript.id,
+                "title" to invitedManuscript.title,
+                "authors" to accountRoleOnManuscriptRepository.authors(invitedManuscript.id),
+                "downloadUrl" to invitedManuscript.downloadUrl,
+                "submissionDate" to invitedManuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "publicationDate" to invitedManuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "description" to invitedManuscript.description,
+            )}
             return pending + invited
         }
-        return manuscripts.toDto()
+        return manuscripts.map { manuscript -> mapOf(
+            "id" to manuscript.id,
+            "title" to manuscript.title,
+            "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
+            "downloadUrl" to manuscript.downloadUrl,
+            "submissionDate" to manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "publicationDate" to manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "isOverseeing" to (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)),
+            "description" to manuscript.description,
+        )}
     }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
