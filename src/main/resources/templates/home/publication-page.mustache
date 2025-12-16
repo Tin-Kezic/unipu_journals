@@ -164,7 +164,7 @@
                     case 'ARCHIVED':
                         newManuscript.setAttribute('options', /*html*/`
                             ${manuscript.isOverseeing ? /*html*/`
-                            <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
+                                <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
                             ` : ''}
                             {{#isAdmin}}<button data-type="hide" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>{{/isAdmin}}
                         `);
@@ -173,7 +173,7 @@
                     case 'HIDDEN':
                         newManuscript.setAttribute('options', /*html*/`
                             ${manuscript.isOverseeing ? /*html*/`
-                            <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
+                                <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
                             ` : ''}
                         `);
                     case 'REJECTED':
