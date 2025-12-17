@@ -1,13 +1,11 @@
 package hr.unipu.journals.feature.manuscript.core
 
 import hr.unipu.journals.feature.publication.core.Affiliation
-import hr.unipu.journals.feature.publication.core.Publication
 import hr.unipu.journals.feature.publication.core.Sorting
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
-import org.springframework.transaction.annotation.Transactional
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
@@ -46,18 +44,15 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                         OR
                         account_role_on_manuscript.account_role = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EIC_REVIEW'
+                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
+                        AND manuscript.current_state = 'AWAITING_EIC_REVIEW'
                         AND account_role_on_manuscript.account_role = 'EIC'
-                    )
-                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
+                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
+                        AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
                         AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR')
-                    )
-                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                        manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
+                        AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                         AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
-                    )
                 )
             )
         ) AND (

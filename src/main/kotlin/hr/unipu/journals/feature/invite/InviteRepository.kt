@@ -32,15 +32,15 @@ interface InviteRepository: Repository<Invite, Int> {
                 OR
                 invite.target = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
             )
-            OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW' AND (
-                manuscript.current_state = 'AWAITING_EIC_REVIEW' AND invite.target = 'EIC_ON_MANUSCRIPT'
-            )
-            OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND (
-                manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND invite.target = 'EDITOR'
-            )
-            OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW' AND (
-                manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND invite.target = 'REVIEWER'
-            )
+            OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
+                AND manuscript.current_state = 'AWAITING_EIC_REVIEW'
+                AND invite.target = 'EIC_ON_MANUSCRIPT'
+            OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
+                AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
+                AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR')
+            OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
+                AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
+                AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
         )
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
