@@ -1,5 +1,4 @@
 package hr.unipu.journals.view.profile
-
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
@@ -21,6 +20,7 @@ class ProfilePageController(
     private val accountRepository: AccountRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository
 ) {
+/*
     @GetMapping("/profiles/{accountId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun page(
@@ -65,4 +65,5 @@ class ProfilePageController(
         }
         return "/profile/profile-page"
     }
+ */
 }
