@@ -93,7 +93,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("affiliation") affiliation: Affiliation? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
-        @Param("sorting") sorting: Sorting? = null
+        @Param("sorting") sorting: Sorting
     ): List<Manuscript>
 
     @Modifying
