@@ -31,7 +31,7 @@ class Manuscript extends HTMLElement {
           ${this._authors?.join(', ')}
         </div>
         <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
-          ${this._roles && !['null', 'undefined'].includes(this._roles) ? `Affiliation: ${this._roles.join(', ')}` : 'hm'}
+          ${this._roles && !['null', 'undefined'].includes(this._roles) ? `Affiliation: ${this._roles.join(', ')}` : ''}
         </p>
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
           ${this._publicationDate && this._publicationDate !== 'null' ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
