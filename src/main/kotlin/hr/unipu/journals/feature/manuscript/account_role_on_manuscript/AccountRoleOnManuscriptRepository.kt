@@ -2,6 +2,8 @@ package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 
 import hr.unipu.journals.feature.manuscript.core.AffiliatedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
+import hr.unipu.journals.feature.publication.core.Sorting
+import org.springframework.data.domain.Sort
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -21,7 +23,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun authors(@Param("manuscript_id") manuscriptId: Int): List<String>
 
     @Query("""
-        SELECT DISTINCT account_role_on_manuscript.account_role, manuscript.* FROM account_role_on_manuscript
+        SELECT account_role_on_manuscript.account_role, manuscript.* FROM account_role_on_manuscript
         JOIN manuscript ON account_role_on_manuscript.manuscript_id = manuscript.id
         JOIN publication_section on manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
@@ -46,11 +48,17 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
                 manuscript.current_state = 'AWAITING_REVIEWER_REVIEW' AND account_role_on_manuscript.account_role = 'REVIEWER'
             )
         )
+        ORDER BY
+            CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
+            CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,
+            CASE WHEN :sorting = 'NEWEST' THEN COALESCE(manuscript.publication_date, manuscript.submission_date) END DESC,
+            CASE WHEN :sorting = 'OLDEST' THEN COALESCE(manuscript.publication_date, manuscript.submission_date) END
     """)
     fun affiliatedManuscripts(
         @Param("account_id") id: Int,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("section_id") sectionId: Int,
+        @Param("sorting") sorting: Sorting
     ): List<AffiliatedManuscript>
 
     @Query("""

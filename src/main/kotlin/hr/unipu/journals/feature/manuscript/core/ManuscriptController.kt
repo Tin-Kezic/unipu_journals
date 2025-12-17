@@ -34,21 +34,14 @@ class ManuscriptController(
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam affiliation: Affiliation?,
         @RequestParam category: String?,
-        @RequestParam sorting: Sorting?
+        @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z
     ): List<Map<String, Any?>> {
-        val manuscripts = manuscriptRepository.all(
-            sectionId = sectionId,
-            manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
-            accountId = authorizationService.account!!.id,
-            category = category,
-            sorting = sorting
-        )
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             val pending = accountRoleOnManuscriptRepository.affiliatedManuscripts(
                 id = authorizationService.account!!.id,
                 manuscriptStateFilter = manuscriptStateFilter,
-                sectionId = sectionId
+                sectionId = sectionId,
+                sorting = sorting
             ).map { affiliatedManuscript -> mapOf(
                 "type" to "pending",
                 "role" to affiliatedManuscript.accountRole,
@@ -63,7 +56,8 @@ class ManuscriptController(
             val invited = inviteRepository.invitedManuscripts(
                 email = authorizationService.account!!.email,
                 manuscriptStateFilter = manuscriptStateFilter,
-                sectionId = sectionId
+                sectionId = sectionId,
+                sorting = sorting
             ).map { invitedManuscript -> mapOf(
                 "type" to "invited",
                 "role" to invitedManuscript.target,
@@ -77,7 +71,14 @@ class ManuscriptController(
             )}
             return pending + invited
         }
-        return manuscripts.map { manuscript -> mapOf(
+        return manuscriptRepository.all(
+            sectionId = sectionId,
+            manuscriptStateFilter = manuscriptStateFilter,
+            affiliation = affiliation,
+            accountId = authorizationService.account!!.id,
+            category = category,
+            sorting = sorting
+        ).map { manuscript -> mapOf(
             "id" to manuscript.id,
             "title" to manuscript.title,
             "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
