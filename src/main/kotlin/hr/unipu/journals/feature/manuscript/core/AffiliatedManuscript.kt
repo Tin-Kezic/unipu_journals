@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Column
 import java.time.LocalDateTime
 
 data class AffiliatedManuscript(
-    val accountRole: ManuscriptRole,
+    val roles: List<ManuscriptRole>,
     @Id val id: Int,
     val title: String,
     val description: String,

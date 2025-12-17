@@ -127,7 +127,7 @@
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
                 newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
-                newManuscript.setAttribute('role', manuscript.role);
+                newManuscript.setAttribute('roles', JSON.stringify(manuscript.roles));
                 switch(manuscriptStateSelect.value) {
                     case 'ALL_AWAITING_REVIEW':
                     case 'AWAITING_EIC_REVIEW':

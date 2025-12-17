@@ -44,7 +44,7 @@ class ManuscriptController(
                 sorting = sorting
             ).map { affiliatedManuscript -> mapOf(
                 "type" to "pending",
-                "role" to affiliatedManuscript.accountRole,
+                "roles" to affiliatedManuscript.roles,
                 "id" to affiliatedManuscript.id,
                 "title" to affiliatedManuscript.title,
                 "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),
@@ -60,7 +60,7 @@ class ManuscriptController(
                 sorting = sorting
             ).map { invitedManuscript -> mapOf(
                 "type" to "invited",
-                "role" to invitedManuscript.target,
+                "roles" to invitedManuscript.roles,
                 "id" to invitedManuscript.id,
                 "title" to invitedManuscript.title,
                 "authors" to accountRoleOnManuscriptRepository.authors(invitedManuscript.id),

@@ -3,7 +3,6 @@ package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 import hr.unipu.journals.feature.manuscript.core.AffiliatedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Sorting
-import org.springframework.data.domain.Sort
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -23,7 +22,10 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun authors(@Param("manuscript_id") manuscriptId: Int): List<String>
 
     @Query("""
-        SELECT account_role_on_manuscript.account_role, manuscript.* FROM account_role_on_manuscript
+        SELECT
+            array_agg(DISTINCT account_role_on_manuscript.account_role) AS roles,
+            manuscript.*
+        FROM account_role_on_manuscript
         JOIN manuscript ON account_role_on_manuscript.manuscript_id = manuscript.id
         JOIN publication_section on manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
@@ -48,6 +50,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
                 AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                 AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER')
         )
+        GROUP BY account_role_on_manuscript.account_id, account_role_on_manuscript.manuscript_id, manuscript.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,

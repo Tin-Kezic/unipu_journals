@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.invite
 
+import hr.unipu.journals.feature.manuscript.core.AffiliatedManuscript
 import hr.unipu.journals.feature.manuscript.core.InvitedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Sorting
@@ -17,7 +18,10 @@ interface InviteRepository: Repository<Invite, Int> {
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
     @Query("""
-        SELECT invite.target, manuscript.* FROM invite
+        SELECT
+            array_agg(DISTINCT invite.target) AS roles,
+            manuscript.*
+        FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
@@ -42,6 +46,7 @@ interface InviteRepository: Repository<Invite, Int> {
                 AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                 AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
         )
+        GROUP BY invite.email, invite.target_id, manuscript.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,
