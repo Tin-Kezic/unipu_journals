@@ -78,7 +78,7 @@ interface InviteRepository: Repository<Invite, Int> {
         @Param("email") email: String,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("role") role: Role?,
-        @Param("account_id") accountId: Int? = null,
+        @Param("account_id") accountId: Int,
         @Param("section_id") sectionId: Int,
         @Param("category") category: String?,
         @Param("sorting") sorting: Sorting
