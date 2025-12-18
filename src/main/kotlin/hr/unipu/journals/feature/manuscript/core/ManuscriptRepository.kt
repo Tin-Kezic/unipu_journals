@@ -9,7 +9,10 @@ import org.springframework.data.repository.query.Param
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
-        SELECT manuscript.* FROM manuscript
+        SELECT
+            array_agg(DISTINCT account_role_on_manuscript.account_role) AS affiliations,
+            manuscript.*
+        FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication.id = publication_section.publication_id
         LEFT JOIN category ON manuscript.category_id = category.id
@@ -89,7 +92,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
         @Param("sorting") sorting: Sorting
-    ): List<Manuscript>
+    ): List<AffiliatedManuscript>
 
     @Modifying
     @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :category_id, :section_id, :file_url)")

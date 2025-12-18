@@ -22,24 +22,36 @@ class Manuscript extends HTMLElement {
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this._isOverseeing = this.getAttribute('is-overseeing');
-    this._roles = JSON.parse(this.getAttribute('roles'));
+    this._affiliations = JSON.parse(this.getAttribute('affiliations'));
     this._options = this.getAttribute('options');
+    this._state = this.getAttribute('state');
     this.innerHTML = `
       <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
-        <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
-          ${this._authors?.join(', ')}
-        </div>
-        <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
-          ${this._roles && !['null', 'undefined'].includes(this._roles) ? `Affiliation: ${this._roles.join(', ')}` : ''}
-        </p>
+        ${this._authors ? `
+          <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+            ${this._authors?.join(', ')}
+          </div>
+        ` : ''}
+        ${this._affiliations?.length ?
+          `<p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
+            Affiliation: ${this._affiliations.join(', ')}
+          </p>
+        ` : ''}
+        ${this._state ? `
+          <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
+            State: ${this._state}
+          </p>
+        ` : ''}
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
-          ${this._publicationDate && this._publicationDate !== 'null' ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
+          ${this._publicationDate ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
         </p>
         <p style="font-weight: 100; font-size: 0.8rem">${this._description}</p>
-        <footer class="container-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
-          ${this._options ? this._options : ''}
-        </footer>
+        ${this._options ? `
+          <footer class="container-buttons" style="margin-top: 0.5rem; margin-bottom: 0;">
+            ${this._options}
+          </footer>
+        ` : ''}
       </article>
     `;
   }
@@ -70,7 +82,7 @@ class Manuscript extends HTMLElement {
         detail: {
           id: this._id,
           title: this._title,
-          ...(name.includes('invite') && { role: this._roles })
+          ...(name.includes('invite') && { roles: this._roles })
         },
         bubbles: true
       }))

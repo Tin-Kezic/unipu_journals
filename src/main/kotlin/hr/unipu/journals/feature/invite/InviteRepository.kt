@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.manuscript.core.AffiliatedManuscript
 import hr.unipu.journals.feature.manuscript.core.InvitedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Sorting
@@ -19,7 +18,7 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Query("""
         SELECT
-            array_agg(DISTINCT invite.target) AS roles,
+            array_agg(DISTINCT invite.target) AS affiliations,
             manuscript.*
         FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
