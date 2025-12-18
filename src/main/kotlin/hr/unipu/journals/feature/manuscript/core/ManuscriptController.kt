@@ -60,7 +60,9 @@ class ManuscriptController(
             val invited = inviteRepository.invitedManuscripts(
                 email = authorizationService.account!!.email,
                 manuscriptStateFilter = manuscriptStateFilter,
+                role = role,
                 sectionId = sectionId,
+                category = category,
                 sorting = sorting
             ).map { invitedManuscript -> mapOf(
                 "type" to "invited",

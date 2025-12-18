@@ -24,7 +24,9 @@ interface InviteRepository: Repository<Invite, Int> {
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
-        WHERE publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
+        JOIN category ON manuscript.category_id = category.id
+        WHERE (category.name = :category OR :category IS NULL)
+        AND publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
         AND publication_section.id = :section_id
         AND invite.email = :email
         AND (
@@ -44,6 +46,25 @@ interface InviteRepository: Repository<Invite, Int> {
             OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
                 AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                 AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
+        ) AND (
+            :role IS NULL
+            OR (
+                :role = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
+                OR
+                :role = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
+                OR
+                account_role_on_manuscript.account_id = :account_id AND (
+                    :role = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                    OR
+                    :role = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    OR
+                    :role = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
+                    OR
+                    :role = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
+                    OR
+                    :role = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                )
+            )
         )
         GROUP BY invite.email, invite.target_id, manuscript.id
         ORDER BY
@@ -55,7 +76,9 @@ interface InviteRepository: Repository<Invite, Int> {
     fun invitedManuscripts(
         @Param("email") email: String,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
+        @Param("role") role: Role?,
         @Param("section_id") sectionId: Int,
+        @Param("category") category: String?,
         @Param("sorting") sorting: Sorting
     ): List<InvitedManuscript>
 
