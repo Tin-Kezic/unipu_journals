@@ -26,6 +26,9 @@ interface InviteRepository: Repository<Invite, Int> {
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
         JOIN category ON manuscript.category_id = category.id
+        LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :role IS NOT NULL
+        LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (category.name = :category OR :category IS NULL)
         AND publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
         AND publication_section.id = :section_id
