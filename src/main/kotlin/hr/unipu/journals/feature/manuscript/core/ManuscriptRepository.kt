@@ -19,6 +19,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :role IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
+        LEFT JOIN account ON :account_id = account.id
         WHERE (category.name = :category OR :category IS NULL)
         AND (publication_section.id = :section_id OR :section_id IS NULL)
         AND (
