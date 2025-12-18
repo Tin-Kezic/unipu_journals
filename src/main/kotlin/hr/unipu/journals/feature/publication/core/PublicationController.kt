@@ -26,17 +26,17 @@ class PublicationController(
     @GetMapping
     fun publications(
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
-        @RequestParam affiliation: Affiliation?,
+        @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
     ): List<Map<String, Any>> {
-        require(affiliation == null || authorizationService.isAuthenticated) // A -> B
+        require(role == null || authorizationService.isAuthenticated) // A -> B
         require(manuscriptStateFilter != ManuscriptStateFilter.ALL_AWAITING_REVIEW || authorizationService.isAuthenticated) // A -> B
         val isAdmin = authorizationService.isAdmin
         if(manuscriptStateFilter == ManuscriptStateFilter.HIDDEN) require(authorizationService.isAdmin)
         return publicationRepository.all(
             manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
+            role = role,
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting ?: Sorting.ALPHABETICAL_A_Z

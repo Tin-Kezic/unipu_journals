@@ -63,8 +63,8 @@
         <option value="ARCHIVED">Archived</option>
         {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
     </select>
-    <select aria-label="affiliation" name="affiliation" {{^isAuthenticated}}hidden{{/isAuthenticated}}>
-        <option value="">Regardless of affiliation</option>
+    <select aria-label="role" name="role" {{^isAuthenticated}}hidden{{/isAuthenticated}}>
+        <option value="">Regardless of role</option>
         <option value="EIC_ON_PUBLICATION">EiC on publication</option>
         <option value="SECTION_EDITOR">Section editor</option>
         <option value="EIC_ON_MANUSCRIPT">EiC on manuscript</option>
@@ -86,7 +86,7 @@
     <script>
         const searchParams = new URLSearchParams(window.location.search);
         document.querySelector('select[name="manuscript-state"]').value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
-        document.querySelector('select[name="affiliation"]').value = searchParams.get('affiliation') || '';
+        document.querySelector('select[name="role"]').value = searchParams.get('role') || '';
         document.querySelector('select[name="category"]').value = searchParams.get('category') || '';
         document.querySelector('select[name="sorting"]').value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
     </script>
@@ -127,7 +127,7 @@
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
                 newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
-                newManuscript.setAttribute('affiliations', JSON.stringify(manuscript.affiliations));
+                newManuscript.setAttribute('roles', JSON.stringify(manuscript.roles));
                 switch(manuscriptStateSelect.value) {
                     case 'ALL_AWAITING_REVIEW':
                     case 'AWAITING_EIC_REVIEW':
@@ -197,17 +197,17 @@
             updateUrl();
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
-        affiliationSelect = document.querySelector('select[name="affiliation"]');
+        roleSelect = document.querySelector('select[name="role"]');
         manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
         categorySelect = document.querySelector('select[name="category"]');
         sortingSelect = document.querySelector('select[name="sorting"]');
         const params = () => new URLSearchParams({
             manuscriptStateFilter: manuscriptStateSelect.value,
-            affiliation: affiliationSelect.value,
+            role: roleSelect.value,
             ...(categorySelect.value && { category: categorySelect.value }),
             sorting: sortingSelect.value,
         });
-        [manuscriptStateSelect, affiliationSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
+        [manuscriptStateSelect, roleSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => {
             const response = await fetch(`/api/publications?${params()}`, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             const responsePublications = await response.json();

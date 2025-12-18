@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -10,14 +10,14 @@ import org.springframework.data.repository.query.Param
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
         SELECT
-            array_agg(DISTINCT account_role_on_manuscript.account_role) AS affiliations,
+            array_agg(DISTINCT account_role_on_manuscript.account_role) AS roles,
             manuscript.*
         FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication ON publication.id = publication_section.publication_id
-        LEFT JOIN category ON manuscript.category_id = category.id
+        JOIN category ON manuscript.category_id = category.id
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
-        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :affiliation IS NOT NULL
+        LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :role IS NOT NULL
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (category.name = :category OR :category IS NULL)
         AND (publication_section.id = :section_id OR :section_id IS NULL)
@@ -58,22 +58,22 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                 )
             )
         ) AND (
-            :affiliation IS NULL
+            :role IS NULL
             OR (
-                :affiliation = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
+                :role = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
                 OR
-                :affiliation = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
+                :role = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
                 OR
                 account_role_on_manuscript.account_id = :account_id AND (
-                    :affiliation = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                    :role = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
                     OR
-                    :affiliation = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    :role = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
                     OR
-                    :affiliation = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
+                    :role = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
                     OR
-                    :affiliation = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
+                    :role = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
                     OR
-                    :affiliation = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                    :role = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
                 )
             )
         )
@@ -87,11 +87,11 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     fun all(
         @Param("section_id") sectionId: Int? = null,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter? = null,
-        @Param("affiliation") affiliation: Affiliation? = null,
+        @Param("role") role: Role? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
         @Param("sorting") sorting: Sorting
-    ): List<AffiliatedManuscript>
+    ): List<AccountRolesAndManuscript>
 
     @Modifying
     @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :category_id, :section_id, :file_url)")

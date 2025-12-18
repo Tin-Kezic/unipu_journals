@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Role
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -100,7 +100,7 @@ class ManuscriptRepositoryTests {
     fun `retrieve all manuscripts by author id`() {
         assertEquals(
             listOf(Manuscript(1, "Machine Learning for Radiology", "A study on using ML to detect anomalies in radiological images.", 1, ManuscriptState.AWAITING_EIC_REVIEW, 1, "http://example.com/ms1.pdf", LocalDateTime.of(2025, 9, 28, 13, 28, 0), null)),
-            manuscriptRepository.all(accountId = 19, affiliation = Affiliation.AUTHOR)
+            manuscriptRepository.all(accountId = 19, role = Role.AUTHOR)
         )
     }
     @Test

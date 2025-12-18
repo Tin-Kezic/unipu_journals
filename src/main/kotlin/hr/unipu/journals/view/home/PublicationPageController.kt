@@ -1,15 +1,10 @@
 package hr.unipu.journals.view.home
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.category.CategoryRepository
-import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
-import hr.unipu.journals.feature.publication.core.Affiliation
-import hr.unipu.journals.feature.publication.core.Publication
+import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Sorting
-import hr.unipu.journals.feature.section.core.Section
 import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.ResourceNotFoundException
@@ -18,7 +13,6 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.time.format.DateTimeFormatter
 
 @Controller
 class PublicationPageController(
@@ -33,7 +27,7 @@ class PublicationPageController(
         @RequestParam publicationId: Int?,
         @RequestParam sectionId: Int?,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter = ManuscriptStateFilter.PUBLISHED,
-        @RequestParam affiliation: Affiliation?,
+        @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
     ): String {
@@ -42,7 +36,7 @@ class PublicationPageController(
         val isAdmin = authorizationService.isAdmin
         val publications = publicationRepository.all(
             manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
+            role = role,
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting

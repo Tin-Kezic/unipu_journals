@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.section.core
 
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
-import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
@@ -35,7 +35,7 @@ class SectionController(
     fun all(
         @PathVariable publicationId: Int,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
-        @RequestParam affiliation: Affiliation?,
+        @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting?
     ): List<Map<String, Any>> {
@@ -43,7 +43,7 @@ class SectionController(
         return sectionRepository.all(
             publicationId = publicationId,
             manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
+            role = role,
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting

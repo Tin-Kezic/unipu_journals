@@ -2,7 +2,7 @@ package hr.unipu.journals.feature.manuscript.core
 
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
-import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
@@ -32,14 +32,14 @@ class ManuscriptController(
         @PathVariable publicationId: Int,
         @PathVariable sectionId: Int,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
-        @RequestParam affiliation: Affiliation?,
+        @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z
     ): List<Map<String, Any?>> {
         val manuscripts = manuscriptRepository.all(
             accountId = authorizationService.account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
-            affiliation = affiliation,
+            role = role,
             sectionId = sectionId,
             category = category,
             sorting = sorting
@@ -47,7 +47,7 @@ class ManuscriptController(
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             val pending = manuscripts.map { affiliatedManuscript -> mapOf(
                 "type" to "pending",
-                "affiliations" to affiliatedManuscript.affiliations,
+                "roles" to affiliatedManuscript.roles,
                 "id" to affiliatedManuscript.id,
                 "title" to affiliatedManuscript.title,
                 "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),
@@ -66,7 +66,7 @@ class ManuscriptController(
                 sorting = sorting
             ).map { invitedManuscript -> mapOf(
                 "type" to "invited",
-                "affiliations" to invitedManuscript.affiliations,
+                "roles" to invitedManuscript.roles,
                 "id" to invitedManuscript.id,
                 "title" to invitedManuscript.title,
                 "authors" to accountRoleOnManuscriptRepository.authors(invitedManuscript.id),
@@ -79,7 +79,7 @@ class ManuscriptController(
             return pending + invited
         }
         return manuscripts.map { affiliatedManuscript -> mapOf(
-            "affiliations" to affiliatedManuscript.affiliations.filter { it != null },
+            "roles" to affiliatedManuscript.roles.filter { it != null },
             "id" to affiliatedManuscript.id,
             "title" to affiliatedManuscript.title,
             "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),

@@ -42,11 +42,11 @@ class PublicationRepositoryTests {
     @Test fun `retrieve all public publications with affiliation`() {
         assertEquals(
             listOf(Publication(1, "Journal of AI Research", false), Publication(3, "Physics Letters", false)),
-            publicationRepository.all(ManuscriptStateFilter.PUBLISHED, Affiliation.EIC_ON_PUBLICATION, 7)
+            publicationRepository.all(ManuscriptStateFilter.PUBLISHED, Role.EIC_ON_PUBLICATION, 7)
         )
         assertEquals(
             listOf(Publication(2, "Nature of Biology", false)),
-            publicationRepository.all(ManuscriptStateFilter.AWAITING_EDITOR_REVIEW, Affiliation.EDITOR, 14)
+            publicationRepository.all(ManuscriptStateFilter.AWAITING_EDITOR_REVIEW, Role.EDITOR, 14)
         )
     }
     @Test fun `retrieve publication title by publication id`() {

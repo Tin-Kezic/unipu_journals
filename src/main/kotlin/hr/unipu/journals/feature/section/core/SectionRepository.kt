@@ -1,8 +1,7 @@
 package hr.unipu.journals.feature.section.core
 
-import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
-import hr.unipu.journals.feature.publication.core.Affiliation
+import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -89,22 +88,22 @@ interface SectionRepository: Repository<Section, Int> {
                 )
             )
         ) AND (
-            :affiliation IS NULL
+            :role IS NULL
             OR (
-                :affiliation = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
+                :role = 'EIC_ON_PUBLICATION' AND eic_on_publication.eic_id = :account_id
                 OR
-                :affiliation = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
+                :role = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
                 OR
                 account_role_on_manuscript.account_id = :account_id AND (
-                    :affiliation = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                    :role = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
                     OR
-                    :affiliation = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    :role = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
                     OR
-                    :affiliation = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
+                    :role = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
                     OR
-                    :affiliation = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
+                    :role = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
                     OR
-                    :affiliation = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                    :role = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
                 )
             )
         )
@@ -118,7 +117,7 @@ interface SectionRepository: Repository<Section, Int> {
     fun all(
         @Param("publication_id") publicationId: Int,
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
-        @Param("affiliation") affiliation: Affiliation? = null,
+        @Param("role") role: Role? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
         @Param("sorting") sorting: Sorting? = null
