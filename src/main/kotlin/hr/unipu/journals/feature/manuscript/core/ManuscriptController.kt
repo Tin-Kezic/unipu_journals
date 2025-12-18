@@ -61,6 +61,7 @@ class ManuscriptController(
                 email = authorizationService.account!!.email,
                 manuscriptStateFilter = manuscriptStateFilter,
                 role = role,
+                accountId = authorizationService.account!!.id,
                 sectionId = sectionId,
                 category = category,
                 sorting = sorting
