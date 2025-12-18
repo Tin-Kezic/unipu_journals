@@ -45,8 +45,6 @@ interface PublicationRepository: Repository<Publication, Int> {
                         :manuscript_state_filter = 'REJECTED' AND manuscript.current_state = 'REJECTED'
                     )
                     OR
-                    :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
-                    OR
                     :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
                         manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
                             account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role = 'EIC'
