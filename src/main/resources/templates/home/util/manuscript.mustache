@@ -44,7 +44,7 @@ class Manuscript extends HTMLElement {
           </p>
         ` : ''}
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
-          ${this._publicationDate ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
+          ${![null, 'null'].includes(this._publicationDate) ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
         </p>
         <p style="font-weight: 100; font-size: 0.8rem">${this._description}</p>
         ${this._options ? `
