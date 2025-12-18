@@ -45,17 +45,17 @@ class ManuscriptController(
             sorting = sorting
         )
         if(manuscriptStateFilter.name.contains("AWAITING")) {
-            val pending = manuscripts.map { affiliatedManuscript -> mapOf(
+            val pending = manuscripts.map { manuscript -> mapOf(
                 "type" to "pending",
-                "roles" to affiliatedManuscript.roles,
-                "id" to affiliatedManuscript.id,
-                "title" to affiliatedManuscript.title,
-                "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),
-                "downloadUrl" to affiliatedManuscript.downloadUrl,
-                "submissionDate" to affiliatedManuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "publicationDate" to affiliatedManuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "description" to affiliatedManuscript.description,
-                "state" to affiliatedManuscript.state
+                "roles" to manuscript.roles,
+                "id" to manuscript.id,
+                "title" to manuscript.title,
+                "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
+                "downloadUrl" to manuscript.downloadUrl,
+                "submissionDate" to manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "publicationDate" to manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                "description" to manuscript.description,
+                "state" to manuscript.state
             )}
             val invited = inviteRepository.invitedManuscripts(
                 email = authorizationService.account!!.email,
@@ -79,16 +79,17 @@ class ManuscriptController(
             )}
             return pending + invited
         }
-        return manuscripts.map { affiliatedManuscript -> mapOf(
-            "roles" to affiliatedManuscript.roles,
-            "id" to affiliatedManuscript.id,
-            "title" to affiliatedManuscript.title,
-            "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),
-            "downloadUrl" to affiliatedManuscript.downloadUrl,
-            "submissionDate" to affiliatedManuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            "publicationDate" to affiliatedManuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            "isOverseeing" to (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(affiliatedManuscript.id)),
-            "description" to affiliatedManuscript.description,
+        return manuscripts.map { manuscript -> mapOf(
+            "roles" to manuscript.roles,
+            "id" to manuscript.id,
+            "title" to manuscript.title,
+            "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
+            "downloadUrl" to manuscript.downloadUrl,
+            "submissionDate" to manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "publicationDate" to manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            "isOverseeing" to (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)),
+            "description" to manuscript.description,
+            "state" to manuscript.state
         )}
     }
     @PostMapping

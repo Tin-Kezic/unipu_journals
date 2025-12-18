@@ -48,13 +48,13 @@ class SectionController(
             category = category,
             sorting = sorting
         ).map { section -> mapOf(
-                "id" to section.id,
-                "title" to section.title,
-                "description" to section.description!!,
-                "canHide" to isAdmin,
-                "canEdit" to authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)
-            )
-        }
+            "id" to section.id,
+            "title" to section.title,
+            "description" to section.description!!,
+            "canHide" to isAdmin,
+            "canEdit" to authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id),
+            "isHidden" to section.isHidden
+        )}
     }
     @PostMapping("/{publicationId}/sections")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)

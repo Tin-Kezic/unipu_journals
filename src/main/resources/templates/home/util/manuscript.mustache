@@ -38,7 +38,7 @@ class Manuscript extends HTMLElement {
             Roles: ${this._roles.join(', ')}
           </p>
         ` : ''}
-        ${this._state ? `
+        ${this._state?.includes('AWAITING') ? `
           <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
             State: ${this._state}
           </p>

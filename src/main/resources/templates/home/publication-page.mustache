@@ -128,12 +128,12 @@
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
                 newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
                 newManuscript.setAttribute('roles', JSON.stringify(manuscript.roles));
+                newManuscript.setAttribute('state', manuscript.state);
                 switch(manuscriptStateSelect.value) {
                     case 'ALL_AWAITING_REVIEW':
                     case 'AWAITING_EIC_REVIEW':
                     case 'AWAITING_EDITOR_REVIEW':
                     case 'AWAITING_REVIEWER_REVIEW':
-                        newManuscript.setAttribute('state', manuscript.state);
                         if(manuscript.type === 'invited') {
                             newManuscript.setAttribute('options', /*html*/`
                                 <button data-type="decline" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Decline</button>
@@ -173,7 +173,7 @@
                         break;
                     case 'HIDDEN':
                         newManuscript.setAttribute('options', /*html*/`
-                            ${manuscript.isOverseeing ? /*html*/`
+                            ${manuscript.isOverseeing && manuscript.state === 'HIDDEN' ? /*html*/`
                                 <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
                             ` : ''}
                         `);
@@ -181,7 +181,7 @@
                         container.appendChild(newManuscript);
                 }
             });
-            else items.forEach(sidebarButton  => {
+            else items.forEach(sidebarButton => {
                 const newElement = document.createElement('sidebar-button');
                 newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
                 if(type === 'section') {
@@ -191,6 +191,7 @@
                 newElement.setAttribute('title', sidebarButton.title);
                 newElement.setAttribute('can-edit', sidebarButton.canEdit);
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
+                newElement.setAttribute('is-hidden', sidebarButton.isHidden);
                 container.appendChild(newElement);
             });
             scrollSidebarToCurrentlySelectedElement(type);
@@ -281,7 +282,7 @@
             buttonToRemove.remove();
         }
         document.addEventListener('sidebar-button-option-click', async (event) => {
-            const { id, title, canEdit, canHide } = event.detail;
+            const { id, title, canEdit, canHide, isHidden } = event.detail;
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             openOptionsDialog(title, [
@@ -294,7 +295,7 @@
                     title
                 )},
                 (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(id, type, true); })},
-                (canHide && manuscriptStateSelect.value == 'HIDDEN') && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(id, type, false); })},
+                (canHide && manuscriptStateSelect.value == 'HIDDEN' && isHidden) && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(id, type, false); })},
                 (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
                     const description = document.getElementById('description');
                     openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {

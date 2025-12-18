@@ -44,7 +44,8 @@ class PublicationController(
             "id" to publication.id,
             "title" to publication.title,
             "canHide" to isAdmin,
-            "canEdit" to authorizationService.isEicOnPublicationOrAdmin(publication.id)
+            "canEdit" to authorizationService.isEicOnPublicationOrAdmin(publication.id),
+            "isHidden" to publication.isHidden
         )}
     }
     @PostMapping

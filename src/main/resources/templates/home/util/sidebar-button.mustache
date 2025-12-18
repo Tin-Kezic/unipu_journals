@@ -20,6 +20,7 @@ class SidebarButton extends HTMLElement {
     this._canEdit = this.getAttribute('can-edit') === 'true';
     this._canHide = this.getAttribute('can-hide') === 'true';
     this._isOverseeing = this._canEdit || this._canHide;
+    this._isHidden = this.getAttribute('is-hidden') === 'true';
     this.innerHTML = `
       <label class="sidebar-button">
         <input type="radio" name="${this._type}" value="${this._id}" hidden>
@@ -64,7 +65,8 @@ class SidebarButton extends HTMLElement {
           id: `${this._type}-${this._id}`,
           title: this._title,
           canEdit: this._canEdit,
-          canHide: this._canHide
+          canHide: this._canHide,
+          isHidden: this._isHidden
         },
         bubbles: true
       }));
