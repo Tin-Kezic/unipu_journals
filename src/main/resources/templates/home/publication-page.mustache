@@ -340,10 +340,16 @@
                 openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
                     const response = await fetch(`/api/invite?accept=${it.decision}&target=${encodeURIComponent(roles)}&targetId=${id}`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
-                    currentElement.setAttribute('roles', currentElement.getAttribute('roles').map(role => role === 'EIC_ON_PUBLICATION' ? 'EIC' : role));
-                    operation === 'Accept'
-                        ? document.getElementById('manuscripts-container-pending').appendChild(document.getElementById(id))
-                        : document.getElementById('id').remove();
+                    const currentElement = document.getElementById(id);
+                    currentElement.setAttribute('roles', JSON.stringify(JSON.parse(currentElement.getAttribute('roles')).map(role => role === 'EIC_ON_PUBLICATION' ? 'EIC' : role)));
+                    if(it.operation === 'Accept') {
+                        currentElement.setAttribute('options', /*html*/`
+                            <button onclick="event.stopPropagation(); window.location='/review/${id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
+                        `);
+                        document.getElementById('manuscripts-container-pending').prepend(currentElement);
+                    } else {
+                        document.getElementById('id').remove();
+                    }
                 });
             });
         });
