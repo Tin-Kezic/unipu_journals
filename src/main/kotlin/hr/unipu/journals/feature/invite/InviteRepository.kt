@@ -19,7 +19,9 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Query("""
         SELECT
-            array_agg(DISTINCT invite.target) AS roles,
+            COALESCE(
+                array_agg(DISTINCT invite.target) FILTER (WHERE invite.email = :email),
+            '{}') AS roles,
             manuscript.*
         FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id

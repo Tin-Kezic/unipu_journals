@@ -80,7 +80,7 @@ class ManuscriptController(
             return pending + invited
         }
         return manuscripts.map { affiliatedManuscript -> mapOf(
-            "roles" to affiliatedManuscript.roles.filter { it != null },
+            "roles" to affiliatedManuscript.roles,
             "id" to affiliatedManuscript.id,
             "title" to affiliatedManuscript.title,
             "authors" to accountRoleOnManuscriptRepository.authors(affiliatedManuscript.id),

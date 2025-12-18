@@ -22,7 +22,7 @@ class Manuscript extends HTMLElement {
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this._isOverseeing = this.getAttribute('is-overseeing');
-    this._affiliations = JSON.parse(this.getAttribute('affiliations'));
+    this._roles = JSON.parse(this.getAttribute('roles'));
     this._options = this.getAttribute('options');
     this._state = this.getAttribute('state');
     this.innerHTML = `
@@ -33,9 +33,9 @@ class Manuscript extends HTMLElement {
             ${this._authors?.join(', ')}
           </div>
         ` : ''}
-        ${this._affiliations?.length ?
+        ${this._roles?.length ?
           `<p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
-            Affiliation: ${this._affiliations.join(', ')}
+            Roles: ${this._roles.join(', ')}
           </p>
         ` : ''}
         ${this._state ? `

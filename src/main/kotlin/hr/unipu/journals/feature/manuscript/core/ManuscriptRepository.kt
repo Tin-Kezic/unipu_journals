@@ -10,7 +10,9 @@ import org.springframework.data.repository.query.Param
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
         SELECT
-            array_agg(DISTINCT account_role_on_manuscript.account_role) AS roles,
+            COALESCE(
+                array_agg(DISTINCT account_role_on_manuscript.account_role) FILTER (WHERE account_role_on_manuscript.account_id = :account_id),
+            '{}') AS roles,
             manuscript.*
         FROM manuscript
         JOIN publication_section ON manuscript.section_id = publication_section.id
