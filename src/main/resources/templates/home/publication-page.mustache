@@ -141,7 +141,8 @@
                             `);
                             manuscriptsContainerInvited().appendChild(newManuscript);
                         } else { // pending
-                            newManuscript.setAttribute('options', /*html*/`
+                            const nonAuthorRoles = manuscript.roles.filter(role => !role.includes('AUTHOR'));
+                            if(nonAuthorRoles.length > 0) newManuscript.setAttribute('options', /*html*/`
                                 <button onclick="event.stopPropagation(); window.location='/review/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
                             `);
                             manuscriptsContainerPending().appendChild(newManuscript);
