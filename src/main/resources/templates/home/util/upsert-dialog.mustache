@@ -1,11 +1,14 @@
 <dialog id="upsert-dialog" closedby="any">
     <p id="upsert-dialog-message"></p>
     <form id="upsert-dialog-form">
-        <div class="text-field">
+        <div class="text-field" style="margin-bottom: 0rem;">
             <label for="upsert-dialog-input">title</label>
             <input id="upsert-dialog-input" name="upsert-dialog-input" type="text">
         </div>
-        <div style="display: flex; justify-content: space-between">
+        <div style="height: 1.25rem;">
+            <label id="create-more-label" hidden> <input name="create-more-checkbox" type="checkbox"> Create more </label>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
             <button id="upsert-dialog-negative" class="m3-button outlined-button" type="button">Cancel</button>
             <button id="upsert-dialog-positive" class="m3-button primary-button" style="box-shadow: none; padding-inline: 1.8rem;"></button>
         </div>
@@ -17,6 +20,8 @@
     const upsertDialogForm = document.getElementById('upsert-dialog-form');
     const upsertDialogInput = document.getElementById('upsert-dialog-input')
     const upsertDialogPositive = document.getElementById('upsert-dialog-positive');
+    const createMoreLabel = document.getElementById('create-more-label');
+    const createMoreCheckbox = document.querySelector('input[name="create-more-checkbox"]');
     document.getElementById('upsert-dialog-negative').addEventListener('click', () => upsertDialog.close());
     let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainerId;
     function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId, inputValue) {
@@ -27,6 +32,7 @@
         upsertDialogSubmitUrl = submitUrl;
         upsertDialogReloadUrl = reloadUrl;
         upsertDialogContainerId = containerId;
+        createMoreLabel.style.display = method === 'POST' ? 'block' : 'none';
         upsertDialog.showModal();
     }
     upsertDialogForm.addEventListener('submit', async (event) => {
@@ -39,6 +45,6 @@
         const items = await reloadResponse.json();
         renderItems(items, upsertDialogContainerId);
         upsertDialogInput.value = '';
-        upsertDialog.close();
+        if(!createMoreCheckbox.checked || createMoreLabel.style.display === 'none') upsertDialog.close();
     });
 </script>
