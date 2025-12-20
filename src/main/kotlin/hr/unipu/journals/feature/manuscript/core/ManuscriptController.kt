@@ -36,8 +36,9 @@ class ManuscriptController(
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z
     ): List<Map<String, Any?>> {
+        val account = authorizationService.account
         val manuscripts = manuscriptRepository.all(
-            accountId = authorizationService.account?.id,
+            accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
             role = role,
             sectionId = sectionId,
@@ -45,6 +46,7 @@ class ManuscriptController(
             sorting = sorting
         )
         if(manuscriptStateFilter.name.contains("AWAITING")) {
+            require(account != null)
             val pending = manuscripts.map { manuscript -> mapOf(
                 "type" to "pending",
                 "roles" to manuscript.roles,
@@ -58,10 +60,10 @@ class ManuscriptController(
                 "state" to manuscript.state
             )}
             val invited = inviteRepository.invitedManuscripts(
-                email = authorizationService.account!!.email,
+                email = account.email,
                 manuscriptStateFilter = manuscriptStateFilter,
                 role = role,
-                accountId = authorizationService.account!!.id,
+                accountId = account.id,
                 sectionId = sectionId,
                 category = category,
                 sorting = sorting
