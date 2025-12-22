@@ -19,9 +19,7 @@ interface InviteRepository: Repository<Invite, Int> {
 
     @Query("""
         SELECT
-            COALESCE(
-                array_agg(DISTINCT invite.target) FILTER (WHERE invite.email = :email),
-            '{}') AS roles,
+            invite.target as role,
             manuscript.*
         FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
@@ -72,7 +70,7 @@ interface InviteRepository: Repository<Invite, Int> {
                 )
             )
         )
-        GROUP BY invite.email, invite.target_id, manuscript.id
+        GROUP BY invite.id, manuscript.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,

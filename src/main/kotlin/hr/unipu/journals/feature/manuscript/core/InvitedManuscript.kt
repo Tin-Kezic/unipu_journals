@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Column
 import java.time.LocalDateTime
 
 data class InvitedManuscript(
-    val roles: List<InvitationTarget>,
+    val role: InvitationTarget,
     @Id val id: Int,
     val title: String,
     val description: String,
