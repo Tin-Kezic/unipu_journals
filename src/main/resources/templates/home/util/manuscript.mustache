@@ -16,26 +16,32 @@ class Manuscript extends HTMLElement {
     this._id = this.getAttribute('id');
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
-    this._authors = JSON.parse(this.getAttribute('authors'));
+    this._authors = this.getAttribute('authors') ? JSON.parse(this.getAttribute('authors')) : null;
+    this._registeredAuthors = this.getAttribute('registered-authors') ? JSON.parse(this.getAttribute('registered-authors')) : null;
+    this._unregisteredAuthors = this.getAttribute('unregistered-authors') ? JSON.parse(this.getAttribute('unregistered-authors')) : null;
     this._submissionDate = this.getAttribute('submission-date');
     this._publicationDate = this.getAttribute('publication-date');
     this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
     this._isOverseeing = this.getAttribute('is-overseeing');
-    this._roles = JSON.parse(this.getAttribute('roles'));
+    this._roles = this.getAttribute('roles') ? JSON.parse(this.getAttribute('roles')) : null;
+    this._role = this.getAttribute('role'); // role for invites
     this._options = this.getAttribute('options');
     this._state = this.getAttribute('state');
     this.innerHTML = `
       <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
-        ${this._authors ? `
+        ${this._registeredAuthors || this._unregisteredAuthors || this._authors ? `
           <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
-            ${this._authors?.join(', ')}
+            ${this._authors ? this._authors?.join(', ') : '' }
+            ${this._registeredAuthors ? this._registeredAuthors?.map(author => `<button onclick='event.stopPropagation();window.location="/profile/${author.id}";'>${author.fullName}<button>`)?.join(',&nbsp') : '' }
+            ${this._unregisteredAuthors ? `, ${this._unregisteredAuthors?.map(author => `<button onclick='event.stopPropagation();console.log("dialog");'>${author.fullName}<button>`)?.join(',&nbsp')}` : '' }
           </div>
-        ` : ''}
-        ${this._roles?.length ?
-          `<p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
-            Roles: ${this._roles.join(', ')}
+        ` : '' }
+        ${this._roles?.length || this._role ? `
+          <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
+            ${this._roles?.length ? `Roles: ${this._roles.join(', ')}` : ''}
+            ${this._role ? `Role: ${this._role}` : ''}
           </p>
         ` : ''}
         ${this._state?.includes('AWAITING') ? `

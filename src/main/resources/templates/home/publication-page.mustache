@@ -122,12 +122,14 @@
                 newManuscript.setAttribute('id', manuscript.id);
                 newManuscript.setAttribute('title', manuscript.title);
                 newManuscript.setAttribute('description', manuscript.description);
-                newManuscript.setAttribute('authors', JSON.stringify(manuscript.authors));
+                newManuscript.setAttribute('authors', manuscript.authors ? JSON.stringify(manuscript.authors) : null);
+                newManuscript.setAttribute('registered-authors', manuscript.registeredAuthors ? JSON.stringify(manuscript.registeredAuthors) : null);
+                newManuscript.setAttribute('unregistered-authors', manuscript.unregisteredAuthors? JSON.stringify(manuscript.unregisteredAuthors) : null);
                 newManuscript.setAttribute('submission-date', manuscript.submissionDate);
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
                 newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
-                newManuscript.setAttribute('roles', JSON.stringify(manuscript.roles));
+                newManuscript.setAttribute('roles', manuscript.roles ? JSON.stringify(manuscript.roles) : null);
                 newManuscript.setAttribute('state', manuscript.state);
                 switch(manuscriptStateSelect.value) {
                     case 'ALL_AWAITING_REVIEW':
@@ -135,6 +137,7 @@
                     case 'AWAITING_EDITOR_REVIEW':
                     case 'AWAITING_REVIEWER_REVIEW':
                         if(manuscript.type === 'invited') {
+                            newManuscript.setAttribute('role', manuscript.role);
                             newManuscript.setAttribute('options', /*html*/`
                                 <button data-type="decline" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Decline</button>
                                 <button data-type="accept" onclick="event.stopPropagation()" class="m3-button primary-button" style="background-color: var(--green); color: white; width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Accept</button>
