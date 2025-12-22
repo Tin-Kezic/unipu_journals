@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 
+import hr.unipu.journals.feature.account.Account
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -10,13 +11,13 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun role(@Param("account_id") accountId: Int, @Param("manuscript_id") manuscriptId: Int): List<ManuscriptRole>
 
     @Query("""
-        SELECT DISTINCT account.full_name FROM account_role_on_manuscript
+        SELECT DISTINCT account.* FROM account_role_on_manuscript
         JOIN account ON account.id = account_role_on_manuscript.account_id
         JOIN manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE account_role_on_manuscript.account_role IN ('CORRESPONDING_AUTHOR', 'AUTHOR')
         AND manuscript.id = :manuscript_id
     """)
-    fun authors(@Param("manuscript_id") manuscriptId: Int): List<String>
+    fun authors(@Param("manuscript_id") manuscriptId: Int): List<Account>
 
     @Query("""
         SELECT DISTINCT account.full_name FROM account_role_on_manuscript
