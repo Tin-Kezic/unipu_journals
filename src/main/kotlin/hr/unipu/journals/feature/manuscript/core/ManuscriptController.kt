@@ -4,6 +4,7 @@ import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
+import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.submit.AuthorDTO
@@ -26,6 +27,7 @@ class ManuscriptController(
     private val inviteRepository: InviteRepository,
     private val authorizationService: AuthorizationService,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val unregisteredAuthorRepository: UnregisteredAuthorRepository
 ) {
     @GetMapping
     fun all(
@@ -37,28 +39,39 @@ class ManuscriptController(
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z
     ): List<Map<String, Any?>> {
         val account = authorizationService.account
-        val manuscripts = manuscriptRepository.all(
+        val manuscriptsAndAuthors = manuscriptRepository.all(
             accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
             role = role,
             sectionId = sectionId,
             category = category,
             sorting = sorting
-        )
+        ).map { manuscript -> Triple(
+            manuscript,
+            accountRoleOnManuscriptRepository.authors(manuscript.id),
+            unregisteredAuthorRepository.authors(manuscript.id)
+        )}
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             require(account != null)
-            val pending = manuscripts.map { manuscript -> mapOf(
-                "type" to "pending",
-                "roles" to manuscript.roles,
-                "id" to manuscript.id,
-                "title" to manuscript.title,
-                "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
-                "downloadUrl" to manuscript.downloadUrl,
-                "submissionDate" to manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "publicationDate" to manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "description" to manuscript.description,
-                "state" to manuscript.state
-            )}
+            val pending = manuscriptsAndAuthors.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
+                put("type", "pending")
+                put("roles", manuscript.roles)
+                put("id", manuscript.id)
+                put("title", manuscript.title)
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) {
+                    put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
+                    put("unregisteredAuthors", unregisteredAuthors)
+                } else {
+                    val registeredAuthorsFullNames = registeredAuthors.map { author -> author.fullName }
+                    val unregisteredAuthorsFullNames = unregisteredAuthors.map { author -> author.fullName }
+                    put("authors", registeredAuthorsFullNames + unregisteredAuthorsFullNames)
+                }
+                put("downloadUrl", manuscript.downloadUrl)
+                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("description", manuscript.description)
+                put("state", manuscript.state)
+            }}
             val invited = inviteRepository.invitedManuscripts(
                 email = account.email,
                 manuscriptStateFilter = manuscriptStateFilter,
@@ -69,7 +82,7 @@ class ManuscriptController(
                 sorting = sorting
             ).map { invitedManuscript -> mapOf(
                 "type" to "invited",
-                "roles" to invitedManuscript.roles,
+                "role" to invitedManuscript.role,
                 "id" to invitedManuscript.id,
                 "title" to invitedManuscript.title,
                 "authors" to accountRoleOnManuscriptRepository.authors(invitedManuscript.id),
@@ -81,18 +94,25 @@ class ManuscriptController(
             )}
             return pending + invited
         }
-        return manuscripts.map { manuscript -> mapOf(
-            "roles" to manuscript.roles,
-            "id" to manuscript.id,
-            "title" to manuscript.title,
-            "authors" to accountRoleOnManuscriptRepository.authors(manuscript.id),
-            "downloadUrl" to manuscript.downloadUrl,
-            "submissionDate" to manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            "publicationDate" to manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
-            "isOverseeing" to (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)),
-            "description" to manuscript.description,
-            "state" to manuscript.state
-        )}
+        return manuscriptsAndAuthors.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
+            put("roles", manuscript.roles)
+            put("id", manuscript.id)
+            put("title", manuscript.title)
+            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) {
+                put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
+                put("unregisteredAuthors", unregisteredAuthors)
+            } else {
+                val registeredAuthorsFullNames = registeredAuthors.map { author -> author.fullName }
+                val unregisteredAuthorsFullNames = unregisteredAuthors.map { author -> author.fullName }
+                put("authors", registeredAuthorsFullNames + unregisteredAuthorsFullNames)
+            }
+            put("downloadUrl", manuscript.downloadUrl)
+            put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId) || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)))
+            put("description", manuscript.description)
+            put("state", manuscript.state)
+        }}
     }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
