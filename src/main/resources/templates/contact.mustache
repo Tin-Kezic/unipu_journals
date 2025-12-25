@@ -9,22 +9,26 @@
 </head>
 <body>
     {{>util/header}}
+    {{>util/dialog/textarea}}
 
     <h1 style="font-size: 3.5rem; text-align: center; padding-top: 5rem;">Unipu Journals</h1>
     <p style="font-size: 1.3rem; color: var(--light-gray); margin-bottom: 3rem; margin-left: 0.25rem; text-align: center;">University of Pula academic journals</p>
 
-    <div style="text-align: center; font-size: 1.2rem; margin-top: 6rem;">
-        <p>A: Zagrebačka 30</p>
-        <p>52100 Pula</p>
-        <p>Hrvatska</p>
-        <br>
-        <br>
-        <p>T: +385 52 377 000</p>
-        <p>F: +385 216 416</p>
-        <br>
-        <br>
-        <p>E: ured@unipu.hr</p>
-        <p>W: www.unipu.hr</p>
-    </div>
+    <div id="contacts" style="text-align: center; font-size: 1.2rem; margin-top: 6rem;">{{{contacts}}}</div>
+    {{#isAdmin}}
+        <div style="width: 100vw; text-align: center;">
+            <button id="edit" class="m3-button primary-button">Edit</button>
+        </div>
+    {{/isAdmin}}
+    <script>
+        document.getElementById('edit').addEventListener('click', async () => {
+            openTextareaDialog('Edit contacts', 'Edit', document.getElementById('contacts').innerHTML, async () => {
+                const textarea = document.getElementById('textarea-dialog-textarea');
+                const response = await fetch(`/contacts?info=${encodeURIComponent(textarea.value)}`, { method: 'PUT' });
+                if(!response.ok) { alert(await response.text()); return; }
+                document.getElementById('contacts').innerHTML = textarea.value;
+            });
+        });
+    </script>
 </body>
 </html>
