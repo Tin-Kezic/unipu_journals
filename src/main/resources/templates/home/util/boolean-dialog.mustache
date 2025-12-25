@@ -12,7 +12,7 @@
     const booleanDialogPositive = document.getElementById('boolean-dialog-positive');
     document.getElementById('boolean-dialog-negative').addEventListener('click', () => booleanDialog.close());
     function openBooleanDialog(message, positiveText, onPositive) {
-        booleanDialogMessage.innerHTML = message
+        booleanDialogMessage.innerHTML = message;
         booleanDialogPositive.innerHTML = positiveText;
         booleanDialogPositive.onclick = () => { onPositive(); booleanDialog.close(); }
         booleanDialog.showModal();
