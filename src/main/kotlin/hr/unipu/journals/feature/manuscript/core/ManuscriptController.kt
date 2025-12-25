@@ -58,14 +58,11 @@ class ManuscriptController(
                 put("roles", manuscript.roles)
                 put("id", manuscript.id)
                 put("title", manuscript.title)
-                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) {
-                    put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
-                    put("unregisteredAuthors", unregisteredAuthors)
-                } else {
-                    val registeredAuthorsFullNames = registeredAuthors.map { author -> author.fullName }
-                    val unregisteredAuthorsFullNames = unregisteredAuthors.map { author -> author.fullName }
-                    put("authors", registeredAuthorsFullNames + unregisteredAuthorsFullNames)
-                }
+                put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
+                put("unregisteredAuthors",
+                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId))
+                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
+                )
                 put("downloadUrl", manuscript.downloadUrl)
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -80,32 +77,37 @@ class ManuscriptController(
                 sectionId = sectionId,
                 category = category,
                 sorting = sorting
-            ).map { invitedManuscript -> mapOf(
-                "type" to "invited",
-                "role" to invitedManuscript.role,
-                "id" to invitedManuscript.id,
-                "title" to invitedManuscript.title,
-                "authors" to accountRoleOnManuscriptRepository.authors(invitedManuscript.id),
-                "downloadUrl" to invitedManuscript.downloadUrl,
-                "submissionDate" to invitedManuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "publicationDate" to invitedManuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                "description" to invitedManuscript.description,
-                "state" to invitedManuscript.state
-            )}
+            ).map { manuscript -> Triple(
+                manuscript,
+                accountRoleOnManuscriptRepository.authors(manuscript.id),
+                unregisteredAuthorRepository.authors(manuscript.id)
+            )}.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
+                put("type", "invited")
+                put("role", manuscript.role)
+                put("id", manuscript.id)
+                put("title", manuscript.title)
+                put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
+                put("unregisteredAuthors",
+                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId))
+                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
+                )
+                put("downloadUrl", manuscript.downloadUrl)
+                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("description", manuscript.description)
+                put("state", manuscript.state)
+            }}
             return pending + invited
         }
         return manuscriptsAndAuthors.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
             put("roles", manuscript.roles)
             put("id", manuscript.id)
             put("title", manuscript.title)
-            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)) {
-                put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
-                put("unregisteredAuthors", unregisteredAuthors)
-            } else {
-                val registeredAuthorsFullNames = registeredAuthors.map { author -> author.fullName }
-                val unregisteredAuthorsFullNames = unregisteredAuthors.map { author -> author.fullName }
-                put("authors", registeredAuthorsFullNames + unregisteredAuthorsFullNames)
-            }
+            put("registeredAuthors", registeredAuthors.map { account -> mapOf("id" to account.id, "fullName" to account.fullName) })
+            put("unregisteredAuthors",
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id) || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId))
+                    unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
+            )
             put("downloadUrl", manuscript.downloadUrl)
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
