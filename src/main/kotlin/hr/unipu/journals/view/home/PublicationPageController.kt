@@ -34,22 +34,20 @@ class PublicationPageController(
         if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
         val isAdmin = authorizationService.isAdmin
-        val publications = publicationRepository.all(
+        model["isAdmin"] = isAdmin
+        model["isAuthenticated"] = authorizationService.isAuthenticated
+        model["categories"] = categoryRepository.all()
+        model["publications"] = publicationRepository.all(
             manuscriptStateFilter = manuscriptStateFilter,
             role = role,
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting
-        )
-        model["isAdmin"] = isAdmin
-        model["isAuthenticated"] = authorizationService.isAuthenticated
-        model["categories"] = categoryRepository.all()
-        model["publications"] = publications.map { publication -> ContainerDTO(
-            id = publication.id,
-            title = publication.title,
-            canHide = isAdmin,
-            canEdit = authorizationService.isEicOnPublicationOrAdmin(publication.id)
-        )}
+        ).map { publication -> buildMap {
+            put("id", publication.id)
+            put("title", publication.title)
+            if(authorizationService.isEicOnPublicationOrAdmin(publication.id)) put("role", "EIC")
+        }}
         return "home/publication-page"
     }
 }

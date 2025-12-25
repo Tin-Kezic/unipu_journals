@@ -1,6 +1,6 @@
 <script>
 class SidebarButton extends HTMLElement {
-  static observedAttributes = ['id', 'font-size', 'title', 'can-edit', 'can-hide'];
+  static observedAttributes = ['id', 'font-size', 'title', 'role'];
   constructor() { super(); }
   connectedCallback() {
     this.render();
@@ -17,8 +17,11 @@ class SidebarButton extends HTMLElement {
     this._type = this.getAttribute('id').replace(/-.*/, '');
     this._title = this.getAttribute('title');
     this._fontSize = this.getAttribute('font-size');
-    this._canEdit = this.getAttribute('can-edit') === 'true';
-    this._canHide = this.getAttribute('can-hide') === 'true';
+    this._role = this.getAttribute('role');
+    console.log(`type: ${this._type}\nrole: ${this._role}`)
+    this._canEdit = {{isAdmin}} || this._type === 'publication' ? this._role === 'EIC' : ['EIC', 'SECTION_EDITOR'].includes(this._role);
+    this._canHide = {{isAdmin}}
+    this.getAttribute('can-hide') === 'true';
     this._isOverseeing = this._canEdit || this._canHide;
     this._isHidden = this.getAttribute('is-hidden') === 'true';
     this.innerHTML = `
@@ -27,8 +30,8 @@ class SidebarButton extends HTMLElement {
         <span style="overflow-wrap: break-word; max-width: ${this._isOverseeing ? '80%' : '100%'}; font-size: ${this._fontSize}">${this._title}</span>
         ${this._isOverseeing ? `
           <svg data-type="${this._type}-options" data-id="${this._id}"
-               xmlns="http://www.w3.org/2000/svg" height="${this._fontSize === 'small' ? '18px' : '24px'}" viewBox="0 -960 960 960" width="24px" 
-               fill="var(--light-gray)">
+            xmlns="http://www.w3.org/2000/svg" height="${this._fontSize === 'small' ? '18px' : '24px'}" viewBox="0 -960 960 960" width="24px" 
+            fill="var(--light-gray)">
             <path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z"/>
           </svg>
         ` : ''}
@@ -52,7 +55,7 @@ class SidebarButton extends HTMLElement {
         detail: {
           id: `${this._type}-${this._id}`,
           title: this._title,
-          isOverseeing: this._isOverseeing
+          role: this._role
         },
         bubbles: true
       }));
@@ -64,8 +67,7 @@ class SidebarButton extends HTMLElement {
         detail: {
           id: `${this._type}-${this._id}`,
           title: this._title,
-          canEdit: this._canEdit,
-          canHide: this._canHide,
+          role: this._role,
           isHidden: this._isHidden
         },
         bubbles: true

@@ -47,14 +47,14 @@ class SectionController(
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting
-        ).map { section -> mapOf(
-            "id" to section.id,
-            "title" to section.title,
-            "description" to section.description!!,
-            "canHide" to isAdmin,
-            "canEdit" to authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id),
-            "isHidden" to section.isHidden
-        )}
+        ).map { section -> buildMap {
+            put("id", section.id)
+            put("title", section.title)
+            put("description", section.description!!)
+            if(authorizationService.isEicOnPublicationOrAdmin(publicationId)) put("role", "EIC")
+            else if(authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, section.id)) put("role", "SECTION_EDITOR")
+            put("isHidden", section.isHidden)
+        }}
     }
     @PostMapping("/{publicationId}/sections")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN)

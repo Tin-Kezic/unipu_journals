@@ -135,7 +135,6 @@
                 newManuscript.setAttribute('submission-date', manuscript.submissionDate);
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
-                newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
                 newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
                 newManuscript.setAttribute('state', manuscript.state);
                 switch(manuscriptStateSelect.value) {
@@ -201,8 +200,7 @@
                         newElement.setAttribute('description', sidebarButton.description);
                     }
                     newElement.setAttribute('title', sidebarButton.title);
-                    newElement.setAttribute('can-edit', sidebarButton.canEdit);
-                    newElement.setAttribute('can-hide', sidebarButton.canHide);
+                    newElement.setAttribute('role', sidebarButton.role);
                     newElement.setAttribute('is-hidden', sidebarButton.isHidden);
                     container.appendChild(newElement);
                 });
@@ -244,7 +242,7 @@
         </div>
         <aside id="publications-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
             {{#publications}}
-                <sidebar-button id="publication-{{id}}" title="{{title}}" can-edit="{{canEdit}}" can-hide="{{canHide}}"></sidebar-button>
+                <sidebar-button id="publication-{{id}}" title="{{title}}" {{#role}}role="{{role}}"{{/role}}></sidebar-button>
             {{/publications}}
         </aside>
     </div>
@@ -263,7 +261,7 @@
     </div>
     <script>
         document.addEventListener('sidebar-button-click', async (event) => {
-            const { id, title, isOverseeing } = event.detail;
+            const { id, title, role } = event.detail;
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
@@ -276,8 +274,8 @@
             if(type === 'publication') {
                 document.getElementById('add-publication').hidden = !({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
                 document.getElementById('publications-span').hidden = ({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
-                document.getElementById('add-section').hidden = !(isOverseeing && manuscriptStateSelect.value === 'PUBLISHED');
-                document.getElementById('sections-span').hidden = (isOverseeing && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('add-section').hidden = !({{isAdmin}} || role === 'EIC' && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('sections-span').hidden = ({{isAdmin}} || role === 'EIC' && manuscriptStateSelect.value === 'PUBLISHED');
             }
             if(type === 'section') document.getElementById('description').innerHTML = document.getElementById(id).getAttribute('description');
         });
@@ -293,9 +291,11 @@
             buttonToRemove.remove();
         }
         document.addEventListener('sidebar-button-option-click', async (event) => {
-            const { id, title, canEdit, canHide, isHidden } = event.detail;
+            const { id, title, role, isHidden } = event.detail;
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
+            const canEdit = {{isAdmin}} || type === 'publication' ? role === 'EIC' : ['EIC', 'SECTION_EDITOR'].includes(role);
+            const canHide = {{isAdmin}};
             openOptionsDialog(title, [
                 canEdit && {name: 'Rename', onClick: () => openUpsertDialog(
                     `Rename ${title}`,
@@ -305,9 +305,9 @@
                     `${type}s-sidebar`,
                     title
                 )},
-                (canHide && manuscriptStateSelect.value == 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(id, type, true); })},
-                (canHide && manuscriptStateSelect.value == 'HIDDEN' && isHidden) && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(id, type, false); })},
-                (type == 'section' && (canEdit || canHide)) && {name: 'Edit description', onClick: () => {
+                (canHide && manuscriptStateSelect.value === 'PUBLISHED') && {name: 'Hide', onClick: () => openBooleanDialog(`Hide ${title}`, 'Hide', async () => { updateHidden(id, type, true); })},
+                (canHide && manuscriptStateSelect.value === 'HIDDEN' && isHidden) && {name: 'Unhide', onClick: () => openBooleanDialog(`Unhide ${title}`, 'Unhide', async () => { updateHidden(id, type, false); })},
+                (type == 'section' && canEdit) && {name: 'Edit description', onClick: () => {
                     const description = document.getElementById('description');
                     openTextareaDialog(`Edit description of ${title}`, 'Edit', description.innerHTML, async () => {
                         const textarea = document.getElementById('textarea-dialog-textarea');
@@ -317,9 +317,9 @@
                         description.innerHTML = textarea.value;
                     });
                 }},
-                {{isAdmin}} && {
+                ({{isAdmin}} ||  type === 'section' && role === 'EIC') && {
                     name: 'Manage editors',
-                    onClick: () => window.location = `/publications/${currentPublicationId}/${type == 'publication' ?  'manage-eic-on-publication' : `sections/${currentSectionId}/manage-section-editor-on-section`}`
+                    onClick: () => window.location = `/publications/${currentPublicationId}/${type === 'publication' ?  'manage-eic-on-publication' : `sections/${currentSectionId}/manage-section-editor-on-section`}`
                 }
             ].filter(Boolean));
         });

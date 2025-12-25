@@ -40,13 +40,12 @@ class PublicationController(
             accountId = authorizationService.account?.id,
             category = category,
             sorting = sorting ?: Sorting.ALPHABETICAL_A_Z
-        ).map { publication -> mapOf(
-            "id" to publication.id,
-            "title" to publication.title,
-            "canHide" to isAdmin,
-            "canEdit" to authorizationService.isEicOnPublicationOrAdmin(publication.id),
-            "isHidden" to publication.isHidden
-        )}
+        ).map { publication -> buildMap {
+            put("id", publication.id)
+            put("title", publication.title)
+            if(authorizationService.isEicOnPublicationOrAdmin(publication.id)) put("role", "EIC")
+            put("isHidden", publication.isHidden)
+        }}
     }
     @PostMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
