@@ -17,6 +17,9 @@
 {{>util/dialog/info}}
 
 <script>
+    const searchParams = new URLSearchParams(window.location.search);
+    let currentPublicationId = searchParams.get('publicationId');
+    let currentSectionId = searchParams.get('sectionId');
     function updateUrl() {
         const publicationIdAndSectionIdParams = new URLSearchParams({
             publicationId: currentPublicationId,
@@ -85,7 +88,6 @@
         <option value="OLDEST">Oldest publications</option>
     </select>
     <script>
-        const searchParams = new URLSearchParams(window.location.search);
         document.querySelector('select[name="manuscript-state"]').value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
         document.querySelector('select[name="role"]').value = searchParams.get('role') || '';
         document.querySelector('select[name="category"]').value = searchParams.get('category') || '';
@@ -190,20 +192,22 @@
                         container.appendChild(newManuscript);
                 }
             });
-            else items.forEach(sidebarButton => {
-                const newElement = document.createElement('sidebar-button');
-                newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
-                if(type === 'section') {
-                    newElement.setAttribute('font-size', 'small');
-                    newElement.setAttribute('description', sidebarButton.description);
-                }
-                newElement.setAttribute('title', sidebarButton.title);
-                newElement.setAttribute('can-edit', sidebarButton.canEdit);
-                newElement.setAttribute('can-hide', sidebarButton.canHide);
-                newElement.setAttribute('is-hidden', sidebarButton.isHidden);
-                container.appendChild(newElement);
+            else {
+                items.forEach(sidebarButton => {
+                    const newElement = document.createElement('sidebar-button');
+                    newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
+                    if(type === 'section') {
+                        newElement.setAttribute('font-size', 'small');
+                        newElement.setAttribute('description', sidebarButton.description);
+                    }
+                    newElement.setAttribute('title', sidebarButton.title);
+                    newElement.setAttribute('can-edit', sidebarButton.canEdit);
+                    newElement.setAttribute('can-hide', sidebarButton.canHide);
+                    newElement.setAttribute('is-hidden', sidebarButton.isHidden);
+                    container.appendChild(newElement);
+                });
                 scrollSidebarToCurrentlySelectedElement(type);
-            });
+            }
             updateUrl();
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
@@ -258,8 +262,6 @@
         <aside id="sections-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;"></aside>
     </div>
     <script>
-        let currentPublicationId = searchParams.get('publicationId');
-        let currentSectionId = searchParams.get('sectionId');
         document.addEventListener('sidebar-button-click', async (event) => {
             const { id, title, isOverseeing } = event.detail;
             const idValue = id.replace(/^.*-/, '');
