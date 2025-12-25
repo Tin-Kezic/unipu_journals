@@ -345,20 +345,24 @@
             { type: 'manuscript-invite-declined', operation: 'Decline', decision: false},
         ].forEach( it => {
             document.addEventListener(it.type, async (event) => {
-                const { id, title, roles } = event.detail;
+                const { id, title, role } = event.detail;
                 openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
-                    const response = await fetch(`/api/invite?accept=${it.decision}&target=${encodeURIComponent(roles)}&targetId=${id}`, { method: 'PUT' });
+                    const response = await fetch(`/api/invite?accept=${it.decision}&target=${encodeURIComponent(role.replace('EIC', 'EIC_ON_MANUSCRIPT'))}&targetId=${id.replace(/^.*-/, '')}`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
                     const currentElement = document.getElementById(id);
-                    currentElement.setAttribute('roles', JSON.stringify(JSON.parse(currentElement.getAttribute('roles')).map(role => role === 'EIC_ON_PUBLICATION' ? 'EIC' : role)));
-                    if(it.operation === 'Accept') {
-                        currentElement.setAttribute('options', /*html*/`
-                            <button onclick="event.stopPropagation(); window.location='/review/${id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
-                        `);
+                    const pending = document.getElementById(id.replace('invited', 'pending'));
+                    if(pending) {
+                        const roles = JSON.parse(pending.getAttribute('roles'));
+                        roles.push(role);
+                        pending.setAttribute('roles', JSON.stringify(roles));
+                    } else if(it.operation === 'Accept') {
+                        currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
+                        currentElement.setAttribute('roles', JSON.stringify([role]));
+                        currentElement.removeAttribute('role');
                         document.getElementById('manuscripts-container-pending').prepend(currentElement);
-                    } else {
-                        document.getElementById('id').remove();
+                        return;
                     }
+                    currentElement.remove();
                 });
             });
         });
