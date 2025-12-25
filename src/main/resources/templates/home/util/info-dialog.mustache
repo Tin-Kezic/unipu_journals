@@ -1,0 +1,23 @@
+<dialog id="info-dialog" closedby="any">
+    <p id="info-dialog-message"></p>
+    <br>
+    <div style="display: flex; justify-content: space-between">
+        <button id="info-dialog-close" class="m3-button outlined-button">Close</button>
+    </div>
+</dialog>
+<script>
+    const infoDialog = document.getElementById('info-dialog');
+    const infoDialogMessage = document.getElementById('info-dialog-message');
+    String.prototype.camelCaseToText = function () { return this
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+        .replace(/^./, char => char.toUpperCase());
+    };
+    document.getElementById('info-dialog-close').addEventListener('click', () => infoDialog.close());
+    function openInfoDialog(obj) {
+        infoDialogMessage.innerHTML = Object.entries(JSON.parse(obj))
+            .map(([key, value]) => `${key.camelCaseToText().toLowerCase()}: ${value}<br>`)
+            .join('');
+        infoDialog.showModal();
+    }
+</script>
