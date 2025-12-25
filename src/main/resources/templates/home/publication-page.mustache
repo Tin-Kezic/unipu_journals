@@ -138,7 +138,7 @@
                     case 'AWAITING_EDITOR_REVIEW':
                     case 'AWAITING_REVIEWER_REVIEW':
                         if(manuscript.type === 'invited') {
-                            newManuscript.setAttribute('role', manuscript.role);
+                            newManuscript.setAttribute('role', manuscript.role.replace('EIC_ON_MANUSCRIPT', 'EIC'));
                             newManuscript.setAttribute('options', /*html*/`
                                 <button data-type="decline" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Decline</button>
                                 <button data-type="accept" onclick="event.stopPropagation()" class="m3-button primary-button" style="background-color: var(--green); color: white; width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Accept</button>
