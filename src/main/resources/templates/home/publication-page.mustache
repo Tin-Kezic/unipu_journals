@@ -8,13 +8,13 @@
 </head>
 <body style="height: 100%; overflow: hidden; display: flex; flex-direction: column;">
 {{>util/header}}
-{{>home/util/sidebar-button}}
-{{>home/util/manuscript}}
-{{>home/util/upsert-dialog}}
-{{>home/util/boolean-dialog}}
-{{>home/util/options-dialog}}
-{{>home/util/textarea-dialog}}
-{{>home/util/info-dialog}}
+{{>util/components/sidebar-button}}
+{{>util/components/manuscript}}
+{{>util/dialog/upsert}}
+{{>util/dialog/boolean}}
+{{>util/dialog/options}}
+{{>util/dialog/textarea}}
+{{>util/dialog/info}}
 
 <script>
     function updateUrl() {
