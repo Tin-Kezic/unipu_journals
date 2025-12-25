@@ -18,7 +18,6 @@ class SidebarButton extends HTMLElement {
     this._title = this.getAttribute('title');
     this._fontSize = this.getAttribute('font-size');
     this._role = this.getAttribute('role');
-    console.log(`type: ${this._type}\nrole: ${this._role}`)
     this._canEdit = {{isAdmin}} || this._type === 'publication' ? this._role === 'EIC' : ['EIC', 'SECTION_EDITOR'].includes(this._role);
     this._canHide = {{isAdmin}}
     this.getAttribute('can-hide') === 'true';
