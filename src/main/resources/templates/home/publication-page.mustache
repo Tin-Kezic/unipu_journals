@@ -198,8 +198,8 @@
                 newElement.setAttribute('can-hide', sidebarButton.canHide);
                 newElement.setAttribute('is-hidden', sidebarButton.isHidden);
                 container.appendChild(newElement);
+                scrollSidebarToCurrentlySelectedElement(type);
             });
-            scrollSidebarToCurrentlySelectedElement(type);
             updateUrl();
         }
         publicationTypeSelect = document.querySelector('select[name="publication-type"]');
