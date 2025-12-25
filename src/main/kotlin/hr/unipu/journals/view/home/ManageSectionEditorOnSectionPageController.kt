@@ -24,6 +24,6 @@ class ManageSectionEditorOnSectionPageController(
     ): String {
         model["currentSection"] = sectionRepository.byId(sectionId).title
         model["sectionEditorEmails"] = sectionEditorOnSectionRepository.sectionEditorEmailsBySectionId(sectionId) + inviteRepository.emailsByTarget(InvitationTarget.SECTION_EDITOR, sectionId)
-        return "home/manage/manage-section-editor-on-section-page"
+        return "home/manage/section-editor-on-section-page"
     }
 }
