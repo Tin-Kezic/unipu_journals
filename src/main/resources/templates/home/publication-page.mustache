@@ -121,7 +121,11 @@
             if(type === 'manuscript') items.forEach(manuscript => {
                 const run = (x, f) => x ? f(x) : null;
                 const newManuscript = document.createElement('manuscript-element');
-                newManuscript.setAttribute('id', manuscript.id);
+                switch(manuscript.type) {
+                    case 'invited': newManuscript.setAttribute('id', `invited-${manuscript.id}`); break;
+                    case 'pending': newManuscript.setAttribute('id', `pending-${manuscript.id}`); break;
+                    default: newManuscript.setAttribute('id', `manuscript-${manuscript.id}`);
+                }
                 newManuscript.setAttribute('title', manuscript.title);
                 newManuscript.setAttribute('description', manuscript.description);
                 newManuscript.setAttribute('registered-authors', run(manuscript.registeredAuthors, JSON.stringify));
