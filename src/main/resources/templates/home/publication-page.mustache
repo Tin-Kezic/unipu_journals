@@ -135,6 +135,7 @@
                 newManuscript.setAttribute('submission-date', manuscript.submissionDate);
                 newManuscript.setAttribute('publication-date', manuscript.publicationDate);
                 newManuscript.setAttribute('download-url', manuscript.downloadUrl);
+                newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
                 newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
                 newManuscript.setAttribute('state', manuscript.state);
                 switch(manuscriptStateSelect.value) {
