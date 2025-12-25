@@ -1,9 +1,11 @@
 package hr.unipu.journals.view
 
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
 import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -24,6 +26,7 @@ class ContactPageController(private val authorizationService: AuthorizationServi
         return "contact"
     }
     @PutMapping
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun update(@RequestParam info: String): ResponseEntity<String> {
         contacts = Jsoup.clean(info, Safelist.relaxed())
         return ResponseEntity.ok("successfully updated contacts")
