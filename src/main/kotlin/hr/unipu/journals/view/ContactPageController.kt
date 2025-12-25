@@ -23,7 +23,7 @@ class ContactPageController(private val authorizationService: AuthorizationServi
     fun page(model: Model): String {
         model["contacts"] = contacts
         model["isAdmin"] = authorizationService.account?.isAdmin
-        return "contact"
+        return "contact-page"
     }
     @PutMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
