@@ -1,6 +1,20 @@
 <script>
 class Manuscript extends HTMLElement {
-  static observedAttributes = ['id', 'title', 'description', 'authors', 'download-url', 'submission-date', 'publication-date', 'options'];
+  static observedAttributes = [
+  'id',
+  'title',
+  'description',
+  'registered-authors',
+  'unregistered-authors',
+  'submission-date',
+  'publication-date',
+  'download-url',
+  'is-overseeing',
+  'roles',
+  'role',
+  'options',
+  'state'
+  ];
   constructor() { super(); }
   connectedCallback() {
     this.render();
@@ -13,31 +27,31 @@ class Manuscript extends HTMLElement {
     }
   }
   render() {
+    const run = (x, f) => x ? f(x) : null;
     this._id = this.getAttribute('id');
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
-    this._authors = this.getAttribute('authors') ? JSON.parse(this.getAttribute('authors')) : null;
-    this._registeredAuthors = this.getAttribute('registered-authors') ? JSON.parse(this.getAttribute('registered-authors')) : null;
-    this._unregisteredAuthors = this.getAttribute('unregistered-authors') ? JSON.parse(this.getAttribute('unregistered-authors')) : null;
+    this._registeredAuthors = run(this.getAttribute('registered-authors'), JSON.parse);
+    this._unregisteredAuthors = run(this.getAttribute('unregistered-authors'), JSON.parse);
     this._submissionDate = this.getAttribute('submission-date');
     this._publicationDate = this.getAttribute('publication-date');
-    this._date = this.getAttribute('date');
     this._downloadUrl = this.getAttribute('download-url');
-    this._isOverseeing = this.getAttribute('is-overseeing');
-    this._roles = this.getAttribute('roles') ? JSON.parse(this.getAttribute('roles')) : null;
+    this._isOverseeing = this.getAttribute('is-overseeing') === 'true';
+    this._roles = run(this.getAttribute('roles'), JSON.parse);
     this._role = this.getAttribute('role'); // role for invites
     this._options = this.getAttribute('options');
     this._state = this.getAttribute('state');
-    this.innerHTML = `
+    this.innerHTML = /*html*/`
       <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
-        ${this._registeredAuthors || this._unregisteredAuthors || this._authors ? `
-          <div class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
-            ${this._authors ? this._authors?.join(', ') : '' }
-            ${this._registeredAuthors ? this._registeredAuthors?.map(author => `<button onclick='event.stopPropagation();window.location="/profile/${author.id}";'>${author.fullName}<button>`)?.join(',&nbsp') : '' }
-            ${this._unregisteredAuthors ? `, ${this._unregisteredAuthors?.map(author => `<button onclick='event.stopPropagation();console.log("dialog");'>${author.fullName}<button>`)?.join(',&nbsp')}` : '' }
-          </div>
-        ` : '' }
+        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+          ${this._registeredAuthors?.length ? this._registeredAuthors?.map(author => `
+            <button onclick="window.location='/profile/${author.id}';">${author.fullName}</button>
+          `)?.join(',&nbsp') : '' }
+          ${this._unregisteredAuthors?.length ? `,&nbsp${this._unregisteredAuthors?.map(author => {
+            return `<button data-author='${JSON.stringify(this._isOverseeing ? author : { "Full name": author })}' onclick='openInfoDialog(this.dataset.author);'>${author.fullName ?? author}</button>`;
+          })?.join(',&nbsp')}` : '' }
+        </div>
         ${this._roles?.length || this._role ? `
           <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">
             ${this._roles?.length ? `Roles: ${this._roles.join(', ')}` : ''}
@@ -88,7 +102,7 @@ class Manuscript extends HTMLElement {
         detail: {
           id: this._id,
           title: this._title,
-          ...(name.includes('invite') && { roles: this._roles })
+          ...(name.includes('invite') && { role: this._role })
         },
         bubbles: true
       }))
