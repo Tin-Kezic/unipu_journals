@@ -106,8 +106,10 @@
                     <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
                     <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
                 `;
-                manuscriptsContainerInvited()?.innerHTML = '';
-                manuscriptsContainerPending()?.innerHTML = '';
+                if(manuscriptsContainerInvited() && manuscriptsContainerPending()) {
+                    manuscriptsContainerInvited().innerHTML = '';
+                    manuscriptsContainerPending().innerHTML = '';
+                }
             } else container.innerHTML = '';
             if(items.length === 0) {
                 switch(type) {

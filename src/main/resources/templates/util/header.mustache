@@ -8,7 +8,10 @@
             <li><a href="/search">search</a></li>
         </ul>
     </nav>
-    <script>document.querySelector(`a[href="${window.location.pathname}"]`).style.textDecoration = 'underline'</script>
+    <script>
+        const current = document.querySelector(`a[href="${window.location.pathname}"]`)
+        if(current) current.style.textDecoration = 'underline'
+    </script>
 
     {{#is-logged-in}}
         <a href="/profiles/{{header-profile-id}}" class="m3-button primary-outlined-button" style="border: none; padding: 0.1rem 0.5rem; text-decoration: none;">
