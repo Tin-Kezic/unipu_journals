@@ -106,10 +106,8 @@
                     <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
                     <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
                 `;
-                if(manuscriptsContainerInvited() && manuscriptsContainerPending()) {
-                    manuscriptsContainerInvited.innerHTML = '';
-                    manuscriptsContainerPending.innerHTML = '';
-                }
+                manuscriptsContainerInvited()?.innerHTML = '';
+                manuscriptsContainerPending()?.innerHTML = '';
             } else container.innerHTML = '';
             if(items.length === 0) {
                 switch(type) {
@@ -161,7 +159,8 @@
                         break;
                     case 'MINOR_MAJOR':
                         newManuscript.setAttribute('options', /*html*/`
-                            <button onclick="event.stopPropagation(); window.location='/manuscript/${manuscript.id}/review-history'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">See review</button>
+                            <button onclick="event.stopPropagation(); window.location='/manuscripts/${manuscript.id}/review-history'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">See review</button>
+                            <button onclick="event.stopPropagation(); window.location='/resubmit/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Resubmit</button>
                         `);
                         container.appendChild(newManuscript);
                         break;
