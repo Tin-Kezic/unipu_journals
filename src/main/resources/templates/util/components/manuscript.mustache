@@ -4,6 +4,7 @@ class Manuscript extends HTMLElement {
   'id',
   'title',
   'description',
+  'corresponding-author',
   'registered-authors',
   'unregistered-authors',
   'submission-date',
@@ -31,6 +32,7 @@ class Manuscript extends HTMLElement {
     this._id = this.getAttribute('id');
     this._title = this.getAttribute('title');
     this._description = this.getAttribute('description');
+    this._correspondingAuthor = run(this.getAttribute('corresponding-author'), JSON.parse);
     this._registeredAuthors = run(this.getAttribute('registered-authors'), JSON.parse);
     this._unregisteredAuthors = run(this.getAttribute('unregistered-authors'), JSON.parse);
     this._submissionDate = this.getAttribute('submission-date');
@@ -51,6 +53,17 @@ class Manuscript extends HTMLElement {
           ${this._unregisteredAuthors?.length ? `,&nbsp${this._unregisteredAuthors?.map(author => {
             return `<button data-author='${JSON.stringify(this._isOverseeing ? author : { "Full name": author })}' onclick='openInfoDialog(this.dataset.author);'>${author.fullName ?? author}</button>`;
           })?.join(',&nbsp')}` : '' }
+        </div>
+        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+          Corresponding author:&nbsp${this._correspondingAuthor?.type === 'registered' ? `
+            <button onclick="window.location='/profile/${this._correspondingAuthor.id}';">${this._correspondingAuthor.fullName}</button>
+          ` : `
+            <button
+              data-author='${JSON.stringify(this._isOverseeing ? this._correspondingAuthor : { "Full name": this._correspondingAuthor })}'
+              onclick='openInfoDialog(this.dataset.author);'
+            >${this._correspondingAuthor?.fullName ?? this._correspondingAuthor}
+            </button>
+          `}
         </div>
         ${this._roles?.length || this._role ? `
           <p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">

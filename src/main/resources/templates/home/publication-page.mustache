@@ -130,6 +130,7 @@
                 }
                 newManuscript.setAttribute('title', manuscript.title);
                 newManuscript.setAttribute('description', manuscript.description);
+                newManuscript.setAttribute('corresponding-author', run(manuscript.correspondingAuthor, JSON.stringify));
                 newManuscript.setAttribute('registered-authors', run(manuscript.registeredAuthors, JSON.stringify));
                 newManuscript.setAttribute('unregistered-authors', run(manuscript.unregisteredAuthors, JSON.stringify));
                 newManuscript.setAttribute('submission-date', manuscript.submissionDate);
