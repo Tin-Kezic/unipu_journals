@@ -49,9 +49,9 @@ class AuthorizationService(
         eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
                 || it.isAdmin
     } ?: false
-    fun isSectionEditorOnSectionOrSuperior(publicationId: Int, sectionId: Int): Boolean = account?.let {
-        sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId)
-                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId)
+    fun isSectionEditorOnSectionOrSuperior(publicationId: Int?, sectionId: Int?): Boolean = account?.let {
+        sectionEditorOnSectionRepository.isSectionEditorOnSection(it.id, sectionId ?: return false)
+                || eicOnPublicationRepository.isEicOnPublication(it.id, publicationId ?: return false)
                 || it.isAdmin
     } ?: false
     fun isEicOnManuscript(manuscriptId: Int): Boolean = account?.id?.let { accountRoleOnManuscriptRepository.isRoleOnManuscript( ManuscriptRole.EIC, it, manuscriptId) } ?: false
