@@ -12,6 +12,7 @@
     --light-gray: #7e7667;
     --checkbox-gray: #c5c6d0;
     --beige: #cfc6b4;;
+    --grey: #49454F;
 }
 * {
     margin: 0;
@@ -29,7 +30,7 @@ dialog {
     font-size: 1rem;
     cursor: pointer;
     margin: 0 auto;
-    color: var(--gray);
+    color: var(--grey);
     position: absolute;
     right: 1.5rem;
     top: 50%;
@@ -105,7 +106,7 @@ dialog {
     top: -0.5rem;
     left: 0.75rem;
     font-size: 0.875rem;
-    color: var(--light-gray);
+    color: var(--light-grey);
     background-color: white;
     padding: 0 0.25rem;
 }
@@ -115,11 +116,11 @@ dialog {
     padding: 0.3rem 0.75rem 0.5rem;
     font-size: 1rem;
     background: white;
-    border: 1.2px solid var(--light-gray);
+    border: 1.2px solid var(--light-grey);
     border-radius: 0.3rem;
 }
 .text-field input::placeholder {
-    color: var(--light-gray);
+    color: var(--light-grey);
 }
 .error-msg {
     font-size: 0.75rem;
@@ -139,7 +140,7 @@ dialog {
     padding: 1rem 0.75rem 0.8rem;
     font-size: 1rem;
     background: white;
-    border: 1.3px solid var(--light-gray);
+    border: 1.3px solid var(--light-grey);
     cursor: pointer;
 }
 .remove-user-button:hover {
@@ -180,7 +181,7 @@ dialog {
     -webkit-appearance: none; /* for Safari */
     width: 1rem;
     height: 1rem;
-    border: 2px solid var(--checkbox-gray);
+    border: 2px solid var(--checkbox-grey);
     border-radius: 0.1rem;
     cursor: pointer;
     position: relative;
