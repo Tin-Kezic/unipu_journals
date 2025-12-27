@@ -4,6 +4,5 @@ enum class ManuscriptRole {
     EIC,
     EDITOR,
     REVIEWER,
-    CORRESPONDING_AUTHOR,
     AUTHOR
 }
