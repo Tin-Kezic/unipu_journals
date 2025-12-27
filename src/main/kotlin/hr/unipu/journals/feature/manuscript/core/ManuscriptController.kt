@@ -1,13 +1,10 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InviteRepository
-import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscript
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
-import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthor
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
@@ -23,10 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.time.format.DateTimeFormatter
-import kotlin.math.atan
 
 @RestController
-@RequestMapping("/api/publications/{publicationId}/sections/{sectionId}/manuscripts")
+@RequestMapping("/api/manuscripts")
 class ManuscriptController(
     private val manuscriptRepository: ManuscriptRepository,
     private val accountRepository: AccountRepository,
@@ -37,8 +33,8 @@ class ManuscriptController(
 ) {
     @GetMapping
     fun all(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
+        @RequestParam publicationId: Int?,
+        @RequestParam sectionId: Int?,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam role: Role?,
         @RequestParam category: String?,

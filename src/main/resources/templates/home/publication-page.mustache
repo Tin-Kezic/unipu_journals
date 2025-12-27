@@ -268,7 +268,7 @@
             const idValue = id.replace(/^.*-/, '');
             const type = id.replace(/-.*$/, '');
             type === 'publication' ? currentPublicationId = idValue : currentSectionId = idValue;
-            const url = `/api/publications/${currentPublicationId}/sections${type === 'section' ? `/${currentSectionId}/manuscripts` : ''}?${params()}`;
+            const url = `/api${type === 'publication' ? `/publications/${currentPublicationId}/sections` : '/manuscripts'}?${params()}&publicationId=${currentPublicationId}&sectionId=${currentSectionId}`;
             const response = await fetch(url, { method: 'GET' });
             if(!response.ok) { alert(await response.text()); return; }
             const items = await response.json();
@@ -379,7 +379,7 @@
             document.addEventListener(it.type, async (event) => {
                 const { id, title } = event.detail;
                 openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
-                    const response = await fetch(`/api/publications/${currentPublicationId}/sections/${currentSectionId}/manuscripts/${id}?newState=${it.newState}`, { method: 'PUT' });
+                    const response = await fetch(`/api/manuscripts/${id}?newState=${it.newState}`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
                     document.getElementById(id).remove();
                 });

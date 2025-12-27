@@ -31,7 +31,7 @@ interface InviteRepository: Repository<Invite, Int> {
         LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (category.name = :category OR :category IS NULL)
         AND publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
-        AND publication_section.id = :section_id
+        AND (publication_section.id = :section_id OR :section_id IS NULL)
         AND invite.email = :email
         AND (
             :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
@@ -82,7 +82,7 @@ interface InviteRepository: Repository<Invite, Int> {
         @Param("manuscript_state_filter") manuscriptStateFilter: ManuscriptStateFilter,
         @Param("role") role: Role?,
         @Param("account_id") accountId: Int,
-        @Param("section_id") sectionId: Int,
+        @Param("section_id") sectionId: Int?,
         @Param("category") category: String?,
         @Param("sorting") sorting: Sorting
     ): List<InvitedManuscript>
