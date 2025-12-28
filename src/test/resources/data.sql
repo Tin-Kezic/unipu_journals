@@ -127,8 +127,6 @@ INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
 (2, 14, 'EDITOR'),
 (1, 15, 'REVIEWER'),
 (2, 16, 'REVIEWER'),
-(1, 17, 'CORRESPONDING_AUTHOR'),
-(2, 18, 'CORRESPONDING_AUTHOR'),
 (1, 19, 'AUTHOR'),
 (2, 20, 'AUTHOR'),
 (1, 25, 'EIC'),

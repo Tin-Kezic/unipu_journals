@@ -87,7 +87,6 @@ CREATE TYPE manuscript_role AS ENUM (
     'EIC',
     'EDITOR',
     'REVIEWER',
-    'CORRESPONDING_AUTHOR',
     'AUTHOR'
 );
 CREATE TABLE account_role_on_manuscript (
