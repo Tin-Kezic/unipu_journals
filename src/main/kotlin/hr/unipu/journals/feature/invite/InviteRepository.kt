@@ -64,8 +64,6 @@ interface InviteRepository: Repository<Invite, Int> {
                     OR
                     :role = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
                     OR
-                    :role = 'CORRESPONDING_AUTHOR' AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
-                    OR
                     :role = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
                 )
             )

@@ -18,7 +18,6 @@ const val AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR = "@aut
 const val AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEicOnManuscript(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
-const val AUTHORIZATION_SERVICE_IS_CORRESPONDING_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR = "@authorizationService.isAuthorOnManuscriptOrAffiliatedSuperior(#manuscriptId)"
 const val AUTHORIZATION_SERVICE_IS_AUTHENTICATED = "isAuthenticated()"
 
@@ -61,10 +60,6 @@ class AuthorizationService(
     } ?: false
     fun isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {
         accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.REVIEWER, it, manuscriptId)
-                || isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
-    } ?: false
-    fun isCorrespondingAuthorOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {
-        accountRoleOnManuscriptRepository.isRoleOnManuscript(ManuscriptRole.CORRESPONDING_AUTHOR, it, manuscriptId)
                 || isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
     } ?: false
     fun isAuthorOnManuscriptOrAffiliatedSuperior(manuscriptId: Int): Boolean = account?.id?.let {

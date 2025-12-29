@@ -6,6 +6,5 @@ enum class Role {
     EIC_ON_MANUSCRIPT,
     EDITOR,
     REVIEWER,
-    CORRESPONDING_AUTHOR,
     AUTHOR
 }
