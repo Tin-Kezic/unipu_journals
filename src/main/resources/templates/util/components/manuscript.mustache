@@ -48,7 +48,7 @@ class Manuscript extends HTMLElement {
         <p class="container-text">${this._title}</p>
         <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
           ${this._registeredAuthors?.length ? this._registeredAuthors?.map(author => `
-            <button onclick="window.location='/profile/${author.id}';">${author.fullName}</button>
+            <button onclick="window.location='/profiles/${author.id}';">${author.fullName}</button>
           `)?.join(',&nbsp') : '' }
           ${this._unregisteredAuthors?.length ? `,&nbsp${this._unregisteredAuthors?.map(author => {
             return `<button data-author='${JSON.stringify(this._isOverseeing ? author : { "Full name": author })}' onclick='openInfoDialog(this.dataset.author);'>${author.fullName ?? author}</button>`;
@@ -56,7 +56,7 @@ class Manuscript extends HTMLElement {
         </div>
         <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
           Corresponding author:&nbsp${this._correspondingAuthor?.type === 'registered' ? `
-            <button onclick="window.location='/profile/${this._correspondingAuthor.id}';">${this._correspondingAuthor.fullName}</button>
+            <button onclick="window.location='/profiles/${this._correspondingAuthor.id}';">${this._correspondingAuthor.fullName}</button>
           ` : `
             <button
               data-author='${JSON.stringify(this._isOverseeing ? this._correspondingAuthor : { "Full name": this._correspondingAuthor })}'

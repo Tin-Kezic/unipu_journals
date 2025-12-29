@@ -14,19 +14,10 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         SELECT DISTINCT account.* FROM account_role_on_manuscript
         JOIN account ON account.id = account_role_on_manuscript.account_id
         JOIN manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE account_role_on_manuscript.account_role IN ('CORRESPONDING_AUTHOR', 'AUTHOR')
+        WHERE account_role_on_manuscript.account_role = 'AUTHOR'
         AND manuscript.id = :manuscript_id
     """)
     fun authors(@Param("manuscript_id") manuscriptId: Int): List<Account>
-
-    @Query("""
-        SELECT DISTINCT account.full_name FROM account_role_on_manuscript
-        JOIN account ON account.id = account_role_on_manuscript.account_id
-        JOIN manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE manuscript.id = :manuscript_id
-        AND account_role_on_manuscript.account_role = 'CORRESPONDING_AUTHOR'
-    """)
-    fun correspondingAuthor(@Param("manuscript_id") manuscriptId: Int): String
 
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript
