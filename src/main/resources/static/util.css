@@ -92,7 +92,7 @@ dialog {
     box-shadow: none;
     font-weight: 600;
 }
-// todo. refactor review-page to use radio inputs instead of active buttons
+/* todo. refactor review-page to use radio inputs instead of active buttons */
 .orange-button:hover, .orange-button:active {
     background-color: var(--orange);
     color: black;
