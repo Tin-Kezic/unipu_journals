@@ -18,8 +18,15 @@
         {{#author}}
         <button onclick="window.location='/logout'" class="m3-button" style="width: 100%;">Log out</button>
         <button onclick='openInfoDialog(`{{{author}}}`)'class="m3-button" style="width: 100%; background-color: var(--frost-blue);">View profile</button>
-        <button onclick="window.location='/logout'" class="m3-button" style="width: 100%; background-color: var(--dark-grey); color: white;">Edit profile</button>
+        <button id="edit-profile" class="m3-button" style="width: 100%; background-color: var(--dark-grey); color: white;">Edit profile</button>
         <button onclick="window.location='/logout'" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>
+        <script>
+            document.getElementById('edit-profile').addEventListener('click', () => openOptionsDialog('Edit profile', [
+                {name: 'Edit email', onClick: () => {}},
+                {name: 'Edit details', onClick: () => {}},
+                {name: 'Change password', onClick: () => {}}
+            ]));
+        </script>
         {{/author}}
     </aside>
     <main style="margin-left: 10%; width: 100%;">
@@ -179,6 +186,48 @@
                 -->
             </div>
         </section>
+        <script>
+            [
+                { type: 'manuscript-invite-accepted', operation: 'Accept', decision: true},
+                { type: 'manuscript-invite-declined', operation: 'Decline', decision: false},
+            ].forEach( it => {
+                document.addEventListener(it.type, async (event) => {
+                    const { id, title, role } = event.detail;
+                    openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
+                        const response = await fetch(`/api/invite?accept=${it.decision}&target=${encodeURIComponent(role.replace('EIC', 'EIC_ON_MANUSCRIPT'))}&targetId=${id.replace(/^.*-/, '')}`, { method: 'PUT' });
+                        if(!response.ok) { alert(await response.text()); return; }
+                        const currentElement = document.getElementById(id);
+                        const pending = document.getElementById(id.replace('invited', 'pending'));
+                        if(pending) {
+                            const roles = JSON.parse(pending.getAttribute('roles'));
+                            roles.push(role);
+                            pending.setAttribute('roles', JSON.stringify(roles));
+                        } else if(it.operation === 'Accept') {
+                            currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
+                            currentElement.setAttribute('roles', JSON.stringify([role]));
+                            currentElement.removeAttribute('role');
+                            document.getElementById('manuscripts-container-pending').prepend(currentElement);
+                            return;
+                        }
+                        currentElement.remove();
+                    });
+                });
+            });
+            [
+                { type: 'manuscript-republished', operation: 'Republish', newState: 'PUBLISHED'},
+                { type: 'manuscript-archived', operation: 'Archive', newState: 'ARCHIVED'},
+                { type: 'manuscript-hidden', operation: 'Hide', newState: 'HIDDEN'},
+            ].forEach( it => {
+                document.addEventListener(it.type, async (event) => {
+                    const { id, title } = event.detail;
+                    openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
+                        const response = await fetch(`/api/manuscripts/${id}?newState=${it.newState}`, { method: 'PUT' });
+                        if(!response.ok) { alert(await response.text()); return; }
+                        document.getElementById(id).remove();
+                    });
+                });
+            });
+        </script>
     </main>
 </div>
 </body>
