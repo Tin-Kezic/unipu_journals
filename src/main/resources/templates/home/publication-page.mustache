@@ -15,7 +15,6 @@
 {{>util/dialog/options}}
 {{>util/dialog/textarea}}
 {{>util/dialog/info}}
-
 <script>
     const searchParams = new URLSearchParams(window.location.search);
     let currentPublicationId = searchParams.get('publicationId');
@@ -43,7 +42,6 @@
         button.querySelector('input').click();
     }
 </script>
-
 <style>
     select {
         height: 2.7rem;
