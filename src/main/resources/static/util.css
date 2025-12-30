@@ -27,15 +27,23 @@ dialog {
     padding: 1.5rem;
     border: none; border-radius: 0.5rem;
 }
-.fa-solid.fa-magnifying-glass {
+.sidebar-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 15rem;
+    word-wrap: break-word;
+    height: auto;
+    padding: 0.7rem;
     font-size: 1rem;
+    background: white;
+    border: 1.3px solid var(--light-grey);
     cursor: pointer;
-    margin: 0 auto;
-    color: var(--grey);
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
+}
+.sidebar-button input:checked ~ svg, .sidebar-button:hover svg { fill: white; }
+.sidebar-button:has(input:checked), .sidebar-button:hover {
+    background: var(--primary);
+    color: white;
 }
 .m3-button {
     border: none;

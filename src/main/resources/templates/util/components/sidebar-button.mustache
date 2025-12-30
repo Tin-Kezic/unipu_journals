@@ -78,23 +78,3 @@ class SidebarButton extends HTMLElement {
 }
 customElements.define('sidebar-button', SidebarButton);
 </script>
-<style>
-  .sidebar-button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 15rem;
-      word-wrap: break-word;
-      height: auto;
-      padding: 0.7rem;
-      font-size: 1rem;
-      background: white;
-      border: 1.3px solid var(--light-grey);
-      cursor: pointer;
-  }
-  .sidebar-button input:checked ~ svg, .sidebar-button:hover svg { fill: white; }
-  .sidebar-button:has(input:checked), .sidebar-button:hover {
-      background: var(--primary);
-      color: white;
-  }
-</style>
