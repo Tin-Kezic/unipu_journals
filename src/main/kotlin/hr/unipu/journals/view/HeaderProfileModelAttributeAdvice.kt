@@ -26,16 +26,17 @@ import org.springframework.web.bind.annotation.ModelAttribute
     ReviewRoundInitializationPageController::class,
     SubmitPageController::class,
     TechnicalProcessingPageController::class,
+    SearchPageController::class
 ])
 class HeaderProfileModelAttributeAdvice(private val authorizationService: AuthorizationService) {
     @ModelAttribute
     fun user(model: Model) {
         val account = authorizationService.account
         if(account == null) {
-            model["is-logged-in"] = false
+            model["header-is-authenticated"] = false
             return
         }
-        model["is-logged-in"] = true
+        model["header-is-authenticated"] = true
         model["header-profile-id"] = account.id
         model["header-profile-full-name"] = account.fullName
         model["header-profile-title"] = account.title
