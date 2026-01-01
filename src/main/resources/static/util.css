@@ -45,6 +45,13 @@ dialog {
     background: var(--primary);
     color: white;
 }
+select, input[type="date"] {
+    height: 2.7rem;
+    font-size: 1rem;
+    background: inherit;
+    border: 1.2px solid var(--light-grey);
+    border-radius: 0.3rem;
+}
 .m3-button {
     border: none;
     padding: 0.8rem 8rem;
