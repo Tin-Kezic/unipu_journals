@@ -104,6 +104,8 @@ interface SectionRepository: Repository<Section, Int> {
                 )
             )
         )
+        AND (:from IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) >= TO_DATE(:from, 'YYYY-MM-DD'))
+        AND (:to IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) <= TO_DATE(:to, 'YYYY-MM-DD'))
         GROUP BY publication_section.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN publication_section.title END,
@@ -117,7 +119,9 @@ interface SectionRepository: Repository<Section, Int> {
         @Param("role") role: Role? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
-        @Param("sorting") sorting: Sorting? = null
+        @Param("sorting") sorting: Sorting? = null,
+        @Param("from") from: String? = null,
+        @Param("to") to: String? = null
     ): List<Section>
 
     @Modifying

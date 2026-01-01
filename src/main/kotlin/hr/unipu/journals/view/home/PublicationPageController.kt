@@ -30,6 +30,8 @@ class PublicationPageController(
         @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
+        @RequestParam from: String?,
+        @RequestParam to: String?
     ): String {
         if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
         if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
@@ -42,7 +44,9 @@ class PublicationPageController(
             role = role,
             accountId = authorizationService.account?.id,
             category = category,
-            sorting = sorting
+            sorting = sorting,
+            from = from,
+            to = to
         ).map { publication -> buildMap {
             put("id", publication.id)
             put("title", publication.title)

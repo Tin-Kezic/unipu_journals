@@ -39,6 +39,8 @@ class ManuscriptController(
         @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
+        @RequestParam from: String?,
+        @RequestParam to: String?,
         @RequestParam accountId: Int?
     ): List<Map<String, Any?>> {
         require(
@@ -53,7 +55,9 @@ class ManuscriptController(
             role = role,
             sectionId = sectionId,
             category = category,
-            sorting = sorting
+            sorting = sorting,
+            from = from,
+            to = to
         ).map { manuscript -> Triple(
             manuscript,
             accountRoleOnManuscriptRepository.authors(manuscript.id),

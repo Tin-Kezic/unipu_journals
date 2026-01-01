@@ -37,7 +37,9 @@ class SectionController(
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam role: Role?,
         @RequestParam category: String?,
-        @RequestParam sorting: Sorting?
+        @RequestParam sorting: Sorting?,
+        @RequestParam from: String?,
+        @RequestParam to: String?
     ): List<Map<String, Any>> {
         val isAdmin = authorizationService.isAdmin
         return sectionRepository.all(
@@ -46,7 +48,9 @@ class SectionController(
             role = role,
             accountId = authorizationService.account?.id,
             category = category,
-            sorting = sorting
+            sorting = sorting,
+            from = from,
+            to = to
         ).map { section -> buildMap {
             put("id", section.id)
             put("title", section.title)

@@ -78,6 +78,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                 )
             )
         )
+        AND (:from IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) >= TO_DATE(:from, 'YYYY-MM-DD'))
+        AND (:to IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) <= TO_DATE(:to, 'YYYY-MM-DD'))
         GROUP BY manuscript.id
         ORDER BY
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
@@ -91,7 +93,9 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("role") role: Role? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
-        @Param("sorting") sorting: Sorting
+        @Param("sorting") sorting: Sorting,
+        @Param("from") from: String? = null,
+        @Param("to") to: String? = null
     ): List<AccountRolesAndManuscript>
 
     @Modifying
