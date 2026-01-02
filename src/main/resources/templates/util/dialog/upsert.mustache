@@ -43,7 +43,7 @@
         const reloadResponse = await fetch(upsertDialogReloadUrl, { method: 'GET' });
         if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
         const items = await reloadResponse.json();
-        renderItems(items, upsertDialogContainerId);
+        renderSidebarButtons(items, upsertDialogContainerId)
         upsertDialogInput.value = '';
         if(!createMoreCheckbox.checked || createMoreLabel.style.display === 'none') upsertDialog.close();
     });

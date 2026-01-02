@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; overflow: hidden;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Page</title>
+    <link href="/util.css" rel="stylesheet"/>
+</head>
+<body style="height: 100%; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+{{>util/header}}
+{{>util/dialog/boolean}}
+{{>util/components/manuscript/element}}
+<div style="display: flex; flex-wrap: wrap; margin: 2rem 1rem 1rem 1rem; gap: 0.5rem;">
+    {{>util/components/select/manuscript-state}}
+    {{>util/components/select/role}}
+    {{>util/components/select/category}}
+    {{>util/components/select/sorting}}
+    <input aria-label="from" type="date" name="from">
+    <input aria-label="to" type="date" name="to">
+    <script>
+        const fromInput = document.querySelector('input[name="from"]');
+        const toInput =  document.querySelector('input[name="to"]');
+        const searchParams = new URLSearchParams(window.location.search);
+
+        manuscriptStateSelect.value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
+        roleSelect.value = searchParams.get('role') || '';
+        categorySelect.value = searchParams.get('category') || '';
+        sortingSelect.value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
+        fromInput.value = searchParams.get('from') || '';
+        toInput.value = searchParams.get('to') || '';
+    </script>
+</div>
+<style>
+    main { width: 50%; }
+    @media (max-width: 1300px) { main { width: 90%; } }
+</style>
+<main style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+    <div class="text-field" style="margin-bottom: 0rem;">
+        <label for="search-input">Search</label>
+        <input id="search-input" name="upsert-dialog-input" type="text">
+    </div>
+    <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
+        <!-- on manuscriptStateSelect.includes('AWAITING'):
+            <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
+            <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+            <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
+            <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        -->
+    </div>
+    <script>
+        const searchInput = document.getElementById('search-input');
+        searchInput.value = searchParams.get('query') || '';
+        const params = () => new URLSearchParams({
+            manuscriptStateFilter: manuscriptStateSelect.value,
+            role: roleSelect.value,
+            ...(categorySelect.value && { category: categorySelect.value }),
+            sorting: sortingSelect.value,
+            ...(fromInput.value && { from: fromInput.value }),
+            ...(toInput.value && { to: toInput.value }),
+            ...(searchInput.value && { query: searchInput.value })
+        });
+        async function search() {
+            const response = await fetch(`/api/manuscripts?${params()}`, { method: 'GET' });
+            if(!response.ok) { alert(await response.text()); return; }
+            renderManuscripts(await response.json(), 'manuscripts-container');
+            history.replaceState(null, '', `${window.location.pathname}?${params()}`);
+        }
+        [searchInput, fromInput, toInput].forEach(input => input.addEventListener('input', search));
+        [manuscriptStateSelect, roleSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', search));
+        search();
+    </script>
+</main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<script>
+    function scrollSidebarToElement({ sidebarId, elementId }) {
+        const sidebar = document.getElementById(sidebarId);
+        const button = document.getElementById(elementId);
+        if(!button) {
+            sidebar?.firstElementChild?.querySelector('input').click();
+            return;
+        }
+        const sidebarRect = sidebar.getBoundingClientRect();
+        const buttonRect = button.getBoundingClientRect();
+        const currentScroll = sidebar.scrollTop;
+        const offsetTop = buttonRect.top - sidebarRect.top + currentScroll;
+        const targetScroll = offsetTop - (sidebar.clientHeight / 2) + (buttonRect.height / 2);
+        sidebar.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        button.querySelector('input').click();
+    }
+</script>

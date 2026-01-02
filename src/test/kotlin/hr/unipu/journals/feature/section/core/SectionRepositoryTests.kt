@@ -18,7 +18,7 @@ class SectionRepositoryTests {
     @Test fun `retrieve section title by section id`() {
         assertEquals(
             "Machine Learning",
-            sectionRepository.byId(1).title
+            sectionRepository.byId(1)?.title
         )
     }
     @Test fun `retrieve section titles by publication title`() {

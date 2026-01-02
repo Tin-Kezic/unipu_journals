@@ -1,0 +1,29 @@
+<script>
+function renderSidebarButtons(sidebarButtons, containerId) {
+    const container = document.getElementById(containerId);
+    const type = containerId.replace(/s-.*/, '');
+    container.innerHTML = '';
+    if(sidebarButtons.length === 0) {
+        switch(type) {
+            case 'publication':
+                document.getElementById('sections-sidebar').innerHTML = '';
+            case 'section':
+                document.getElementById('description').innerHTML = '';
+                document.getElementById('manuscripts-container').innerHTML = '';
+        }
+    }
+    sidebarButtons.forEach(sidebarButton => {
+        const newElement = document.createElement('sidebar-button');
+        newElement.setAttribute('id', `${type}-${sidebarButton.id}`);
+        if(type === 'section') {
+            newElement.setAttribute('font-size', 'small');
+            newElement.setAttribute('description', sidebarButton.description);
+        }
+        newElement.setAttribute('title', sidebarButton.title);
+        newElement.setAttribute('role', sidebarButton.role);
+        newElement.setAttribute('is-hidden', sidebarButton.isHidden);
+        container.appendChild(newElement);
+    });
+    scrollSidebarToElement({ sidebarId: containerId, elementId: `${containerId.replace(/s-.*$/, '')}-${(new URLSearchParams(window.location.search).get(containerId.replace(/s-.*/, '') + 'Id'))}`});
+}
+</script>

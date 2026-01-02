@@ -49,8 +49,8 @@ class PublicationRepositoryTests {
             publicationRepository.all(ManuscriptStateFilter.AWAITING_EDITOR_REVIEW, Role.EDITOR, 14)
         )
     }
-    @Test fun `retrieve publication title by publication id`() {
-        assertEquals("Journal of AI Research", publicationRepository.title(1))
+    @Test fun `retrieve publication by publication id`() {
+        assertEquals("Journal of AI Research", publicationRepository.byId(1)?.title)
     }
     @Test fun `retrieve all published publications`() {
         assertEquals(

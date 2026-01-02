@@ -3,8 +3,10 @@ package hr.unipu.journals.feature.manuscript.core
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
+import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthor
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
@@ -24,6 +26,8 @@ import java.time.format.DateTimeFormatter
 @RestController
 @RequestMapping("/api/manuscripts")
 class ManuscriptController(
+    private val publicationRepository: PublicationRepository,
+    private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository,
     private val accountRepository: AccountRepository,
     private val inviteRepository: InviteRepository,
@@ -41,7 +45,8 @@ class ManuscriptController(
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
         @RequestParam from: String?,
         @RequestParam to: String?,
-        @RequestParam accountId: Int?
+        @RequestParam accountId: Int?,
+        @RequestParam query: String?
     ): List<Map<String, Any?>> {
         require(
             manuscriptStateFilter in listOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
@@ -57,7 +62,8 @@ class ManuscriptController(
             category = category,
             sorting = sorting,
             from = from,
-            to = to
+            to = to,
+            query = query
         ).map { manuscript -> Triple(
             manuscript,
             accountRoleOnManuscriptRepository.authors(manuscript.id),
@@ -218,18 +224,18 @@ class ManuscriptController(
     }
     @PutMapping("/{manuscriptId}")
     fun updateState(
-        @PathVariable publicationId: Int,
-        @PathVariable sectionId: Int,
         @PathVariable manuscriptId: Int,
         @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript $manuscriptId")
+        val section = sectionRepository.byId(manuscript.sectionId)!!
+        val publication = publicationRepository.byId(section.publicationId)!!
         val isAdmin = authorizationService.isAdmin
-        val isSectionEditorOnSectionOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+        val isSectionEditorOnSectionOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
         val isEditorOnManuscriptOrAffiliatedSuperior = authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
         when(newState) {
             ManuscriptState.ARCHIVED -> {
-                if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section $sectionId")
+                if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section ${section.id}")
                 if(manuscript.state != ManuscriptState.PUBLISHED) return ResponseEntity.badRequest().body("cannot archive manuscript that is not published")
             }
             ManuscriptState.HIDDEN -> {
@@ -250,7 +256,7 @@ class ManuscriptController(
             }
             ManuscriptState.PUBLISHED -> when(manuscript.state) {
                 ManuscriptState.HIDDEN -> if(isAdmin.not()) return ResponseEntity.status(403).body("unauthorized to unhide manuscripts")
-                ManuscriptState.ARCHIVED -> if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to unarchive manuscripts in section $sectionId")
+                ManuscriptState.ARCHIVED -> if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to unarchive manuscripts in section ${section.id}")
                 ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                     if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
                 }

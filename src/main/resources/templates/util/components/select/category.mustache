@@ -1,0 +1,5 @@
+<select aria-label="category" name="category">
+    <option value="">All categories</option>
+    {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
+</select>
+<script>const categorySelect = document.querySelector('select[name="category"]');</script>

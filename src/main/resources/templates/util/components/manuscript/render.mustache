@@ -1,0 +1,93 @@
+<script>
+function renderManuscripts(manuscripts, containerId) {
+    const container = document.getElementById(containerId);
+    const manuscriptsContainerInvited = () => document.getElementById('manuscripts-container-invited');
+    const manuscriptsContainerPending = () => document.getElementById('manuscripts-container-pending');
+    if(manuscriptStateSelect.value.includes('AWAITING')) {
+        container.innerHTML = `
+            <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
+            <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+            <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
+            <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        `;
+        if(manuscriptsContainerInvited() && manuscriptsContainerPending()) {
+            manuscriptsContainerInvited().innerHTML = '';
+            manuscriptsContainerPending().innerHTML = '';
+        }
+    } else container.innerHTML = '';
+    manuscripts.forEach(manuscript => {
+        const run = (x, f) => x ? f(x) : null;
+        const newManuscript = document.createElement('manuscript-element');
+        switch(manuscript.type) {
+            case 'invited': newManuscript.setAttribute('id', `invited-${manuscript.id}`); break;
+            case 'pending': newManuscript.setAttribute('id', `pending-${manuscript.id}`); break;
+            default: newManuscript.setAttribute('id', `manuscript-${manuscript.id}`);
+        }
+        newManuscript.setAttribute('title', manuscript.title);
+        newManuscript.setAttribute('description', manuscript.description);
+        newManuscript.setAttribute('corresponding-author', run(manuscript.correspondingAuthor, JSON.stringify));
+        newManuscript.setAttribute('registered-authors', run(manuscript.registeredAuthors, JSON.stringify));
+        newManuscript.setAttribute('unregistered-authors', run(manuscript.unregisteredAuthors, JSON.stringify));
+        newManuscript.setAttribute('submission-date', manuscript.submissionDate);
+        newManuscript.setAttribute('publication-date', manuscript.publicationDate);
+        newManuscript.setAttribute('download-url', manuscript.downloadUrl);
+        newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
+        newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
+        newManuscript.setAttribute('state', manuscript.state);
+        switch(manuscriptStateSelect.value) {
+            case 'ALL_AWAITING_REVIEW':
+            case 'AWAITING_EIC_REVIEW':
+            case 'AWAITING_EDITOR_REVIEW':
+            case 'AWAITING_REVIEWER_REVIEW':
+                if(manuscript.type === 'invited') {
+                    newManuscript.setAttribute('role', manuscript.role.replace('EIC_ON_MANUSCRIPT', 'EIC'));
+                    newManuscript.setAttribute('options', /*html*/`
+                        <button data-type="decline" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Decline</button>
+                        <button data-type="accept" onclick="event.stopPropagation()" class="m3-button primary-button" style="background-color: var(--green); color: white; width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Accept</button>
+                    `);
+                    manuscriptsContainerInvited().appendChild(newManuscript);
+                } else { // pending
+                    const nonAuthorRoles = manuscript.roles.filter(role => !role.includes('AUTHOR'));
+                    if(nonAuthorRoles.length > 0) newManuscript.setAttribute('options', /*html*/`
+                        <button onclick="event.stopPropagation(); window.location='/review/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
+                    `);
+                    manuscriptsContainerPending().appendChild(newManuscript);
+                }
+                break;
+            case 'MINOR_MAJOR':
+                newManuscript.setAttribute('options', /*html*/`
+                    <button onclick="event.stopPropagation(); window.location='/manuscripts/${manuscript.id}/review-history'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">See review</button>
+                    <button onclick="event.stopPropagation(); window.location='/resubmit/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Resubmit</button>
+                `);
+                container.appendChild(newManuscript);
+                break;
+            case 'PUBLISHED':
+                newManuscript.setAttribute('options', /*html*/`
+                    ${manuscript.isOverseeing ? /*html*/`
+                        <button data-type="archive" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Archive</button>
+                    ` : ''}
+                    {{#isAdmin}}<button data-type="hide" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>{{/isAdmin}}
+                `);
+                container.appendChild(newManuscript);
+                break;
+            case 'ARCHIVED':
+                newManuscript.setAttribute('options', /*html*/`
+                    ${manuscript.isOverseeing ? /*html*/`
+                        <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
+                    ` : ''}
+                    {{#isAdmin}}<button data-type="hide" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>{{/isAdmin}}
+                `);
+                container.appendChild(newManuscript);
+                break;
+            case 'HIDDEN':
+                newManuscript.setAttribute('options', /*html*/`
+                    ${manuscript.isOverseeing && manuscript.state === 'HIDDEN' ? /*html*/`
+                        <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
+                    ` : ''}
+                `);
+            case 'REJECTED':
+                container.appendChild(newManuscript);
+        }
+    });
+}
+</script>

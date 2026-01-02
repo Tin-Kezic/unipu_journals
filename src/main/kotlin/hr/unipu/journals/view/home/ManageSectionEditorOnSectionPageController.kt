@@ -22,7 +22,7 @@ class ManageSectionEditorOnSectionPageController(
         @PathVariable sectionId: Int,
         model: Model
     ): String {
-        model["currentSection"] = sectionRepository.byId(sectionId).title
+        model["currentSection"] = sectionRepository.byId(sectionId)?.title
         model["sectionEditorEmails"] = sectionEditorOnSectionRepository.sectionEditorEmailsBySectionId(sectionId) + inviteRepository.emailsByTarget(InvitationTarget.SECTION_EDITOR, sectionId)
         return "home/manage/section-editor-on-section-page"
     }

@@ -1,0 +1,14 @@
+<select aria-label="manuscript state" name="manuscript-state">
+    <option value="PUBLISHED">Published manuscripts</option>
+    {{#isAuthenticated}}
+    <option value="ALL_AWAITING_REVIEW">All awaiting review</option>
+    <option value="AWAITING_EIC_REVIEW">Awaiting EiC review</option>
+    <option value="AWAITING_EDITOR_REVIEW">Awaiting Editor review</option>
+    <option value="AWAITING_REVIEWER_REVIEW">Awaiting reviewer review</option>
+    <option value="MINOR_MAJOR">Minor/Major</option>
+    <option value="REJECTED">Rejected</option>
+    {{/isAuthenticated}}
+    <option value="ARCHIVED">Archived</option>
+    {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
+</select>
+<script>const manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');</script>

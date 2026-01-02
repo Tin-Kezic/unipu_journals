@@ -23,6 +23,7 @@ class ProfilePageController(
     fun page(@PathVariable accountId: Int, model: Model): String {
         val account = authorizationService.account
         model["isAccountOwnerOrAdmin"] = authorizationService.isAccountOwner(accountId) || account?.isAdmin ?: false
+        model["isAdmin"] = authorizationService.isAdmin
         model["categories"] = categoryRepository.all()
         accountRepository.byId(accountId)?.let { profile ->
             model["fullName"] = profile.fullName

@@ -11,13 +11,13 @@
 {{>util/dialog/info}}
 {{>util/dialog/boolean}}
 {{>util/dialog/options}}
-{{>util/components/manuscript}}
+{{>util/components/manuscript/element}}
 <div style="width: 100%; height: 100%; display: flex; flex-direction: row;">
     <aside style="width: 25vw; height: 100%; justify-content: center; display: flex; flex-direction: column; align-items: center; gap: 2rem; padding: 2rem;">
         <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
         {{#author}}
         <button onclick="window.location='/logout'" class="m3-button" style="width: 100%;">Log out</button>
-        <button onclick='openInfoDialog(`{{{author}}}`)'class="m3-button" style="width: 100%; background-color: var(--frost-blue);">View profile</button>
+        <button onclick='openInfoDialog(`{{{author}}}`)' class="m3-button" style="width: 100%; background-color: var(--frost-blue);">View profile</button>
         <button id="edit-profile" class="m3-button" style="width: 100%; background-color: var(--dark-grey); color: white;">Edit profile</button>
         <button onclick="window.location='/logout'" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>
         <script>
@@ -29,17 +29,11 @@
         </script>
         {{/author}}
     </aside>
-    <main style="margin-left: 10%; width: 100%;">
-    <style>
-    </style>
-    <script>
-        const searchParams = new URLSearchParams(window.location.search);
-        function updateUrl() { history.replaceState(null, '', `${window.location.pathname}?${params()}`)}
-    </script>
-        <div style="display: flex; flex-wrap: wrap; margin: 2rem 1rem 1rem 1rem; gap: 0.5rem;">
+    <main style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin-left: 10%; width: 100%;">
+        <div style="display: flex; flex-wrap: wrap; margin: 2rem 1rem 1rem 0rem; gap: 0.5rem;">
+
             <select aria-label="manuscript state" name="manuscript-state">
                 <option value="PUBLISHED">Published manuscripts</option>
-                <option value="ARCHIVED">Archived</option>
                 {{#isAccountOwnerOrAdmin}}
                 <option value="ALL_AWAITING_REVIEW">All awaiting review</option>
                 <option value="AWAITING_EIC_REVIEW">Awaiting EiC review</option>
@@ -47,199 +41,47 @@
                 <option value="AWAITING_REVIEWER_REVIEW">Awaiting reviewer review</option>
                 <option value="MINOR_MAJOR">Minor/Major</option>
                 <option value="REJECTED">Rejected</option>
-                <option value="HIDDEN">Hidden</option>
                 {{/isAccountOwnerOrAdmin}}
+                <option value="ARCHIVED">Archived</option>
+                {{#isAdmin}}<option value="HIDDEN">Hidden</option>{{/isAdmin}}
             </select>
-            <select aria-label="category" name="category">
-                <option value="">All categories</option>
-                {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
-            </select>
-            <select aria-label="sorting" name="sorting">
-                <option value="ALPHABETICAL_A_Z">Alphabetical (A-Z)</option>
-                <option value="ALPHABETICAL_Z_A">Alphabetical (Z-A)</option>
-                <option value="NEWEST">Newest publications</option>
-                <option value="OLDEST">Oldest publications</option>
-            </select>
+            <script>const manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');</script>
+            {{>util/components/select/category}}
+            {{>util/components/select/sorting}}
             <script>
-                document.querySelector('select[name="manuscript-state"]').value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
-                document.querySelector('select[name="category"]').value = searchParams.get('category') || '';
-                document.querySelector('select[name="sorting"]').value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
-            </script>
-            <script>
-                publicationTypeSelect = document.querySelector('select[name="publication-type"]');
-                roleSelect = document.querySelector('select[name="role"]');
-                manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');
-                categorySelect = document.querySelector('select[name="category"]');
-                sortingSelect = document.querySelector('select[name="sorting"]');
+                const searchParams = new URLSearchParams(window.location.search);
+                manuscriptStateSelect.value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
+                categorySelect.value = searchParams.get('category') || '';
+                sortingSelect.value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
+
                 const params = () => new URLSearchParams({
                     manuscriptStateFilter: manuscriptStateSelect.value,
                     ...(categorySelect.value && { category: categorySelect.value }),
                     sorting: sortingSelect.value,
                 });
-                [manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', async () => renderManuscripts()));
-                async function renderManuscripts() {
+                async function loadManuscripts() {
                     const response = await fetch(`/api/manuscripts?${params()}&role=AUTHOR&accountId=${window.location.pathname.replace('/profiles/', '')}`, { method: 'GET' });
                     if(!response.ok) { alert(await response.text()); return; }
-                    const manuscripts = await response.json();
-                    const container = document.getElementById('manuscripts-container');
-                    const manuscriptsContainerInvited = () => document.getElementById('manuscripts-container-invited');
-                    const manuscriptsContainerPending = () => document.getElementById('manuscripts-container-pending');
-                    if(manuscriptStateSelect.value.includes('AWAITING')) {
-                        container.innerHTML = `
-                            <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
-                            <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
-                            <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
-                            <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
-                        `;
-                        if(manuscriptsContainerInvited() && manuscriptsContainerPending()) {
-                            manuscriptsContainerInvited().innerHTML = '';
-                            manuscriptsContainerPending().innerHTML = '';
-                        }
-                    } else container.innerHTML = '';
-                    manuscripts.forEach(manuscript => {
-                        const run = (x, f) => x ? f(x) : null;
-                        const newManuscript = document.createElement('manuscript-element');
-                        switch(manuscript.type) {
-                            case 'invited': newManuscript.setAttribute('id', `invited-${manuscript.id}`); break;
-                            case 'pending': newManuscript.setAttribute('id', `pending-${manuscript.id}`); break;
-                            default: newManuscript.setAttribute('id', `manuscript-${manuscript.id}`);
-                        }
-                        newManuscript.setAttribute('title', manuscript.title);
-                        newManuscript.setAttribute('description', manuscript.description);
-                        newManuscript.setAttribute('corresponding-author', run(manuscript.correspondingAuthor, JSON.stringify));
-                        newManuscript.setAttribute('registered-authors', run(manuscript.registeredAuthors, JSON.stringify));
-                        newManuscript.setAttribute('unregistered-authors', run(manuscript.unregisteredAuthors, JSON.stringify));
-                        newManuscript.setAttribute('submission-date', manuscript.submissionDate);
-                        newManuscript.setAttribute('publication-date', manuscript.publicationDate);
-                        newManuscript.setAttribute('download-url', manuscript.downloadUrl);
-                        newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
-                        newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
-                        newManuscript.setAttribute('state', manuscript.state);
-                        switch(manuscriptStateSelect.value) {
-                            case 'ALL_AWAITING_REVIEW':
-                            case 'AWAITING_EIC_REVIEW':
-                            case 'AWAITING_EDITOR_REVIEW':
-                            case 'AWAITING_REVIEWER_REVIEW':
-                                if(manuscript.type === 'invited') {
-                                    newManuscript.setAttribute('role', manuscript.role.replace('EIC_ON_MANUSCRIPT', 'EIC'));
-                                    newManuscript.setAttribute('options', /*html*/`
-                                        <button data-type="decline" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Decline</button>
-                                        <button data-type="accept" onclick="event.stopPropagation()" class="m3-button primary-button" style="background-color: var(--green); color: white; width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Accept</button>
-                                    `);
-                                    manuscriptsContainerInvited().appendChild(newManuscript);
-                                } else { // pending
-                                    const nonAuthorRoles = manuscript.roles.filter(role => !role.includes('AUTHOR'));
-                                    if(nonAuthorRoles.length > 0) newManuscript.setAttribute('options', /*html*/`
-                                        <button onclick="event.stopPropagation(); window.location='/review/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
-                                    `);
-                                    manuscriptsContainerPending().appendChild(newManuscript);
-                                }
-                                break;
-                            case 'MINOR_MAJOR':
-                                newManuscript.setAttribute('options', /*html*/`
-                                    <button onclick="event.stopPropagation(); window.location='/manuscripts/${manuscript.id}/review-history'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">See review</button>
-                                    <button onclick="event.stopPropagation(); window.location='/resubmit/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Resubmit</button>
-                                `);
-                                container.appendChild(newManuscript);
-                                break;
-                            case 'PUBLISHED':
-                                newManuscript.setAttribute('options', /*html*/`
-                                    ${manuscript.isOverseeing ? /*html*/`
-                                        <button data-type="archive" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Archive</button>
-                                    ` : ''}
-                                    {{#isAdmin}}<button data-type="hide" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>{{/isAdmin}}
-                                `);
-                                console.log(newManuscript)
-                                container.appendChild(newManuscript);
-                                break;
-                            case 'ARCHIVED':
-                                newManuscript.setAttribute('options', /*html*/`
-                                    ${manuscript.isOverseeing ? /*html*/`
-                                        <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
-                                    ` : ''}
-                                    {{#isAdmin}}<button data-type="hide" onclick="event.stopPropagation()" class="m3-button red-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Hide</button>{{/isAdmin}}
-                                `);
-                                container.appendChild(newManuscript);
-                                break;
-                            case 'HIDDEN':
-                                newManuscript.setAttribute('options', /*html*/`
-                                    ${manuscript.isOverseeing && manuscript.state === 'HIDDEN' ? /*html*/`
-                                        <button data-type="republish" onclick="event.stopPropagation()" class="m3-button primary-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Republish</button>
-                                    ` : ''}
-                                `);
-                            case 'REJECTED':
-                                container.appendChild(newManuscript);
-                        }
-                    });
-                    updateUrl();
+                    renderManuscripts(await response.json(), 'manuscripts-container');
+                    history.replaceState(null, '', `${window.location.pathname}?${params()}`);
                 }
-                renderManuscripts();
+                [manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', loadManuscripts));
+                loadManuscripts();
             </script>
         </div>
-        <section style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 1rem; margin: 0 1.5rem 1rem 1.5rem; min-width: 0; overflow: hidden;">
-            <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
-                <!-- on manuscriptStateSelect.includes('AWAITING'):
-                    <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
-                    <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
-                    <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
-                    <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
-                -->
-            </div>
-        </section>
-        <script>
-            [
-                { type: 'manuscript-invite-accepted', operation: 'Accept', decision: true},
-                { type: 'manuscript-invite-declined', operation: 'Decline', decision: false},
-            ].forEach( it => {
-                document.addEventListener(it.type, async (event) => {
-                    const { id, title, role } = event.detail;
-                    openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
-                        const response = await fetch(`/api/invite?accept=${it.decision}&target=${encodeURIComponent(role.replace('EIC', 'EIC_ON_MANUSCRIPT'))}&targetId=${id.replace(/^.*-/, '')}`, { method: 'PUT' });
-                        if(!response.ok) { alert(await response.text()); return; }
-                        const currentElement = document.getElementById(id);
-                        const pending = document.getElementById(id.replace('invited', 'pending'));
-                        if(pending) {
-                            const roles = JSON.parse(pending.getAttribute('roles'));
-                            roles.push(role);
-                            pending.setAttribute('roles', JSON.stringify(roles));
-                        } else if(it.operation === 'Accept') {
-                            currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
-                            currentElement.setAttribute('roles', JSON.stringify([role]));
-                            currentElement.removeAttribute('role');
-                            document.getElementById('manuscripts-container-pending').prepend(currentElement);
-                            return;
-                        }
-                        currentElement.remove();
-                    });
-                });
-            });
-            [
-                { type: 'manuscript-republished', operation: 'Republish', newState: 'PUBLISHED'},
-                { type: 'manuscript-archived', operation: 'Archive', newState: 'ARCHIVED'},
-                { type: 'manuscript-hidden', operation: 'Hide', newState: 'HIDDEN'},
-            ].forEach( it => {
-                document.addEventListener(it.type, async (event) => {
-                    const { id, title } = event.detail;
-                    openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
-                        const response = await fetch(`/api/manuscripts/${id}?newState=${it.newState}`, { method: 'PUT' });
-                        if(!response.ok) { alert(await response.text()); return; }
-                        document.getElementById(id).remove();
-                    });
-                });
-            });
-        </script>
+        <div id="manuscripts-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-right: 1rem; overflow-y: auto; overflow-x: hidden; height: 100%; padding-bottom: 4rem;">
+            <!-- on manuscriptStateSelect.includes('AWAITING'):
+                <p style="font-size: 1.5rem; font-weight: 400;">Invited</p>
+                <div id="manuscripts-container-invited" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+                <p style="font-size: 1.5rem; font-weight: 400;">Pending</p>
+                <div id="manuscripts-container-pending" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+            -->
+        </div>
     </main>
 </div>
 </body>
 </html>
 <style>
-    select {
-        height: 2.7rem;
-        font-size: 1rem;
-        background: inherit;
-        border: 1.2px solid var(--light-grey);
-        border-radius: 0.3rem;
-    }
     .manuscript-container:hover {
         box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
     }

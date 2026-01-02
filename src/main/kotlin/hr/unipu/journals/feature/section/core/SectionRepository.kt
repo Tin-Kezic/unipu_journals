@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param
 
 interface SectionRepository: Repository<Section, Int> {
     @Query("SELECT * from publication_section WHERE id = :id")
-    fun byId(@Param("id") sectionId: Int): Section
+    fun byId(@Param("id") sectionId: Int): Section?
 
     @Query("""
         SELECT DISTINCT publication_section.title FROM publication_section

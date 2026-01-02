@@ -82,6 +82,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         AND (:to IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) <= TO_DATE(:to, 'YYYY-MM-DD'))
         GROUP BY manuscript.id
         ORDER BY
+            CASE WHEN :query IS NOT NULL THEN similarity(manuscript.title, :query) END DESC,
             CASE WHEN :sorting = 'ALPHABETICAL_A_Z' THEN manuscript.title END,
             CASE WHEN :sorting = 'ALPHABETICAL_Z_A' THEN manuscript.title END DESC,
             CASE WHEN :sorting = 'NEWEST' THEN COALESCE(MAX(manuscript.publication_date), MAX(manuscript.submission_date)) END DESC,
@@ -95,7 +96,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("category") category: String? = null,
         @Param("sorting") sorting: Sorting,
         @Param("from") from: String? = null,
-        @Param("to") to: String? = null
+        @Param("to") to: String? = null,
+        @Param("query") query: String? = null
     ): List<AccountRolesAndManuscript>
 
     @Modifying

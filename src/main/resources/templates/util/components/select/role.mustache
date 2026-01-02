@@ -1,0 +1,11 @@
+<select aria-label="role" name="role" {{^isAuthenticated}}hidden{{/isAuthenticated}}>
+    <option value="">Regardless of role</option>
+    <option value="EIC_ON_PUBLICATION">EiC on publication</option>
+    <option value="SECTION_EDITOR">Section editor</option>
+    <option value="EIC_ON_MANUSCRIPT">EiC on manuscript</option>
+    <option value="EDITOR">Editor on manuscript</option>
+    <option value="REVIEWER">Reviewer</option>
+    <option value="CORRESPONDING_AUTHOR">Corresponding Author</option>
+    <option value="AUTHOR">Author</option>
+</select>
+<script>const roleSelect = document.querySelector('select[name="role"]');</script>

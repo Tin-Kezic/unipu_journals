@@ -28,7 +28,9 @@ class PublicationController(
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter,
         @RequestParam role: Role?,
         @RequestParam category: String?,
-        @RequestParam sorting: Sorting?
+        @RequestParam sorting: Sorting?,
+        @RequestParam from: String?,
+        @RequestParam to: String?
     ): List<Map<String, Any>> {
         require(role == null || authorizationService.isAuthenticated) // A -> B
         require(manuscriptStateFilter != ManuscriptStateFilter.ALL_AWAITING_REVIEW || authorizationService.isAuthenticated) // A -> B
@@ -39,7 +41,9 @@ class PublicationController(
             role = role,
             accountId = authorizationService.account?.id,
             category = category,
-            sorting = sorting ?: Sorting.ALPHABETICAL_A_Z
+            sorting = sorting ?: Sorting.ALPHABETICAL_A_Z,
+            from = from,
+            to = to
         ).map { publication -> buildMap {
             put("id", publication.id)
             put("title", publication.title)
