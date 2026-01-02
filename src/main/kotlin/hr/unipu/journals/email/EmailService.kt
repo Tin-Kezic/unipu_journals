@@ -1,5 +1,5 @@
 package hr.unipu.journals.email
-/*
+
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
@@ -16,4 +16,3 @@ class EmailService(private val mailSender: JavaMailSender) {
         setText(text)
     })
 }
- */
