@@ -20,7 +20,7 @@ class EmailService(private val mailSender: JavaMailSender) {
     fun sendHtml(
         to: String,
         subject: String,
-        description: String
+        html: String
     ) {
         val message: MimeMessage = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
@@ -41,7 +41,7 @@ class EmailService(private val mailSender: JavaMailSender) {
                       <tr>
                         <td style="padding:30px; text-align:center; color:black;">
                           <h1 style="margin:0 0 16px 0; font-size:24px; font-weight:bold;">Unipu Journals</h1>
-                          <p style="margin:0; font-size:16px; line-height:1.5;">${description}</p>
+                          <p style="margin:0; font-size:16px; line-height:1.5;">${html}</p>
                         </td>
                       </tr>
                     </table>
