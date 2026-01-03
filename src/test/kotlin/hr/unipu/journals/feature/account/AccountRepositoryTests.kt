@@ -1,5 +1,8 @@
 package hr.unipu.journals.feature.account
 
+import hr.unipu.journals.feature.account.core.Account
+import hr.unipu.journals.feature.account.core.AccountDTO
+import hr.unipu.journals.feature.account.core.AccountRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -16,7 +19,21 @@ class AccountRepositoryTests {
         Assertions.assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
         assertEquals(
             1,
-            accountRepository.insert(AccountDTO("John", "Dr.", "john@unipu.hr", "secure123", "secure123", "University", "Professor", "USA", "Cheyenne", "200 West 24th Street", "82002-0020"))
+            accountRepository.insert(
+                AccountDTO(
+                    "John",
+                    "Dr.",
+                    "john@unipu.hr",
+                    "secure123",
+                    "secure123",
+                    "University",
+                    "Professor",
+                    "USA",
+                    "Cheyenne",
+                    "200 West 24th Street",
+                    "82002-0020"
+                )
+            )
         )
         Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM account WHERE email = 'john@unipu.hr')"))
     }
@@ -44,13 +61,39 @@ class AccountRepositoryTests {
     }
     @Test fun `retrieve account by id`() {
         assertEquals(
-            Account(1, "root", "Mr.R", "root@unipu.hr", $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC", "root Affiliation", "root job type", "root country", "root city", "root address", "root zip code", false),
+            Account(
+                1,
+                "root",
+                "Mr.R",
+                "root@unipu.hr",
+                $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC",
+                "root Affiliation",
+                "root job type",
+                "root country",
+                "root city",
+                "root address",
+                "root zip code",
+                false
+            ),
             accountRepository.byId(1)
         )
     }
     @Test fun `retrieve account by email`() {
         assertEquals(
-            Account(1, "root", "Mr.R", "root@unipu.hr", $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC", "root Affiliation", "root job type", "root country", "root city", "root address", "root zip code", false),
+            Account(
+                1,
+                "root",
+                "Mr.R",
+                "root@unipu.hr",
+                $$"$2a$12$rlJYGCjNYJpyZTt/enAIVuaI2JOdCyN93jQbE/hQQjIDLPTXmIOoC",
+                "root Affiliation",
+                "root job type",
+                "root country",
+                "root city",
+                "root address",
+                "root zip code",
+                false
+            ),
             accountRepository.byEmail("root@unipu.hr")
         )
     }

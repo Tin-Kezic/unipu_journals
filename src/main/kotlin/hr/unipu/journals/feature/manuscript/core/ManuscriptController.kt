@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.account.core.AccountRepository
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository

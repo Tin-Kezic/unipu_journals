@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.account
+package hr.unipu.journals.feature.account.core
 
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query

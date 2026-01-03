@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.publication.eic_on_publication
 
-import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.account.core.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN

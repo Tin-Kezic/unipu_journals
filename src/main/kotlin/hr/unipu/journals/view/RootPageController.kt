@@ -1,6 +1,6 @@
 package hr.unipu.journals.view
 
-import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.account.core.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ROOT
@@ -12,7 +12,6 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 

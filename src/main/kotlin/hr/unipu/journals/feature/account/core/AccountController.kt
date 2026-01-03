@@ -1,7 +1,6 @@
-package hr.unipu.journals.feature.account
+package hr.unipu.journals.feature.account.core
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
-import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
