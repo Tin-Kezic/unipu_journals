@@ -4,15 +4,17 @@ import jakarta.mail.internet.MimeMessage
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
 @Service
+@Async("emailExecutor")
 class EmailService(private val mailSender: JavaMailSender) {
     fun send(
         to: String,
         subject: String,
         text: String
-    ): Unit = mailSender.send(SimpleMailMessage().apply {
+    ) = mailSender.send(SimpleMailMessage().apply {
         setTo(to)
         setSubject(subject)
         setText(text)
