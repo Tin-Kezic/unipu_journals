@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-private var contacts = ""
+@Volatile private var contacts = ""
 
 @Controller
 @RequestMapping("/contacts")
