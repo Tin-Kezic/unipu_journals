@@ -5,9 +5,7 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Sorting
-import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.view.ResourceNotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -17,15 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 class PublicationPageController(
     private val publicationRepository: PublicationRepository,
-    private val sectionRepository: SectionRepository,
     private val authorizationService: AuthorizationService,
     private val categoryRepository: CategoryRepository,
 ) {
     @GetMapping("/")
     fun page(
         model: Model,
-        @RequestParam publicationId: Int?,
-        @RequestParam sectionId: Int?,
         @RequestParam manuscriptStateFilter: ManuscriptStateFilter = ManuscriptStateFilter.PUBLISHED,
         @RequestParam role: Role?,
         @RequestParam category: String?,
@@ -33,8 +28,6 @@ class PublicationPageController(
         @RequestParam from: String?,
         @RequestParam to: String?
     ): String {
-        if(publicationId != null && publicationRepository.exists(publicationId).not()) throw ResourceNotFoundException("failed to find publication $publicationId")
-        if(sectionId != null && sectionRepository.exists(sectionId).not()) throw ResourceNotFoundException("failed to find section $sectionId")
         val isAdmin = authorizationService.isAdmin
         model["isAdmin"] = isAdmin
         model["isAuthenticated"] = authorizationService.isAuthenticated
