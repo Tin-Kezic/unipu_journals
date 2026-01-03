@@ -14,6 +14,8 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 	implementation("org.springframework.boot:spring-boot-starter-mustache:3.5.3")
 	implementation("org.jsoup:jsoup:1.15.3")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("com.github.ben-manes.caffeine:caffeine")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.5.3")
     //implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
