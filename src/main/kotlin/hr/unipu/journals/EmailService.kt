@@ -1,4 +1,4 @@
-package hr.unipu.journals.email
+package hr.unipu.journals
 
 import jakarta.mail.internet.MimeMessage
 import org.springframework.mail.SimpleMailMessage
