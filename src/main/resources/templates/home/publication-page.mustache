@@ -184,7 +184,7 @@
     // spring session default: 30min
     {{#isAuthenticated}}
         setTimeout(() => {
-            window.location.href = "/login.html";
+            window.location = "/login.html";
         }, 1800000);
     {{/isAuthenticated}}
 </script>

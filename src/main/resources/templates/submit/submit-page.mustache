@@ -181,7 +181,7 @@
             `, { method: 'POST' }); //&files=${encodeURIComponent(Array.from(files))}
         if(!response.ok) { alert(await response.text()); return; }
         */
-        window.location.href = '/';
+        window.location = '/';
     });
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
