@@ -90,6 +90,6 @@ interface InviteRepository: Repository<Invite, Int> {
     fun invite(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int = 0): Int
 
     @Modifying
-    @Query("DELETE FROM invite WHERE email = :email AND target = :target::invitation_target AND (target_id = :target_id OR :target_id IS NULL)")
-    fun revoke(@Param("email") email: String, @Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): Int
+    @Query("DELETE FROM invite WHERE email = :email AND (target = :target::invitation_target OR :target IS NULL) AND (target_id = :target_id OR :target_id IS NULL)")
+    fun revoke(@Param("email") email: String, @Param("target") target: InvitationTarget? = null, @Param("target_id") targetId: Int? = null): Int
 }
