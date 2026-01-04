@@ -1,15 +1,12 @@
 package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 
-import hr.unipu.journals.feature.account.core.Account
+import hr.unipu.journals.feature.account.Account
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript, Int> {
-    @Query("SELECT account_role FROM account_role_on_manuscript WHERE account_id = :account_id AND manuscript_id = :manuscript_id")
-    fun role(@Param("account_id") accountId: Int, @Param("manuscript_id") manuscriptId: Int): List<ManuscriptRole>
-
     @Query("""
         SELECT DISTINCT account.* FROM account_role_on_manuscript
         JOIN account ON account.id = account_role_on_manuscript.account_id
