@@ -7,5 +7,6 @@ import org.springframework.data.relational.core.mapping.Table
 data class Invite(
     @Id val id: Int,
     val email: String,
-    val target: InvitationTarget
+    val target: InvitationTarget,
+    val targetId: Int
 )
