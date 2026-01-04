@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.account.core
+package hr.unipu.journals.feature.account
 
 data class AccountDTO (
     val fullName: String,
