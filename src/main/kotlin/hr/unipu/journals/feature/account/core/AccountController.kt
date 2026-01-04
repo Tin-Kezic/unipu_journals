@@ -36,10 +36,7 @@ class AccountController(
     )
     @PostMapping
     fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
-        var error = ""
-        if (accountRepository.existsByEmail(account.email)) error += "email taken"
-        if (account.password != account.passwordConfirmation) error += " and password mismatch"
-        if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
+        if (accountRepository.existsByEmail(account.email)) return ResponseEntity.badRequest().body("email taken")
         val rowsInserted = accountRepository.insert(account.clean())
         if(rowsInserted == 1) return ResponseEntity.ok("successfully registered account: $account")
         return ResponseEntity.internalServerError().body("failed to register account: $account")
@@ -48,10 +45,7 @@ class AccountController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun update(@ModelAttribute request: AccountDTO): ResponseEntity<String> {
         val account = authorizationService.account!!
-        var error = ""
-        if(accountRepository.existsByEmail(request.email) && account.email != request.email) error += "email taken"
-        if(request.password != request.passwordConfirmation) error += " and password mismatch"
-        if(error.isNotEmpty()) return ResponseEntity.badRequest().body(error)
+        if(accountRepository.existsByEmail(request.email) && account.email != request.email) return ResponseEntity.badRequest().body("email taken")
         val rowsAffected = accountRepository.update(account.id, request.clean())
         return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
         else ResponseEntity.internalServerError().body("failed to update account: $request")
