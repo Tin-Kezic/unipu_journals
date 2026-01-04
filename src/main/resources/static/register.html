@@ -80,7 +80,7 @@
             document.getElementById('password').focus()
             return;
         }
-        const response = await fetch(`api/accounts`, {
+        const response = await fetch(`/api/accounts`, {
             method: 'POST',
             body: new URLSearchParams({
                 fullName: form.fullName.value,
