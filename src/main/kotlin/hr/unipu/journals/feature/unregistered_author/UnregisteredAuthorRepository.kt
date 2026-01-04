@@ -20,5 +20,9 @@ interface UnregisteredAuthorRepository: Repository<UnregisteredAuthor, Int> {
         @Param("country") country: String,
         @Param("affiliation") affiliation: String,
         @Param("manuscript_id") manuscriptId: Int,
-    )
+    ): Int
+
+    @Modifying
+    @Query("DELETE FROM unregistered_author WHERE email = :email")
+    fun delete(@Param("email") email: String): Int
 }
