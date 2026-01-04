@@ -39,7 +39,7 @@ class EicOnPublicationRepositoryTests {
         assertEquals(listOf("eic2.on.publication@unipu.hr"), eicOnPublicationRepository.eicEmailsByPublicationId(5))
     }
     @Test fun `assign eic on publication`() {
-        eicOnPublicationRepository.assign(2, 8)
+        eicOnPublicationRepository.assign(8, 2)
         Assertions.assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM eic_on_publication WHERE publication_id = 2 AND eic_id = 8)"))
     }
     @Test fun `revoke eic on publication`() {

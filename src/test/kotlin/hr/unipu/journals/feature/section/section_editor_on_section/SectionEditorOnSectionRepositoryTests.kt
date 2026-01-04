@@ -26,7 +26,7 @@ class SectionEditorOnSectionRepositoryTests {
     }
     @Test fun `assign section editor on section`() {
         assertFalse(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM section_editor_on_section WHERE section_editor_id = 28 AND publication_section_id = 3)"))
-        sectionEditorOnSectionRepository.assign(28, 3)
+        sectionEditorOnSectionRepository.assign(3, 28)
         assertTrue(jdbcTemplate.queryForObject<Boolean>("SELECT EXISTS (SELECT 1 FROM section_editor_on_section WHERE section_editor_id = 28 AND publication_section_id = 3)"))
     }
     @Test fun `revoke section editor on section`() {

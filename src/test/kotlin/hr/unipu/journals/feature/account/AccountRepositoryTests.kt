@@ -1,8 +1,5 @@
 package hr.unipu.journals.feature.account
 
-import hr.unipu.journals.feature.account.core.Account
-import hr.unipu.journals.feature.account.core.AccountDTO
-import hr.unipu.journals.feature.account.core.AccountRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
