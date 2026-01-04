@@ -19,13 +19,19 @@
         <button onclick="window.location='/logout'" class="m3-button" style="width: 100%;">Log out</button>
         <button onclick='openInfoDialog(`{{{author}}}`)' class="m3-button" style="width: 100%; background-color: var(--frost-blue);">View profile</button>
         <button id="edit-profile" class="m3-button" style="width: 100%; background-color: var(--dark-grey); color: white;">Edit profile</button>
-        <button onclick="window.location='/logout'" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>
+        <button id="delete-account" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>
         <script>
             document.getElementById('edit-profile').addEventListener('click', () => openOptionsDialog('Edit profile', [
                 {name: 'Edit email', onClick: () => {}},
                 {name: 'Edit details', onClick: () => {}},
                 {name: 'Change password', onClick: () => {}}
             ]));
+            document.getElementById('delete-account').addEventListener('click', () => openBooleanDialog('Permanently delete account', 'Delete', async () => {
+                const response = await fetch(`/api/accounts`, {
+                    method: 'DELETE', body: new URLSearchParams({ accountId: window.location.pathname.replace('/profiles/', '') })
+                });
+                openInfoDialog(JSON.stringify({ "confirm deletion" : "an email has been sent" }));
+            }));
         </script>
         {{/author}}
     </aside>
