@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.section.section_editor_on_section
 
-import hr.unipu.journals.feature.account.core.AccountRepository
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_PUBLICATION_OR_ADMIN
@@ -29,7 +29,7 @@ class SectionEditorOnSectionController(
     ): ResponseEntity<String> {
         try {
             val rowsAffected = accountRepository.byEmail(email)?.let {
-                sectionEditorOnSectionRepository.assign(sectionId, it.id)
+                sectionEditorOnSectionRepository.assign(it.id, sectionId)
             } ?: inviteRepository.invite(
                 email = email,
                 target = InvitationTarget.SECTION_EDITOR,
