@@ -17,11 +17,14 @@ interface EicOnPublicationRepository: Repository<EicOnPublication, Int> {
     """)
     fun eicEmailsByPublicationId(@Param("publication_id") publicationId: Int): List<String>
 
-    @Modifying
-    @Query("INSERT INTO eic_on_publication (publication_id, eic_id) VALUES (:publication_id, :eic_id)")
-    fun assign(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int): Int
+    @Query("SELECT publication_id FROM eic_on_publication WHERE eic_id = :eic_id")
+    fun allAffiliatedPublicationIds(@Param("eic_id") eicId: Int): List<Int>?
 
     @Modifying
-    @Query("DELETE FROM eic_on_publication WHERE publication_id = :publication_id AND eic_id = :eic_id")
-    fun revoke(@Param("publication_id") publicationId: Int, @Param("eic_id") eicId: Int): Int
+    @Query("INSERT INTO eic_on_publication (publication_id, eic_id) VALUES (:publication_id, :eic_id)")
+    fun assign(@Param("eic_id") eicId: Int, @Param("publication_id") publicationId: Int): Int
+
+    @Modifying
+    @Query("DELETE FROM eic_on_publication WHERE eic_id = :eic_id AND (publication_id = :publication_id OR :publication_id IS NULL)")
+    fun revoke(@Param("eic_id") eicId: Int, @Param("publication_id") publicationId: Int? = null): Int
 }
