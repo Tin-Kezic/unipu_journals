@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.account.core.AccountRepository
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
@@ -32,9 +32,9 @@ class InviteController(
             InvitationTarget.ADMIN ->
                 accountRepository.updateIsAdmin(account.email, true)
             InvitationTarget.EIC_ON_PUBLICATION ->
-                eicOnPublicationRepository.assign(targetId, account.id)
+                eicOnPublicationRepository.assign(account.id, targetId)
             InvitationTarget.SECTION_EDITOR ->
-                sectionRepository.assign(targetId, account.id)
+                sectionRepository.assign(account.id,  targetId)
             InvitationTarget.EIC_ON_MANUSCRIPT,
             InvitationTarget.EDITOR,
             InvitationTarget.REVIEWER ->
