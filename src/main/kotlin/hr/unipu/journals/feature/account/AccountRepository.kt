@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.account.core
+package hr.unipu.journals.feature.account
 
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -29,7 +29,6 @@ interface AccountRepository: Repository<Account, Int> {
     @Query("SELECT email FROM account WHERE is_admin = TRUE")
     fun allAdminEmails(): List<String>
 
-    // todo. check if postgresql migration broke dto param
     @Modifying
     @Query("""
         INSERT INTO account
