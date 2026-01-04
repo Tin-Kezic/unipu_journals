@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.account.core
+package hr.unipu.journals.feature.account
 
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
@@ -9,18 +9,19 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("api/accounts")
+@RequestMapping("/api/accounts")
 class AccountController(
     private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val authorizationService: AuthorizationService
+    private val authorizationService: AuthorizationService,
+    private val emailVerificationService: EmailVerificationService
 ) {
     fun AccountDTO.clean() = this.copy(
         fullName = Jsoup.clean(this.fullName, Safelist.none()),
@@ -35,11 +36,10 @@ class AccountController(
         zipCode = Jsoup.clean(this.zipCode, Safelist.none())
     )
     @PostMapping
-    fun insert(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
+    fun register(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         if (accountRepository.existsByEmail(account.email)) return ResponseEntity.badRequest().body("email taken")
-        val rowsInserted = accountRepository.insert(account.clean())
-        if(rowsInserted == 1) return ResponseEntity.ok("successfully registered account: $account")
-        return ResponseEntity.internalServerError().body("failed to register account: $account")
+        emailVerificationService.register(account.clean())
+        return ResponseEntity.ok("successfully sent registration confirmation email: $account")
     }
     @PutMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
@@ -52,9 +52,8 @@ class AccountController(
     }
     @DeleteMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
-    fun delete(@PathVariable accountId: Int): ResponseEntity<String> {
-        val rowsAffected = accountRepository.delete(accountId)
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account $accountId")
-        else ResponseEntity.internalServerError().body("failed to delete account $accountId")
+    fun delete(@RequestParam("accountId") accountId: Int): ResponseEntity<String> {
+        emailVerificationService.delete(accountRepository.byId(accountId) ?: return ResponseEntity.badRequest().body("failed to find account"))
+        return ResponseEntity.ok("successfully sent deletion confirmation email: $accountId")
     }
 }
