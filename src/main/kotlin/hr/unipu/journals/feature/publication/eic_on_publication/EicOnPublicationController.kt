@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.publication.eic_on_publication
 
-import hr.unipu.journals.feature.account.core.AccountRepository
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ADMIN
@@ -23,7 +23,7 @@ class EicOnPublicationController(
     @PutMapping("/assign-eic")
     fun assign(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
         val rowsAffected = accountRepository.byEmail(email)?.let {
-            eicOnPublicationRepository.assign(publicationId, it.id)
+            eicOnPublicationRepository.assign(it.id, publicationId)
         } ?: inviteRepository.invite(
                 email = email,
                 target = InvitationTarget.EIC_ON_PUBLICATION,
