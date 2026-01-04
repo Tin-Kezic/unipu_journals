@@ -15,10 +15,8 @@ class CacheConfig {
         val caffeine = Caffeine.newBuilder()
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .maximumSize(10_000)
-        val pendingRegistrations =
-            CaffeineCache("pendingRegistrations", caffeine.build())
-        return SimpleCacheManager().apply {
-            setCaches(listOf(pendingRegistrations))
-        }
+        val pendingRegistrations = CaffeineCache("pendingRegistrations", caffeine.build())
+        val pendingDeletions = CaffeineCache("pendingDeletions", caffeine.build())
+        return SimpleCacheManager().apply { setCaches(listOf(pendingRegistrations, pendingDeletions)) }
     }
 }
