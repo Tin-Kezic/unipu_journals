@@ -94,7 +94,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("role") role: Role? = null,
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
-        @Param("sorting") sorting: Sorting,
+        @Param("sorting") sorting: Sorting? = null,
         @Param("from") from: String? = null,
         @Param("to") to: String? = null,
         @Param("query") query: String? = null
