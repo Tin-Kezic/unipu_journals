@@ -14,6 +14,9 @@ interface InviteRepository: Repository<Invite, Int> {
     @Query("SELECT EXISTS (SELECT 1 FROM invite WHERE email = :email AND target = 'ADMIN')")
     fun isAdmin(@Param("email") email: String): Boolean
 
+    @Query("SELECT * FROM invite WHERE email = :email")
+    fun allByEmail(@Param("email") email: String): List<Invite>
+
     @Query("SELECT invite.email FROM invite WHERE invite.target = :target::invitation_target AND (invite.target_id = :target_id OR :target_id IS NULL)")
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
