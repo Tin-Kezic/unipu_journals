@@ -5,7 +5,6 @@ data class AccountDTO (
     val title: String,
     val email: String,
     val password: String,
-    val passwordConfirmation: String,
     val affiliation: String,
     val jobType: String,
     val country: String,
