@@ -9,6 +9,7 @@
 <body style="height: 100%; overflow: hidden; display: flex; flex-direction: column;">
 {{>util/header}}
 {{>util/dialog/info}}
+{{>util/dialog/upsert}}
 {{>util/dialog/boolean}}
 {{>util/dialog/options}}
 {{>util/components/manuscript/element}}
@@ -22,15 +23,30 @@
         <button id="delete-account" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>
         <script>
             document.getElementById('edit-profile').addEventListener('click', () => openOptionsDialog('Edit profile', [
-                {name: 'Edit email', onClick: () => {}},
-                {name: 'Edit details', onClick: () => {}},
+                {name: 'Edit details', onClick: () => window.location=`${window.location.pathname}/edit`},
+                {name: 'Change email', onClick: () => openUpsertDialog({
+                    message: 'Change email',
+                    positive: 'Change',
+                    onPositive: async () => {
+                        const response = await fetch('/api/accounts/email', { method: 'PUT', body: new URLSearchParams({
+                            accountId: window.location.pathname.replace('/profiles/', ''),
+                            newEmail: upsertDialogInput.value
+                        })});
+                        if(!response.ok) { alert(await response.text()); return; }
+                        openInfoDialog(JSON.stringify({ "an email has been sent" : "confirm email change" }));
+                    },
+                    canCreateMore: false,
+                    inputValue: '',
+                    labelValue: 'email'
+                })},
                 {name: 'Change password', onClick: () => {}}
             ]));
             document.getElementById('delete-account').addEventListener('click', () => openBooleanDialog('Permanently delete account', 'Delete', async () => {
                 const response = await fetch(`/api/accounts`, {
                     method: 'DELETE', body: new URLSearchParams({ accountId: window.location.pathname.replace('/profiles/', '') })
                 });
-                openInfoDialog(JSON.stringify({ "confirm deletion" : "an email has been sent" }));
+                if(!response.ok) { alert(await response.text()); return; }
+                openInfoDialog(JSON.stringify({ "an email has been sent" : "confirm deletion" }));
             }));
         </script>
         {{/author}}

@@ -19,12 +19,23 @@
     const upsertDialogMessage = document.getElementById('upsert-dialog-message');
     const upsertDialogForm = document.getElementById('upsert-dialog-form');
     const upsertDialogInput = document.getElementById('upsert-dialog-input')
+    const upsertDialogInputLabel = document.querySelector('label[for="upsert-dialog-input"]');
     const upsertDialogPositive = document.getElementById('upsert-dialog-positive');
     const createMoreLabel = document.getElementById('create-more-label');
     const createMoreCheckbox = document.querySelector('input[name="create-more-checkbox"]');
     document.getElementById('upsert-dialog-negative').addEventListener('click', () => upsertDialog.close());
+    let upsertDialogOnPositive;
+    function openUpsertDialog({ message, positive, onPositive, canCreateMore, inputValue, labelValue }) {
+        upsertDialogMessage.innerHTML = message;
+        upsertDialogPositive.innerHTML = positive;
+        upsertDialogOnPositive = onPositive;
+        createMoreLabel.style.display = canCreateMore ? 'block' : 'none';
+        upsertDialogInput.value = inputValue;
+        upsertDialogInputLabel.innerHTML = labelValue;
+        upsertDialog.showModal();
+    }
     let upsertDialogMethod, upsertDialogSubmitUrl, upsertDialogReloadUrl, upsertDialogContainerId;
-    function openUpsertDialog(message, method, submitUrl, reloadUrl, containerId, inputValue) {
+    function openUpsertDialogHelperUpsertAndReload(message, method, submitUrl, reloadUrl, containerId, inputValue) {
         upsertDialogMessage.innerHTML = message;
         upsertDialogMethod = method;
         upsertDialogInput.value = inputValue;
@@ -33,18 +44,22 @@
         upsertDialogReloadUrl = reloadUrl;
         upsertDialogContainerId = containerId;
         createMoreLabel.style.display = method === 'POST' ? 'block' : 'none';
+        upsertDialogOnPositive = async () => {
+            const input = document.getElementById('upsert-dialog-input');
+            const upsertResponse = await fetch(upsertDialogSubmitUrl + encodeURIComponent(input.value), { method: upsertDialogMethod });
+            if(!upsertResponse.ok) { alert(await upsertResponse.text()); return; }
+            const reloadResponse = await fetch(upsertDialogReloadUrl, { method: 'GET' });
+            if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
+            const items = await reloadResponse.json();
+            renderSidebarButtons(items, upsertDialogContainerId)
+            upsertDialogInput.value = '';
+            if(!createMoreCheckbox.checked || createMoreLabel.style.display === 'none') upsertDialog.close();
+        }
         upsertDialog.showModal();
     }
     upsertDialogForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const input = document.getElementById('upsert-dialog-input');
-        const upsertResponse = await fetch(upsertDialogSubmitUrl + encodeURIComponent(input.value), { method: upsertDialogMethod });
-        if(!upsertResponse.ok) { alert(await upsertResponse.text()); return; }
-        const reloadResponse = await fetch(upsertDialogReloadUrl, { method: 'GET' });
-        if(!reloadResponse.ok) { alert(await reloadResponse.text()); return; }
-        const items = await reloadResponse.json();
-        renderSidebarButtons(items, upsertDialogContainerId)
-        upsertDialogInput.value = '';
-        if(!createMoreCheckbox.checked || createMoreLabel.style.display === 'none') upsertDialog.close();
+        upsertDialogOnPositive();
+        upsertDialog.close();
     });
 </script>

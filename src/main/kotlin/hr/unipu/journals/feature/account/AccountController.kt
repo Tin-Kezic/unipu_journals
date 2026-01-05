@@ -50,6 +50,15 @@ class AccountController(
         return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
         else ResponseEntity.internalServerError().body("failed to update account: $request")
     }
+    @PutMapping("/email")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
+    fun updateEmail(@RequestParam("accountId") accountId: Int, @RequestParam newEmail: String): ResponseEntity<String> {
+        emailVerificationService.changeEmail(AccountAndNewEmail(
+            accountRepository.byId(accountId) ?: return ResponseEntity.badRequest().body("unauthenticated"),
+            newEmail
+        ))
+        return ResponseEntity.ok("successfully updated email")
+    }
     @DeleteMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
     fun delete(@RequestParam("accountId") accountId: Int): ResponseEntity<String> {

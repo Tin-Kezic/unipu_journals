@@ -8,15 +8,19 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section.section_editor_on_section.SectionEditorOnSectionRepository
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
+import hr.unipu.journals.security.AuthorizationService
 import org.springframework.cache.CacheManager
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/authentication")
 class EmailVerificationController(
     private val cacheManager: CacheManager,
+    private val authorizationService: AuthorizationService,
     private val accountRepository: AccountRepository,
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val manuscriptRepository: ManuscriptRepository,
@@ -74,18 +78,34 @@ class EmailVerificationController(
                 )
             }
         }
-        manuscriptRepository.all(accountId = pending.id).map { it.id }.forEach { id -> unregisteredAuthorRepository.insert(
-            fullName = pending.fullName,
-            email = pending.email,
-            country = pending.country,
-            affiliation = pending.affiliation,
-            manuscriptId = id
-        )}
         eicOnPublicationRepository.revoke(pending.id)
         sectionEditorOnSectionRepository.revoke(pending.id)
         accountRoleOnManuscriptRepository.revoke(pending.id)
         val rowsAffected = accountRepository.delete(pending.id)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account")
         else ResponseEntity.internalServerError().body("failed to delete account")
+    }
+    @GetMapping("/change-email")
+    fun changeEmail(@RequestParam token: String): ResponseEntity<String> {
+        val cache = cacheManager.getCache("pendingEmailChanges") ?: return ResponseEntity.status(410).body(expired)
+        val pending = cache.get(token, AccountAndNewEmail::class.java) ?: return ResponseEntity.status(410).body(expired)
+        cache.evict(token)
+        if(accountRepository.existsByEmail(pending.newEmail)) return ResponseEntity.badRequest().body("email taken")
+        if(authorizationService.isAccountOwnerOrAdmin(pending.account.id).not()) return ResponseEntity.status(401).body("unauthorized")
+        accountRepository.updateEmail(pending.account.id, pending.newEmail)
+        unregisteredAuthorRepository.allAffiliatedManuscriptIds(pending.newEmail).forEach { id ->
+            accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, pending.account.id, id)
+        }
+        unregisteredAuthorRepository.delete(pending.newEmail)
+        inviteRepository.allByEmail(pending.newEmail).forEach { (id, email, target, targetId) -> when(target) {
+            InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(pending.newEmail, true)
+            InvitationTarget.EIC_ON_PUBLICATION -> eicOnPublicationRepository.assign(pending.account.id, targetId)
+            InvitationTarget.SECTION_EDITOR -> sectionEditorOnSectionRepository.assign(pending.account.id, targetId)
+            InvitationTarget.EIC_ON_MANUSCRIPT -> accountRoleOnManuscriptRepository.assign(ManuscriptRole.EIC, pending.account.id, targetId)
+            InvitationTarget.EDITOR -> accountRoleOnManuscriptRepository.assign(ManuscriptRole.EDITOR, pending.account.id, targetId)
+            InvitationTarget.REVIEWER -> accountRoleOnManuscriptRepository.assign(ManuscriptRole.REVIEWER, pending.account.id, targetId)
+        }}
+        inviteRepository.revoke(pending.newEmail)
+        return ResponseEntity.ok("successfully changed email")
     }
 }

@@ -68,7 +68,7 @@
         <div style="width: 15rem;">
             <button
                 id="add-publication"
-                onclick="openUpsertDialog('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar', '')"
+                onclick="openUpsertDialogHelperUpsertAndReload('Add publication', 'POST', '/api/publications?title=', `/api/publications?${params()}`, 'publications-sidebar', '')"
                 class="m3-button primary-button"
                 style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 100%; margin-bottom: 0.5rem;"
                 {{#isAdmin}}hidden{{/isAdmin}}
@@ -85,7 +85,7 @@
         <div style="width: 15rem;">
             <button
                 id="add-section"
-                onclick="openUpsertDialog('Add section', 'POST', `/api/publications/${currentPublicationId}/sections?title=`, `/api/publications/${currentPublicationId}/sections?${params()}`, 'sections-sidebar', '')"
+                onclick="openUpsertDialogHelperUpsertAndReload('Add section', 'POST', `/api/publications/${currentPublicationId}/sections?title=`, `/api/publications/${currentPublicationId}/sections?${params()}`, 'sections-sidebar', '')"
                 class="m3-button primary-button"
                 style="padding: 0.7rem 1.3rem; font-size: 1rem; border-radius: 0.5rem; box-shadow: none; width: 15rem; margin-bottom: 0.5rem;"
                 {{^isEicOnPublicationOrAdmin}}hidden{{/isEicOnPublicationOrAdmin}}
@@ -132,7 +132,7 @@
             const canEdit = {{isAdmin}} || type === 'publication' ? role === 'EIC' : ['EIC', 'SECTION_EDITOR'].includes(role);
             const canHide = {{isAdmin}};
             openOptionsDialog(title, [
-                canEdit && {name: 'Rename', onClick: () => openUpsertDialog(
+                canEdit && {name: 'Rename', onClick: () => openUpsertDialogHelperUpsertAndReload(
                     `Rename ${title}`,
                     'PUT',
                     `/api/publications/${currentPublicationId}${type === 'section' ? `/sections/${currentSectionId}` : ''}?title=`,

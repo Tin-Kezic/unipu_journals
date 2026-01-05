@@ -60,6 +60,13 @@ interface AccountRepository: Repository<Account, Int> {
     ): Int
 
     @Modifying
+    @Query("UPDATE account SET email = :email WHERE id = :id")
+    fun updateEmail(
+        @Param("id") id: Int,
+        @Param("email") email: String
+    ): Int
+
+    @Modifying
     @Query("DELETE FROM account WHERE id = :id")
     fun delete(@Param("id") id: Int): Int
 }

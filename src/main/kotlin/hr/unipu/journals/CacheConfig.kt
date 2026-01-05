@@ -17,6 +17,13 @@ class CacheConfig {
             .maximumSize(10_000)
         val pendingRegistrations = CaffeineCache("pendingRegistrations", caffeine.build())
         val pendingDeletions = CaffeineCache("pendingDeletions", caffeine.build())
-        return SimpleCacheManager().apply { setCaches(listOf(pendingRegistrations, pendingDeletions)) }
+        val pendingEmailChanges = CaffeineCache("pendingEmailChanges", caffeine.build())
+        return SimpleCacheManager().apply {
+            setCaches(listOf(
+                pendingRegistrations,
+                pendingDeletions,
+                pendingEmailChanges
+            ))
+        }
     }
 }
