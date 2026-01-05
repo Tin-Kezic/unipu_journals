@@ -9,6 +9,9 @@ interface UnregisteredAuthorRepository: Repository<UnregisteredAuthor, Int> {
     @Query("SELECT * FROM unregistered_author WHERE manuscript_id = :manuscript_id")
     fun authors(@Param("manuscript_id") manuscriptId: Int): List<UnregisteredAuthor>
 
+    @Query("SELECT manuscript_id FROM unregistered_author WHERE email = :email")
+    fun allAffiliatedManuscriptIds(@Param("email") email: String): List<Int>
+
     @Query("SELECT * FROM unregistered_author WHERE email = :email")
     fun byEmail(@Param("email") email: String): UnregisteredAuthor?
 
