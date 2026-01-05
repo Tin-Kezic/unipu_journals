@@ -34,9 +34,13 @@ class EmailVerificationController(
 
         val rowsAffected = accountRepository.insert(pending)
         if(rowsAffected == 0) return ResponseEntity.internalServerError().body("failed to insert account")
-        unregisteredAuthorRepository.delete(pending.email)
-
         val account = accountRepository.byEmail(pending.email) ?: return ResponseEntity.internalServerError().body("failed to insert account")
+
+        unregisteredAuthorRepository.allAffiliatedManuscriptIds(pending.email).forEach { id ->
+            accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, id)
+        }
+        unregisteredAuthorRepository.delete(account.email)
+
         inviteRepository.allByEmail(pending.email).forEach { (id, email, target, targetId) -> when(target) {
             InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(account.email, true)
             InvitationTarget.EIC_ON_PUBLICATION -> eicOnPublicationRepository.assign(account.id, targetId)
@@ -45,7 +49,7 @@ class EmailVerificationController(
             InvitationTarget.EDITOR -> accountRoleOnManuscriptRepository.assign(ManuscriptRole.EDITOR, account.id, targetId)
             InvitationTarget.REVIEWER -> accountRoleOnManuscriptRepository.assign(ManuscriptRole.REVIEWER, account.id, targetId)
         }}
-        inviteRepository.revoke(pending.email)
+        inviteRepository.revoke(account.email)
         return ResponseEntity.ok("successfully verified email")
     }
     @GetMapping("/delete")
