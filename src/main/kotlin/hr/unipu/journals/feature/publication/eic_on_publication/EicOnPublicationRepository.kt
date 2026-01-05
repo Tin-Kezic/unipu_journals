@@ -18,7 +18,7 @@ interface EicOnPublicationRepository: Repository<EicOnPublication, Int> {
     fun eicEmailsByPublicationId(@Param("publication_id") publicationId: Int): List<String>
 
     @Query("SELECT publication_id FROM eic_on_publication WHERE eic_id = :eic_id")
-    fun allAffiliatedPublicationIds(@Param("eic_id") eicId: Int): List<Int>?
+    fun allAffiliatedPublicationIds(@Param("eic_id") eicId: Int): List<Int>
 
     @Modifying
     @Query("INSERT INTO eic_on_publication (publication_id, eic_id) VALUES (:publication_id, :eic_id)")

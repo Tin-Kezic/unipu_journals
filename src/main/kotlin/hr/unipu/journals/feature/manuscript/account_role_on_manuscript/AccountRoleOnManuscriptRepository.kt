@@ -30,7 +30,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     ): Boolean
 
     @Query("SELECT * FROM account_role_on_manuscript WHERE account_id = :account_id")
-    fun allAffiliatedRolesAndManuscriptIds(@Param("account_id") accountId: Int): List<AccountRoleOnManuscript>?
+    fun allAffiliatedRolesAndManuscriptIds(@Param("account_id") accountId: Int): List<AccountRoleOnManuscript>
 
     @Modifying
     @Query("INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role) VALUES (:manuscript_id, :account_id, :account_role::manuscript_role)")

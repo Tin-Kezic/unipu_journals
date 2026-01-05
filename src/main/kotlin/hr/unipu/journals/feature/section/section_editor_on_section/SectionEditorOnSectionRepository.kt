@@ -17,7 +17,7 @@ interface SectionEditorOnSectionRepository: Repository<SectionEditorOnSection, I
     fun sectionEditorEmailsBySectionId(@Param("publication_section_id") sectionId: Int): List<String>
 
     @Query("SELECT publication_section_id FROM section_editor_on_section WHERE section_editor_id = :section_editor_id")
-    fun allAffiliatedSectionIds(@Param("section_editor_id") sectionEditorId: Int): List<Int>?
+    fun allAffiliatedSectionIds(@Param("section_editor_id") sectionEditorId: Int): List<Int>
 
     @Modifying
     @Query("INSERT INTO section_editor_on_section (section_editor_id, publication_section_id) VALUES (:section_editor_id, :publication_section_id)")
