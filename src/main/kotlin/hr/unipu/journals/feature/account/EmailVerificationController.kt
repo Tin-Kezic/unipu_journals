@@ -58,9 +58,9 @@ class EmailVerificationController(
         val pending = cache.get(token, Account::class.java) ?: return ResponseEntity.status(410).body(expired)
         cache.evict(token)
         if(pending.isAdmin) inviteRepository.invite(pending.email, InvitationTarget.ADMIN)
-        eicOnPublicationRepository.allAffiliatedPublicationIds(pending.id)?.forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.EIC_ON_PUBLICATION, id) }
-        sectionEditorOnSectionRepository.allAffiliatedSectionIds(pending.id)?.forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.SECTION_EDITOR, id) }
-        accountRoleOnManuscriptRepository.allAffiliatedRolesAndManuscriptIds(pending.id)?.forEach { (id, manuscriptId, accountId, accountRole) ->
+        eicOnPublicationRepository.allAffiliatedPublicationIds(pending.id).forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.EIC_ON_PUBLICATION, id) }
+        sectionEditorOnSectionRepository.allAffiliatedSectionIds(pending.id).forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.SECTION_EDITOR, id) }
+        accountRoleOnManuscriptRepository.allAffiliatedRolesAndManuscriptIds(pending.id).forEach { (id, manuscriptId, accountId, accountRole) ->
             when(accountRole) {
                 ManuscriptRole.EIC -> inviteRepository.invite(pending.email, InvitationTarget.EIC_ON_MANUSCRIPT, manuscriptId)
                 ManuscriptRole.EDITOR -> inviteRepository.invite(pending.email, InvitationTarget.EDITOR, manuscriptId)
