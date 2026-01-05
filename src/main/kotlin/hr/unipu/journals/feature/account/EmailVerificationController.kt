@@ -60,9 +60,7 @@ class EmailVerificationController(
         if(pending.isAdmin) inviteRepository.invite(pending.email, InvitationTarget.ADMIN)
         eicOnPublicationRepository.allAffiliatedPublicationIds(pending.id)?.forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.EIC_ON_PUBLICATION, id) }
         sectionEditorOnSectionRepository.allAffiliatedSectionIds(pending.id)?.forEach { id -> inviteRepository.invite(pending.email, InvitationTarget.SECTION_EDITOR, id) }
-        println(pending)
         accountRoleOnManuscriptRepository.allAffiliatedRolesAndManuscriptIds(pending.id)?.forEach { (id, manuscriptId, accountId, accountRole) ->
-            println("$id | $manuscriptId | $accountId | $accountRole")
             when(accountRole) {
                 ManuscriptRole.EIC -> inviteRepository.invite(pending.email, InvitationTarget.EIC_ON_MANUSCRIPT, manuscriptId)
                 ManuscriptRole.EDITOR -> inviteRepository.invite(pending.email, InvitationTarget.EDITOR, manuscriptId)
