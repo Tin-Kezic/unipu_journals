@@ -29,7 +29,7 @@ class EmailVerificationService(
     fun changeEmail(accountAndNewEmail: AccountAndNewEmail) {
         val token = UUID.randomUUID().toString()
         cacheManager.getCache("pendingEmailChanges")?.put(token, accountAndNewEmail)
-        val href = "${baseUrl}/authentication/change-email?token=${token}"
-        emailService.sendHtml(accountAndNewEmail.account.email, "Confirm email change", "<a href=\"${href}\" style=\"${style}\">Confirm email change to ${accountAndNewEmail.newEmail}</a>")
+        emailService.sendHtml(accountAndNewEmail.account.email, "Email changed", "<p style=\"margin:1rem;\">your account email has been changed to ${accountAndNewEmail.newEmail}</p>")
+        emailService.sendHtml(accountAndNewEmail.newEmail, "Confirm email change", button("change-email", token, "Confirm email change to ${accountAndNewEmail.newEmail}"))
     }
 }
