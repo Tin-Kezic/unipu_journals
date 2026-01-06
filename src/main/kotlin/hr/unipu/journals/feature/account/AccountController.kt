@@ -41,14 +41,32 @@ class AccountController(
         emailVerificationService.register(account.clean())
         return ResponseEntity.ok("successfully sent registration confirmation email: $account")
     }
-    @PutMapping
+    @PutMapping("/details")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
-    fun update(@ModelAttribute request: AccountDTO): ResponseEntity<String> {
-        val account = authorizationService.account!!
-        if(accountRepository.existsByEmail(request.email) && account.email != request.email) return ResponseEntity.badRequest().body("email taken")
-        val rowsAffected = accountRepository.update(account.id, request.clean())
-        return if(rowsAffected == 1) return ResponseEntity.ok("successfully updated account $request")
-        else ResponseEntity.internalServerError().body("failed to update account: $request")
+    fun updateDetails(
+        @RequestParam("accountId") accountId: Int,
+        @RequestParam fullName: String,
+        @RequestParam title: String,
+        @RequestParam affiliation: String,
+        @RequestParam jobType: String,
+        @RequestParam country: String,
+        @RequestParam city: String,
+        @RequestParam address: String,
+        @RequestParam zipCode: String
+    ): ResponseEntity<String> {
+        val rowsAffected = accountRepository.updateDetails(
+            accountId = accountId,
+            fullName = fullName,
+            title = title,
+            affiliation = affiliation,
+            jobType = jobType,
+            country = country,
+            city = city,
+            address = address,
+            zipCode = zipCode
+        )
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully updated details")
+        else ResponseEntity.internalServerError().body("failed to update details")
     }
     @PutMapping("/email")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
@@ -58,6 +76,15 @@ class AccountController(
             newEmail
         ))
         return ResponseEntity.ok("successfully updated email")
+    }
+    @PutMapping("/password")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
+    fun updatePassword(@RequestParam("accountId") accountId: Int, @RequestParam currentPassword: String, @RequestParam newPassword: String): ResponseEntity<String> {
+        val account = accountRepository.byId(accountId)
+        if(passwordEncoder.matches(currentPassword, account?.password).not()) return ResponseEntity.badRequest().body("invalid current password")
+        val rowsAffected = accountRepository.updatePassword(accountId, passwordEncoder.encode(newPassword))
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully changes password")
+        else ResponseEntity.internalServerError().body("failed to update password")
     }
     @DeleteMapping
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)

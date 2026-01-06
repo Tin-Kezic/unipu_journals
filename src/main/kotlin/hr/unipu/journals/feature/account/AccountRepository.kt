@@ -38,25 +38,29 @@ interface AccountRepository: Repository<Account, Int> {
     """)
     fun insert(@Param("dto") accountDTO: AccountDTO): Int
 
-    // todo. check if postgresql migration broke dto param
     @Modifying
     @Query("""
         UPDATE account SET
-        full_name = :#{#dto.fullName},
-        title = :#{#dto.title},
-        email = :#{#dto.email},
-        password = :#{#dto.password},
-        affiliation = :#{#dto.affiliation},
-        job_type = :#{#dto.jobType},
-        country = :#{#dto.country},
-        city = :#{#dto.city},
-        address = :#{#dto.address},
-        zip_code = :#{#dto.zipCode}
+        full_name = :full_name,
+        title = :title,
+        affiliation = :affiliation,
+        job_type = :job_type,
+        country = :country,
+        city = :city,
+        address = :address,
+        zip_code = :zip_code
         WHERE id = :id
     """)
-    fun update(
-        @Param("id") id: Int,
-        @Param("dto") accountDTO: AccountDTO
+    fun updateDetails(
+        @Param("id") accountId: Int,
+        @Param("full_name") fullName: String,
+        @Param("title") title: String,
+        @Param("affiliation") affiliation: String,
+        @Param("job_type") jobType: String,
+        @Param("country") country: String,
+        @Param("city") city: String,
+        @Param("address") address: String,
+        @Param("zip_code") zipCode: String
     ): Int
 
     @Modifying
@@ -64,6 +68,13 @@ interface AccountRepository: Repository<Account, Int> {
     fun updateEmail(
         @Param("id") id: Int,
         @Param("email") email: String
+    ): Int
+
+    @Modifying
+    @Query("UPDATE account SET password = :password WHERE id = :id")
+    fun updatePassword(
+        @Param("id") id: Int,
+        @Param("password") password: String
     ): Int
 
     @Modifying

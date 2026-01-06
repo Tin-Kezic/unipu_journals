@@ -1,5 +1,6 @@
 package hr.unipu.journals.view.profile
 
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.security.access.prepost.PreAuthorize
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-class EditProfilePageController(private val authorizationService: AuthorizationService) {
+class EditProfilePageController(private val accountRepository: AccountRepository) {
     @GetMapping("/profiles/{accountId}/edit")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
-    fun page(@PathVariable accountId: Int, model: Model): String {
-        model["account"] = authorizationService.account ?: throw IllegalStateException("failed to find account $accountId")
+    fun page(@PathVariable("accountId") accountId: Int, model: Model): String {
+        model["account"] = accountRepository.byId(accountId) ?: throw IllegalStateException("failed to find account $accountId")
         return "profile/edit-profile-page"
     }
 }

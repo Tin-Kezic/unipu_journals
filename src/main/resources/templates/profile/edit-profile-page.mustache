@@ -18,20 +18,6 @@
                 <div class="text-field">
                     <label>title</label>
                     <input name="title" type="text" value="{{title}}" required>
-                    <span id="email-taken" class="error-msg" style="float:right; text-decoration: underline;">email already in use</span>
-                </div>
-                <div class="text-field">
-                    <label>email</label>
-                    <input name="email" type="email" value="{{email}}" required>
-                </div>
-                <div class="text-field">
-                    <label>password</label>
-                    <input name="password" type="password" required>
-                    <span id="password-mismatch" class="error-msg" style="float:right; text-decoration: underline;">password doesn't match</span>
-                </div>
-                <div class="text-field">
-                    <label>repeat password</label>
-                    <input name="passwordConfirmation" type="password" required>
                 </div>
                 <div class="text-field">
                     <label>affiliation</label>
@@ -62,24 +48,22 @@
                 </div>
             </form>
             <script>
-                const form = document.getElementById('update-account-form');
-                const formData = new FormData(form);
-                form.addEventListener('submit', async () => {
-                    const response = fetch('api/accounts', { method: 'PUT', body: formData });
-                    if(!response.ok) {
-                        const error = await response.text();
-                        if(error.includes('password-mismatch')) {
-                            document.getElementById('password-mismatch').style.display = 'inline-block';
-                            document.getElementById('password').focus()
-                        }
-                        if(error.includes('email-taken')) {
-                            document.getElementById('email-taken').style.display = 'inline-block';
-                            document.getElementById('email').focus()
-                        }
-                        return;
-                    }
+                document.getElementById('update-account-form').addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const response = await fetch('/api/accounts/details', { method: 'PUT', body: new URLSearchParams({
+                        accountId: window.location.pathname.replace('/profiles/', '').replace('/edit', ''),
+                        fullName: document.querySelector('input[name="fullName"]').value,
+                        title: document.querySelector('input[name="title"]').value,
+                        affiliation: document.querySelector('input[name="affiliation"]').value,
+                        jobType: document.querySelector('input[name="jobType"]').value,
+                        country: document.querySelector('input[name="country"]').value,
+                        city: document.querySelector('input[name="city"]').value,
+                        address: document.querySelector('input[name="address"]').value,
+                        zipCode: document.querySelector('input[name="zipCode"]').value,
+                    })});
+                    if(!response.ok) { alert(await response.text()); return; }
                     window.location = '/profiles/{{id}}';
-    });
+                });
             </script>
         {{/account}}
     </section>

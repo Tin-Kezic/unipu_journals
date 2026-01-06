@@ -33,20 +33,20 @@
                             newEmail: upsertDialogInput.value
                         })});
                         if(!response.ok) { alert(await response.text()); return; }
-                        openInfoDialog(JSON.stringify({ "an email has been sent" : "confirm email change" }));
+                        alert(`A confirmation email has been sent to ${upsertDialogInput.value}.\nVerify new email address within 15 minutes.`)
                     },
                     canCreateMore: false,
                     inputValue: '',
                     labelValue: 'email'
                 })},
-                {name: 'Change password', onClick: () => {}}
+                {name: 'Change password', onClick: () => openUpdatePasswordDialog()}
             ]));
             document.getElementById('delete-account').addEventListener('click', () => openBooleanDialog('Permanently delete account', 'Delete', async () => {
                 const response = await fetch(`/api/accounts`, {
                     method: 'DELETE', body: new URLSearchParams({ accountId: window.location.pathname.replace('/profiles/', '') })
                 });
                 if(!response.ok) { alert(await response.text()); return; }
-                openInfoDialog(JSON.stringify({ "an email has been sent" : "confirm deletion" }));
+                alert(`A confirmation email has been sent to your email address. Verify account deletion within 15 minutes.`);
             }));
         </script>
         {{/author}}
@@ -130,3 +130,43 @@
         }
     }
 </style>
+<dialog id="update-password-dialog" closedby="any">
+    <form id="update-password-dialog-form">
+        <p id="update-password-dialog-message"></p>
+        <div class="text-field" style="margin-bottom: 0.5rem;">
+            <label for="update-password-dialog-current-password-input">current password</label>
+            <input id="update-password-dialog-current-password-input" name="update-password-dialog-input" type="password" required>
+        </div>
+        <div class="text-field" style="margin-bottom: 0.5rem;">
+            <label for="update-password-dialog-new-password-input">new password</label>
+            <input id="update-password-dialog-new-password-input" name="update-password-dialog-input" type="password" required>
+        </div>
+        <div class="text-field" style="margin-bottom: 0.5rem;">
+            <label for="update-password-dialog-new-password-confirmation-input">repeat password</label>
+            <input id="update-password-dialog-new-password-confirmation-input" name="update-password-dialog-input" type="password" required>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button id="update-password-dialog-negative" class="m3-button outlined-button" type="button">Cancel</button>
+            <button class="m3-button primary-button" style="box-shadow: none; padding-inline: 1.8rem;">Change password</button>
+        </div>
+    </form>
+</dialog>
+<script>
+    const updatePasswordDialog = document.getElementById('update-password-dialog');
+    const updatePasswordDialogCurrentPasswordInput = document.getElementById('update-password-dialog-current-password-input');
+    const updatePasswordDialogNewPasswordInput = document.getElementById('update-password-dialog-new-password-input');
+    const updatePasswordDialogNewPasswordConfirmationInput = document.getElementById('update-password-dialog-new-password-confirmation-input');
+    function openUpdatePasswordDialog() { updatePasswordDialog.showModal(); }
+    document.getElementById('update-password-dialog-negative').addEventListener('click', () => updatePasswordDialog.close());
+    document.getElementById('update-password-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if(updatePasswordDialogNewPasswordInput.value != updatePasswordDialogNewPasswordConfirmationInput.value) { alert("password mistmach"); return; }
+        const response = await fetch('/api/accounts/password', { method: 'PUT', body: new URLSearchParams({
+            accountId: window.location.pathname.replace('/profiles/', ''),
+            currentPassword: updatePasswordDialogCurrentPasswordInput.value,
+            newPassword: updatePasswordDialogNewPasswordInput.value
+        })});
+        if(!response.ok) { alert(await response.text()); return; }
+        updatePasswordDialog.close();
+    });
+</script>
