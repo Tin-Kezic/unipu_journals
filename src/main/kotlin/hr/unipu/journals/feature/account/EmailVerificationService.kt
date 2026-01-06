@@ -11,20 +11,20 @@ class EmailVerificationService(
     private val cacheManager: CacheManager,
     private val emailService: EmailService
 ) {
-    private val style = "text-decoration:none;background-color:#454545;color:white;border-radius:1rem;padding:1rem;margin:1rem;"
     @Value($$"${app.base-url}")
-    lateinit var baseUrl: String
+    private lateinit var baseUrl: String
+    private val style = "style=\"text-decoration:none;background-color:#454545;color:white;border-radius:1rem;padding:1rem;margin:1rem;\""
+    private fun button(type: String, token: String, text: String) = "<a href=\"$baseUrl/authentication/$type?token=$token\" $style>$text</a>"
+
     fun register(account: AccountDTO) {
         val token = UUID.randomUUID().toString()
         cacheManager.getCache("pendingRegistrations")?.put(token, account)
-        val href = "${baseUrl}/authentication/verify?token=${token}"
-        emailService.sendHtml(account.email, "Email verification", "<a href=\"${href}\" style=\"${style}\">Verify email</a>")
+        emailService.sendHtml(account.email, "Email verification", button("verify", token,"Verify email"))
     }
     fun delete(account: Account) {
         val token = UUID.randomUUID().toString()
         cacheManager.getCache("pendingDeletions")?.put(token, account)
-        val href = "${baseUrl}/authentication/delete?token=${token}"
-        emailService.sendHtml(account.email, "Account deletion", "<a href=\"${href}\" style=\"${style}\">Permanently delete account</a>")
+        emailService.sendHtml(account.email, "Account deletion", button("delete", token, "Permanently delete ${account.email} account"))
     }
     fun changeEmail(accountAndNewEmail: AccountAndNewEmail) {
         val token = UUID.randomUUID().toString()
