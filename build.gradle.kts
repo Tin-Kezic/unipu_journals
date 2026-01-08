@@ -16,7 +16,6 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine")
-
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.5.3")
     //implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
@@ -24,7 +23,6 @@ dependencies {
 	// implementation("org.springframework.session:spring-session-jdbc:3.2.1")
 	// implementation("org.springframework.boot:spring-boot-starter-data-ldap:3.5.3")
 	// implementation("org.springframework.boot:spring-boot-starter-data-rest:3.5.3")
-
     testImplementation("com.h2database:h2:2.2.224")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.3")
 	testImplementation("org.springframework.security:spring-security-test:6.0.3")
