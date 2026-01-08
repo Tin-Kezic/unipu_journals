@@ -93,7 +93,7 @@ class SectionController(
                 description = description?.run { Jsoup.clean(this, Safelist.relaxed()) },
                 isHidden = isHidden
             )
-            if (rowsAffected == 1) ResponseEntity.ok("section successfully updated")
+            if(rowsAffected == 1) ResponseEntity.ok("section successfully updated")
             else ResponseEntity.internalServerError().body("failed to update section")
         } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
     }
