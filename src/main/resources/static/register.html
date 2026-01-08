@@ -80,21 +80,18 @@
             document.getElementById('password').focus()
             return;
         }
-        const response = await fetch(`/api/accounts`, {
-            method: 'POST',
-            body: new URLSearchParams({
-                fullName: form.fullName.value,
-                title: form.title.value,
-                email: form.email.value,
-                password: form.password.value,
-                affiliation: form.affiliation.value,
-                jobType: form.jobType.value,
-                country: form.country.value,
-                city: form.city.value,
-                address: form.address.value,
-                zipCode: form.zipCode.value
-            })
-        });
+        const response = await fetch(`/api/accounts`, { method: 'POST', body: new URLSearchParams({
+            fullName: form.fullName.value,
+            title: form.title.value,
+            email: form.email.value,
+            password: form.password.value,
+            affiliation: form.affiliation.value,
+            jobType: form.jobType.value,
+            country: form.country.value,
+            city: form.city.value,
+            address: form.address.value,
+            zipCode: form.zipCode.value
+        })});
         if(!response.ok) {
             const error = await response.text();
             document.getElementById('email-taken').style.display = error.includes('email taken') ? 'inline-block': 'none';
