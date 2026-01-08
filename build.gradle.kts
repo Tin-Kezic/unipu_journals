@@ -16,6 +16,7 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("net.lingala.zip4j:zip4j:2.11.5")
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.5.3")
     //implementation("org.springframework.boot:spring-boot-starter-jooq:3.5.6")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
