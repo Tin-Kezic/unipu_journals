@@ -114,8 +114,8 @@
         <div id="additional-authors"></div>
 
         <div class="text-field">
-            <label for="abstract">Abstract</label>
-            <textarea id="abstract" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;"></textarea>
+            <label for="description">Description</label>
+            <textarea id="description" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;"></textarea>
         </div>
         <div style="display: flex; justify-content: space-between;">
             <label class="m3-button">Upload files
@@ -140,48 +140,49 @@
         const category = document.querySelector('select[name="category"]').value;
         if(category == 'category') { alert('select a category'); return; }
 
-        const publication = document.querySelector('select[name="publication"]').value;
-        if(publication == 'publication') { alert('select a publication'); return; }
+        const publicationName = document.querySelector('select[name="publication"]').value;
+        if(publicationName == 'publication') { alert('select a publication'); return; }
 
-        const section = document.querySelector('select[name="section"]').value;
+        const sectionName = document.querySelector('select[name="section"]').value;
         const title = document.querySelector('input[name="title"]').value;
 
         // authors
         const fullNames = document.querySelectorAll('input[name="full-name"]');
-        const institutionalEmails = document.querySelectorAll('input[name="institutional-email"]');
+        const emails = document.querySelectorAll('input[name="institutional-email"]');
         const countries = document.querySelectorAll('input[name="country"]');
         const affiliations = document.querySelectorAll('input[name="affiliation"]');
         const isCorrespondingAuthorList = document.querySelectorAll('input[name="corresponding-author"]');
 
         const authors = Array.from(fullNames).map((_, index) => ({
             fullName: fullNames[index].value,
-            institutionalEmail: institutionalEmails[index].value,
+            email: emails[index].value,
             country: countries[index].value,
             affiliation: affiliations[index].value,
-            isCorrespondingAuthor: isCorrespondingAuthorList[index].checked
         }));
 
-        let noCorrespondingAuthor = true
-        authors.forEach(author => { if(author.isCorrespondingAuthor) { noCorrespondingAuthor = false }})
-        if(noCorrespondingAuthor) { alert('select corresponding author'); return; }
+        let correspondingAuthorEmail
+        authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email }})
+        if(!correspondingAuthorEmail) { alert('select corresponding author'); return; }
 
-        const abstract = document.getElementById('abstract').value;
+        const description = document.getElementById('description').value;
         const files = document.querySelector('input[type="file"]').files;
-        Array.from(files).forEach(file => {
-            console.log(`FILES: ${file.name}`)
-        })
-        /* consideration: using { body: data }
-        const response = await fetch(`
-            /api/publications/${publication}/sections/${section}/insert
-                ?title=${encodeURIComponent(title)}
-                &category=${encodeURIComponent(category)}
-                &authors=${encodeURIComponent(authors)}
-                &abstract=${encodeURIComponent(abstract)}
-                &files=files
-            `, { method: 'POST' }); //&files=${encodeURIComponent(Array.from(files))}
+        if(files.length === 0) { alert('submit files'); return; }
+
+        const formData = new FormData();
+        formData.append("manuscriptSubmission", new Blob([JSON.stringify({
+            title,
+            category,
+            publicationName,
+            sectionName,
+            authors,
+            correspondingAuthorEmail,
+            description
+        })], { type: "application/json" }));
+        Array.from(files).forEach(file => formData.append("files", file));
+
+        const response = await fetch('/api/manuscripts', { method: 'POST', body: formData });
         if(!response.ok) { alert(await response.text()); return; }
-        */
-        window.location = '/';
+        //window.location = '/';
     });
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
