@@ -62,7 +62,6 @@ class InviteRepositoryTests {
                     categoryId = 1,
                     state = ManuscriptState.AWAITING_EDITOR_REVIEW,
                     sectionId = 7,
-                    downloadUrl = "http://example.com/ms2.pdf",
                     submissionDate = LocalDateTime.of(2023, 9, 28, 13, 28, 0),
                     publicationDate = null,
                 ),
@@ -73,7 +72,6 @@ class InviteRepositoryTests {
                     categoryId = 2,
                     state = ManuscriptState.AWAITING_REVIEWER_REVIEW,
                     sectionId = 11,
-                    downloadUrl = "http://example.com/ms3.pdf",
                     submissionDate = LocalDateTime.of(2022, 9, 28, 13, 28, 0),
                     publicationDate = null,
                 )
@@ -89,7 +87,6 @@ class InviteRepositoryTests {
                     categoryId = 2,
                     state = ManuscriptState.AWAITING_REVIEWER_REVIEW,
                     sectionId = 11,
-                    downloadUrl = "http://example.com/ms3.pdf",
                     submissionDate = LocalDateTime.of(2022, 9, 28, 13, 28, 0),
                     publicationDate = null,
                 )
