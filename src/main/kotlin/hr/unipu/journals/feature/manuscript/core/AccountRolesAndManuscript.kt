@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import java.time.LocalDateTime
 
-data class AccountRolesAndManuscript (
+data class AccountRolesAndManuscript(
     val roles: List<ManuscriptRole>,
     @Id val id: Int,
     val title: String,
