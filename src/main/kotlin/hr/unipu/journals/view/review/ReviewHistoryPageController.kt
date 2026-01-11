@@ -2,6 +2,7 @@ package hr.unipu.journals.view.review
 
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
+import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
 import hr.unipu.journals.feature.manuscript.review.OneToFive
 import hr.unipu.journals.feature.manuscript.review.Recommendation
@@ -19,7 +20,8 @@ import java.time.format.DateTimeFormatter
 class ReviewHistoryPageController(
     private val manuscriptRepository: ManuscriptRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val manuscriptReviewRepository: ManuscriptReviewRepository
+    private val manuscriptReviewRepository: ManuscriptReviewRepository,
+    private val manuscriptFileRepository: ManuscriptFileRepository
 ) {
     @GetMapping("/manuscripts/{manuscriptId}/review-history/reviewer/{reviewerId}/round/{round}")
     fun page(
@@ -36,7 +38,7 @@ class ReviewHistoryPageController(
         model["publicationDate"] = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd.MM.YYYY")) ?: "no publication date"
         model["authors"] = accountRoleOnManuscriptRepository.authors(manuscript.id).map { it.fullName }
         model["abstract"] = manuscript.description
-        model["downloadUrl"] = manuscript.downloadUrl
+        model["files"] =  manuscriptFileRepository.allFilesByManuscriptId(manuscript.id)
         model["reviewerWithRounds"] = manuscriptReviewRepository.reviewersAndRounds(manuscriptId)
             .groupBy { it.reviewerId }
             .map { (reviewer, rounds) -> ReviewerWithRounds(reviewer, rounds.map { it.round }) }

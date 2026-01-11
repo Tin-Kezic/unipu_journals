@@ -39,7 +39,7 @@ class Manuscript extends HTMLElement {
     this._unregisteredAuthors = run(this.getAttribute('unregistered-authors'), JSON.parse);
     this._submissionDate = this.getAttribute('submission-date');
     this._publicationDate = this.getAttribute('publication-date');
-    this._downloadUrl = this.getAttribute('download-url');
+    this._files = run(this.getAttribute('files'), JSON.parse);
     this._isOverseeing = this.getAttribute('is-overseeing') === 'true';
     this._roles = run(this.getAttribute('roles'), JSON.parse);
     this._role = this.getAttribute('role'); // role for invites

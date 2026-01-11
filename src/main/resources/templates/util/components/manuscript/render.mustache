@@ -30,7 +30,7 @@ function renderManuscripts(manuscripts, containerId) {
         newManuscript.setAttribute('unregistered-authors', run(manuscript.unregisteredAuthors, JSON.stringify));
         newManuscript.setAttribute('submission-date', manuscript.submissionDate);
         newManuscript.setAttribute('publication-date', manuscript.publicationDate);
-        newManuscript.setAttribute('download-url', manuscript.downloadUrl);
+        newManuscript.setAttribute('files', run(manuscript.files, JSON.stringify));
         newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
         newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
         newManuscript.setAttribute('state', manuscript.state);

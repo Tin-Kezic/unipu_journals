@@ -101,7 +101,7 @@ class ManuscriptController(
                             else unregisteredAuthor.fullName
                         }
                 )
-                put("downloadUrl", manuscript.downloadUrl)
+                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("description", manuscript.description)
@@ -151,7 +151,7 @@ class ManuscriptController(
                             else unregisteredAuthor.fullName
                         }
                 )
-                put("downloadUrl", manuscript.downloadUrl)
+                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("description", manuscript.description)
@@ -189,7 +189,7 @@ class ManuscriptController(
                         else unregisteredAuthor.fullName
                     }
             )
-            put("downloadUrl", manuscript.downloadUrl)
+            put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
