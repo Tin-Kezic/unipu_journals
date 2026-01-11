@@ -14,7 +14,6 @@ data class AccountRolesAndManuscript(
     @Column("current_state")
     val state: ManuscriptState,
     val sectionId: Int,
-    val downloadUrl: String,
     val submissionDate: LocalDateTime,
     val publicationDate: LocalDateTime?,
     val correspondingAuthorEmail: String
