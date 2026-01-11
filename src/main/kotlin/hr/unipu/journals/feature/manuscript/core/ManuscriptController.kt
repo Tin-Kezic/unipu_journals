@@ -49,7 +49,7 @@ class ManuscriptController(
         @RequestParam query: String?
     ): List<Map<String, Any?>> {
         require(
-            manuscriptStateFilter in listOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
+            manuscriptStateFilter in setOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
                     || accountId == null
                     || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
         )
