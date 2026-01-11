@@ -100,7 +100,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("query") query: String? = null
     ): List<AccountRolesAndManuscript>
 
-    @Modifying
     @Query("""
         INSERT INTO manuscript (
             title,
