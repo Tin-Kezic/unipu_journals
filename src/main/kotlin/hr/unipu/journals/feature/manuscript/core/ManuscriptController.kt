@@ -240,7 +240,7 @@ class ManuscriptController(
             }
             ManuscriptState.HIDDEN -> {
                 if(isAdmin.not()) return ResponseEntity.status(403).body("unauthorized to hide manuscripts")
-                if(manuscript.state !in listOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
+                if(manuscript.state !in setOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
             }
             ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to $newState")
             ManuscriptState.AWAITING_EDITOR_REVIEW -> {
