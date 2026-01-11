@@ -9,6 +9,9 @@ interface CategoryRepository: Repository<Category, Int> {
     @Query("SELECT name FROM category ORDER BY name")
     fun all(): List<String>
 
+    @Query("SELECT id FROM category WHERE name = :name")
+    fun idByName(@Param("name") name: String): Int
+
     @Modifying
     @Query("INSERT INTO category (name) VALUES (:name)")
     fun insert(@Param("name") name: String): Int
