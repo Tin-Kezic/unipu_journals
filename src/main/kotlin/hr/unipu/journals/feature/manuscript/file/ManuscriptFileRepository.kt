@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param
 
 interface ManuscriptFileRepository: Repository<ManuscriptFile, Int> {
     @Query("SELECT * FROM file WHERE manuscript_id = :manuscript_id")
-    fun allFilesByManuscriptId(@Param("manuscript_id") manuscriptId: Int): ManuscriptFile
+    fun allFilesByManuscriptId(@Param("manuscript_id") manuscriptId: Int): List<ManuscriptFile>
 
     @Query("INSERT INTO file (name, path, manuscript_id) VALUES (:name, :path, :manuscript_id)")
     fun insert(
