@@ -9,7 +9,7 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface SectionRepository: Repository<Section, Int> {
-    @Query("SELECT * from publication_section WHERE id = :id")
+    @Query("SELECT * FROM publication_section WHERE id = :id")
     fun byId(@Param("id") sectionId: Int): Section?
 
     @Query("""
