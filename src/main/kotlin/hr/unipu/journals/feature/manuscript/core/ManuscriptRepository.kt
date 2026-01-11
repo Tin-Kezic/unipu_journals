@@ -125,9 +125,6 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("corresponding_author_email") correspondingAuthorEmail: String
     ): Manuscript
 
-    @Query("SELECT EXISTS (SELECT 1 FROM manuscript WHERE id = :id)")
-    fun exists(@Param("id") id: Int): Boolean
-
     @Modifying
     @Query("UPDATE manuscript SET current_state = :state::manuscript_state WHERE id = :id")
     fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState): Int
