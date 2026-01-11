@@ -101,13 +101,29 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
     ): List<AccountRolesAndManuscript>
 
     @Modifying
-    @Query("INSERT INTO manuscript (title, category_id, section_id, file_url) VALUES (:title, :category_id, :section_id, :file_url)")
+    @Query("""
+        INSERT INTO manuscript (
+            title,
+            description,
+            category_id,
+            section_id,
+            corresponding_author_email
+        ) VALUES (
+            :title,
+            :description,
+            :category_id,
+            :section_id
+            :corresponding_author_email
+        )
+        RETURNING * 
+    """)
     fun insert(
         @Param("title") title: String,
+        @Param("description") description: String,
         @Param("category_id") categoryId: Int,
         @Param("section_id") sectionId: Int,
-        @Param("file_url") fileUrl: String
-    ): Int
+        @Param("corresponding_author_email") correspondingAuthorEmail: String
+    ): Manuscript
 
     @Query("SELECT EXISTS (SELECT 1 FROM manuscript WHERE id = :id)")
     fun exists(@Param("id") id: Int): Boolean
