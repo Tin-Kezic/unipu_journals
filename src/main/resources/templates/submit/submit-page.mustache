@@ -196,7 +196,7 @@
         ];
         Array.from(fileInput.files).forEach(file => {
             const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (forbiddenExtensions.includes(fileExtension)) {
+            if(forbiddenExtensions.includes(fileExtension)) {
                 alert(`files of type .${fileExtension} are not allowed`);
                 fileInput.value = '';
                 return;
