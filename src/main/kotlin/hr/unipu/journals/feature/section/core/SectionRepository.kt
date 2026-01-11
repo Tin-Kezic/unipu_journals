@@ -13,6 +13,17 @@ interface SectionRepository: Repository<Section, Int> {
     fun byId(@Param("id") sectionId: Int): Section?
 
     @Query("""
+        SELECT id FROM publication_section
+        JOIN publication ON publication_section.publication_id = publication.id
+        WHERE publication.name = :publication_name
+        AND publication_section.name = :section_name
+    """)
+    fun idByName(
+        @Param("publication_name") publicationName: String,
+        @Param("section_name") sectionName: String
+    ): Int
+
+    @Query("""
         SELECT DISTINCT publication_section.title FROM publication_section
         JOIN publication ON publication_section.publication_id = publication.id
         LEFT JOIN manuscript ON manuscript.section_id = publication_section.id
