@@ -44,7 +44,9 @@ class InviteController(
                     manuscriptId = targetId
                 )
         }
-        inviteRepository.revoke(
+        if(accept && target == InvitationTarget.EIC_ON_MANUSCRIPT)
+            inviteRepository.revokeAllEicOnManuscript(targetId)
+        else inviteRepository.revoke(
             email = account.email,
             target = target,
             targetId = targetId
