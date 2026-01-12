@@ -1,16 +1,24 @@
 package hr.unipu.journals.feature.manuscript.core
 
 import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
+import hr.unipu.journals.feature.manuscript.category.CategoryRepository
+import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.feature.section.core.SectionRepository
-import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthor
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
+import hr.unipu.journals.security.ClamAv
+import hr.unipu.journals.security.ScanResult
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,9 +27,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/manuscripts")
@@ -29,11 +40,15 @@ class ManuscriptController(
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
     private val manuscriptRepository: ManuscriptRepository,
+    private val manuscriptFileRepository: ManuscriptFileRepository,
     private val accountRepository: AccountRepository,
     private val inviteRepository: InviteRepository,
     private val authorizationService: AuthorizationService,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
-    private val unregisteredAuthorRepository: UnregisteredAuthorRepository
+    private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
+    private val categoryRepository: CategoryRepository,
+    private val zipService: ZipService,
+    private val clamAv: ClamAv
 ) {
     @GetMapping
     fun all(
@@ -200,26 +215,66 @@ class ManuscriptController(
             put("state", manuscript.state)
         }}
     }
-    @PostMapping
+    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(
-        @PathVariable sectionId: Int,
-        @RequestParam title: String,
-        @RequestParam category: String,
-        @RequestParam authors: List<UnregisteredAuthor>,
-        @RequestParam abstract: String,
-        @RequestParam files: List<MultipartFile>,
+        @RequestPart manuscriptSubmission: ManuscriptSubmission,
+        @RequestPart files: List<MultipartFile>,
     ): ResponseEntity<String> {
-        // clean inputs with Jsoup
-        /*
-        publicationRepository.insert(
-            title = Jsoup.clean(title, Safelist.none()),
-            category = Jsoup.clean(category, Safelist.none()),
-            authors = authors,
-            abstract = abstract,
-            files = files
+        val forbiddenExtensions = setOf(
+            "exe", "msi", "bat", "cmd", "sh", "app", "apk", "dll", "so", "bin", "iso", "dmg", "img", "pkg",
+            "html", "htm", "css", "js", "php", "asp", "aspx",
+            "psd", "indd", "cdr", "sketch", "key",
+            "gif", "webp", "heic", "heif", "raw",
+            "hdf", "h5", "sav", "dta", "mat",
+            "rar", "7z", "ace",
+            "tmp", "bak", "~doc", "swp",
+            "ttf", "otf", "fon", ""
         )
-         */
+        files.forEach { file ->
+            if(file.originalFilename == null)
+                return ResponseEntity.badRequest().body("submitted unnamed files")
+            val extension = file.originalFilename!!.substringAfterLast('.', "").lowercase()
+            if(extension in forbiddenExtensions)
+                return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
+            if(extension == "zip" && zipService.isEncrypted(file))
+                return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
+            if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
+                return ResponseEntity.badRequest().body("submitted files contain malware")
+        }
+        val insertedManuscript = manuscriptRepository.insert(
+            title = Jsoup.clean(manuscriptSubmission.title, Safelist.none()),
+            description = Jsoup.clean(manuscriptSubmission.description, Safelist.none()),
+            categoryId = categoryRepository.idByName(Jsoup.clean(manuscriptSubmission.category, Safelist.none())),
+            sectionId = sectionRepository.idByName(
+                publicationName = Jsoup.clean(manuscriptSubmission.publicationName, Safelist.none()),
+                sectionName = Jsoup.clean(manuscriptSubmission.sectionName, Safelist.none())
+            ),
+            correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
+        )
+        val paths = files.map { file -> "/unipu-journals/files/${UUID.randomUUID()}-${Jsoup.clean(file.originalFilename!!, Safelist.none())}" }
+        files.zip(paths).forEach { (file, path) ->
+            file.transferTo(File(path))
+            manuscriptFileRepository.insert(
+                name = Jsoup.clean(file.originalFilename!!, Safelist.none()),
+                path = path,
+                manuscriptId = insertedManuscript.id
+            )
+        }
+        manuscriptSubmission.authors.forEach { authorDTO ->
+            val account = accountRepository.byEmail(authorDTO.email)
+            if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
+            else unregisteredAuthorRepository.insert(
+                fullName = authorDTO.fullName,
+                email = authorDTO.email,
+                country = authorDTO.country,
+                affiliation = authorDTO.affiliation,
+                manuscriptId = insertedManuscript.id
+            )
+        }
+        accountRoleOnManuscriptRepository.allEicOnPublicationEmailsByPublicationName(manuscriptSubmission.publicationName).forEach { eicEmail ->
+            inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
+        }
         return ResponseEntity.ok("manuscript successfully added")
     }
     @PutMapping("/{manuscriptId}")
