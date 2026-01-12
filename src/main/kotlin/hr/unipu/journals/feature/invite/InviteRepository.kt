@@ -95,4 +95,8 @@ interface InviteRepository: Repository<Invite, Int> {
     @Modifying
     @Query("DELETE FROM invite WHERE email = :email AND (target = :target::invitation_target OR :target IS NULL) AND (target_id = :target_id OR :target_id IS NULL)")
     fun revoke(@Param("email") email: String, @Param("target") target: InvitationTarget? = null, @Param("target_id") targetId: Int? = null): Int
+
+    @Modifying
+    @Query("DELETE FROM invite WHERE target = 'EIC_ON_MANUSCRIPT' AND target_id = :manuscript_id")
+    fun revokeAllEicOnManuscript(@Param("manuscript_id") manuscriptId: Int): Int
 }
