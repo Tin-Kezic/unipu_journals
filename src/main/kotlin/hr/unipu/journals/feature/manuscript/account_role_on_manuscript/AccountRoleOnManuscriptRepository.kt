@@ -17,13 +17,14 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun authors(@Param("manuscript_id") manuscriptId: Int): List<Account>
 
     @Query("""
-        SELECT * FROM account_role_on_manuscript
+        SELECT DISTINCT account.email FROM account_role_on_manuscript
         JOIN manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         JOIN publication_section ON publication_section.id = manuscript.section_id
         JOIN publication ON publication.id = publication_section.publication_id
-        WHERE publication.name = :name AND account_role_on_manuscript.account_role = 'EIC'
+        JOIN account ON account.id = account_role_on_manuscript.account_id
+        WHERE publication.title = :title AND account_role_on_manuscript.account_role = 'EIC'
     """)
-    fun allEicOnPublicationEmailsByPublicationName(@Param("name") name: String): List<String>
+    fun allEicOnPublicationEmailsByPublicationTitle(@Param("title") title: String): List<String>
 
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript
