@@ -242,7 +242,7 @@ class ManuscriptController(
         }
         val tempFiles = files.map { file -> File.createTempFile(
             UUID.randomUUID().toString(),
-            "-${Jsoup.clean(file.originalFilename!!, Safelist.none())}",
+            "-${Jsoup.clean(file.originalFilename!!, Safelist.none()).replace("-", "_")}",
             File("/tmp")).apply { deleteOnExit() }
         }
         files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp) }
