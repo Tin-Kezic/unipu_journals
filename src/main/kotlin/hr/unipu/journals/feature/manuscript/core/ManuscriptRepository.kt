@@ -111,7 +111,7 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
             :title,
             :description,
             :category_id,
-            :section_id
+            :section_id,
             :corresponding_author_email
         )
         RETURNING * 
