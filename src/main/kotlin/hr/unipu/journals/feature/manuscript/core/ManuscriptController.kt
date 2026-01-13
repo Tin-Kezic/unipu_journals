@@ -16,6 +16,7 @@ import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.security.ClamAv
 import hr.unipu.journals.security.ScanResult
+import hr.unipu.journals.util.AppProperties
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.MediaType
@@ -48,8 +49,12 @@ class ManuscriptController(
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val categoryRepository: CategoryRepository,
     private val zipService: ZipService,
-    private val clamAv: ClamAv
+    private val clamAv: ClamAv,
+    private val appProperties: AppProperties
 ) {
+    private fun toAwaitingManuscript() {
+
+    }
     @GetMapping
     fun all(
         @RequestParam publicationId: Int?,
@@ -116,7 +121,7 @@ class ManuscriptController(
                             else unregisteredAuthor.fullName
                         }
                 )
-                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
+                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("description", manuscript.description)
@@ -166,7 +171,7 @@ class ManuscriptController(
                             else unregisteredAuthor.fullName
                         }
                 )
-                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
+                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("description", manuscript.description)
@@ -204,7 +209,7 @@ class ManuscriptController(
                         else unregisteredAuthor.fullName
                     }
             )
-            put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id))
+            put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
@@ -234,48 +239,60 @@ class ManuscriptController(
         files.forEach { file ->
             if(file.originalFilename == null)
                 return ResponseEntity.badRequest().body("submitted unnamed files")
-            val extension = file.originalFilename!!.substringAfterLast('.', "").lowercase()
-            if(extension in forbiddenExtensions)
-                return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
-            if(extension == "zip" && zipService.isEncrypted(file))
-                return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
-            if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
-                return ResponseEntity.badRequest().body("submitted files contain malware")
         }
-        val insertedManuscript = manuscriptRepository.insert(
-            title = Jsoup.clean(manuscriptSubmission.title, Safelist.none()),
-            description = Jsoup.clean(manuscriptSubmission.description, Safelist.none()),
-            categoryId = categoryRepository.idByName(Jsoup.clean(manuscriptSubmission.category, Safelist.none())),
-            sectionId = sectionRepository.idByName(
-                publicationName = Jsoup.clean(manuscriptSubmission.publicationName, Safelist.none()),
-                sectionName = Jsoup.clean(manuscriptSubmission.sectionName, Safelist.none())
-            ),
-            correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
-        )
-        val paths = files.map { file -> "/unipu-journals/files/${UUID.randomUUID()}-${Jsoup.clean(file.originalFilename!!, Safelist.none())}" }
-        files.zip(paths).forEach { (file, path) ->
-            file.transferTo(File(path))
-            manuscriptFileRepository.insert(
-                name = Jsoup.clean(file.originalFilename!!, Safelist.none()),
-                path = path,
-                manuscriptId = insertedManuscript.id
+        val tempFiles = files.map { file -> File.createTempFile(
+            UUID.randomUUID().toString(),
+            "-${Jsoup.clean(file.originalFilename!!, Safelist.none())}",
+            File("/tmp")).apply { deleteOnExit() }
+        }
+        files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp) }
+        try {
+            tempFiles.forEach { file ->
+                val extension = file.name.substringAfterLast('.', "").lowercase()
+                if(extension in forbiddenExtensions)
+                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
+                if(extension == "zip" && zipService.isEncrypted(file))
+                    return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
+                if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
+                    return ResponseEntity.badRequest().body("submitted files contain malware")
+            }
+            val insertedManuscript = manuscriptRepository.insert(
+                title = Jsoup.clean(manuscriptSubmission.title, Safelist.none()),
+                description = Jsoup.clean(manuscriptSubmission.description, Safelist.none()),
+                categoryId = categoryRepository.idByName(Jsoup.clean(manuscriptSubmission.category, Safelist.none())),
+                sectionId = sectionRepository.idByName(
+                    publicationTitle = Jsoup.clean(manuscriptSubmission.publicationTitle, Safelist.none()),
+                    sectionTitle = Jsoup.clean(manuscriptSubmission.sectionName, Safelist.none())
+                ),
+                correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
             )
+            tempFiles.forEach { file ->
+                val path = "${appProperties.fileStoragePath}/unipu-journals/files/${file.name}"
+                file.copyTo(File(path), true)
+                manuscriptFileRepository.insert(
+                    name = file.name.substringAfterLast("-"),
+                    path = path,
+                    manuscriptId = insertedManuscript.id
+                )
+            }
+            manuscriptSubmission.authors.forEach { authorDTO ->
+                val account = accountRepository.byEmail(authorDTO.email)
+                if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
+                else unregisteredAuthorRepository.insert(
+                    fullName = authorDTO.fullName,
+                    email = authorDTO.email,
+                    country = authorDTO.country,
+                    affiliation = authorDTO.affiliation,
+                    manuscriptId = insertedManuscript.id
+                )
+            }
+            accountRoleOnManuscriptRepository.allEicOnPublicationEmailsByPublicationTitle(manuscriptSubmission.publicationTitle).forEach { eicEmail ->
+                inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
+            }
+            return ResponseEntity.ok("manuscript successfully added")
+        } finally {
+            tempFiles.forEach { file -> file.delete() }
         }
-        manuscriptSubmission.authors.forEach { authorDTO ->
-            val account = accountRepository.byEmail(authorDTO.email)
-            if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
-            else unregisteredAuthorRepository.insert(
-                fullName = authorDTO.fullName,
-                email = authorDTO.email,
-                country = authorDTO.country,
-                affiliation = authorDTO.affiliation,
-                manuscriptId = insertedManuscript.id
-            )
-        }
-        accountRoleOnManuscriptRepository.allEicOnPublicationEmailsByPublicationName(manuscriptSubmission.publicationName).forEach { eicEmail ->
-            inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
-        }
-        return ResponseEntity.ok("manuscript successfully added")
     }
     @PutMapping("/{manuscriptId}")
     fun updateState(
@@ -290,30 +307,30 @@ class ManuscriptController(
         val isEditorOnManuscriptOrAffiliatedSuperior = authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
         when(newState) {
             ManuscriptState.ARCHIVED -> {
-                if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to archive manuscripts in section ${section.id}")
+                if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("forbidden to archive manuscripts in section ${section.id}")
                 if(manuscript.state != ManuscriptState.PUBLISHED) return ResponseEntity.badRequest().body("cannot archive manuscript that is not published")
             }
             ManuscriptState.HIDDEN -> {
-                if(isAdmin.not()) return ResponseEntity.status(403).body("unauthorized to hide manuscripts")
+                if(isAdmin.not()) return ResponseEntity.status(403).body("forbidden to hide manuscripts")
                 if(manuscript.state !in setOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
             }
             ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to $newState")
             ManuscriptState.AWAITING_EDITOR_REVIEW -> {
-                if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("unauthorized to EiC review manuscripts $manuscriptId")
+                if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to EiC review manuscripts $manuscriptId")
                 if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from $newState")
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
-                if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("unauthorized to initialize round on manuscript $manuscriptId")
+                if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to initialize round on manuscript $manuscriptId")
                 if(manuscript.state != ManuscriptState.AWAITING_EDITOR_REVIEW) return ResponseEntity.badRequest().body("cannot initialize round from $newState")
             }
             ManuscriptState.MINOR, ManuscriptState.MAJOR, ManuscriptState.REJECTED -> {
-                if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
+                if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor on manuscript $manuscriptId")
             }
             ManuscriptState.PUBLISHED -> when(manuscript.state) {
-                ManuscriptState.HIDDEN -> if(isAdmin.not()) return ResponseEntity.status(403).body("unauthorized to unhide manuscripts")
-                ManuscriptState.ARCHIVED -> if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("unauthorized to unarchive manuscripts in section ${section.id}")
+                ManuscriptState.HIDDEN -> if(isAdmin.not()) return ResponseEntity.status(403).body("forbidden to unhide manuscripts")
+                ManuscriptState.ARCHIVED -> if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("forbidden to unarchive manuscripts in section ${section.id}")
                 ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
-                    if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("unauthorized to determine minor on manuscript $manuscriptId")
+                    if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor on manuscript $manuscriptId")
                 }
                 else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from $newState")
             }
