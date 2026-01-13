@@ -35,7 +35,7 @@ class EicOnPublicationController(
     @PutMapping("/revoke-eic")
     fun revoke(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
         val rowsAffected = accountRepository.byEmail(email)?.let {
-            eicOnPublicationRepository.revoke(publicationId, it.id)
+            eicOnPublicationRepository.revoke(eicId = it.id, publicationId = publicationId)
         } ?: inviteRepository.revoke(
             email = email,
             target = InvitationTarget.EIC_ON_PUBLICATION,
