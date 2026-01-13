@@ -1,7 +1,7 @@
 package hr.unipu.journals.feature.account
 
 import hr.unipu.journals.EmailService
-import org.springframework.beans.factory.annotation.Value
+import hr.unipu.journals.util.AppProperties
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -9,12 +9,11 @@ import java.util.UUID
 @Service
 class EmailVerificationService(
     private val cacheManager: CacheManager,
-    private val emailService: EmailService
+    private val emailService: EmailService,
+    private val appProperties: AppProperties
 ) {
-    @Value($$"${app.base-url}")
-    private lateinit var baseUrl: String
     private val style = "style=\"text-decoration:none;background-color:#454545;color:white;border-radius:1rem;padding:1rem;margin:1rem;\""
-    private fun button(type: String, token: String, text: String) = "<a href=\"$baseUrl/authentication/$type?token=$token\" $style>$text</a>"
+    private fun button(type: String, token: String, text: String) = "<a href=\"${appProperties.baseUrl}/authentication/$type?token=$token\" $style>$text</a>"
 
     fun register(account: AccountDTO) {
         val token = UUID.randomUUID().toString()
