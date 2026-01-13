@@ -139,8 +139,8 @@
         const category = document.querySelector('select[name="category"]').value;
         if(category == 'category') { alert('select a category'); return; }
 
-        const publicationName = document.querySelector('select[name="publication"]').value;
-        if(publicationName == 'publication') { alert('select a publication'); return; }
+        const publicationTitle = document.querySelector('select[name="publication"]').value;
+        if(publicationTitle == 'publication') { alert('select a publication'); return; }
 
         const sectionName = document.querySelector('select[name="section"]').value;
         const title = document.querySelector('input[name="title"]').value;
@@ -170,7 +170,7 @@
         formData.append("manuscriptSubmission", new Blob([JSON.stringify({
             title,
             category,
-            publicationName,
+            publicationTitle,
             sectionName,
             authors,
             correspondingAuthorEmail,
