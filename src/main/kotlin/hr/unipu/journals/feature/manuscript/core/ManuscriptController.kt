@@ -68,7 +68,7 @@ class ManuscriptController(
                     || accountId == null
                     || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
         )
-        val account = accountId?.let {accountRepository.byId(it) } ?: authorizationService.account
+        val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
         val manuscriptsAndAuthors = manuscriptRepository.all(
             accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
