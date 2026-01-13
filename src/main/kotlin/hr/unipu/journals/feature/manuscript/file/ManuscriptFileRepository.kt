@@ -6,6 +6,9 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface ManuscriptFileRepository: Repository<ManuscriptFile, Int> {
+    @Query("SELECT * FROM manuscript_file WHERE id = :id")
+    fun byId(@Param("id") id: Int): ManuscriptFile?
+
     @Query("SELECT * FROM manuscript_file WHERE manuscript_id = :manuscript_id")
     fun allFilesByManuscriptId(@Param("manuscript_id") manuscriptId: Int): List<ManuscriptFile>
 
