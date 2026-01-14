@@ -17,6 +17,7 @@ import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.security.ClamAv
 import hr.unipu.journals.security.ScanResult
 import hr.unipu.journals.util.AppProperties
+import hr.unipu.journals.util.Global
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.MediaType
@@ -52,9 +53,6 @@ class ManuscriptController(
     private val clamAv: ClamAv,
     private val appProperties: AppProperties
 ) {
-    private fun toAwaitingManuscript() {
-
-    }
     @GetMapping
     fun all(
         @RequestParam publicationId: Int?,
@@ -242,7 +240,7 @@ class ManuscriptController(
         }
         val tempFiles = files.map { file -> File.createTempFile(
             UUID.randomUUID().toString(),
-            "-${Jsoup.clean(file.originalFilename!!, Safelist.none()).replace("-", "_")}",
+            Jsoup.clean(file.originalFilename!!, Safelist.none()),
             File("/tmp")).apply { deleteOnExit() }
         }
         files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp) }
@@ -270,7 +268,7 @@ class ManuscriptController(
                 val path = "${appProperties.fileStoragePath}/unipu-journals/files/${file.name}"
                 file.copyTo(File(path), true)
                 manuscriptFileRepository.insert(
-                    name = file.name.substringAfterLast("-"),
+                    name = file.name.drop(Global.UUID_LENGTH),
                     path = path,
                     manuscriptId = insertedManuscript.id
                 )
@@ -290,9 +288,7 @@ class ManuscriptController(
                 inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
             }
             return ResponseEntity.ok("manuscript successfully added")
-        } finally {
-            tempFiles.forEach { file -> file.delete() }
-        }
+        } finally { tempFiles.forEach { file -> file.delete() } }
     }
     @PutMapping("/{manuscriptId}")
     fun updateState(
