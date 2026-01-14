@@ -1,7 +1,42 @@
 <script>
+    document.addEventListener('manuscript-click', async (event) => {
+        const inlineDisplayableTypes = [
+            "txt", "log", "md", "markdown", "csv", "tsv",
+            "json", "jsonl", "jsonld", "xml",
+            "yaml", "yml", "toml",
+            "ini", "cfg", "conf", "env", "sql",
+            "svg", "xhtml", "webmanifest",
+            "ts", "jsx", "tsx", "py", "java", "c", "cpp",
+            "h", "hpp", "cs", "go", "rs", "rb",
+            "swift", "kt", "scala", "lua", "r",
+            "pl", "dart",
+            "png", "jpg", "jpeg", "bmp", "ico",
+            "avif", "tif", "tiff", "jfif",
+            "mp3", "wav", "ogg", "opus", "m4a",
+            "aac", "flac",
+            "mp4", "m4v", "webm", "ogv", "3gp",
+            "pdf", "epub",
+            "woff", "woff2", "eot",
+            "geojson", "ndjson",
+            "fasta", "fastq", "vcf", "bed", "gff",
+            "wasm"
+        ];
+        const { id, title } = event.detail;
+        const currentElement = document.getElementById(id);
+        const run = (x, f) => x ? f(x) : null;
+        const files = run(currentElement.getAttribute('files'), JSON.parse);
+        const fileAndOptions = Object.fromEntries(files.map(file => {
+            const fileType = file.name.slice(file.name.lastIndexOf('.') + 1);
+            console.log(fileType)
+            const options = `<a href="/files?id=${file.id}">[Download]</a>${inlineDisplayableTypes.includes(fileType) ? `&nbsp<a href="/files?id=${file.id}&type=VIEW">[View]</a>` : ''}`;
+            return [file.name, options];
+        }))
+        console.log(fileAndOptions)
+        openInfoDialog(JSON.stringify(fileAndOptions))
+    });
     [
-        { type: 'manuscript-invite-accepted', operation: 'Accept', decision: true},
-        { type: 'manuscript-invite-declined', operation: 'Decline', decision: false},
+        { type: 'manuscript-invite-accepted', operation: 'Accept', decision: true },
+        { type: 'manuscript-invite-declined', operation: 'Decline', decision: false }
     ].forEach( it => {
         document.addEventListener(it.type, async (event) => {
             const { id, title, role } = event.detail;
@@ -26,9 +61,9 @@
         });
     });
     [
-        { type: 'manuscript-republished', operation: 'Republish', newState: 'PUBLISHED'},
-        { type: 'manuscript-archived', operation: 'Archive', newState: 'ARCHIVED'},
-        { type: 'manuscript-hidden', operation: 'Hide', newState: 'HIDDEN'},
+        { type: 'manuscript-republished', operation: 'Republish', newState: 'PUBLISHED' },
+        { type: 'manuscript-archived', operation: 'Archive', newState: 'ARCHIVED' },
+        { type: 'manuscript-hidden', operation: 'Hide', newState: 'HIDDEN' }
     ].forEach( it => {
         document.addEventListener(it.type, async (event) => {
             const { id, title } = event.detail;

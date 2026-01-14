@@ -46,7 +46,7 @@ class Manuscript extends HTMLElement {
     this._options = this.getAttribute('options');
     this._state = this.getAttribute('state');
     this.innerHTML = /*html*/`
-      <article onclick="window.location='${this._downloadUrl}'" class="container" style="width: auto; height: auto; max-width: 100%;">
+      <article class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
         <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
           ${this._registeredAuthors?.length ? this._registeredAuthors?.map(author => `
@@ -91,6 +91,10 @@ class Manuscript extends HTMLElement {
     `;
   }
   _removeOldListeners() {
+    if(this._clickHandler) {
+      this.querySelector('article')?.removeEventListener('click', this._clickHandler);
+      this._clickHandler = null;
+    }
     if(this._acceptHandler) {
       this.querySelector('button[data-type="accept"]')?.removeEventListener('click', this._acceptHandler);
       this._acceptHandler = null;
@@ -124,11 +128,13 @@ class Manuscript extends HTMLElement {
   }
   setupEventListeners() {
     this._removeOldListeners();
+    this._clickHandler = () => this.basicDispatch('manuscript-click');
     this._acceptHandler = () => this.basicDispatch('manuscript-invite-accepted');
     this._declineHandler = () => this.basicDispatch('manuscript-invite-declined');
     this._republishHandler = () => this.basicDispatch('manuscript-republished');
     this._archiveHandler = () => this.basicDispatch('manuscript-archived');
     this._hideHandler = () => this.basicDispatch('manuscript-hidden');
+    this.querySelector('article')?.addEventListener('click', this._clickHandler);
     this.querySelector('button[data-type="accept"]')?.addEventListener('click', this._acceptHandler);
     this.querySelector('button[data-type="decline"]')?.addEventListener('click', this._declineHandler);
     this.querySelector('button[data-type="republish"]')?.addEventListener('click', this._republishHandler);
