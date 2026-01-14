@@ -17,7 +17,6 @@ import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.security.ClamAv
 import hr.unipu.journals.security.ScanResult
 import hr.unipu.journals.util.AppProperties
-import hr.unipu.journals.util.Global
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.MediaType
@@ -238,14 +237,16 @@ class ManuscriptController(
             if(file.originalFilename == null)
                 return ResponseEntity.badRequest().body("submitted unnamed files")
         }
-        val tempFiles = files.map { file -> File.createTempFile(
-            UUID.randomUUID().toString(),
-            Jsoup.clean(file.originalFilename!!, Safelist.none()),
-            File("/tmp")).apply { deleteOnExit() }
+        val tempFiles = files.map { file ->
+            val cleanFileName = Jsoup.clean(file.originalFilename!!, Safelist.none())
+            cleanFileName to File.createTempFile(
+                UUID.randomUUID().toString(),
+                "." + cleanFileName.substringAfter(".")
+            ).apply { deleteOnExit() }
         }
-        files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp) }
+        files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp.second) }
         try {
-            tempFiles.forEach { file ->
+            tempFiles.forEach { (name, file) ->
                 val extension = file.name.substringAfterLast('.', "").lowercase()
                 if(extension in forbiddenExtensions)
                     return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
@@ -264,14 +265,10 @@ class ManuscriptController(
                 ),
                 correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
             )
-            tempFiles.forEach { file ->
+            tempFiles.forEach { (name, file) ->
                 val path = "${appProperties.fileStoragePath}/unipu-journals/files/${file.name}"
                 file.copyTo(File(path), true)
-                manuscriptFileRepository.insert(
-                    name = file.name.drop(Global.UUID_LENGTH),
-                    path = path,
-                    manuscriptId = insertedManuscript.id
-                )
+                manuscriptFileRepository.insert(name = name, path = path, manuscriptId = insertedManuscript.id)
             }
             manuscriptSubmission.authors.forEach { authorDTO ->
                 val account = accountRepository.byEmail(authorDTO.email)
@@ -288,7 +285,7 @@ class ManuscriptController(
                 inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
             }
             return ResponseEntity.ok("manuscript successfully added")
-        } finally { tempFiles.forEach { file -> file.delete() } }
+        } finally { tempFiles.forEach { (name, file) -> file.delete() } }
     }
     @PutMapping("/{manuscriptId}")
     fun updateState(

@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript.file
 
-import hr.unipu.journals.util.Global
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -22,7 +21,7 @@ class ManuscriptFileController(private val manuscriptFileRepository: ManuscriptF
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .header(
                 HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"${file.name.drop(Global.UUID_LENGTH)}\""
+                "attachment; filename=\"${manuscriptFile.name}\""
             )
             .contentLength(file.length())
             .body(FileSystemResource(file))
