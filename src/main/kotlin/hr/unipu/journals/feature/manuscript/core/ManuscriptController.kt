@@ -10,6 +10,7 @@ import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
+import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
@@ -45,6 +46,7 @@ class ManuscriptController(
     private val accountRepository: AccountRepository,
     private val inviteRepository: InviteRepository,
     private val authorizationService: AuthorizationService,
+    private val eicOnPublicationRepository: EicOnPublicationRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val categoryRepository: CategoryRepository,
@@ -281,7 +283,10 @@ class ManuscriptController(
                     manuscriptId = insertedManuscript.id
                 )
             }
-            accountRoleOnManuscriptRepository.allEicOnPublicationEmailsByPublicationTitle(manuscriptSubmission.publicationTitle).forEach { eicEmail ->
+            eicOnPublicationRepository.eicEmailsByPublicationId(
+                publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
+                    ?: return ResponseEntity.internalServerError().body("failed to find publication ${manuscriptSubmission.publicationTitle}")
+            ).forEach { eicEmail ->
                 inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
             }
             return ResponseEntity.ok("manuscript successfully added")
@@ -294,7 +299,7 @@ class ManuscriptController(
     ): ResponseEntity<String> {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript $manuscriptId")
         val section = sectionRepository.byId(manuscript.sectionId)!!
-        val publication = publicationRepository.byId(section.publicationId)!!
+        val publication = publicationRepository.by(id = section.publicationId)!!
         val isAdmin = authorizationService.isAdmin
         val isSectionEditorOnSectionOrSuperior = authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
         val isEditorOnManuscriptOrAffiliatedSuperior = authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)
