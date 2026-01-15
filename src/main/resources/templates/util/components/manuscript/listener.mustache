@@ -27,11 +27,9 @@
         const files = run(currentElement.getAttribute('files'), JSON.parse);
         const fileAndOptions = Object.fromEntries(files.map(file => {
             const fileType = file.name.slice(file.name.lastIndexOf('.') + 1);
-            console.log(fileType)
             const options = `<a href="/files?id=${file.id}">[Download]</a>${inlineDisplayableTypes.includes(fileType) ? `&nbsp<a href="/files?id=${file.id}&type=VIEW">[View]</a>` : ''}`;
             return [file.name, options];
         }))
-        console.log(fileAndOptions)
         openInfoDialog(JSON.stringify(fileAndOptions))
     });
     [
@@ -49,14 +47,14 @@
                     const roles = JSON.parse(pending.getAttribute('roles'));
                     roles.push(role);
                     pending.setAttribute('roles', JSON.stringify(roles));
+                    pending.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
+                    currentElement.remove();
                 } else if(it.operation === 'Accept') {
                     currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
                     currentElement.setAttribute('roles', JSON.stringify([role]));
                     currentElement.removeAttribute('role');
                     document.getElementById('manuscripts-container-pending').prepend(currentElement);
-                    return;
                 }
-                currentElement.remove();
             });
         });
     });
