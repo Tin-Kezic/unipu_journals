@@ -12,9 +12,7 @@ class EmailVerificationService(
     private val emailService: EmailService,
     private val appProperties: AppProperties
 ) {
-    private val style = "style=\"text-decoration:none;background-color:#454545;color:white;border-radius:1rem;padding:1rem;margin:1rem;\""
-    private fun button(type: String, token: String, text: String) = "<a href=\"${appProperties.baseUrl}/authentication/$type?token=$token\" $style>$text</a>"
-
+    private fun button(type: String, token: String, text: String) = "<a href=\"${appProperties.baseUrl}/authentication/$type?token=$token\">$text</a>"
     fun register(account: AccountDTO) {
         val token = UUID.randomUUID().toString()
         cacheManager.getCache("pendingRegistrations")?.put(token, account)
