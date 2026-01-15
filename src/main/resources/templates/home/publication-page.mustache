@@ -60,6 +60,17 @@
             const publicationsContainer = document.getElementById('publications-sidebar');
             renderSidebarButtons(responsePublications, 'publications-sidebar');
             updateUrl();
+            if(manuscriptStateSelect.value !== 'PUBLISHED') {
+                document.getElementById('add-section').hidden = true;
+                document.getElementById('sections-span').hidden = false;
+                document.getElementById('add-publication').hidden = true;
+                document.getElementById('publications-span').hidden = false;
+            } else if ({{isAdmin}}) {
+                document.getElementById('add-section').hidden = false;
+                document.getElementById('sections-span').hidden = true;
+                document.getElementById('add-publication').hidden = false;
+                document.getElementById('publications-span').hidden = true;
+            }
         }));
     </script>
 </div>
