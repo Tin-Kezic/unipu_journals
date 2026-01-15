@@ -50,7 +50,7 @@ class PublicationRepositoryTests {
         )
     }
     @Test fun `retrieve publication by publication id`() {
-        assertEquals("Journal of AI Research", publicationRepository.byId(1)?.title)
+        assertEquals("Journal of AI Research", publicationRepository.by(id = 1)?.title)
     }
     @Test fun `retrieve all published publications`() {
         assertEquals(

@@ -8,8 +8,11 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface PublicationRepository: Repository<Publication, Int> {
-    @Query("SELECT * FROM publication WHERE id = :id")
-    fun byId(@Param("id") id: Int): Publication?
+    @Query("SELECT * FROM publication WHERE (id = :id OR :id IS NULL) AND (title = :title OR :title IS NULL)")
+    fun by(
+        @Param("id") id: Int? = null,
+        @Param("title") title: String? = null
+    ): Publication?
 
     @Query("""
         SELECT publication.* FROM publication
