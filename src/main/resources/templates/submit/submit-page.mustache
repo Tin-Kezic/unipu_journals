@@ -121,12 +121,13 @@
             <label class="m3-button">Upload files
                 <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
             </label>
-            <button class="m3-button primary-button">Submit</button>
+            <button id="submit" class="m3-button primary-button">Submit</button>
         </div>
         <br> <br>
         <div id="file-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
     </form>
 </div>
+<dialog id="submitting-dialog" closedby="any"><p>Submitting...</p></dialog>
 <script>
     function onCheckboxClick(checkbox) {
         document.querySelectorAll('input[name="corresponding-author"]').forEach(cb => cb.checked = false)
@@ -134,13 +135,23 @@
     }
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
+    const submitButton = document.getElementById('submit');
+    const submittingDialog = document.getElementById('submitting-dialog');
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
+        submittingDialog.showModal();
+        submitButton.disabled = true;
+
+        function earlyReturn() {
+            submittingDialog.close();
+            submitButton.disabled = false;
+        }
+
         const category = document.querySelector('select[name="category"]').value;
-        if(category == 'category') { alert('select a category'); return; }
+        if(category == 'category') { alert('select a category'); earlyReturn(); return; }
 
         const publicationTitle = document.querySelector('select[name="publication"]').value;
-        if(publicationTitle == 'publication') { alert('select a publication'); return; }
+        if(publicationTitle == 'publication') { alert('select a publication'); earlyReturn(); return; }
 
         const sectionName = document.querySelector('select[name="section"]').value;
         const title = document.querySelector('input[name="title"]').value;
@@ -161,10 +172,10 @@
 
         let correspondingAuthorEmail
         authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email }})
-        if(!correspondingAuthorEmail) { alert('select corresponding author'); return; }
+        if(!correspondingAuthorEmail) { alert('select corresponding author'); earlyReturn(); return; }
 
         const description = document.getElementById('description').value;
-        if(fileInput.value.length === 0) { alert('submit files'); return; }
+        if(fileInput.value.length === 0) { alert('submit files'); earlyReturn(); return; }
 
         const formData = new FormData();
         formData.append("manuscriptSubmission", new Blob([JSON.stringify({
@@ -179,7 +190,7 @@
         Array.from(fileInput.files).forEach(file => formData.append("files", file));
 
         const response = await fetch('/api/manuscripts', { method: 'POST', body: formData });
-        if(!response.ok) { alert(await response.text()); return; }
+        if(!response.ok) { alert(await response.text()); earlyReturn(); return; }
         window.location = '/';
     });
     fileInput.addEventListener('change', () => {
@@ -199,6 +210,7 @@
             if(forbiddenExtensions.includes(fileExtension)) {
                 alert(`files of type .${fileExtension} are not allowed`);
                 fileInput.value = '';
+                submittingDialog.close();
                 return;
             }
         });
