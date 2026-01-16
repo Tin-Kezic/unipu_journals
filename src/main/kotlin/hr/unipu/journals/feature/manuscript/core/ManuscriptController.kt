@@ -314,7 +314,7 @@ class ManuscriptController(
             }
             ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to $newState")
             ManuscriptState.AWAITING_EDITOR_REVIEW -> {
-                if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to EiC review manuscripts $manuscriptId")
+                if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to editor review manuscript $manuscriptId")
                 if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from $newState")
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
