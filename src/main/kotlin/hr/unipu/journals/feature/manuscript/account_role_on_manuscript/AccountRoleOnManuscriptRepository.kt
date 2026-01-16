@@ -10,11 +10,13 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     @Query("""
         SELECT DISTINCT account.* FROM account_role_on_manuscript
         JOIN account ON account.id = account_role_on_manuscript.account_id
-        JOIN manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
-        WHERE account_role_on_manuscript.account_role = 'AUTHOR'
-        AND manuscript.id = :manuscript_id
+        WHERE (account_role_on_manuscript.account_role = :role OR :role IS NULL)
+        AND (account_role_on_manuscript.manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
     """)
-    fun authors(@Param("manuscript_id") manuscriptId: Int): List<Account>
+    fun all(
+        @Param("role") role: ManuscriptRole? = null,
+        @Param("manuscript_id") manuscriptId: Int? = null
+    ): List<Account>
 
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript

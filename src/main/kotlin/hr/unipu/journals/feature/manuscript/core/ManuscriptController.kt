@@ -136,7 +136,7 @@ class ManuscriptController(
                 sorting = sorting
             ).map { manuscript -> Triple(
                 manuscript,
-                accountRoleOnManuscriptRepository.authors(manuscript.id),
+                accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId =manuscript.id),
                 unregisteredAuthorRepository.authors(manuscript.id)
             )}.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
                 put("type", "invited")
