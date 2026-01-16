@@ -317,6 +317,10 @@ class ManuscriptController(
                 if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to editor review manuscript $manuscriptId")
                 if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from $newState")
             }
+            ManuscriptState.AWAITING_ROUND_INITIALIZATION -> {
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to initialize review round on manuscript $manuscriptId")
+                if(manuscript.state !in listOf(ManuscriptState.AWAITING_EDITOR_REVIEW, ManuscriptState.MINOR, ManuscriptState.MAJOR)) return ResponseEntity.badRequest().body("cannot change state to AWAITING_ROUND_INITIALIZATION from $newState")
+            }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                 if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to initialize round on manuscript $manuscriptId")
                 if(manuscript.state != ManuscriptState.AWAITING_EDITOR_REVIEW) return ResponseEntity.badRequest().body("cannot initialize round from $newState")
