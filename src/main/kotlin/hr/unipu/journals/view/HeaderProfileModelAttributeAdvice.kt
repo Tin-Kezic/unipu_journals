@@ -5,8 +5,6 @@ import hr.unipu.journals.view.home.PublicationPageController
 import hr.unipu.journals.view.profile.EditProfilePageController
 import hr.unipu.journals.view.profile.ProfilePageController
 import hr.unipu.journals.view.review.EicInitialReviewPageController
-import hr.unipu.journals.view.review.ReviewPageController
-import hr.unipu.journals.view.review.ReviewRoundInitializationPageController
 import hr.unipu.journals.view.submit.SubmitPageController
 import hr.unipu.journals.view.submit.TechnicalProcessingPageController
 import org.springframework.ui.Model
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute
     EditProfilePageController::class,
     ProfilePageController::class,
     EicInitialReviewPageController::class,
-    ReviewPageController::class,
-    ReviewRoundInitializationPageController::class,
     SubmitPageController::class,
     TechnicalProcessingPageController::class,
     SearchPageController::class
