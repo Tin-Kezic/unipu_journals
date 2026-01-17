@@ -33,21 +33,21 @@ interface InviteRepository: Repository<Invite, Int> {
         AND invite.email = :email
         AND (
             :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
-                invite.target = 'EIC_ON_MANUSCRIPT' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                invite.target = 'EIC_ON_MANUSCRIPT' AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW')
                 OR
-                invite.target = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                invite.target = 'EDITOR' AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW')
                 OR
                 invite.target = 'REVIEWER' AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
             )
-            OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
+            OR invite.target = 'EIC_ON_MANUSCRIPT'
+                AND :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
                 AND manuscript.current_state = 'AWAITING_EIC_REVIEW'
-                AND invite.target = 'EIC_ON_MANUSCRIPT'
-            OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
+            OR invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR')
+                AND :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
                 AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
-                AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR')
-            OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
+            OR invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
+                AND :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
                 AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-                AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR', 'REVIEWER')
         ) AND (
             :role IS NULL
             OR (
