@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
@@ -12,6 +13,7 @@ import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
+import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthor
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
@@ -72,8 +74,47 @@ class ManuscriptController(
                     || accountId == null
                     || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
         )
+        fun List<Triple<Manuscript, List<Account>, List<UnregisteredAuthor>>>.toManuscriptMap(): List<Map<String, Any?>> =
+            this.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
+                put("id", manuscript.id)
+                put("title", manuscript.title)
+                put("registeredAuthors", registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) })
+                put("unregisteredAuthors",
+                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
+                        || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+                        || authorizationService.isAdmin)
+                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
+                )
+                put("correspondingAuthor",
+                    accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
+                        ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
+                            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
+                                || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+                                || authorizationService.isAdmin)
+                                unregisteredAuthor.let { author -> mapOf(
+                                    "type" to "unregistered",
+                                    "id" to author.id,
+                                    "fullName" to author.fullName,
+                                    "email" to author.email,
+                                    "country" to author.country,
+                                    "affiliation" to author.affiliation,
+                                    "manuscriptId" to author.manuscriptId
+                                )}
+                            else unregisteredAuthor.fullName
+                        }
+                )
+                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
+                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+                        || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
+                        || authorizationService.isAdmin)
+                put("description", manuscript.description)
+                put("state", manuscript.state)
+            }}
         val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
-        val manuscriptsAndAuthors = manuscriptRepository.all(
+
+        val manuscripts = manuscriptRepository.all(
             accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
             role = role,
@@ -85,48 +126,16 @@ class ManuscriptController(
             query = query
         ).map { manuscript -> Triple(
             manuscript,
-            accountRoleOnManuscriptRepository.authors(manuscript.id),
+            accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, role = ManuscriptRole.AUTHOR).map { accountRepository.byId(it.accountId)!! },
             unregisteredAuthorRepository.authors(manuscript.id)
-        )}
+        )}.toManuscriptMap()
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             require(account != null)
-            val pending = manuscriptsAndAuthors.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
-                put("type", "pending")
-                put("roles", manuscript.roles)
-                put("id", manuscript.id)
-                put("title", manuscript.title)
-                put("registeredAuthors", registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) })
-                put("unregisteredAuthors",
-                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                                || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                                || authorizationService.isAdmin)
-                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
-                )
-                put("correspondingAuthor",
-                    accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                        ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
-                            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                                || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                                || authorizationService.isAdmin)
-                                unregisteredAuthor.let { author -> mapOf(
-                                    "type" to "unregistered",
-                                    "id" to author.id,
-                                    "fullName" to author.fullName,
-                                    "email" to author.email,
-                                    "country" to author.country,
-                                    "affiliation" to author.affiliation,
-                                    "manuscriptId" to author.manuscriptId
-                                )}
-                            else unregisteredAuthor.fullName
-                        }
-                )
-                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
-                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("description", manuscript.description)
-                put("state", manuscript.state)
-            }}
-            val invited = inviteRepository.invitedManuscripts(
+            val pending = manuscripts.map { manuscript -> manuscript + mapOf(
+                    "type" to "pending",
+                    "roles" to accountRoleOnManuscriptRepository.all(manuscriptId = manuscript["id"] as Int, accountId = account.id).map { it.accountRole }
+            )}
+            val invites = inviteRepository.invitedManuscripts(
                 email = account.email,
                 manuscriptStateFilter = manuscriptStateFilter,
                 role = role,
@@ -134,90 +143,20 @@ class ManuscriptController(
                 sectionId = sectionId,
                 category = category,
                 sorting = sorting
-            ).map { manuscript -> Triple(
+            )
+            val invited = invites.map {
+                manuscriptRepository.byId(it.targetId)!!
+            }.map { manuscript -> Triple(
                 manuscript,
-                accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId =manuscript.id),
+                accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, role = ManuscriptRole.AUTHOR).map { accountRepository.byId(it.accountId)!! },
                 unregisteredAuthorRepository.authors(manuscript.id)
-            )}.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
-                put("type", "invited")
-                put("role", manuscript.role)
-                put("id", manuscript.id)
-                put("title", manuscript.title)
-                put("registeredAuthors", registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) })
-                put("unregisteredAuthors",
-                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                        || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                        || authorizationService.isAdmin
-                        )
-                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
-                )
-                put("correspondingAuthor",
-                    accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                        ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
-                            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                                || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                                || authorizationService.isAdmin
-                                )
-                                unregisteredAuthor.let { author -> mapOf(
-                                    "type" to "unregistered",
-                                    "id" to author.id,
-                                    "fullName" to author.fullName,
-                                    "email" to author.email,
-                                    "country" to author.country,
-                                    "affiliation" to author.affiliation,
-                                    "manuscriptId" to author.manuscriptId
-                                )}
-                            else unregisteredAuthor.fullName
-                        }
-                )
-                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
-                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("description", manuscript.description)
-                put("state", manuscript.state)
-            }}
+            )}.toManuscriptMap().zip(invites).map { (map, invite) -> map + mapOf(
+                "type" to "invited",
+                "role" to invite.target
+            )}
             return pending + invited
         }
-        return manuscriptsAndAuthors.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
-            put("roles", manuscript.roles)
-            put("id", manuscript.id)
-            put("title", manuscript.title)
-            put("registeredAuthors", registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) })
-            put("unregisteredAuthors",
-                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                    || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                    || authorizationService.isAdmin
-                    )
-                    unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
-            )
-            put("correspondingAuthor",
-                accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                    ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
-                        if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                            || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                            || authorizationService.isAdmin)
-                            unregisteredAuthor.let { author -> mapOf(
-                                "type" to "unregistered",
-                                "id" to author.id,
-                                "fullName" to author.fullName,
-                                "email" to author.email,
-                                "country" to author.country,
-                                "affiliation" to author.affiliation,
-                                "manuscriptId" to author.manuscriptId
-                            )}
-                        else unregisteredAuthor.fullName
-                    }
-            )
-            put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
-            put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-            put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-            put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                    || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
-                    || authorizationService.isAdmin
-            )
-            put("description", manuscript.description)
-            put("state", manuscript.state)
-        }}
+        return manuscripts
     }
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
