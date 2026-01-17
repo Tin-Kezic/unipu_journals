@@ -137,6 +137,7 @@
     const fileList = document.getElementById('file-list');
     const submitButton = document.getElementById('submit');
     const submittingDialog = document.getElementById('submitting-dialog');
+    submittingDialog.addEventListener('cancel', (e) => e.preventDefault());
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
         submittingDialog.showModal();
