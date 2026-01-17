@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.invite
 
-import hr.unipu.journals.feature.manuscript.core.InvitedManuscript
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
@@ -21,17 +20,13 @@ interface InviteRepository: Repository<Invite, Int> {
     fun emailsByTarget(@Param("target") target: InvitationTarget, @Param("target_id") targetId: Int? = null): List<String>
 
     @Query("""
-        SELECT
-            invite.target as role,
-            manuscript.*
-        FROM invite
+        SELECT invite.* FROM invite
         JOIN manuscript ON invite.target_id = manuscript.id
         JOIN publication_section ON manuscript.section_id = publication_section.id
         JOIN publication on publication_section.publication_id = publication.id
         JOIN category ON manuscript.category_id = category.id
         LEFT JOIN eic_on_publication ON publication.id = eic_on_publication.publication_id
         LEFT JOIN section_editor_on_section ON publication_section.id = section_editor_on_section.publication_section_id AND :role IS NOT NULL
-        LEFT JOIN account_role_on_manuscript ON manuscript.id = account_role_on_manuscript.manuscript_id
         WHERE (category.name = :category OR :category IS NULL)
         AND publication_section.is_hidden = FALSE AND publication.is_hidden = FALSE
         AND (publication_section.id = :section_id OR :section_id IS NULL)
@@ -60,14 +55,12 @@ interface InviteRepository: Repository<Invite, Int> {
                 OR
                 :role = 'SECTION_EDITOR' AND section_editor_on_section.section_editor_id = :account_id
                 OR
-                account_role_on_manuscript.account_id = :account_id AND (
-                    :role = 'EIC_ON_MANUSCRIPT' AND account_role_on_manuscript.account_role = 'EIC'
+                invite.email = :email AND (
+                    :role = 'EIC_ON_MANUSCRIPT' AND invite.target = 'EIC_ON_MANUSCRIPT'
                     OR
-                    :role = 'EDITOR' AND account_role_on_manuscript.account_role = 'EDITOR'
+                    :role = 'EDITOR' AND invite.target = 'EDITOR'
                     OR
-                    :role = 'REVIEWER' AND account_role_on_manuscript.account_role = 'REVIEWER'
-                    OR
-                    :role = 'AUTHOR' AND account_role_on_manuscript.account_role = 'AUTHOR'
+                    :role = 'REVIEWER' AND invite.target = 'REVIEWER'
                 )
             )
         )
@@ -86,7 +79,7 @@ interface InviteRepository: Repository<Invite, Int> {
         @Param("section_id") sectionId: Int?,
         @Param("category") category: String?,
         @Param("sorting") sorting: Sorting
-    ): List<InvitedManuscript>
+    ): List<Invite>
 
     @Modifying
     @Query("INSERT INTO invite (email, target, target_id) VALUES (:email, :target::invitation_target, :target_id)")
