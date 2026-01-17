@@ -1,6 +1,8 @@
 package hr.unipu.journals.view.review
 
+import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
@@ -19,6 +21,7 @@ import java.time.format.DateTimeFormatter
 @Controller
 class ReviewHistoryPageController(
     private val manuscriptRepository: ManuscriptRepository,
+    private val accountRepository: AccountRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val manuscriptReviewRepository: ManuscriptReviewRepository,
     private val manuscriptFileRepository: ManuscriptFileRepository
@@ -36,7 +39,7 @@ class ReviewHistoryPageController(
         model["title"] = manuscript.title
         model["submissionDate"] = manuscript.submissionDate.format(DateTimeFormatter.ofPattern("dd.MM.YYYY"))
         model["publicationDate"] = manuscript.publicationDate?.format(DateTimeFormatter.ofPattern("dd.MM.YYYY")) ?: "no publication date"
-        model["authors"] = accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId = manuscript.id).map { it.fullName }
+        model["authors"] = accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId = manuscript.id).map { accountRepository.byId(it.accountId)?.fullName }
         model["abstract"] = manuscript.description
         model["files"] =  manuscriptFileRepository.allFilesByManuscriptId(manuscript.id)
         model["reviewerWithRounds"] = manuscriptReviewRepository.reviewersAndRounds(manuscriptId)
