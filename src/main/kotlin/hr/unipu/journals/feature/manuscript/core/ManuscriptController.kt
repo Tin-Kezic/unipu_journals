@@ -271,7 +271,7 @@ class ManuscriptController(
                 ManuscriptState.HIDDEN -> if(isAdmin.not()) return ResponseEntity.status(403).body("forbidden to unhide manuscripts")
                 ManuscriptState.ARCHIVED -> if(isSectionEditorOnSectionOrSuperior.not()) return ResponseEntity.status(403).body("forbidden to unarchive manuscripts in section ${section.id}")
                 ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
-                    if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor on manuscript $manuscriptId")
+                    if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor/major on manuscript $manuscriptId")
                 }
                 else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from $newState")
             }
