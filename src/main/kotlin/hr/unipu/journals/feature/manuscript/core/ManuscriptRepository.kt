@@ -35,24 +35,29 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                 OR
                 :manuscript_state_filter = 'ARCHIVED' AND manuscript.current_state = 'ARCHIVED'
                 OR account_role_on_manuscript.account_id = :account_id AND (
-                    :manuscript_state_filter IN ('MINOR_MAJOR', 'REJECTED') AND manuscript.current_state IN ('MINOR', 'MAJOR', 'REJECTED')
+                    :manuscript_state_filter = 'MINOR_MAJOR' AND manuscript.current_state IN ('MINOR', 'MAJOR')
+                    OR
+                    :manuscript_state_filter = 'REJECTED' AND manuscript.current_state = 'REJECTED'
                     OR
                     :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
-                        account_role_on_manuscript.account_role IN ('EIC', 'AUTHOR') AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        account_role_on_manuscript.account_role IN ('EIC', 'AUTHOR') AND manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW')
                         OR
-                        account_role_on_manuscript.account_role IN ('EDITOR', 'AUTHOR') AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW')
+                        account_role_on_manuscript.account_role IN ('EDITOR', 'AUTHOR') AND manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW')
                         OR
                         account_role_on_manuscript.account_role IN ('REVIEWER', 'AUTHOR') AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
                     )
-                    OR :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
+                    OR account_role_on_manuscript.account_role IN ('EIC', 'AUTHOR')
+                        AND :manuscript_state_filter = 'AWAITING_EIC_REVIEW'
                         AND manuscript.current_state = 'AWAITING_EIC_REVIEW'
-                        AND account_role_on_manuscript.account_role IN ('EIC', 'AUTHOR')
-                    OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
-                        AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
-                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'AUTHOR')
-                    OR :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
+                    OR account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'AUTHOR') AND (
+                        :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW'
+                            AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW'
+                        OR :manuscript_state_filter = 'AWAITING_ROUND_INITIALIZATION'
+                            AND manuscript.current_state = 'AWAITING_ROUND_INITIALIZATION'
+                    )
+                    OR account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER', 'AUTHOR')
+                        AND :manuscript_state_filter = 'AWAITING_REVIEWER_REVIEW'
                         AND manuscript.current_state = 'AWAITING_REVIEWER_REVIEW'
-                        AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'REVIEWER', 'AUTHOR')
                 )
             )
         ) AND (
