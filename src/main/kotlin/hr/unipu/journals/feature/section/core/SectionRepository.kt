@@ -69,12 +69,12 @@ interface SectionRepository: Repository<Section, Int> {
                 )
                 OR
                 :manuscript_state_filter = 'ALL_AWAITING_REVIEW' AND (
-                    manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
+                    manuscript.current_state IN ('AWAITING_EIC_REVIEW', 'AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW') AND (
                         account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EIC', 'AUTHOR')
                         OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT' AND invite.email = account.email
                     )
                     OR
-                    manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_REVIEWER_REVIEW') AND (
+                    manuscript.current_state IN ('AWAITING_EDITOR_REVIEW', 'AWAITING_ROUND_INITIALIZATION', 'AWAITING_REVIEWER_REVIEW') AND (
                         account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EDITOR', 'AUTHOR')
                         OR invite.target_id = manuscript.id AND invite.target = 'EDITOR' AND invite.email = account.email
                     )
@@ -89,6 +89,10 @@ interface SectionRepository: Repository<Section, Int> {
                     OR invite.target_id = manuscript.id AND invite.target = 'EIC_ON_MANUSCRIPT' AND invite.email = account.email
                 )
                 OR :manuscript_state_filter = 'AWAITING_EDITOR_REVIEW' AND manuscript.current_state = 'AWAITING_EDITOR_REVIEW' AND (
+                    account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'AUTHOR')
+                    OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR') AND invite.email = account.email
+                )
+                OR :manuscript_state_filter = 'AWAITING_ROUND_INITIALIZATION' AND manuscript.current_state = 'AWAITING_ROUND_INITIALIZATION' AND (
                     account_role_on_manuscript.account_id = :account_id AND account_role_on_manuscript.account_role IN ('EIC', 'EDITOR', 'AUTHOR')
                     OR invite.target_id = manuscript.id AND invite.target IN ('EIC_ON_MANUSCRIPT', 'EDITOR') AND invite.email = account.email
                 )
