@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript.account_role_on_manuscript
 
-import hr.unipu.journals.feature.account.Account
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -8,15 +7,16 @@ import org.springframework.data.repository.query.Param
 
 interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript, Int> {
     @Query("""
-        SELECT DISTINCT account.* FROM account_role_on_manuscript
-        JOIN account ON account.id = account_role_on_manuscript.account_id
-        WHERE (account_role_on_manuscript.account_role = :role OR :role IS NULL)
-        AND (account_role_on_manuscript.manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
+        SELECT DISTINCT * FROM account_role_on_manuscript
+        WHERE (manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
+        AND (account_id = :account_id OR :account_id IS NULL)
+        AND (account_role = :role::manuscript_role OR :role IS NULL)
     """)
     fun all(
+        @Param("manuscript_id") manuscriptId: Int? = null,
+        @Param("account_id") accountId: Int? = null,
         @Param("role") role: ManuscriptRole? = null,
-        @Param("manuscript_id") manuscriptId: Int? = null
-    ): List<Account>
+    ): List<AccountRoleOnManuscript>
 
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript
