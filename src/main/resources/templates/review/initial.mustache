@@ -10,58 +10,67 @@
 
 <body>
 {{>util/header}}
+{{>util/components/manuscript/element}}
+{{>util/dialog/info}}
+{{>util/dialog/boolean}}
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 1rem;">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh;">
+    <div>
+        {{#manuscript}}
+            <manuscript-element
+                style="width: 50%;"
+                id = '{{id}}'
+                title = '{{title}}'
+                description = '{{description}}'
+                corresponding-author = '{{{correspondingAuthor}}}'
+                registered-authors = '{{{registeredAuthors}}}'
+                unregistered-authors = '{{{unregisteredAuthors}}}'
+                submission-date = '{{submissionDate}}'
+                files = '{{{files}}}'
+                is-overseeing = '{{isOverseeing}}'
+                roles = '{{{roles}}}'
+                state = '{{state}}'
+            ></manuscript-element>
+        {{/manuscript}}
 
-    <section class="container article-box" style="padding: 0.8rem; max-width: 70vw; width: 70vw;">
-        {{#manuscripts}}
-            <article>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
-                    <div>
-                        <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
-                        <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
-                        <p>{{submissionDate}}       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
-                        <p style="margin-top: 0.2rem;">{{description}}</p>
-                    </div>
-                    <button class="m3-button outlined-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">
-                        Download
-                    </button>
-                </div>
-            </article>
-        {{/manuscripts}}
-    </section>
-
-    <div class="wrapper" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; max-width: 70vw; width: 70vw;">
-        <div class="text-field" style="width: 16rem;">
-            <label>editor email</label>
-            <input type="email" placeholder="editor@mail.com"/>
-        </div>
-
-        <div style="display: flex; gap: 2rem;">
-            <button class="m3-button green-button" style="padding: 1rem 3rem; font-size: 2.5rem; box-shadow: none;">Accept</button>
-            <button class="m3-button red-button" style="padding: 1rem 3.4rem; font-size: 2.5rem;">Reject</button>
+        <div class="wrapper" style="display: flex; flex-direction: column; width: 70vw;">
+            <div id="editor-email-div" class="text-field" style="width: 16rem;">
+                <label for="editor-email-input">editor email</label>
+                <input id="editor-email-input" type="email" placeholder="editor@email.com" style="background-color: inherit;"/>
+            </div>
+            <div style="display: flex; gap: 2rem;">
+                <button id="accept" class="m3-button green-button" style="padding: 1rem 3rem; font-size: 2.5rem; box-shadow: none;">Accept</button>
+                <button id="reject" class="m3-button red-button" style="padding: 1rem 3.4rem; font-size: 2.5rem;">Reject</button>
+            </div>
         </div>
     </div>
 </div>
 </body>
-
-<style>
-    .text-field input {
-        background-color: inherit;
-    }
-    .download-button:hover {
-        color: var(--primary) !important;
-    }
-    @media (max-width: 800px) {
-        .article-box {
-            width: 28rem !important;
-            min-height: 15rem !important;
-            max-width: 90vw !important;
+<script>
+    const path = window.location.pathname;
+    const manuscriptId = path.replace('/review/', '');
+    const isEicReview = '{{type}}' === 'EIC';
+    const newAcceptedState = isEicReview ? 'AWAITING_EDITOR_REVIEW' : 'AWAITING_ROUND_INITIALIZATION';
+    const editorEmailInput = document.getElementById('editor-email-input')
+    document.getElementById('editor-email-div').hidden = !isEicReview;
+    document.getElementById('accept').addEventListener('click', async () => {
+        const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=${newAcceptedState}`, { method: 'PUT' });
+        if(!response.ok) { alert(await response.text()); return; }
+        if(isEicReview) {
+            const response = await fetch(`/api/account-role-on-manuscript`, { method: 'POST', body: new URLSearchParams({
+                email: [editorEmailInput.value],
+                role: 'EDITOR',
+                manuscriptId
+            })});
+            if(!response.ok) { alert(await response.text()); return; }
         }
-        .wrapper {
-            max-width: 90vw !important;
-            width: 90vw !important;
-        }
-    }
-</style>
+        if(isEicReview ? history.back() : window.location = `${path}/round-initialization`)
+        history.back();
+    });
+    document.getElementById('reject').addEventListener('click', async () => {
+        const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
+        if(!response.ok) { alert(await response.text()); return; }
+        history.back();
+    });
+</script>
 </html>
