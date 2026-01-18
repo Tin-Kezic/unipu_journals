@@ -32,8 +32,8 @@
     {{>util/components/select/role}}
     {{>util/components/select/category}}
     {{>util/components/select/sorting}}
-    <input aria-label="from" type="date" name="from">
-    <input aria-label="to" type="date" name="to">
+    <input aria-label="from" type="date" max="9000-12-31" name="from">
+    <input aria-label="to" type="date" max="9000-12-31" name="to">
     <script>
         const fromInput = document.querySelector('input[name="from"]');
         const toInput =  document.querySelector('input[name="to"]');
