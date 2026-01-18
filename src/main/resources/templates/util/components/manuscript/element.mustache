@@ -48,7 +48,7 @@ class Manuscript extends HTMLElement {
     this.innerHTML = /*html*/`
       <article class="container" style="width: auto; height: auto; max-width: 100%;">
         <p class="container-text">${this._title}</p>
-        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem; width: fit-content; max-width: 100%">
           ${this._registeredAuthors?.length ? this._registeredAuthors?.map(author => `
             <button onclick="window.location='/profiles/${author.id}';">${author.fullName}</button>
           `)?.join(',&nbsp') : '' }
@@ -56,7 +56,7 @@ class Manuscript extends HTMLElement {
             return `<button data-author='${JSON.stringify(this._isOverseeing ? author : { "Full name": author })}' onclick='openInfoDialog(this.dataset.author);'>${author.fullName ?? author}</button>`;
           })?.join(',&nbsp')}` : '' }
         </div>
-        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem;">
+        <div onclick="event.stopPropagation();" class="authors" style="display: flex; flex-wrap: wrap; font-weight: 100; font-size: 0.8rem; width: fit-content; max-width: 100%">
           Corresponding author:&nbsp${this._correspondingAuthor?.type === 'registered' ? `
             <button onclick="window.location='/profiles/${this._correspondingAuthor.id}';">${this._correspondingAuthor.fullName}</button>
           ` : `
