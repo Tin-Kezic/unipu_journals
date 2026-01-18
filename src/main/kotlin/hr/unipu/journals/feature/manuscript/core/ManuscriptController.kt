@@ -22,6 +22,7 @@ import hr.unipu.journals.security.ScanResult
 import hr.unipu.journals.util.AppProperties
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
@@ -64,8 +66,8 @@ class ManuscriptController(
         @RequestParam role: Role?,
         @RequestParam category: String?,
         @RequestParam sorting: Sorting = Sorting.ALPHABETICAL_A_Z,
-        @RequestParam from: String?,
-        @RequestParam to: String?,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) from: LocalDate?,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) to: LocalDate?,
         @RequestParam accountId: Int?,
         @RequestParam query: String?
     ): List<Map<String, Any?>> {

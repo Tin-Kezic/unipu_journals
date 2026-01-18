@@ -6,6 +6,7 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
+import java.time.LocalDate
 
 interface ManuscriptRepository: Repository<Manuscript, Int> {
     @Query("""
@@ -78,8 +79,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
                 )
             )
         )
-        AND (:from IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) >= TO_DATE(:from, 'YYYY-MM-DD'))
-        AND (:to IS NULL OR COALESCE(manuscript.publication_date, manuscript.submission_date) <= TO_DATE(:to, 'YYYY-MM-DD'))
+        AND COALESCE(manuscript.publication_date, manuscript.submission_date) >= COALESCE(:from, DATE '-infinity')
+        AND COALESCE(manuscript.publication_date, manuscript.submission_date) <= COALESCE(:to, DATE 'infinity')
         GROUP BY manuscript.id
         ORDER BY
             CASE WHEN :query IS NOT NULL THEN similarity(manuscript.title, :query) END DESC,
@@ -95,8 +96,8 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("account_id") accountId: Int? = null,
         @Param("category") category: String? = null,
         @Param("sorting") sorting: Sorting? = null,
-        @Param("from") from: String? = null,
-        @Param("to") to: String? = null,
+        @Param("from") from: LocalDate? = null,
+        @Param("to") to: LocalDate? = null,
         @Param("query") query: String? = null
     ): List<Manuscript>
 
