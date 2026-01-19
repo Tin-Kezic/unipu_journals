@@ -35,17 +35,24 @@ class AccountRoleOnManuscriptController(
             ManuscriptRole.REVIEWER -> require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
             ManuscriptRole.AUTHOR -> return ResponseEntity.badRequest().body("cannot manually assign author to manuscript")
         }
-        accountRepository.byEmail(cleanEmail)?.let {
-            accountRoleOnManuscriptRepository.assign(
-                accountRole = role,
-                accountId = it.id,
-                manuscriptId = manuscriptId
+        try {
+            accountRepository.byEmail(cleanEmail)?.let {
+                accountRoleOnManuscriptRepository.assign(
+                    accountRole = role,
+                    accountId = it.id,
+                    manuscriptId = manuscriptId
+                )
+            } ?: inviteRepository.invite(
+                email = cleanEmail,
+                target = InvitationTarget.valueOf(role.name.replace("EIC", "EIC_ON_MANUSCRIPT")),
+                targetId = manuscriptId
             )
-        } ?: inviteRepository.invite(
-            email = cleanEmail,
-            target = InvitationTarget.valueOf(role.name.replace("EIC", "EIC_ON_MANUSCRIPT")),
-            targetId = manuscriptId
-        )
-        return ResponseEntity.ok("successfully assigned role")
+            return ResponseEntity.ok("successfully assigned role")
+        } catch (e: Exception) {
+            return if(e.message?.contains("duplicate") ?: false)
+                ResponseEntity.badRequest().body("email is already assigned to role")
+            else
+                ResponseEntity.internalServerError().body("failed to assign role")
+        }
     }
 }
