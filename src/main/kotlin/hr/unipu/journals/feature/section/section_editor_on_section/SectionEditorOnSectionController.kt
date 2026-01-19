@@ -35,13 +35,13 @@ class SectionEditorOnSectionController(
                 target = InvitationTarget.SECTION_EDITOR,
                 targetId = sectionId
             )
-            return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor $email on section $sectionId")
-            else ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
+            return if(rowsAffected == 1) ResponseEntity.ok("successfully assigned section editor")
+            else ResponseEntity.internalServerError().body("failed to assign section editor")
         } catch (e: Exception) {
             return if(e.message?.contains("duplicate") ?: false)
-                ResponseEntity.badRequest().body("$email is already section editor")
+                ResponseEntity.badRequest().body("email is already section editor")
             else
-                ResponseEntity.internalServerError().body("failed to assign section editor $email on section $sectionId")
+                ResponseEntity.internalServerError().body("failed to assign section editor")
         }
     }
     @DeleteMapping("{publicationId}/sections/{sectionId}/revoke-section-editor")
@@ -58,7 +58,7 @@ class SectionEditorOnSectionController(
             target = InvitationTarget.SECTION_EDITOR,
             targetId = sectionId
         )
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully revoked section editor $email on section $sectionId")
-        else ResponseEntity.internalServerError().body("failed to revoke section editor $email on section $sectionId")
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully revoked section editor")
+        else ResponseEntity.internalServerError().body("failed to revoke section editor")
     }
 }
