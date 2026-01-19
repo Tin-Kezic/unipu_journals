@@ -22,15 +22,22 @@ class EicOnPublicationController(
 ) {
     @PutMapping("/assign-eic")
     fun assign(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
-        val rowsAffected = accountRepository.byEmail(email)?.let {
-            eicOnPublicationRepository.assign(it.id, publicationId)
-        } ?: inviteRepository.invite(
+        try {
+            val rowsAffected = accountRepository.byEmail(email)?.let {
+                eicOnPublicationRepository.assign(it.id, publicationId)
+            } ?: inviteRepository.invite(
                 email = email,
                 target = InvitationTarget.EIC_ON_PUBLICATION,
                 targetId = publicationId
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("eic $email successfully assigned on publication $publicationId")
-        else ResponseEntity.internalServerError().body("failed to assign $email as eic on publication $publicationId")
+            )
+            return if(rowsAffected == 1) ResponseEntity.ok("eic successfully assigned on publication")
+            else ResponseEntity.internalServerError().body("failed to assign eic on publication")
+        } catch (e: Exception) {
+            return if(e.message?.contains("duplicate") ?: false)
+                ResponseEntity.badRequest().body("email is already EiC")
+            else
+                ResponseEntity.internalServerError().body("failed to assign EiC")
+        }
     }
     @PutMapping("/revoke-eic")
     fun revoke(@PathVariable publicationId: Int, @RequestParam email: String): ResponseEntity<String> {
@@ -41,7 +48,7 @@ class EicOnPublicationController(
             target = InvitationTarget.EIC_ON_PUBLICATION,
             targetId = publicationId
         )
-        return if(rowsAffected == 1) ResponseEntity.ok("eic $email successfully revoked on publication $publicationId")
-        else ResponseEntity.internalServerError().body("failed revoking $email as eic on publication $publicationId")
+        return if(rowsAffected == 1) ResponseEntity.ok("eic successfully revoked on publication")
+        else ResponseEntity.internalServerError().body("failed revoking eic on publication")
     }
 }
