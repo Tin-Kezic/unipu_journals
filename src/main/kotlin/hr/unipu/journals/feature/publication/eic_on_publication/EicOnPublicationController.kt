@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/publications/{publicationId}")
+@RequestMapping("/api/publications/{publicationId}")
 @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
 class EicOnPublicationController(
     private val eicOnPublicationRepository: EicOnPublicationRepository,
