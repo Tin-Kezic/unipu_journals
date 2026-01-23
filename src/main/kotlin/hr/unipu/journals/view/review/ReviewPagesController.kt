@@ -51,7 +51,7 @@ class ReviewPagesController(
             ))
             put("title", manuscript.title)
             put("registeredAuthors", jacksonObjectMapper().writeValueAsString(
-                registeredAuthors.map { author -> mapOf("manuscriptId" to author.id, "fullName" to author.fullName) }
+                registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) }
             ))
             put("unregisteredAuthors", jacksonObjectMapper().writeValueAsString(
                 if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
@@ -60,7 +60,7 @@ class ReviewPagesController(
                     unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
             ))
             put("correspondingAuthor", jacksonObjectMapper().writeValueAsString(
-                accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "manuscriptId" to it.id, "fullName" to it.fullName) }
+                accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
                     ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
                         if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
                             || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
