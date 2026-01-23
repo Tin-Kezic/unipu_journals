@@ -17,18 +17,6 @@ interface ManuscriptReviewRepository: Repository<ManuscriptReview, Int> {
     fun reviewersAndRounds(@Param("manuscript_id") manuscriptId: Int): List<ReviewerAndRound>
 
     @Modifying
-    @Query("""
-        UPDATE manuscript_review SET editor_recommendation = :recommendation
-        WHERE manuscript_id = :manuscript_id AND id = (
-            SELECT MAX(id) FROM manuscript_review WHERE manuscript_id = :manuscript_id
-        )
-    """)
-    fun updateEditorRecommendation(
-        @Param("manuscript_id") manuscriptId: Int,
-        @Param("recommendation") recommendation: Recommendation
-    ): Int
-
-    @Modifying
     @Query("INSERT INTO manuscript_review ()")
     fun insert(@Param("manuscript_id") manuscriptId: Int): Int
 }
