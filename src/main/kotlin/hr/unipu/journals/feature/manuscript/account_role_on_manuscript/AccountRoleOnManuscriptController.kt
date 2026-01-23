@@ -8,6 +8,7 @@ import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -54,5 +55,28 @@ class AccountRoleOnManuscriptController(
             else
                 ResponseEntity.internalServerError().body("failed to assign role")
         }
+    }
+    @DeleteMapping
+    fun revoke(
+        @RequestParam email: String,
+        @RequestParam role: ManuscriptRole,
+        @RequestParam manuscriptId: Int
+    ): ResponseEntity<String> {
+        when(role) {
+            ManuscriptRole.EIC -> require(authorizationService.isEicOnManuscript(manuscriptId))
+            ManuscriptRole.EDITOR -> require(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId))
+            ManuscriptRole.REVIEWER -> require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
+            ManuscriptRole.AUTHOR -> {}
+        }
+        accountRepository.byEmail(email)?.let {
+            val rowsEffected = accountRoleOnManuscriptRepository.revoke(manuscriptId = manuscriptId, accountId = it.id, accountRole = role)
+            return if(rowsEffected == 1) ResponseEntity.ok("successfully revoked role")
+            else ResponseEntity.internalServerError().body("failed to revoke role")
+        } ?: inviteRepository.revoke(
+            email = email,
+            target = InvitationTarget.valueOf(role.name.replace("EIC", "EIC_ON_MANUSCRIPT")),
+            targetId = manuscriptId
+        )
+        return ResponseEntity.ok("successfully revoked role")
     }
 }
