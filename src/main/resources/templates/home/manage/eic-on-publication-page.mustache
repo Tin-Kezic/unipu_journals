@@ -41,11 +41,12 @@
 </main>
 
 <script>
+    const urlBase = '/api/publications/{{publicationId}}';
     function revokeEicOnPublication(email) {
         openBooleanDialog(`Revoke EiC privileges for <b>${email}</b>`, `Revoke`, async () => {
-            const response = await fetch(`/publications/{{publicationId}}/revoke-eic?email=${encodeURIComponent(currentEmail)}`, { method: 'PUT' });
+            const response = await fetch(`${urlBase}/revoke-eic?email=${encodeURIComponent(email)}`, { method: 'PUT' });
             if(!response.ok) { alert(await response.text()); return; }
-            document.querySelector(`.remove-user-button[data-email="${currentEmail}"]`).remove();
+            document.querySelector(`.remove-user-button[data-email="${email}"]`).remove();
         });
     }
     document.querySelectorAll('.remove-user-button').forEach(button => button.addEventListener('click', () => revokeEicOnPublication(button.dataset.email)));
@@ -53,7 +54,7 @@
         event.preventDefault();
         const emailInput = document.querySelector('input[name="email"]');
         const email = emailInput.value;
-        const response = await fetch(`/publications/{{publicationId}}/assign-eic?email=${encodeURIComponent(email)}`, { method: 'PUT' })
+        const response = await fetch(`${urlBase}/assign-eic?email=${encodeURIComponent(email)}`, { method: 'PUT' })
         if(!response.ok || !email) { alert(await response.text()); return; }
         const newButton = document.createElement('button');
         newButton.className = 'remove-user-button';
