@@ -45,7 +45,7 @@ class EmailVerificationController(
         }
         unregisteredAuthorRepository.delete(account.email)
 
-        inviteRepository.allByEmail(pending.email).forEach { (id, email, target, targetId) -> when(target) {
+        inviteRepository.all(email = pending.email).forEach { (id, email, target, targetId) -> when(target) {
             InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(account.email, true)
             InvitationTarget.EIC_ON_PUBLICATION -> eicOnPublicationRepository.assign(account.id, targetId)
             InvitationTarget.SECTION_EDITOR -> sectionEditorOnSectionRepository.assign(account.id, targetId)
@@ -80,7 +80,7 @@ class EmailVerificationController(
         }
         eicOnPublicationRepository.revoke(pending.id)
         sectionEditorOnSectionRepository.revoke(pending.id)
-        accountRoleOnManuscriptRepository.revoke(pending.id)
+        accountRoleOnManuscriptRepository.revoke(accountId = pending.id)
         val rowsAffected = accountRepository.delete(pending.id)
         return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted account")
         else ResponseEntity.internalServerError().body("failed to delete account")
@@ -97,7 +97,7 @@ class EmailVerificationController(
             accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, pending.account.id, id)
         }
         unregisteredAuthorRepository.delete(pending.newEmail)
-        inviteRepository.allByEmail(pending.newEmail).forEach { (id, email, target, targetId) -> when(target) {
+        inviteRepository.all(email = pending.newEmail).forEach { (id, email, target, targetId) -> when(target) {
             InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(pending.newEmail, true)
             InvitationTarget.EIC_ON_PUBLICATION -> eicOnPublicationRepository.assign(pending.account.id, targetId)
             InvitationTarget.SECTION_EDITOR -> sectionEditorOnSectionRepository.assign(pending.account.id, targetId)
