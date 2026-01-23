@@ -9,7 +9,7 @@ data class ManuscriptReview(
     @Id val id: Int,
     val manuscriptId: Int,
     val reviewerId: Int,
-    val manuscriptReviewRoundId: Int,
+    val round: Int,
     val novelty: OneToFive?,
     val significance: OneToFive?,
     val technicalQuality: OneToFive?,
