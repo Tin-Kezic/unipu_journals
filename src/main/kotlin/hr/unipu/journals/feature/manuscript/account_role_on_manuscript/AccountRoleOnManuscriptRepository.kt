@@ -43,7 +43,16 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     )
 
     @Modifying
-    @Query("DELETE FROM account_role_on_manuscript WHERE account_id = :account_id")
-    fun revoke(@Param("account_id") accountId: Int): Int
+    @Query("""
+        DELETE FROM account_role_on_manuscript
+        WHERE (manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
+        AND account_id = :account_id
+        AND (account_role = :account_role::manuscript_role OR :account_role IS NULL)
+        """)
+    fun revoke(
+        @Param("manuscript_id") manuscriptId: Int? = null,
+        @Param("account_id") accountId: Int,
+        @Param("account_role") accountRole: ManuscriptRole? = null
+    ): Int
 }
 
