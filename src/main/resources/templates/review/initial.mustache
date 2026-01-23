@@ -64,8 +64,7 @@
             })});
             if(!response.ok) { alert(await response.text()); return; }
         }
-        if(isEicReview ? history.back() : window.location = `${path}/round-initialization`)
-        history.back();
+        isEicReview ? history.back() : location.reload();
     });
     document.getElementById('reject').addEventListener('click', async () => {
         const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
