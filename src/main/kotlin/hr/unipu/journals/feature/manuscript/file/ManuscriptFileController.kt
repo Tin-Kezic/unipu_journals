@@ -21,7 +21,6 @@ class ManuscriptFileController(private val manuscriptFileRepository: ManuscriptF
     ): ResponseEntity<FileSystemResource> {
         val manuscriptFile = manuscriptFileRepository.byId(id) ?: throw IllegalArgumentException("failed to find file $id")
         val file = File(manuscriptFile.path)
-        println(type)
         val mediaType = MediaTypeFactory.getMediaType(file.name).orElse(MediaType.APPLICATION_OCTET_STREAM)
         return ResponseEntity.ok()
             .contentType(mediaType)
