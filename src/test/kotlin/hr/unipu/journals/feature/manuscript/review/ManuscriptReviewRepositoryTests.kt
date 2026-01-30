@@ -45,7 +45,7 @@ class ManuscriptReviewRepositoryTests {
                 LocalDateTime.of(2020, 2, 28, 13, 28, 0),
                 LocalDateTime.of(2022, 2, 28, 13, 28, 0)
             ),
-            manuscriptReviewRepository.review(
+            manuscriptReviewRepository.by(
                 manuscriptId = 1,
                 reviewerId = 1,
                 round = 1
