@@ -46,6 +46,10 @@ dialog {
     background: var(--primary);
     color: white;
 }
+input[type="radio"]:checked + .sidebar-button {
+    color: white;
+    background-color: black;
+}
 select, input[type="date"] {
     height: 2.7rem;
     font-size: 1rem;
