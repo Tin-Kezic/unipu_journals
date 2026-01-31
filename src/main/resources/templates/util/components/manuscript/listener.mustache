@@ -47,10 +47,10 @@
                     const roles = JSON.parse(pending.getAttribute('roles'));
                     roles.push(role);
                     pending.setAttribute('roles', JSON.stringify(roles));
-                    pending.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
+                    pending.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/manuscripts/${id.replace(/^.*-/, '')}/review'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
                     currentElement.remove();
                 } else if(it.operation === 'Accept') {
-                    currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/review/${id.replace(/^.*-/, '')}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
+                    currentElement.setAttribute('options', `<button onclick="event.stopPropagation(); window.location='/manuscripts/${id.replace(/^.*-/, '')}/review'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>`);
                     currentElement.setAttribute('roles', JSON.stringify([role]));
                     currentElement.removeAttribute('role');
                     document.getElementById('manuscripts-container-pending').prepend(currentElement);
