@@ -8,6 +8,7 @@ import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,6 +25,7 @@ class AccountRoleOnManuscriptController(
     private val emailService: EmailService
 ) {
     @PostMapping
+    @Transactional
     fun assign(
         @RequestParam email: String,
         @RequestParam role: ManuscriptRole,
