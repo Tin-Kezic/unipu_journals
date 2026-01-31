@@ -100,13 +100,20 @@ class ReviewPagesController(
             }
             ManuscriptState.AWAITING_ROUND_INITIALIZATION -> {
                 require(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId))
-                model["reviewers"] = accountRoleOnManuscriptRepository.all(role = ManuscriptRole.REVIEWER, manuscriptId = manuscriptId)
-                    .map { accountRepository.byId(it.accountId)!! }
-                    .map { mapOf("manuscriptId" to it.id, "email" to it.email) }
+                model["type"] = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else "EDITOR"
+                val registeredReviewers = accountRoleOnManuscriptRepository.all(role = ManuscriptRole.REVIEWER, manuscriptId = manuscriptId)
+                        .map { accountRepository.byId(it.accountId)!! }
+                        .map { it.email }
+                val unregisteredReviewers = inviteRepository.all(target = InvitationTarget.REVIEWER, targetId = manuscriptId).map { it.email }
+                model["reviewers"] = registeredReviewers + unregisteredReviewers
+                val round = manuscriptReviewRoundRepository.by(manuscriptId)
+                model["editorRecommendation"] = round?.editorRecommendation ?: ""
+                model["editorComment"] = round?.editorComment ?: ""
                 "/review/round-initialization-page"
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                 require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
+                model["type"] = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) "EDITOR" else null
                 "/review/review-page"
             }
             else -> throw IllegalArgumentException("manuscript is currently not under review")
