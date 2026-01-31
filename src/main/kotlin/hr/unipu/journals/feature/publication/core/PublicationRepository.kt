@@ -1,11 +1,11 @@
 package hr.unipu.journals.feature.publication.core
 
-import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
+import org.springframework.transaction.annotation.Transactional
 
 interface PublicationRepository: Repository<Publication, Int> {
     @Query("SELECT * FROM publication WHERE (id = :id OR :id IS NULL) AND (title = :title OR :title IS NULL)")
@@ -14,6 +14,7 @@ interface PublicationRepository: Repository<Publication, Int> {
         @Param("title") title: String? = null
     ): Publication?
 
+    @Transactional
     @Query("""
         SELECT publication.* FROM publication
         LEFT JOIN publication_section ON publication.id = publication_section.publication_id
