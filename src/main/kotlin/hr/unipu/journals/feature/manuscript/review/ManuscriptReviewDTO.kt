@@ -1,0 +1,26 @@
+package hr.unipu.journals.feature.manuscript.review
+
+data class ManuscriptReviewDTO(
+    val novelty: OneToFive?,
+    val significance: OneToFive?,
+    val technicalQuality: OneToFive?,
+    val clarity: OneToFive?,
+    val methodology: OneToFive?,
+    val relevanceToThePublication: OneToFive?,
+    val languageQuality: OneToFive?,
+    val overallMark: OneToFive?,
+    val sufficientBackground: ReviewQuestion?,
+    val appropriateResearchDesign: ReviewQuestion?,
+    val adequatelyDescribed: ReviewQuestion?,
+    val clearlyPresented: ReviewQuestion?,
+    val supportedConclusions: ReviewQuestion?,
+    val conflict: Boolean?,
+    val plagiarism: Boolean?,
+    val llm: Boolean?,
+    val selfCitation: Boolean?,
+    val appropriateReferences: Boolean?,
+    val ethicalConcerns: Boolean?,
+    val reviewerComment: String?,
+    val reviewerCommentFileUrl: String?,
+    val recommendation: Recommendation?,
+)
