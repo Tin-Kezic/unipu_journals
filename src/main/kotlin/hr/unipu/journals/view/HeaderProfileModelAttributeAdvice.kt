@@ -4,7 +4,7 @@ import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.view.home.PublicationPageController
 import hr.unipu.journals.view.profile.EditProfilePageController
 import hr.unipu.journals.view.profile.ProfilePageController
-import hr.unipu.journals.view.review.EicInitialReviewPageController
+import hr.unipu.journals.view.review.ReviewPagesController
 import hr.unipu.journals.view.submit.SubmitPageController
 import hr.unipu.journals.view.submit.TechnicalProcessingPageController
 import org.springframework.ui.Model
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
     PublicationPageController::class,
     EditProfilePageController::class,
     ProfilePageController::class,
-    EicInitialReviewPageController::class,
+    ReviewPagesController::class,
     SubmitPageController::class,
     TechnicalProcessingPageController::class,
     SearchPageController::class
