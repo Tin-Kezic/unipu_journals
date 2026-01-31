@@ -74,7 +74,7 @@ class SectionController(
             )
             if(rowsAffected == 1) ResponseEntity.ok("section successfully added")
             else ResponseEntity.internalServerError().body("failed to add section")
-        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
+        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title already exists") }
     }
     @PutMapping("/{publicationId}/sections/{sectionId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_SECTION_EDITOR_ON_SECTION_OR_SUPERIOR)
@@ -95,7 +95,7 @@ class SectionController(
             )
             if(rowsAffected == 1) ResponseEntity.ok("section successfully updated")
             else ResponseEntity.internalServerError().body("failed to update section")
-        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title $title already exists") }
+        } catch (_: DataIntegrityViolationException) { ResponseEntity.badRequest().body("section with title already exists") }
     }
     @DeleteMapping("/{publicationId}/sections/{sectionId}")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
