@@ -9,6 +9,7 @@ import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -25,6 +26,7 @@ class InviteController(
     private val authorizationService: AuthorizationService
 ) {
     @PutMapping
+    @Transactional
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun decide(@RequestParam accept: Boolean, @RequestParam target: InvitationTarget, targetId: Int): ResponseEntity<String> {
         val account = authorizationService.account!!
