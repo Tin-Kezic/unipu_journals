@@ -17,6 +17,9 @@ interface ManuscriptReviewRepository: Repository<ManuscriptReview, Int> {
     fun reviewersAndRounds(@Param("manuscript_id") manuscriptId: Int): List<ReviewerAndRound>
 
     @Modifying
-    @Query("INSERT INTO manuscript_review ()")
-    fun insert(@Param("manuscript_id") manuscriptId: Int): Int
+    @Query("INSERT INTO manuscript_review (reviewer_id, manuscript_review_round_id) VALUES (:reviewer_id, :manuscript_review_round_id)")
+    fun insert(
+        @Param("reviewer_id") reviewerId: Int,
+        @Param("manuscript_review_round_id") manuscriptReviewRoundId: Int,
+    ): Int
 }
