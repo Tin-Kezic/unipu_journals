@@ -2,12 +2,15 @@ package hr.unipu.journals.view.review
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.invite.InvitationTarget
+import hr.unipu.journals.feature.invite.InviteRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.round.ManuscriptReviewRoundRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
@@ -26,14 +29,15 @@ class ReviewPagesController(
     private val authorizationService: AuthorizationService,
     private val accountRepository: AccountRepository,
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val inviteRepository: InviteRepository,
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
-    private val manuscriptReviewRepository: ManuscriptReviewRepository,
+    private val manuscriptReviewRoundRepository: ManuscriptReviewRoundRepository,
     private val manuscriptRepository: ManuscriptRepository,
     private val manuscriptFileRepository: ManuscriptFileRepository
 ) {
-    @GetMapping("/review/{manuscriptId}")
+    @GetMapping("/manuscripts/{manuscriptId}/review")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR)
     fun page(@PathVariable manuscriptId: Int, model: Model): String {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: throw IllegalArgumentException("failed to find manuscript $manuscriptId")
