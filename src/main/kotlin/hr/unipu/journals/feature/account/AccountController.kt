@@ -39,7 +39,7 @@ class AccountController(
     fun register(@ModelAttribute account: AccountDTO): ResponseEntity<String> {
         if(accountRepository.existsByEmail(account.email)) return ResponseEntity.badRequest().body("email taken")
         emailVerificationService.register(account.clean())
-        return ResponseEntity.ok("successfully sent registration confirmation email: $account")
+        return ResponseEntity.ok("successfully sent registration confirmation email")
     }
     @PutMapping("/details")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ACCOUNT_OWNER_OR_ADMIN)
