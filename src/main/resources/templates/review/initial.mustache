@@ -48,7 +48,7 @@
 </body>
 <script>
     const path = window.location.pathname;
-    const manuscriptId = path.replace('/review/', '');
+    const manuscriptId = path.replace('/manuscripts/', '').replace('/review', ''); // /manuscripts/id/review -> id
     const isEicReview = '{{type}}' === 'EIC';
     const newAcceptedState = isEicReview ? 'AWAITING_EDITOR_REVIEW' : 'AWAITING_ROUND_INITIALIZATION';
     const editorEmailInput = document.getElementById('editor-email-input')
