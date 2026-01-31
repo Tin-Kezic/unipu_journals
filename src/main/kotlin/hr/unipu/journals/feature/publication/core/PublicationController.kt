@@ -34,7 +34,6 @@ class PublicationController(
     ): List<Map<String, Any>> {
         require(role == null || authorizationService.isAuthenticated) // A -> B
         require(manuscriptStateFilter != ManuscriptStateFilter.ALL_AWAITING_REVIEW || authorizationService.isAuthenticated) // A -> B
-        val isAdmin = authorizationService.isAdmin
         if(manuscriptStateFilter == ManuscriptStateFilter.HIDDEN) require(authorizationService.isAdmin)
         return publicationRepository.all(
             manuscriptStateFilter = manuscriptStateFilter,
@@ -73,10 +72,10 @@ class PublicationController(
                 title = title?.run { Jsoup.clean(title, Safelist.none()) },
                 isHidden = isHidden
             )
-            if(rowsAffected == 1) ResponseEntity.ok("successfully updated publication $publicationId")
-            else ResponseEntity.internalServerError().body("failed to update publication $publicationId")
+            if(rowsAffected == 1) ResponseEntity.ok("successfully updated publication")
+            else ResponseEntity.internalServerError().body("failed to update publication")
         } catch (e: Exception) {
-            if(e.message?.contains("duplicate") ?: false) ResponseEntity.badRequest().body("publication $title already exists")
+            if(e.message?.contains("duplicate") ?: false) ResponseEntity.badRequest().body("publication already exists")
             else ResponseEntity.internalServerError().body("failed to update publication")
         }
     }
@@ -84,7 +83,7 @@ class PublicationController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_ADMIN)
     fun delete(@PathVariable publicationId: Int): ResponseEntity<String> {
         val rowsAffected = publicationRepository.delete(publicationId)
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted publication $publicationId")
-        else ResponseEntity.internalServerError().body("failed to delete publication $publicationId")
+        return if(rowsAffected == 1) ResponseEntity.ok("successfully deleted publication")
+        else ResponseEntity.internalServerError().body("failed to delete publication")
     }
 }
