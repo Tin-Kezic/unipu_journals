@@ -227,7 +227,7 @@ class ManuscriptController(
             }
             eicOnPublicationRepository.eicEmailsByPublicationId(
                 publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
-                    ?: return ResponseEntity.internalServerError().body("failed to find publication ${manuscriptSubmission.publicationTitle}")
+                    ?: return ResponseEntity.internalServerError().body("failed to find publication")
             ).forEach { eicEmail ->
                 inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
             }
