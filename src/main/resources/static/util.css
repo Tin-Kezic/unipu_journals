@@ -98,20 +98,6 @@ select, input[type="date"] {
     padding: 0.8rem 1rem;
     text-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
 }
-.orange-button {
-    background-color: white;
-    border: 0.08rem solid var(--beige);
-    border-radius: 0.5rem;
-    color: var(--beige);
-    padding: 0.3rem 3rem;
-    box-shadow: none;
-    font-weight: 600;
-}
-/* todo. refactor review-page to use radio inputs instead of active buttons */
-.orange-button:hover, .orange-button:active {
-    background-color: var(--orange);
-    color: black;
-}
 .text-field {
     position: relative;
     width: 100%;
