@@ -7,6 +7,7 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
+import org.springframework.transaction.annotation.Transactional
 
 interface SectionRepository: Repository<Section, Int> {
     @Query("SELECT * FROM publication_section WHERE id = :id")
@@ -34,6 +35,7 @@ interface SectionRepository: Repository<Section, Int> {
     """)
     fun allPublishedTitlesByPublicationTitle(@Param("title") publicationTitle: String): List<String>
 
+    @Transactional
     @Query("""
         SELECT publication_section.* FROM publication_section
         JOIN publication ON publication.id = publication_section.publication_id
