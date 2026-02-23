@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional
 interface ManuscriptReviewRoundRepository: Repository<ManuscriptReviewRound, Int> {
 
     @Query("SELECT * FROM manuscript_review_round WHERE manuscript_id = :manuscript_id ORDER BY round DESC LIMIT 1")
-    fun by(@Param("manuscript_id") manuscriptId: Int): ManuscriptReviewRound?
+    fun latest(@Param("manuscript_id") manuscriptId: Int): ManuscriptReviewRound?
+
+    @Query("SELECT * FROM manuscript_review_round WHERE id = :id")
+    fun byId(@Param("id") id: Int): ManuscriptReviewRound?
 
     @Transactional
     @Query("""
