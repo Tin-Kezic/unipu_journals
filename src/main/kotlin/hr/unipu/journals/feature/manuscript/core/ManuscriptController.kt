@@ -212,7 +212,7 @@ class ManuscriptController(
                 correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
             )
             tempFiles.forEach { (name, file) ->
-                val path = "${appProperties.fileStoragePath}/unipu-journals/files/${file.name}"
+                val path = "${appProperties.fileStoragePath}/${file.name}"
                 file.copyTo(File(path), true)
                 manuscriptFileRepository.insert(name = name, path = path, manuscriptId = insertedManuscript.id)
             }
