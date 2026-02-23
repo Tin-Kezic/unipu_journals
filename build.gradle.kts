@@ -8,6 +8,7 @@ repositories { mavenCentral() }
 java.toolchain.languageVersion = JavaLanguageVersion.of(24)
 val byteBuddyAgent: Configuration by configurations.creating
 dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-mail:3.5.3")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.5.3")
