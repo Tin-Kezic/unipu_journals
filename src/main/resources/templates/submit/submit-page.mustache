@@ -146,10 +146,10 @@
         submitButton.disabled = true;
 
         const category = document.querySelector('select[name="category"]').value;
-        if(category == 'category') { alert('select a category'); submittingDialog.close(); return; }
+        if(category == 'category') { alert('select a category'); submittingDialog.close(); submitButton.disabled = false; return; }
 
         const publicationTitle = document.querySelector('select[name="publication"]').value;
-        if(publicationTitle == 'publication') { alert('select a publication'); submittingDialog.close(); return; }
+        if(publicationTitle == 'publication') { alert('select a publication'); submittingDialog.close(); submitButton.disabled = false; return; }
 
         const sectionName = document.querySelector('select[name="section"]').value;
         const title = document.querySelector('input[name="title"]').value;
@@ -168,12 +168,12 @@
             affiliation: affiliations[index].value,
         }));
 
-        let correspondingAuthorEmail
-        authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email }})
-        if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); return; }
+        let correspondingAuthorEmail;
+        authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email; }})
+        if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); submitButton.disabled = false; return; }
 
         const description = document.getElementById('description').value;
-        if(fileInput.value.length === 0) { alert('submit files'); submittingDialog.close(); return; }
+        if(fileInput.value.length === 0) { alert('submit files'); submittingDialog.close(); submitButton.disabled = false; return; }
 
         const formData = new FormData();
         formData.append("manuscriptSubmission", new Blob([JSON.stringify({
@@ -188,12 +188,12 @@
         Array.from(fileInput.files).forEach(file => formData.append("files", file));
 
         const response = await fetch('/api/manuscripts', { method: 'POST', body: formData });
-        if(!response.ok) { alert(await response.text()); submittingDialog.close(); return; }
+        if(!response.ok) { alert(await response.text()); submittingDialog.close(); submitButton.disabled = false; return; }
         window.location = '/';
     });
     fileInput.addEventListener('change', () => {
         fileList.innerHTML = '';
-        fileInputSpan.innerHTML = 'Replace files'
+        fileInputSpan.innerHTML = 'Replace files';
         const forbiddenExtensions = [
             'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
             'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx',
@@ -210,6 +210,7 @@
                 alert(`files of type .${fileExtension} are not allowed`);
                 fileInput.value = '';
                 submittingDialog.close();
+                submitButton.disabled = false;
                 return;
             }
         });
