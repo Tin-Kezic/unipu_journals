@@ -12,15 +12,15 @@
 {{>util/dialog/info}}
 {{>util/dialog/boolean}}
 {{>util/dialog/textarea}}
+<style>
+    input[name="review"]:checked + label {
+        background-color: black;
+        color: white;
+    }
+</style>
 <div class="content">
     <aside style="flex: 0 0 300px;">
         <section id="reviews-container" class="container" style="display: flex; flex-direction: row; padding-block: 2.4rem; margin-bottom: 0.9rem; cursor: default;"></section>
-        <style>
-            input[name="review"]:checked + label {
-                background-color: black;
-                color: white;
-            }
-        </style>
         <section class="container" style="cursor: default;">
             <p id="reviewer-and-round"></p>
             <p id="review-recommendation">recommendation: _INSERT RECOMMENDATION_</p>
