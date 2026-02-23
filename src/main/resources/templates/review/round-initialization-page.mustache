@@ -34,7 +34,7 @@
 
     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
         <button id="start-round" class="m3-button green-button" style="box-shadow: none;">Start Round</button>
-        <button onclick="window.location = `${window.location.pathname}-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
+        <button onclick="window.location=`${window.location.pathname}-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
         <button id="decide" class="m3-button primary-button">Decide</button>
     </div>
     <script>if('{{type}}' != 'EIC') document.getElementById('decide').hidden = true;</script>
@@ -141,7 +141,7 @@
         const decision = (new FormData(decisionDialogForm)).get('decision');
         const manuscriptId = window.location.pathname.replace('/manuscripts/', '').replace('/review', ''); // /manuscripts/id/review -> id
         switch(decision) {
-            case 'ACCEPT': window.location = `/technical-processing-page/${manuscriptId}`; break;
+            case 'ACCEPT': window.location = `/manuscripts/${manuscriptId}/technical-processing`; break;
             case 'MINOR': case 'MAJOR': case 'REJECT':
                 const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=${decision.replace('REJECT', 'REJECTED')}`, { method: 'PUT' });
                 if(!response.ok) { alert(await response.text()); return; }
