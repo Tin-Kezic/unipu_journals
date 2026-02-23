@@ -1,5 +1,6 @@
 package hr.unipu.journals.feature.manuscript.file
 
+import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRepository
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -13,20 +14,27 @@ import java.io.File
 
 @RestController
 @RequestMapping("/files")
-class ManuscriptFileController(private val manuscriptFileRepository: ManuscriptFileRepository) {
+class ManuscriptFileController(
+    private val manuscriptFileRepository: ManuscriptFileRepository,
+    private val manuscriptReviewFileRepository: ManuscriptReviewFileRepository
+) {
     @GetMapping
     fun file(
         @RequestParam id: Int,
-        @RequestParam type: ManuscriptFileAccessType = ManuscriptFileAccessType.DOWNLOAD
+        @RequestParam fileType: ManuscriptFileType = ManuscriptFileType.MANUSCRIPT,
+        @RequestParam fileAccessType: ManuscriptFileAccessType = ManuscriptFileAccessType.DOWNLOAD,
     ): ResponseEntity<FileSystemResource> {
-        val manuscriptFile = manuscriptFileRepository.byId(id) ?: throw IllegalArgumentException("failed to find file $id")
-        val file = File(manuscriptFile.path)
+        val (name, path) = when(fileType) {
+            ManuscriptFileType.MANUSCRIPT -> manuscriptFileRepository.byId(id)?.let { Pair(it.name, it.path) } ?: throw IllegalArgumentException("failed to find file $id")
+            ManuscriptFileType.REVIEW -> manuscriptReviewFileRepository.byId(id)?.let { Pair(it.name, it.path) } ?: throw IllegalArgumentException("failed to find file $id")
+        }
+        val file = File(path)
         val mediaType = MediaTypeFactory.getMediaType(file.name).orElse(MediaType.APPLICATION_OCTET_STREAM)
         return ResponseEntity.ok()
             .contentType(mediaType)
             .header(
                 HttpHeaders.CONTENT_DISPOSITION,
-                "${if(type == ManuscriptFileAccessType.DOWNLOAD) "attachment" else "inline"}; filename=\"${manuscriptFile.name}\""
+                "${if(fileAccessType == ManuscriptFileAccessType.DOWNLOAD) "attachment" else "inline"}; filename=\"${name}\""
             )
             .contentLength(file.length())
             .body(FileSystemResource(file))
