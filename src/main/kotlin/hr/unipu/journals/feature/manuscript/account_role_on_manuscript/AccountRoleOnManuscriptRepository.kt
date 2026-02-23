@@ -12,7 +12,7 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
     fun editorOnManuscript(@Param("manuscript_id") manuscriptId: Int): AccountRoleOnManuscript
 
     @Query("""
-        SELECT DISTINCT * FROM account_role_on_manuscript
+        SELECT * FROM account_role_on_manuscript
         WHERE (manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
         AND (account_id = :account_id OR :account_id IS NULL)
         AND (account_role = :role::manuscript_role OR :role IS NULL)
