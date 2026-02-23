@@ -162,7 +162,6 @@ class ManuscriptController(
         }
         return manuscripts
     }
-    @Transactional
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHENTICATED)
     fun insert(
