@@ -117,8 +117,8 @@
             const items = await response.json();
             type === 'publication' ?  renderSidebarButtons(items, 'sections-sidebar') : renderManuscripts(items, 'manuscripts-container');
             if(type === 'publication') {
-                document.getElementById('add-section').hidden = !({{isAdmin}} || role === 'EIC' && manuscriptStateSelect.value === 'PUBLISHED');
-                document.getElementById('sections-span').hidden = ({{isAdmin}} || role === 'EIC' && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('add-section').hidden = !(({{isAdmin}} || role === 'EIC') && manuscriptStateSelect.value === 'PUBLISHED');
+                document.getElementById('sections-span').hidden = (({{isAdmin}} || role === 'EIC') && manuscriptStateSelect.value === 'PUBLISHED');
                 document.getElementById('add-publication').hidden = !({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
                 document.getElementById('publications-span').hidden = ({{isAdmin}} && manuscriptStateSelect.value === 'PUBLISHED');
             }
