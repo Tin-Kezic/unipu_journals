@@ -27,7 +27,7 @@
         const files = run(currentElement.getAttribute('files'), JSON.parse);
         const fileAndOptions = Object.fromEntries(files.map(file => {
             const fileType = file.name.slice(file.name.lastIndexOf('.') + 1);
-            const options = `<a href="/files?id=${file.id}">[Download]</a>${inlineDisplayableTypes.includes(fileType) ? `&nbsp<a href="/files?id=${file.id}&type=VIEW">[View]</a>` : ''}`;
+            const options = `<a href="/files?id=${file.id}">[Download]</a>${inlineDisplayableTypes.includes(fileType) ? `&nbsp<a href="/files?id=${file.id}&fileAccessType=VIEW">[View]</a>` : ''}`;
             return [file.name, options];
         }))
         openInfoDialog(JSON.stringify(fileAndOptions))
@@ -35,7 +35,7 @@
     [
         { type: 'manuscript-invite-accepted', operation: 'Accept', decision: true },
         { type: 'manuscript-invite-declined', operation: 'Decline', decision: false }
-    ].forEach( it => {
+    ].forEach(it => {
         document.addEventListener(it.type, async (event) => {
             const { id, title, role } = event.detail;
             openBooleanDialog(`${it.operation} ${title}`, it.operation, async (event) => {
