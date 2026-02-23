@@ -4,89 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Review Page</title>
-
     <link rel="stylesheet" href="/util.css" />
 </head>
-
 <body>
 {{>util/header}}
-
+{{>util/components/manuscript/element}}
+{{>util/dialog/info}}
+{{>util/dialog/boolean}}
+{{>util/dialog/textarea}}
 <div class="content">
     <aside style="flex: 0 0 300px;">
-        <section class="container" style="padding-block: 2.4rem; margin-bottom: 0.9rem;">
-            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 1</button>
-            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 2</button>
-            <button style="text-decoration: underline; background-color: inherit; border: none;">Review report 3</button>
-        </section>
-
-        <section class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem;">
-                <p>Review report 1</p>
-                <p>21.7.2025.</p>
-            </div>
-            <p>state: Minor</p>
-
+        <section id="reviews-container" class="container" style="display: flex; flex-direction: row; padding-block: 2.4rem; margin-bottom: 0.9rem; cursor: default;"></section>
+        <style>
+            input[name="review"]:checked + label {
+                background-color: black;
+                color: white;
+            }
+        </style>
+        <section class="container" style="cursor: default;">
+            <p id="reviewer-and-round"></p>
+            <p id="review-recommendation">recommendation: _INSERT RECOMMENDATION_</p>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p>Reviewer's comment</p>
-                <div style="padding-inline: 1rem; background-color: white;">
-                    <a href="#">AnnouncementFlyer.pdf</a>
-                </div>
+                <button id="reviewer-comment-files" style="background: none; border: none; color: blue; text-decoration: underline; font-size: medium; cursor: pointer; padding-inline-end: 1rem;">files</button>
             </div>
-
-            <section class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
-                Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics... more
-                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--primary); border-width: 1px;">more</button>
-            </section>
-
+            <section id="reviewer-comment" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
             <br>
-
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p>Author's reply</p>
-                <div style="padding-inline: 1rem; background-color: white;">
-                    <a href="#">AnnouncementFlyer.pdf</a>
-                </div>
+                <button id="author-response-files" style="background: none; border: none; color: blue; text-decoration: underline; font-size: medium; cursor: pointer; padding-inline-end: 1rem;">files</button>
             </div>
-
-            <section class="container " style="margin: 0.5rem; min-height: 15rem; max-height: 15rem;">
-                Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics is essential in a wide range of fields... moreAcoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-                In practical terms, acoustics is essential in a wide range o fields... more
-                <button style="background-color: inherit; border-radius: 1rem; border-color: var(--primary); border-width: 1px;">more</button>
-            </section>
-
-            <button class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
+            <section id="author-response" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
+            <button id="view-full-review" class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
         </section>
     </aside>
+    <main style="flex: 1;">
+        <form id="form">
+            <div class="main-container" style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                {{#manuscript}}
+                    <manuscript-element
+                        style="width: 100%;"
+                        id = '{{id}}'
+                        title = '{{title}}'
+                        description = '{{description}}'
+                        corresponding-author = '{{{correspondingAuthor}}}'
+                        registered-authors = '{{{registeredAuthors}}}'
+                        unregistered-authors = '{{{unregisteredAuthors}}}'
+                        submission-date = '{{submissionDate}}'
+                        files = '{{{files}}}'
+                        is-overseeing = '{{isOverseeing}}'
+                        roles = '{{{roles}}}'
+                        state = '{{state}}'
+                    ></manuscript-element>
+                {{/manuscript}}
 
-    <main>
-        <form>
-            <section class="container article-box" style="padding: 0.8rem; min-height: 9.5rem; max-height: 9.5rem;">
-                <article>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
-                        <div>
-                            <p style="font-weight: bold; font-size: 1rem;">KSWN (Kannada SentiWordNet): Developing a Sentiment Lexicon for Kannada using Translation and Word Embedding Techniques</p>
-                            <p>Rashmi Kariganuru Bheemarao1, Hassan Sadashiva Guruprasad1 and Shambhavi Bangalore Ravi2</p>
-                            <p>Submitted: 9 June 2025       ID: <!--<publishing_key>-<section_key>-<increasing_6digit_id>--></p>
-                            <p style="margin-top: 0.2rem;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</p>
-                        </div>
-                        <button class="m3-button outlined-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
-                    </div>
-                </article>
-
-                <div style="display: flex; justify-content: flex-end;">
-                    <button class="m3-button yellow-button" style="box-shadow: none; padding: 0.6rem 0.8rem; font-size: 0.8rem; border-radius: 2rem; margin-top: -2rem;">Manage</button>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button class="m3-button green-button" style="box-shadow: none;">Submit Review</button>
+                    <button type="button" onclick="window.location=`${window.location.pathname}-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
+                    <button id="end-round" type="button" class="m3-button primary-button">End round</button>
                 </div>
-            </section>
-
+            </div>
             <fieldset style="border: none;">
                 <section class="Recommendations">
-                    <p><b>Recommendations for Authors</b> (will be shown to authors)</p>
-                    <p class="recommendations-description">Answers to the following questions do not replace any specific comments made for authors. Please give further details in the "comments for authors" box below.</p>
-
-                    <br>
-
                     <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
                         <div class="container rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100;">
                             <table class="rating-table">
@@ -100,274 +79,50 @@
                                     <th style="padding-left: 0.3rem;">5</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>Novelty</td>
-                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="novelty" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Significance</td>
-                                    <td><input type="radio" class="blue-checkbox" name="significance" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="significance" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="significance" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="significance" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="significance" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Technical Quality</td>
-                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="technical_quality" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Clarity</td>
-                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="clarity" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Methodology</td>
-                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="methodology" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Relevance to the Publication</td>
-                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="relevance" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Language Quality</td>
-                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="language_quality" value="5"></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Overall Mark</td>
-                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="1"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="2"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="3"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="4"></td>
-                                    <td><input type="radio" class="blue-checkbox" name="overall_mark" value="5"></td>
-                                </tr>
-                                </tbody>
+                                <tbody id="rating-tbody"></tbody>
                             </table>
                         </div>
-
-                        <div class="container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 42rem; padding-inline: 1rem; font-weight: 100;">
-                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; margin-top: 0.5rem; gap: 1rem;">
-                                <p style="flex: 1;">Does the introduction provide sufficient background and include all relevant references?</p>
-                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="intro-yes"   name="intro" value="yes">
-                                    <label for="intro-yes" class="checkbox">Yes</label>
-
-                                    <input type="radio" id="intro-impr" name="intro" value="improved">
-                                    <label for="intro-impr" class="checkbox">Can be improved</label>
-
-                                    <input type="radio" id="intro-must" name="intro" value="must">
-                                    <label for="intro-must" class="checkbox">Must be improved</label>
-                                </div>
-                            </div>
-
-                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
-                                <p style="flex: 1;">Is the research design appropriate?</p>
-                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="design-yes"   name="design" value="yes">
-                                    <label for="design-yes" class="checkbox">Yes</label>
-
-                                    <input type="radio" id="design-impr" name="design" value="improved">
-                                    <label for="design-impr" class="checkbox">Can be improved</label>
-
-                                    <input type="radio" id="design-must" name="design" value="must">
-                                    <label for="design-must" class="checkbox">Must be improved</label>
-                                </div>
-                            </div>
-
-                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
-                                <p style="flex: 1;">Are the methods adequately described?</p>
-                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="methods-yes"   name="methods" value="yes">
-                                    <label for="methods-yes" class="checkbox">Yes</label>
-
-                                    <input type="radio" id="methods-impr" name="methods" value="improved">
-                                    <label for="methods-impr" class="checkbox">Can be improved</label>
-
-                                    <input type="radio" id="methods-must" name="methods" value="must">
-                                    <label for="methods-must" class="checkbox">Must be improved</label>
-                                </div>
-                            </div>
-
-                            <div class="check-question" style="display: flex; align-items: center; margin-bottom: 1rem; gap: 1rem;">
-                                <p style="flex: 1;">Are the results clearly presented?</p>
-                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="results-yes"   name="results" value="yes">
-                                    <label for="results-yes" class="checkbox">Yes</label>
-
-                                    <input type="radio" id="results-impr" name="results" value="improved">
-                                    <label for="results-impr" class="checkbox">Can be improved</label>
-
-                                    <input type="radio" id="results-must" name="results" value="must">
-                                    <label for="results-must" class="checkbox">Must be improved</label>
-                                </div>
-                            </div>
-
-                            <div class="check-question" style="display: flex; align-items: center; gap: 1rem;">
-                                <p style="flex: 1;">Are the conclusions supported by the results?</p>
-                                <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                                    <input type="radio" id="conclusions-yes"   name="conclusions" value="yes">
-                                    <label for="conclusions-yes" class="checkbox">Yes</label>
-
-                                    <input type="radio" id="conclusions-impr" name="conclusions" value="improved">
-                                    <label for="conclusions-impr" class="checkbox">Can be improved</label>
-
-                                    <input type="radio" id="conclusions-must" name="conclusions" value="must">
-                                    <label for="conclusions-must" class="checkbox">Must be improved</label>
-                                </div>
+                        <div id="check-questions-container" class="container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 42rem; padding-inline: 1rem; font-weight: 100;"></div>
+                        <div class="container" style="display: flex; flex-direction: column; gap: 0.7rem; justify-content: center; width: 5rem;">
+                            <b style="text-align: center;">Recommendation</b> <br>
+                            <label for="accept" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Accept</label>
+                            <label for="minor" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Minor</label>
+                            <label for="major" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Major</label>
+                            <label for="reject" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Reject</label>
+                            <div style="display: flex; justify-content: center;">
+                                <input type="radio" id="major" name="recommendation" value="MAJOR" style="width: 1px; opacity: 0.01;" >
+                                <input type="radio" id="accept" name="recommendation" value="ACCEPT" style="width: 1px; opacity: 0.01;">
+                                <input type="radio" id="minor" name="recommendation" value="MINOR" style="width: 1px; opacity: 0.01;">
+                                <input type="radio" id="reject" name="recommendation" value="REJECT" style="width: 1px; opacity: 0.01;" required>
                             </div>
                         </div>
+                        <style>
+                            .sidebar-button.selected {
+                                background-color: var(--primary);
+                                color: white;
+                            }
+                        </style>
+                        <script>
+                            document.querySelectorAll('input[name="recommendation"]').forEach(radio => {
+                                radio.addEventListener('change', () => {
+                                    document.querySelectorAll('.sidebar-button').forEach(label => {
+                                    label.classList.remove('selected');
+                                    });
+                                    const selectedLabel = document.querySelector(`label[for="${radio.id}"]`);
+                                    if(selectedLabel) selectedLabel.classList.add('selected');
+                                });
+                            });
+                        </script>
                     </div>
-
-                    <div style="display: flex; align-items: center; gap: 1.8rem;">
-                        <p><b>Recommendation</b></p>
+                    <section>
                         <div style="display: flex; gap: 0.5rem;">
-                            <button type="button" class="m3-button orange-button">Accept</button>
-                            <button type="button" class="m3-button orange-button">Minor</button>
-                            <button type="button" class="m3-button orange-button">Major</button>
-                            <button type="button" class="m3-button orange-button">Reject</button>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <section class="comments-section">
-                        <p style="margin-top: 0.5rem; font-weight: bold;">Comments and suggestions for author</p>
-
-                        <div class="text-field">
-                            <label for="comment">Reviewers comment</label>
-                            <textarea id="comment" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;"></textarea>
-                        </div>
-
-                        <div style="display: flex; gap: 5rem; align-items: flex-start; margin-top: -0.5rem;">
-                            <div style="flex: 1;">
-                                <div class="container" style="padding: 0.7rem 1.5rem; font-weight: 100;">
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <span>Do you have any conflict of interest regarding this manuscript?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="conflict_interest" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="conflict_interest" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <span>Did you detect plagiarism?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="plagiarism" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="plagiarism" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <span>Did you detect inappropriate use of LLM tools?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="llm_used" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="llm_used" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <span>Did you detect inappropriate self-citations by the authors?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="self_citation" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="self_citation" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <span>Are the references appropriate and relevant?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="references" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="references" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="check-question" style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span>Do you have any other ethical concerns?</span>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="ethical_concerns" value="yes">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
-                                            </label>
-                                            <label class="pale-yellow-checkbox-button">
-                                                <input type="radio" name="ethical_concerns" value="no">
-                                                <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="text-field" style="margin: 0;">
+                                <label for="comment">Comments and suggestions for author</label>
+                                <textarea id="comment" name="reviewerComment" required style="width: 100%; resize: vertical; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem 3rem 2rem; font-size: 1rem;"></textarea>
+                                <input type="file" name="reviewerCommentFiles" multiple/>
                             </div>
-
-                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
-                                <button type="submit" class="m3-button outlined-button" style="color: var(--primary); border-color: var(--primary); padding: 1rem 8rem;">Upload file</button>
-
-                                <div style="padding-inline: 0.2rem; gap: 10.8rem;">
-                                    <a href="#">PDF-document.pdf</a>
-                                    <button>-</button>
-                                </div>
-
-                                <button class="m3-button primary-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem; margin-top: 0.6rem;">Decide</button>
-                                <button class="m3-button yellow-button" style="width: 100%; padding: 1rem 1.2rem; font-size: 2.5rem; border-radius: 1rem;" type="submit">Submit Review</button>
+                            <div style="display: flex; gap: 5rem; align-items: flex-start;">
+                                <div id="boolean-questions-container" class="container" style="padding: 0.7rem 1.5rem; font-weight: 100;"></div>
                             </div>
                         </div>
                     </section>
@@ -377,122 +132,267 @@
     </main>
 </div>
 </body>
+<script>
+    let reviewerCommentFiles, authorResponseFiles;
+    document.getElementById('reviewer-comment-files').addEventListener('click', () => openInfoDialog(JSON.stringify(reviewerCommentFiles)));
+    document.getElementById('author-response-files').addEventListener('click', () => openInfoDialog(JSON.stringify(authorResponseFiles)));
+    (async () => {
+        const reviewerIdAndReviews = await (await fetch(`/api/manuscripts/{{manuscriptId}}/reviews?isComplete=true`, { method: 'GET' })).json();
+        const isAuthorized = Object.entries(reviewerIdAndReviews)[0]?.[0] != 1; // [0].reviewerId != 1 (1-n used for unauthorized)
+        const reviewsAndFiles = Object.entries(reviewerIdAndReviews).map(([reviewerId, reviewsAndFiles]) => reviewsAndFiles).flat();
+        const reviews = Object.entries(reviewerIdAndReviews).map(([reviewerId, reviewsAndFiles]) => Object.entries(reviewsAndFiles).map(([key, value]) => value.first)).flat(); // value.second is files
+        const roundMap = new Map([...new Set(reviews.map(r => r.manuscriptReviewRoundId))].map((id, index) => [id, index + 1]));
+        Object.entries(reviewerIdAndReviews).forEach(([reviewerId, reviewsAndFiles]) => {
+            const div = document.createElement('div');
+            div.style = 'display: flex; flex-direction: column; align-items: center; margin-left: 0.8rem;';
+            div.innerHTML = /*html*/`
+                <button onclick="if(${isAuthorized}) window.location='/profiles/${reviewerId}';" style="text-decoration: underline; background-color: inherit; border: none; cursor: pointer;">Reviewer ${reviewerId}</button>
+                <div style="display: flex; flex-direction: column;">
+                    ${Object.entries(reviewsAndFiles).map(([key, value]) => value.first) // reviews
+                        .sort((a, b) => a.manuscriptReviewRoundId - b.manuscriptReviewRoundId)
+                        .map((review, index) => /*html*/`
+                            <input id="review-${review.id}" name="review" value="${review.id}" type="radio" hidden>
+                            <label for="review-${review.id}">round_${roundMap.get(review.manuscriptReviewRoundId)}</label>
+                        `).join('')}
+                </div>
+            `;
+            document.getElementById('reviews-container').appendChild(div);
+        });
 
-<div class="overlay">
-    <div class="dialog" style="padding-inline: 2rem;">
-        <p style="text-align: center;">Editor's recommendation</p>
-        <br>
-        <div style="display: flex; justify-content: center;">
-            <button type="button" class="m3-button orange-button" style="width:9rem;">Reject</button>
-        </div>
-        <br>
-        <br>
+        const inlineDisplayableTypes = ["txt", "log", "md", "markdown", "csv", "tsv", "json", "jsonl", "jsonld", "xml", "yaml", "yml", "toml", "ini", "cfg", "conf", "env", "sql", "svg", "xhtml", "webmanifest", "ts", "jsx", "tsx", "py", "java", "c", "cpp", "h", "hpp", "cs", "go", "rs", "rb", "swift", "kt", "scala", "lua", "r", "pl", "dart", "png", "jpg", "jpeg", "bmp", "ico", "avif", "tif", "tiff", "jfif", "mp3", "wav", "ogg", "opus", "m4a", "aac", "flac", "mp4", "m4v", "webm", "ogv", "3gp", "pdf", "epub", "woff", "woff2", "eot", "geojson", "ndjson", "fasta", "fastq", "vcf", "bed", "gff", "wasm"];
+        document.querySelectorAll('input[name="review"]').forEach(input => input.addEventListener('change', () => {
+            const review = reviews.find(r => r.id == input.value);
+            document.getElementById('reviewer-and-round').innerHTML = `Reviewer: ${review.reviewerId}, round: ${roundMap.get(review.manuscriptReviewRoundId)}`;
+            document.getElementById('review-recommendation').innerHTML = `Recommendation: <b>${review.recommendation}</b>`;
+            document.getElementById('reviewer-comment').innerHTML = review.reviewerComment;
+            document.getElementById('author-response').innerHTML = review.authorResponse;
+            const files = Object.entries(reviewsAndFiles).find(([key, value]) => value.first.id == input.value)[1].second; // ["n", {first: review, second: files}]
+            const helper = (files) => Object.fromEntries(files.map(file => {
+                const fileType = file.name.slice(file.name.lastIndexOf('.') + 1);
+                const options = `<a href="/files?id=${file.id}&fileType=REVIEW">[Download]</a>${inlineDisplayableTypes.includes(fileType) ? `&nbsp<a href="/files?id=${file.id}&fileType=REVIEW&fileAccessType=VIEW">[View]</a>` : ''}`;
+                return [file.name, options];
+            }));
+            reviewerCommentFiles = helper(files.filter(f => f.fileRole === 'REVIEW'));
+            authorResponseFiles = helper(files.filter(f => f.fileRole === 'AUTHOR_RESPONSE'));
+        }));
+        const firstReview = document.querySelector('input[name="review"]');
+        if(firstReview) {
+            firstReview.checked = true;
+            firstReview.dispatchEvent(new Event('change'));
+        }
+    })();
+    document.getElementById('view-full-review').addEventListener('click', () => {
+        window.location = `${window.location.pathname}-history?id=${document.querySelector('input[name="review"]:checked').value}`;
+    });
+
+    const ratingTbody = document.getElementById('rating-tbody');
+    [
+        { label: 'Novelty', name: 'novelty' },
+        { label: 'Significance', name: 'significance' },
+        { label: 'Technical Quality', name: 'technicalQuality' },
+        { label: 'Clarity', name: 'clarity' },
+        { label: 'Methodology', name: 'methodology' },
+        { label: 'Relevance to the Publication', name: 'relevanceToThePublication' },
+        { label: 'Language Quality', name: 'languageQuality' },
+        { label: 'Overall Mark', name: 'overallMark' }
+
+    ].forEach(rating => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${rating.label}</td>
+            ${['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE'].map(n => `
+                <td><input type="radio" class="blue-checkbox" name="${rating.name}" value="${n}" ${n == 'ONE' ? 'required' : ''}></td>
+            `).join('')}
+        `;
+        ratingTbody.appendChild(row);
+    });
+    const checkQuestionsContainer = document.getElementById('check-questions-container');
+    [
+        { label: 'Does the introduction provide sufficient background and include all relevant references?', name: 'sufficientBackground' },
+        { label: 'Is the research design appropriate?', name: 'appropriateResearchDesign' },
+        { label: 'Are the methods adequately described?', name: 'adequatelyDescribed' },
+        { label: 'Are the results clearly presented?', name: 'clearlyPresented' },
+        { label: 'Are the conclusions supported by the results?', name: 'supportedConclusions' }
+    ].forEach(question => {
+        const div = document.createElement('div');
+        div.className = 'check-question';
+        div.style = 'display: flex; align-items: center; margin: 0.5rem 0; gap: 1rem;';
+        div.innerHTML = `
+            <p style="flex: 1;">${question.label}</p>
+            <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
+                <input type="radio" id="${question.name}-yes" name="${question.name}" value="YES"  required>
+                <label for="${question.name}-yes" class="checkbox">Yes</label>
+
+                <input type="radio" id="${question.name}-impr" name="${question.name}" value="CAN_BE_IMPROVED" >
+                <label for="${question.name}-impr" class="checkbox">Can be improved</label>
+
+                <input type="radio" id="${question.name}-must" name="${question.name}" value="MUST_BE_IMPROVED" >
+                <label for="${question.name}-must" class="checkbox">Must be improved</label>
+            </div>
+        `;
+        checkQuestionsContainer.appendChild(div);
+    });
+    const booleanQuestionsContainer = document.getElementById('boolean-questions-container');
+    [
+        { label: 'Do you have any conflict of interest regarding this manuscript?', name: 'conflictOfInterest' },
+        { label: 'Did you detect plagiarism?', name: 'plagiarism' },
+        { label: 'Did you detect inappropriate use of LLM tools?', name: 'llmUsed' },
+        { label: 'Did you detect inappropriate self-citations by the authors?', name: 'selfCitation' },
+        { label: 'Are the references appropriate and relevant?', name: 'appropriateReferences' },
+        { label: 'Do you have any other ethical concerns?', name: 'ethicalConcerns' }
+    ].forEach(question => {
+        const div = document.createElement('div');
+        div.className = 'check-question';
+        div.style = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;';
+        div.innerHTML = `
+            <span>${question.label}</span>
+            <div style="display: flex; gap: 0.5rem;">
+                <label class="pale-yellow-checkbox-button" style="display: flex;">
+                    <input type="radio" name="${question.name}" value="true" required style="height: 1px;">
+                    <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
+                </label>
+                <label class="pale-yellow-checkbox-button" style="display: flex;">
+                    <input type="radio" name="${question.name}" value="false" style="height: 1px;">
+                    <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
+                </label>
+            </div>
+        `;
+        booleanQuestionsContainer.appendChild(div);
+    });
+    const fileInput = document.querySelector('input[type="file"]');
+    fileInput.addEventListener('change', () => {
+        const forbiddenExtensions = [
+            'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
+            'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx',
+            'psd', 'indd', 'cdr', 'sketch', 'key',
+            'gif', 'webp', 'heic', 'heif', 'raw',
+            'hdf', 'h5', 'sav', 'dta', 'mat',
+            'rar', '7z', 'ace',
+            'tmp', 'bak', '~doc', 'swp',
+            'ttf', 'otf', 'fon'
+        ];
+        Array.from(fileInput.files).forEach(file => {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if(forbiddenExtensions.includes(fileExtension)) {
+                alert(`files of type .${fileExtension} are not allowed`);
+                fileInput.value = '';
+                return;
+            }
+        });
+    });
+    const form = document.getElementById('form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const body = new FormData();
+
+        body.append('review', new Blob([JSON.stringify({
+            novelty: formData.get('novelty'),
+            significance: formData.get('significance'),
+            technicalQuality: formData.get('technicalQuality'),
+            clarity: formData.get('clarity'),
+            methodology: formData.get('methodology'),
+            relevanceToThePublication: formData.get('relevanceToThePublication'),
+            languageQuality: formData.get('languageQuality'),
+            overallMark: formData.get('overallMark'),
+
+            sufficientBackground: formData.get('sufficientBackground'),
+            appropriateResearchDesign: formData.get('appropriateResearchDesign'),
+            adequatelyDescribed: formData.get('adequatelyDescribed'),
+            clearlyPresented: formData.get('clearlyPresented'),
+            supportedConclusions: formData.get('supportedConclusions'),
+
+            recommendation: formData.get('recommendation'),
+
+            conflictOfInterest: formData.get('conflictOfInterest'),
+            plagiarism: formData.get('plagiarism'),
+            llmUsed: formData.get('llmUsed'),
+            selfCitation: formData.get('selfCitation'),
+            appropriateReferences: formData.get('appropriateReferences'),
+            ethicalConcerns: formData.get('ethicalConcerns'),
+
+            reviewerComment: formData.get('reviewerComment')
+        })], { type: 'application/json' }));
+        for(const file of fileInput.files) body.append('files', file);
+
+        const response = await fetch(`/api${window.location.pathname}s`, { method: 'POST', body});
+        if(!response.ok) { alert(await response.text()); return; }
+        history.back();
+    });
+</script>
+<!-- ||||||||||||| MOVE TO REVIEW PAGE FOR EDITOR TO END ROUND AND USE API TO END ROUND INSTEAD OF NON-EXISTANT>UPDATE-EDITOR-RECOMMENDATION todo
+    /* {
+        openOptionsDialog('Decide', [
+            {name: 'Accept', onClick: async () => {
+                if('{{type}}' == 'EIC') window.location = `/manuscripts/${manuscriptId}/technical-processing`;
+                else {
+                    updateEditorRecommendation(manuscriptId, 'ACCEPT');
+                    alert("successfully updated editor recommendation to: accept");
+                }
+            }},
+            {name: 'Minor', onClick: async () => updateManuscriptState(manuscriptId, 'MINOR')},
+            {name: 'Major', onClick: async () => updateManuscriptState(manuscriptId, 'MAJOR')},
+            {name: 'Reject', onClick: async () => {
+                if('{{type}}' == 'EIC') {
+                    const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
+                    if(!response.ok) { alert(await response.text()); return; }
+                    history.back();
+                } else {
+                    updateEditorRecommendation(manuscriptId, 'REJECT');
+                    alert("successfully updated editor recommendation to: reject");
+                }
+            }}
+        ]);
+    } */
+-->
+<dialog id="end-round-dialog" closedby="any">
+    <form id="end-round-dialog-form" style="display: flex; flex-direction: column; gap: 0.5rem;">
         <div style="display: flex; gap: 0.5rem;">
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Accept</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Minor</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Major</button>
-            <button type="button" class="m3-button orange-button" style="width: 5rem; display: flex; align-items: center; justify-content: center; padding-block: 1rem;">Reject</button>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="radio" id="editor-accept" name="editor-recommendation" value="ACCEPT" style="display: none;">
+                <label for="editor-accept" class="sidebar-button" style="display: flex; justify-content: center;">Accept</label>
+
+                <input type="radio" id="editor-minor" name="editor-recommendation" value="MINOR" style="display: none;">
+                <label for="editor-minor" class="sidebar-button" style="display: flex; justify-content: center;">Minor</label>
+
+                <input type="radio" id="editor-major" name="editor-recommendation" value="MAJOR" style="display: none;">
+                <label for="editor-major" class="sidebar-button" style="display: flex; justify-content: center;">Major</label>
+
+                <input type="radio" id="editor-reject" name="editor-recommendation" value="REJECT" style="display: none;">
+                <label for="editor-reject" class="sidebar-button" style="display: flex; justify-content: center;">Reject</label>
+            </div>
+            <div class="text-field" style="margin: 0;">
+                <label for="end-round-dialog-textarea">editor's comment</label>
+                <textarea id="end-round-dialog-textarea" name="end-round-dialog-textarea" type="text" style="width: 25rem; height: 12.5rem; padding: 1rem; font-size: medium;"></textarea>
+            </div>
         </div>
-        <br>
         <div style="display: flex; justify-content: space-between">
-            <button class="m3-button outlined-button">Cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button outlined-button">Submit</button>
-            </div>
+            <button id="end-round-dialog-negative" type="button" class="m3-button outlined-button">Cancel</button>
+            <button class="m3-button primary-button" style="margin-left: 1rem; padding-inline: 1.7rem;">End round</button>
         </div>
-    </div>
-</div>
-
-<div class="overlay">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Reviewer's comment</p>
-        <br>
-        <p style="padding-inline: 4rem; text-align: justify; line-height: 1.5rem; font-size: 1.2rem; margin-bottom: 1rem;">
-            Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
-            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
-
-            (this window supports html parsing)
-            Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
-            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
-
-            (this window supports html parsing)
-        </p>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outlined-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--primary);">edit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <p>Author's reply</p>
-        <br>
-        <p style="padding-inline: 4rem; text-align: justify; line-height: 1.5rem; font-size: 1.2rem; margin-bottom: 1rem;">
-            Very cool review, thanks
-        </p>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outlined-button" onclick="hideOverlayAndDialog()">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--primary);">edit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <div class="text-field">
-            <label for="comment">Reviewer's comment</label>
-            <textarea id="comment" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;">Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
-            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
-
-            (this window supports html parsing)
-            Acoustics is the branch of physics that deals with the study of sound—its production, transmission, and effects. It encompasses how sound waves travel through different media (such as air, water, and solids), how they interact with surfaces and structures, and how they are perceived by the human ear.
-            In practical terms, acoustics is essential in a wide range of fields, including architecture (designing buildings for optimal sound), audio engineering (recording and mixing sound), environmental science (managing noise pollution), and medicine (using ultrasound for diagnostics). Key concepts in acoustics include frequency, amplitude, reverberation, echo, and sound absorption.
-            Whether it's designing a concert hall to enhance musical clarity or creating noise-reducing materials for quieter environments
-
-            (this window supports html parsing)</textarea>
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outlined-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--primary);">save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="overlay">
-    <div class="dialog" style="padding: 1.5rem 3rem;">
-        <div class="text-field">
-            <label for="comment">Author's reply</label>
-            <textarea id="comment" required style="width: 100%; resize: vertical; field-sizing: content; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; width: 68vw;">Very cool review, thanks.</textarea>
-        </div>
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <button class="m3-button outlined-button">cancel</button>
-            <div style="display: flex; justify-content: flex-end">
-                <button class="m3-button remove-button" style="box-shadow: none; padding-inline: 1.5rem; color: white; background-color: var(--primary);">save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+    </form>
+</dialog>
+<script>
+    const endRoundDialog = document.getElementById('end-round-dialog');
+    document.getElementById('end-round').addEventListener('click', () => endRoundDialog.showModal());
+    document.getElementById('end-round-dialog-negative').addEventListener('click', () => endRoundDialog.close());
+    document.getElementById('end-round-dialog-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const response = await fetch(`/api${window.location.pathname}-rounds/end`, { method: 'POST', body: new URLSearchParams({
+            recommendation: document.querySelector('input[name="editor-recommendation"]:checked').value,
+            editorComment: document.getElementById('end-round-dialog-textarea').value
+        })});
+        if(!response.ok) { alert(await response.text()); return; }
+        history.back();
+    });
+</script>
 <style>
     .content {
         display: flex;
         align-items: flex-start;
         gap: 1rem;
         padding: 1rem;
-    }
-    main {
-        flex: 1;
-
     }
     .container {
         width: auto !important;
@@ -526,28 +426,6 @@
     .download-button:hover {
         color: var(--primary) !important;
     }
-    .orange-button:hover {
-        background-color: var(--orange);
-    }
-    .orange-button:active {
-        background-color: var(--orange);
-    }
-    .orange-button:nth-child(1):hover,
-    .orange-button:nth-child(1):active {
-        background-color: var(--green) !important;
-        color: black;
-    }
-    .orange-button:nth-child(2):hover,
-    .orange-button:nth-child(2):active {
-        background-color: var(--yellow) !important;
-        color: black !important;
-    }
-    .orange-button:nth-child(4):hover,
-    .orange-button:nth-child(4):active {
-        background-color: var(--pink) !important;
-        color: black;
-    }
-
     @media screen and (max-width: 1300px) {
         .content {
             display: flex;
@@ -587,23 +465,11 @@
             max-width: 87vw !important;
             min-width: auto !important;
         }
-        .orange-button {
-            padding-inline: 1.5rem !important;
-            font-size: clamp(0.7rem, 2vw, 1rem) !important;
-            white-space: nowrap;
-            min-width: 0;
-        }
-        .comments-section > div:last-child {
-            gap: 1rem !important;
-        }
         .container .article-box {
             order: 1;
             width: 96vw !important;
             max-width: 100vw !important;
             margin-bottom: 1rem;
-        }
-        #comment {
-            width: 95vw !important;
         }
     }
 </style>
