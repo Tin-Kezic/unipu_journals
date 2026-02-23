@@ -168,16 +168,6 @@ class ManuscriptController(
         @RequestPart manuscriptSubmission: ManuscriptSubmission,
         @RequestPart files: List<MultipartFile>,
     ): ResponseEntity<String> {
-        val forbiddenExtensions = setOf(
-            "exe", "msi", "bat", "cmd", "sh", "app", "apk", "dll", "so", "bin", "iso", "dmg", "img", "pkg",
-            "html", "htm", "css", "js", "php", "asp", "aspx",
-            "psd", "indd", "cdr", "sketch", "key",
-            "gif", "webp", "heic", "heif", "raw",
-            "hdf", "h5", "sav", "dta", "mat",
-            "rar", "7z", "ace",
-            "tmp", "bak", "~doc", "swp",
-            "ttf", "otf", "fon", ""
-        )
         files.forEach { file ->
             if(file.originalFilename == null)
                 return ResponseEntity.badRequest().body("submitted unnamed files")
@@ -193,7 +183,7 @@ class ManuscriptController(
         try {
             tempFiles.forEach { (name, file) ->
                 val extension = file.name.substringAfterLast('.', "").lowercase()
-                if(extension in forbiddenExtensions)
+                if(extension in clamAv.forbiddenExtensions)
                     return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
                 if(extension == "zip" && zipService.isEncrypted(file))
                     return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
