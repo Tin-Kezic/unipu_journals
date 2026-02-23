@@ -6,6 +6,8 @@ import org.springframework.data.repository.Repository
 import org.springframework.data.repository.query.Param
 
 interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript, Int> {
+    @Query("SELECT * FROM account_role_on_manuscript WHERE manuscript_id = :manuscript_id AND account_role = 'EIC'")
+    fun eicOnManuscript(@Param("manuscript_id") manuscriptId: Int): AccountRoleOnManuscript
     @Query("""
         SELECT DISTINCT * FROM account_role_on_manuscript
         WHERE (manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
