@@ -14,7 +14,6 @@ import org.jsoup.safety.Safelist
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -32,7 +31,6 @@ class ManuscriptReviewRoundController(
     private val manuscriptReviewRepository: ManuscriptReviewRepository,
     private val emailService: EmailService
 ) {
-    @Transactional
     @PostMapping("/start")
     fun startRound(@PathVariable manuscriptId: Int): ResponseEntity<String> {
         val response = manuscriptService.updateState(
@@ -51,7 +49,6 @@ class ManuscriptReviewRoundController(
         }
         return ResponseEntity.ok("successfully started round")
     }
-    @Transactional
     @PostMapping("/end")
     fun endRound(
         @PathVariable manuscriptId: Int,
