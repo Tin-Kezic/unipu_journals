@@ -31,26 +31,26 @@ class ManuscriptService(
                 if(isAdmin.not()) return ResponseEntity.status(403).body("forbidden to hide manuscripts")
                 if(manuscript.state !in setOf(ManuscriptState.PUBLISHED, ManuscriptState.REJECTED)) return ResponseEntity.badRequest().body("cannot hide manuscript that is not published or rejected")
             }
-            ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to $newState")
+            ManuscriptState.AWAITING_EIC_REVIEW -> return ResponseEntity.badRequest().body("cannot change manuscript state to ${manuscript.state}")
             ManuscriptState.AWAITING_EDITOR_REVIEW -> {
                 if(authorizationService.isEicOnManuscript(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to editor review manuscript $manuscriptId")
-                if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from $newState")
+                if(manuscript.state != ManuscriptState.AWAITING_EIC_REVIEW) return ResponseEntity.badRequest().body("cannot change state to AWAITING_EDITOR_REVIEW from ${manuscript.state}")
             }
             ManuscriptState.AWAITING_ROUND_INITIALIZATION -> {
                 if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId).not()) return ResponseEntity.status(403).body("forbidden to initialize review round awaiting on manuscript $manuscriptId")
-                if(manuscript.state !in listOf(ManuscriptState.AWAITING_EDITOR_REVIEW, ManuscriptState.MINOR, ManuscriptState.MAJOR)) return ResponseEntity.badRequest().body("cannot change state to AWAITING_ROUND_INITIALIZATION from $newState")
+                if(manuscript.state !in setOf(ManuscriptState.AWAITING_REVIEWER_REVIEW, ManuscriptState.AWAITING_EDITOR_REVIEW, ManuscriptState.MINOR, ManuscriptState.MAJOR)) return ResponseEntity.badRequest().body("cannot change state to AWAITING_ROUND_INITIALIZATION from ${manuscript.state}")
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                 if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to initialize round on manuscript $manuscriptId")
-                if(manuscript.state != ManuscriptState.AWAITING_ROUND_INITIALIZATION) return ResponseEntity.badRequest().body("cannot initialize round from $newState")
+                if(manuscript.state != ManuscriptState.AWAITING_ROUND_INITIALIZATION) return ResponseEntity.badRequest().body("cannot initialize round from ${manuscript.state}")
             }
             ManuscriptState.MINOR, ManuscriptState.MAJOR -> {
                 if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor/major on manuscript $manuscriptId")
-                if(manuscript.state !in listOf(ManuscriptState.AWAITING_ROUND_INITIALIZATION, ManuscriptState.AWAITING_REVIEWER_REVIEW)) return ResponseEntity.badRequest().body("cannot initialize round from $newState")
+                if(manuscript.state !in setOf(ManuscriptState.AWAITING_ROUND_INITIALIZATION, ManuscriptState.AWAITING_REVIEWER_REVIEW)) return ResponseEntity.badRequest().body("cannot initialize round from ${manuscript.state}")
             }
             ManuscriptState.REJECTED -> {
                 if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to reject on manuscript $manuscriptId")
-                if(manuscript.state.name.contains("AWAITING").not()) return ResponseEntity.badRequest().body("cannot reject manuscript from $newState")
+                if(manuscript.state.name.contains("AWAITING").not()) return ResponseEntity.badRequest().body("cannot reject manuscript from ${manuscript.state}")
             }
             ManuscriptState.PUBLISHED -> when(manuscript.state) {
                 ManuscriptState.HIDDEN -> if(isAdmin.not()) return ResponseEntity.status(403).body("forbidden to unhide manuscripts")
@@ -58,7 +58,7 @@ class ManuscriptService(
                 ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                     if(isEditorOnManuscriptOrAffiliatedSuperior.not()) return ResponseEntity.status(403).body("forbidden to determine minor/major on manuscript $manuscriptId")
                 }
-                else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from $newState")
+                else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from ${manuscript.state}")
             }
         }
         val rowsAffected = manuscriptRepository.updateState(manuscriptId, newState)
