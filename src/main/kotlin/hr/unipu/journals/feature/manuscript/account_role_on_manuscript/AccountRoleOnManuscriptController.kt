@@ -8,7 +8,6 @@ import hr.unipu.journals.security.AuthorizationService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,7 +21,6 @@ class AccountRoleOnManuscriptController(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val inviteRepository: InviteRepository,
     private val authorizationService: AuthorizationService,
-    private val emailService: EmailService
 ) {
     @PostMapping
     fun assign(
@@ -36,6 +34,12 @@ class AccountRoleOnManuscriptController(
             ManuscriptRole.EDITOR -> require(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId))
             ManuscriptRole.REVIEWER -> require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
             ManuscriptRole.AUTHOR -> return ResponseEntity.badRequest().body("cannot manually assign author to manuscript")
+        }
+        if(role == ManuscriptRole.REVIEWER) {
+            val eic = accountRoleOnManuscriptRepository.eicOnManuscript(manuscriptId)
+            val editor = accountRoleOnManuscriptRepository.editorOnManuscript(manuscriptId)
+            if(accountRepository.byEmail(cleanEmail)?.id in setOf(eic.accountId, editor.accountId))
+                return ResponseEntity.badRequest().body("EiC and editor cannot be assigned as reviewers as they have review privileges by default")
         }
         try {
             accountRepository.byEmail(cleanEmail)?.let {
