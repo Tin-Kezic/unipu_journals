@@ -10,6 +10,8 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRepository
+import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRole
 import hr.unipu.journals.feature.manuscript.review.round.ManuscriptReviewRoundRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
@@ -33,6 +35,8 @@ class ReviewPagesController(
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val publicationRepository: PublicationRepository,
     private val sectionRepository: SectionRepository,
+    private val manuscriptReviewRepository: ManuscriptReviewRepository,
+    private val manuscriptReviewFileRepository: ManuscriptReviewFileRepository,
     private val manuscriptReviewRoundRepository: ManuscriptReviewRoundRepository,
     private val manuscriptRepository: ManuscriptRepository,
     private val manuscriptFileRepository: ManuscriptFileRepository
@@ -41,8 +45,8 @@ class ReviewPagesController(
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR)
     fun page(@PathVariable manuscriptId: Int, model: Model): String {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: throw IllegalArgumentException("failed to find manuscript $manuscriptId")
-        val sectionId = sectionRepository.byId(manuscript.sectionId)!!.id
-        val publicationId = publicationRepository.by(id = sectionId)!!.id
+        val section = sectionRepository.byId(manuscript.sectionId)!!
+        val publication = publicationRepository.by(id = section.publicationId)!!
         val accountId = authorizationService.account!!.id
         model["manuscript"] = Triple(
             manuscript,
@@ -59,7 +63,7 @@ class ReviewPagesController(
             ))
             put("unregisteredAuthors", jacksonObjectMapper().writeValueAsString(
                 if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                    || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+                    || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
                     || authorizationService.isAdmin)
                     unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
             ))
@@ -67,7 +71,7 @@ class ReviewPagesController(
                 accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
                     ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
                         if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                            || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+                            || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
                             || authorizationService.isAdmin)
                             unregisteredAuthor.let { author -> mapOf(
                                 "type" to "unregistered",
@@ -85,7 +89,7 @@ class ReviewPagesController(
                 manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }
             ))
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-            put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
+            put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
                     || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
                     || authorizationService.isAdmin)
             put("description", manuscript.description)
@@ -110,14 +114,31 @@ class ReviewPagesController(
                         .map { it.email }
                 val unregisteredReviewers = inviteRepository.all(target = InvitationTarget.REVIEWER, targetId = manuscriptId).map { it.email }
                 model["reviewers"] = registeredReviewers + unregisteredReviewers
-                val round = manuscriptReviewRoundRepository.by(manuscriptId)
+                val round = manuscriptReviewRoundRepository.latest(manuscriptId)
                 model["editorRecommendation"] = round?.editorRecommendation ?: ""
                 model["editorComment"] = round?.editorComment ?: ""
                 "/review/round-initialization-page"
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
                 require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
-                model["type"] = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) "EDITOR" else null
+                val type = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) "EDITOR" else null
+                model["type"] = type
+                model["reviewerWithRounds"] = manuscriptReviewRepository.all(manuscriptId = manuscriptId)
+                    .groupBy { it.reviewerId }
+                    .toSortedMap()
+                    .map { (reviewerId, reviews) -> buildMap {
+                        put("reviewerId", reviewerId)
+                        put("review", reviews.mapIndexed { index, review -> buildMap {
+                            val files = manuscriptReviewFileRepository.all(review.id)
+                            put("reviewerId", if(type != null) review.reviewerId else null)
+                            put("reviewerComment", review.reviewerComment)
+                            put("reviewerCommentFiles", files.filter { it.fileRole == ManuscriptReviewFileRole.REVIEW })
+                            put("authorResponse", review.authorResponse)
+                            put("authorResponseFiles", files.filter { it.fileRole == ManuscriptReviewFileRole.AUTHOR_RESPONSE })
+                            put("round", index + 1)
+                            put("roundId", review.manuscriptReviewRoundId)
+                        }})
+                    }}
                 "/review/review-page"
             }
             else -> throw IllegalArgumentException("manuscript is currently not under review")
