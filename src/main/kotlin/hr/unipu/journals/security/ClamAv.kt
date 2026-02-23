@@ -13,6 +13,16 @@ enum class ScanResult { OK, FOUND }
 @Service
 class ClamAv(appProperties: AppProperties) {
     private val socketPath: Path = Path.of(appProperties.clamavPath)
+    val forbiddenExtensions = setOf(
+        "exe", "msi", "bat", "cmd", "sh", "app", "apk", "dll", "so", "bin", "iso", "dmg", "img", "pkg",
+        "html", "htm", "css", "js", "php", "asp", "aspx",
+        "psd", "indd", "cdr", "sketch", "key",
+        "gif", "webp", "heic", "heif", "raw",
+        "hdf", "h5", "sav", "dta", "mat",
+        "rar", "7z", "ace",
+        "tmp", "bak", "~doc", "swp",
+        "ttf", "otf", "fon", ""
+    )
     fun scanMultipartFile(file: File): ScanResult {
         SocketChannel.open(UnixDomainSocketAddress.of(socketPath)).use { channel ->
             val command = "SCAN ${file.absolutePath}\n"
