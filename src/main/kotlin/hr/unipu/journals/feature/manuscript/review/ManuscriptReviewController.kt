@@ -1,7 +1,6 @@
 package hr.unipu.journals.feature.manuscript.review
 
 import hr.unipu.journals.EmailService
-import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ZipService
 import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFile
@@ -18,7 +17,6 @@ import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
