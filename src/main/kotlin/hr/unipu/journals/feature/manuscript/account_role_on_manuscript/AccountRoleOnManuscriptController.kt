@@ -25,7 +25,6 @@ class AccountRoleOnManuscriptController(
     private val emailService: EmailService
 ) {
     @PostMapping
-    @Transactional
     fun assign(
         @RequestParam email: String,
         @RequestParam role: ManuscriptRole,
