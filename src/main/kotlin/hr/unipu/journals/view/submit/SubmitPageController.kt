@@ -25,7 +25,6 @@ class SubmitPageController(
         model["isAdmin"] = authorizationService.isAdmin
         model["categories"] = categoryRepository.all()
         model["publications"] = publicationRepository.all(ManuscriptStateFilter.PUBLISHED).map { it.title }
-        model["sections"] = listOf("Section_1", "Section_2", "Section_3")
         return "submit/submit-page"
     }
 }
