@@ -49,6 +49,9 @@
                         sectionSelect.appendChild(newOption);
                     });
                 });
+                window.addEventListener('pageshow', () => {
+                    if(publicationSelect.value != 'publication') publicationSelect.dispatchEvent(new Event('change'));
+                });
             </script>
         </div>
 
