@@ -117,7 +117,6 @@ class ManuscriptController(
                 put("state", manuscript.state)
             }}
         val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
-
         val manuscripts = manuscriptRepository.all(
             accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
