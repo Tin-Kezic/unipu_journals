@@ -68,8 +68,8 @@ class ManuscriptService(
                 subject = "Manuscript set to ${newState.name.lowercase()}",
                 html = "The manuscript ${manuscript.title} has been set to ${newState.name.lowercase()}."
             )
-            ResponseEntity.ok("successfully updated state on manuscript: $manuscriptId")
+            ResponseEntity.ok("successfully updated state on manuscript")
         }
-        else ResponseEntity.internalServerError().body("failed to update state on manuscript: $manuscriptId")
+        else ResponseEntity.internalServerError().body("failed to update state on manuscript")
     }
 }
