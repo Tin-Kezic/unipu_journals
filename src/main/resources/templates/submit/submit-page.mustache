@@ -131,7 +131,7 @@
         <div id="file-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
     </form>
 </div>
-<dialog id="submitting-dialog" closedby="any"><p>Submitting...</p></dialog>
+<dialog id="submitting-dialog"><p>Submitting...</p></dialog>
 <script>
     function onCheckboxClick(checkbox) {
         document.querySelectorAll('input[name="corresponding-author"]').forEach(cb => cb.checked = false)
@@ -149,10 +149,10 @@
         submitButton.disabled = true;
 
         const category = document.querySelector('select[name="category"]').value;
-        if(category == 'category') { alert('select a category'); submittingDialog.close(); submitButton.disabled = false; return; }
+        if(category == 'category') { alert('select a category'); submittingDialog.close(); return; }
 
         const publicationTitle = document.querySelector('select[name="publication"]').value;
-        if(publicationTitle == 'publication') { alert('select a publication'); submittingDialog.close(); submitButton.disabled = false; return; }
+        if(publicationTitle == 'publication') { alert('select a publication'); submittingDialog.close(); return; }
 
         const sectionName = document.querySelector('select[name="section"]').value;
         const title = document.querySelector('input[name="title"]').value;
@@ -173,10 +173,10 @@
 
         let correspondingAuthorEmail;
         authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email; }})
-        if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); submitButton.disabled = false; return; }
+        if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); return; }
 
         const description = document.getElementById('description').value;
-        if(fileInput.value.length === 0) { alert('submit files'); submittingDialog.close(); submitButton.disabled = false; return; }
+        if(fileInput.value.length === 0) { alert('submit files'); submittingDialog.close(); return; }
 
         const formData = new FormData();
         formData.append("manuscriptSubmission", new Blob([JSON.stringify({
@@ -191,7 +191,7 @@
         Array.from(fileInput.files).forEach(file => formData.append("files", file));
 
         const response = await fetch('/api/manuscripts', { method: 'POST', body: formData });
-        if(!response.ok) { alert(await response.text()); submittingDialog.close(); submitButton.disabled = false; return; }
+        if(!response.ok) { alert(await response.text()); submittingDialog.close(); return; }
         window.location = '/';
     });
     fileInput.addEventListener('change', () => {
