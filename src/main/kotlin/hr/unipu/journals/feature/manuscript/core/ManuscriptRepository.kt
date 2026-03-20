@@ -127,6 +127,30 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("corresponding_author_email") correspondingAuthorEmail: String
     ): Manuscript
 
+    @Query("""
+        INSERT INTO manuscript (
+            title,
+            description,
+            category_id,
+            current_state,
+            section_id,
+            submission_date,
+            publication_date,
+            corresponding_author_email
+        ) VALUES (
+            :#{#m.title},
+            :#{#m.description},
+            :#{#m.categoryId},
+            'SNAPSHOT',
+            :#{#m.sectionId},
+            :#{#m.submissionDate},
+            :#{#m.publicationDate},
+            :#{#m.correspondingAuthorEmail}
+        )
+        RETURNING * 
+    """)
+    fun snapshot(@Param("m") manuscript: Manuscript): Manuscript
+
     @Modifying
     @Query("UPDATE manuscript SET current_state = :state::manuscript_state WHERE id = :id")
     fun updateState(@Param("id") id: Int, @Param("state") manuscriptState: ManuscriptState): Int
