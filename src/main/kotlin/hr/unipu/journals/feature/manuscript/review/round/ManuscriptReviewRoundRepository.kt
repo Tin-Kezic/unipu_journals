@@ -17,9 +17,10 @@ interface ManuscriptReviewRoundRepository: Repository<ManuscriptReviewRound, Int
 
     @Transactional
     @Query("""
-        INSERT INTO manuscript_review_round (manuscript_id, round)
+        INSERT INTO manuscript_review_round (manuscript_id, snapshot_id, round)
         SELECT
             :manuscript_id,
+            :snapshot_id,
             COALESCE(MAX(round), 0) + 1
         FROM (
             SELECT round
@@ -29,7 +30,10 @@ interface ManuscriptReviewRoundRepository: Repository<ManuscriptReviewRound, Int
         ) locked_rows
         RETURNING *
     """)
-    fun startRound(@Param("manuscript_id") manuscriptId: Int): ManuscriptReviewRound?
+    fun startRound(
+        @Param("manuscript_id") manuscriptId: Int,
+        @Param("snapshot_id") snapshotId: Int
+    ): ManuscriptReviewRound?
 
     @Modifying
     @Transactional

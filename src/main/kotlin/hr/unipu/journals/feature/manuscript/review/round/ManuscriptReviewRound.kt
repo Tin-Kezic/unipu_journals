@@ -8,6 +8,7 @@ import org.springframework.data.relational.core.mapping.Table
 data class ManuscriptReviewRound(
     @Id val id: Int,
     val manuscriptId: Int,
+    val snapshotId: Int,
     val round: Int,
     val editorRecommendation: Recommendation?,
     val editorComment: String?

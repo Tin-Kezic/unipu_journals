@@ -60,6 +60,7 @@ class ManuscriptService(
                 }
                 else -> return ResponseEntity.badRequest().body("cannot change state to PUBLISHED from ${manuscript.state}")
             }
+            ManuscriptState.SNAPSHOT -> return ResponseEntity.badRequest().body("cannot modify snapshot")
         }
         val rowsAffected = manuscriptRepository.updateState(manuscriptId, newState)
         return if(rowsAffected == 1) {

@@ -7,6 +7,7 @@ import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.Manuscrip
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptService
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
+import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
 import hr.unipu.journals.feature.manuscript.review.Recommendation
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR
@@ -31,6 +32,7 @@ class ManuscriptReviewRoundController(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val manuscriptService: ManuscriptService,
     private val manuscriptRepository: ManuscriptRepository,
+    private val manuscriptFileRepository: ManuscriptFileRepository,
     private val manuscriptReviewRoundRepository: ManuscriptReviewRoundRepository,
     private val manuscriptReviewRepository: ManuscriptReviewRepository,
     private val authorizationService: AuthorizationService,
@@ -44,7 +46,14 @@ class ManuscriptReviewRoundController(
             newState = ManuscriptState.AWAITING_REVIEWER_REVIEW
         )
         if(response.statusCode != HttpStatus.OK) return response
-        val round = manuscriptReviewRoundRepository.startRound(manuscriptId)
+        val rounds = manuscriptReviewRoundRepository.all(manuscriptId = manuscriptId)
+        val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript")
+        val snapshotId = if(rounds.isEmpty() || rounds.last().manuscriptId != manuscriptId) let {
+            val snapshot = manuscriptRepository.snapshot(manuscript)
+            manuscriptFileRepository.copyFiles(from = manuscriptId, to = snapshot.id)
+            return@let snapshot.id
+        } else rounds.last().snapshotId
+        val round = manuscriptReviewRoundRepository.startRound(manuscriptId, snapshotId)
             ?: return ResponseEntity.internalServerError().body("failed to find round")
         val eicId = accountRoleOnManuscriptRepository.eicOnManuscript(manuscriptId).accountId
         val editorId = accountRoleOnManuscriptRepository.editorOnManuscript(manuscriptId).accountId
