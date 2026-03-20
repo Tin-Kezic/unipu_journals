@@ -1,20 +1,86 @@
 package hr.unipu.journals.feature.manuscript.core
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import hr.unipu.journals.EmailService
+import hr.unipu.journals.feature.account.AccountRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
+import hr.unipu.journals.feature.manuscript.category.CategoryRepository
+import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
+import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.format.DateTimeFormatter
 
 @Service
 class ManuscriptService(
     private val manuscriptRepository: ManuscriptRepository,
+    private val accountRepository: AccountRepository,
+    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
+    private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
+    private val manuscriptFileRepository: ManuscriptFileRepository,
     private val sectionRepository: SectionRepository,
     private val publicationRepository: PublicationRepository,
+    private val categoryRepository: CategoryRepository,
     private val authorizationService: AuthorizationService,
     private val emailService: EmailService
 ) {
+    fun toManuscriptDto(manuscript: Manuscript) = Triple(
+        manuscript,
+        accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId = manuscript.id).map { accountRepository.byId(it.accountId)!! },
+        unregisteredAuthorRepository.authors(manuscript.id)
+    ).let { (manuscript, registeredAuthors, unregisteredAuthors) ->
+        val section = sectionRepository.byId(manuscript.sectionId)!!
+        val publication = publicationRepository.by(id = section.publicationId)!!
+        val accountId = authorizationService.account!!.id
+        return@let buildMap {
+            put("id", manuscript.id)
+            put("roles", jacksonObjectMapper().writeValueAsString(
+                accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, accountId = accountId).map { it.accountRole }
+            ))
+            put("title", manuscript.title)
+            put("category", categoryRepository.nameById(manuscript.categoryId))
+            put("registeredAuthors", jacksonObjectMapper().writeValueAsString(
+                registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) }
+            ))
+            put("unregisteredAuthors", jacksonObjectMapper().writeValueAsString(
+                if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
+                    || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
+                    || authorizationService.isAdmin)
+                    unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
+            ))
+            put("correspondingAuthor", jacksonObjectMapper().writeValueAsString(
+                accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
+                    ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
+                        if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
+                            || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
+                            || authorizationService.isAdmin)
+                            unregisteredAuthor.let { author -> mapOf(
+                                "type" to "unregistered",
+                                "manuscriptId" to author.id,
+                                "fullName" to author.fullName,
+                                "email" to author.email,
+                                "country" to author.country,
+                                "affiliation" to author.affiliation,
+                                "manuscriptId" to author.manuscriptId
+                            )}
+                        else unregisteredAuthor.fullName
+                    }
+            ))
+            put("files", jacksonObjectMapper().writeValueAsString(
+                manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }
+            ))
+            put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
+                    || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
+                    || authorizationService.isAdmin)
+            put("description", manuscript.description)
+            put("state", manuscript.state)
+        }
+    }
     fun updateState(manuscriptId: Int, newState: ManuscriptState): ResponseEntity<String> {
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript")
         val section = sectionRepository.byId(manuscript.sectionId)!!
