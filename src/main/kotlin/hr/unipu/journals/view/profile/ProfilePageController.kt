@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class ProfilePageController(
-    private val manuscriptRepository: ManuscriptRepository,
     private val authorizationService: AuthorizationService,
     private val accountRepository: AccountRepository,
-    private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val categoryRepository: CategoryRepository
 ) {
     @GetMapping("/profiles/{accountId}")
