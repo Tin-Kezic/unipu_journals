@@ -115,6 +115,7 @@ class ManuscriptController(
                         || authorizationService.isAdmin)
                 put("description", manuscript.description)
                 put("state", manuscript.state)
+                put("category", categoryRepository.nameById(manuscript.categoryId))
             }}
         val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
         val manuscripts = manuscriptRepository.all(

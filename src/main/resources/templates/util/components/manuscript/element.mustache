@@ -15,6 +15,7 @@ class Manuscript extends HTMLElement {
   'is-overseeing',
   'roles',
   'role',
+  'category',
   'options',
   'state'
   ];
@@ -43,6 +44,7 @@ class Manuscript extends HTMLElement {
     this._isOverseeing = this.getAttribute('is-overseeing') === 'true';
     this._roles = run(this.getAttribute('roles'), JSON.parse);
     this._role = this.getAttribute('role'); // role for invites
+    this._category = this.getAttribute('category');
     this._options = this.getAttribute('options');
     this._state = this.getAttribute('state');
     this.innerHTML = /*html*/`
@@ -78,6 +80,7 @@ class Manuscript extends HTMLElement {
             State: ${this._state}
           </p>
         ` : ''}
+        ${this._category ? `<p style="font-weight: 100; font-size: 0.8rem; margin-top: 0.2rem;">Category: ${this._category}</p>` : ''}
         <p style="font-weight: 100; font-size: 0.8rem; margin-bottom: 0.5rem; margin-top: 0.2rem;">
           ${![null, 'null'].includes(this._publicationDate) ? `Published: ${this._publicationDate}` : `Submitted: ${this._submissionDate}`}
         </p>

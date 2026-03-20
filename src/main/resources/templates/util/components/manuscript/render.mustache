@@ -33,6 +33,7 @@ function renderManuscripts(manuscripts, containerId) {
         newManuscript.setAttribute('files', run(manuscript.files, JSON.stringify));
         newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
         newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
+        newManuscript.setAttribute('category', manuscript.category);
         newManuscript.setAttribute('state', manuscript.state);
         switch(manuscriptStateSelect.value) {
             case 'ALL_AWAITING_REVIEW':
