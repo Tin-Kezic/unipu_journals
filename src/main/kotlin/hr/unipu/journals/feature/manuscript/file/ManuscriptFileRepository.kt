@@ -13,6 +13,17 @@ interface ManuscriptFileRepository: Repository<ManuscriptFile, Int> {
     fun allFilesByManuscriptId(@Param("manuscript_id") manuscriptId: Int): List<ManuscriptFile>
 
     @Modifying
+    @Query("""
+       INSERT INTO manuscript_file (path, manuscript_id, name)
+       SELECT path, :to, name FROM manuscript_file
+       WHERE manuscript_id = :from
+    """)
+    fun copyFiles(
+        @Param("from") from: Int,
+        @Param("to") to: Int
+    ): Int
+
+    @Modifying
     @Query("INSERT INTO manuscript_file (name, path, manuscript_id) VALUES (:name, :path, :manuscript_id)")
     fun insert(
         @Param("name") name: String,
