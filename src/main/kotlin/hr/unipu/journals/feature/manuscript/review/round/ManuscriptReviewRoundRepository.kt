@@ -15,6 +15,9 @@ interface ManuscriptReviewRoundRepository: Repository<ManuscriptReviewRound, Int
     @Query("SELECT * FROM manuscript_review_round WHERE id = :id")
     fun byId(@Param("id") id: Int): ManuscriptReviewRound?
 
+    @Query("SELECT * FROM manuscript_review_round WHERE manuscript_id = :manuscript_id")
+    fun all(@Param("manuscript_id") manuscriptId: Int): List<ManuscriptReviewRound>
+
     @Transactional
     @Query("""
         INSERT INTO manuscript_review_round (manuscript_id, snapshot_id, round)
