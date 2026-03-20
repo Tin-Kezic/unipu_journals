@@ -61,7 +61,7 @@
 
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                     <button class="m3-button green-button" style="box-shadow: none;">Submit Review</button>
-                    <button type="button" onclick="window.location=`${window.location.pathname}-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
+                    <button type="button" onclick="window.location=`/manuscripts/{{manuscriptId}}/review-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
                     <button id="end-round" type="button" class="m3-button primary-button">End round</button>
                 </div>
             </div>
@@ -183,7 +183,7 @@
         }
     })();
     document.getElementById('view-full-review').addEventListener('click', () => {
-        window.location = `${window.location.pathname}-history?id=${document.querySelector('input[name="review"]:checked').value}`;
+        window.location = `/manuscripts/{{manuscriptId}}/review-history?id=${document.querySelector('input[name="review"]:checked').value}`;
     });
 
     const ratingTbody = document.getElementById('rating-tbody');
@@ -316,8 +316,7 @@
             reviewerComment: formData.get('reviewerComment')
         })], { type: 'application/json' }));
         for(const file of fileInput.files) body.append('files', file);
-
-        const response = await fetch(`/api${window.location.pathname}s`, { method: 'POST', body});
+        const response = await fetch(`/api/manuscripts/{{manuscriptId}}/reviews`, { method: 'POST', body});
         if(!response.ok) { alert(await response.text()); return; }
         history.back();
     });
@@ -380,12 +379,12 @@
     document.getElementById('end-round-dialog-negative').addEventListener('click', () => endRoundDialog.close());
     document.getElementById('end-round-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const response = await fetch(`/api${window.location.pathname}-rounds/end`, { method: 'POST', body: new URLSearchParams({
-            recommendation: document.querySelector('input[name="editor-recommendation"]:checked').value,
-            editorComment: document.getElementById('end-round-dialog-textarea').value
-        })});
+        const recommendation = document.querySelector('input[name="editor-recommendation"]:checked').value;
+        const editorComment = document.getElementById('end-round-dialog-textarea').value;
+        const response = await fetch(`/api/manuscripts/{{manuscriptId}}/review-rounds/end`, { method: 'POST', body: new URLSearchParams({ recommendation, editorComment })});
         if(!response.ok) { alert(await response.text()); return; }
-        history.back();
+        if('{{type}}' == 'EIC' && recommendation == 'ACCEPT') window.location = `/manuscripts/{{manuscriptId}}/technical-processing`;
+        else history.back();
     });
 </script>
 <style>
