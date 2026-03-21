@@ -140,13 +140,11 @@
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
     const fileInputSpan = document.getElementById('file-input-span');
-    const submitButton = document.getElementById('submit');
     const submittingDialog = document.getElementById('submitting-dialog');
     submittingDialog.addEventListener('cancel', (e) => e.preventDefault());
     document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
         submittingDialog.showModal();
-        submitButton.disabled = true;
 
         const category = document.querySelector('select[name="category"]').value;
         if(category == 'category') { alert('select a category'); submittingDialog.close(); return; }
@@ -213,7 +211,6 @@
                 alert(`files of type .${fileExtension} are not allowed`);
                 fileInput.value = '';
                 submittingDialog.close();
-                submitButton.disabled = false;
                 return;
             }
         });
