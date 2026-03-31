@@ -15,22 +15,18 @@
             <label>title</label>
             <input name="title" type="text" required>
         </div>
-
         <div style="display: flex; gap: 0.3rem;">
             <select name="category" class="dropdown">
                 <option value="category">Category</option>
                 {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
             </select>
-
             {{#isAdmin}}
                 <a href="/categories" type="button" class="m3-button primary-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Manage</a>
             {{/isAdmin}}
-
             <select name="publication" class="dropdown">
                 <option value="publication">Publication</option>
                 {{#publications}}<option value="{{.}}">{{.}}</option>{{/publications}}
             </select>
-
             <select name="section" class="dropdown">
                 <option value="section">Section</option>
             </select>
@@ -54,9 +50,7 @@
                 });
             </script>
         </div>
-
         <br><br>
-
         <p style="font-size: 0.8rem; color: var(--light-grey); margin-left: 0.5rem; margin-bottom: 0.3rem;">Author</p>
         <div class="author-container">
             <div class="text-field">
@@ -101,7 +95,7 @@
                         <button onclick="this.parentNode.remove()" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Remove</button>
 
                         <label class="pale-yellow-checkbox-button">
-                            <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author" hidden>
+                            <input type="radio" name="corresponding-author" hidden>
                             <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
                         </label>
                     `;
@@ -109,13 +103,11 @@
                 });
             </script>
             <label class="pale-yellow-checkbox-button">
-                <input type="checkbox" onclick="onCheckboxClick(this)" name="corresponding-author" hidden>
+                <input type="radio" name="corresponding-author" hidden>
                 <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
             </label>
         </div>
-
         <div id="additional-authors"></div>
-
         <div class="text-field">
             <label for="description">Description</label>
             <textarea id="description" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;"></textarea>
@@ -133,10 +125,6 @@
 </div>
 <dialog id="submitting-dialog"><p>Submitting...</p></dialog>
 <script>
-    function onCheckboxClick(checkbox) {
-        document.querySelectorAll('input[name="corresponding-author"]').forEach(cb => cb.checked = false)
-        checkbox.checked = true;
-    }
     const fileInput = document.querySelector('input[type="file"]');
     const fileList = document.getElementById('file-list');
     const fileInputSpan = document.getElementById('file-input-span');
@@ -169,8 +157,7 @@
             affiliation: affiliations[index].value,
         }));
 
-        let correspondingAuthorEmail;
-        authors.forEach((author, index) => { if(isCorrespondingAuthorList[index].checked) { correspondingAuthorEmail = authors[index].email; }})
+        const correspondingAuthorEmail = document.querySelector('input[name="corresponding-author"]:checked')?.value;
         if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); return; }
 
         const description = document.getElementById('description').value;
