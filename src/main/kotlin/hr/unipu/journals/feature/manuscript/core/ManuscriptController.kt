@@ -75,8 +75,8 @@ class ManuscriptController(
     ): List<Map<String, Any?>> {
         require(
             manuscriptStateFilter in setOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
-                    || accountId == null
-                    || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
+                || accountId == null
+                || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
         )
         fun List<Triple<Manuscript, List<Account>, List<UnregisteredAuthor>>>.toManuscriptMap(): List<Map<String, Any?>> =
             this.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
@@ -111,8 +111,8 @@ class ManuscriptController(
                 put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                        || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
-                        || authorizationService.isAdmin)
+                    || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
+                    || authorizationService.isAdmin)
                 put("description", manuscript.description)
                 put("state", manuscript.state)
                 put("category", categoryRepository.nameById(manuscript.categoryId))
@@ -136,8 +136,8 @@ class ManuscriptController(
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             require(account != null)
             val pending = manuscripts.map { manuscript -> manuscript + mapOf(
-                    "type" to "pending",
-                    "roles" to accountRoleOnManuscriptRepository.all(manuscriptId = manuscript["id"] as Int, accountId = account.id).map { it.accountRole }
+                "type" to "pending",
+                "roles" to accountRoleOnManuscriptRepository.all(manuscriptId = manuscript["id"] as Int, accountId = account.id).map { it.accountRole }
             )}
             val invites = inviteRepository.invitedManuscripts(
                 email = account.email,
@@ -168,6 +168,8 @@ class ManuscriptController(
         @RequestPart manuscriptSubmission: ManuscriptSubmission,
         @RequestPart files: List<MultipartFile>,
     ): ResponseEntity<String> {
+        if(manuscriptSubmission.authors.size != manuscriptSubmission.authors.distinctBy { it.email }.size)
+            return ResponseEntity.badRequest().body("duplicate author email")
         files.forEach { file ->
             if(file.originalFilename == null)
                 return ResponseEntity.badRequest().body("submitted unnamed files")
@@ -208,13 +210,13 @@ class ManuscriptController(
             manuscriptSubmission.authors.forEach { authorDTO ->
                 val account = accountRepository.byEmail(authorDTO.email)
                 if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
-                else try { unregisteredAuthorRepository.insert(
+                else unregisteredAuthorRepository.insert(
                     fullName = authorDTO.fullName,
                     email = authorDTO.email,
                     country = authorDTO.country,
                     affiliation = authorDTO.affiliation,
-                    manuscriptId = insertedManuscript.id)
-                } catch (_: Exception) { return ResponseEntity.badRequest().body("Duplicate unregistered author email") }
+                    manuscriptId = insertedManuscript.id
+                )
             }
             eicOnPublicationRepository.eicEmailsByPublicationId(
                 publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
