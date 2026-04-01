@@ -54,7 +54,7 @@ class ManuscriptService(
             ))
             put("correspondingAuthor", jacksonObjectMapper().writeValueAsString(
                 accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                    ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
+                    ?: unregisteredAuthorRepository.byEmail(email = manuscript.correspondingAuthorEmail, manuscriptId = manuscript.id)?.let { unregisteredAuthor ->
                         if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
                             || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
                             || authorizationService.isAdmin)

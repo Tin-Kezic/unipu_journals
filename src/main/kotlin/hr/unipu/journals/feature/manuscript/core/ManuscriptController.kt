@@ -91,7 +91,7 @@ class ManuscriptController(
                 )
                 put("correspondingAuthor",
                     accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                        ?: unregisteredAuthorRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { unregisteredAuthor ->
+                        ?: unregisteredAuthorRepository.byEmail(email = manuscript.correspondingAuthorEmail, manuscriptId = manuscript.id)?.let { unregisteredAuthor ->
                             if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
                                 || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
                                 || authorizationService.isAdmin)
@@ -184,7 +184,7 @@ class ManuscriptController(
             tempFiles.forEach { (name, file) ->
                 val extension = file.name.substringAfterLast('.', "").lowercase()
                 if(extension in clamAv.forbiddenExtensions)
-                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
+                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed")
                 if(extension == "zip" && zipService.isEncrypted(file))
                     return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
                 if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
@@ -208,13 +208,13 @@ class ManuscriptController(
             manuscriptSubmission.authors.forEach { authorDTO ->
                 val account = accountRepository.byEmail(authorDTO.email)
                 if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
-                else unregisteredAuthorRepository.insert(
+                else try { unregisteredAuthorRepository.insert(
                     fullName = authorDTO.fullName,
                     email = authorDTO.email,
                     country = authorDTO.country,
                     affiliation = authorDTO.affiliation,
-                    manuscriptId = insertedManuscript.id
-                )
+                    manuscriptId = insertedManuscript.id)
+                } catch (_: Exception) { return ResponseEntity.badRequest().body("Duplicate unregistered author email") }
             }
             eicOnPublicationRepository.eicEmailsByPublicationId(
                 publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
@@ -230,4 +230,18 @@ class ManuscriptController(
         @PathVariable manuscriptId: Int,
         @RequestParam newState: ManuscriptState
     ): ResponseEntity<String> = manuscriptService.updateState(manuscriptId = manuscriptId, newState = newState)
+
+    @PutMapping("/{manuscriptId}/technical-processing")
+    fun technicalProcessing(
+        @PathVariable manuscriptId: Int,
+        @RequestPart registeredAuthorIds: List<Int>,
+        @RequestPart manuscriptSubmission: ManuscriptSubmission,
+        @RequestPart files: List<MultipartFile>,
+    ): ResponseEntity<String> {
+        println("manuscript id: $manuscriptId")
+        println("registered author ids: $registeredAuthorIds")
+        println("manuscript submission: $manuscriptSubmission")
+        println("files: $files")
+        return ResponseEntity.ok("")
+    }
 }
