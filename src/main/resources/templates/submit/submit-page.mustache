@@ -157,7 +157,7 @@
             affiliation: affiliations[index].value,
         }));
 
-        const correspondingAuthorEmail = document.querySelector('input[name="corresponding-author"]:checked')?.value;
+        const correspondingAuthorEmail = document.querySelector('input[name="corresponding-author"]:checked')?.parentNode.parentNode.querySelector('input[name="institutional-email"]').value
         if(!correspondingAuthorEmail) { alert('select corresponding author'); submittingDialog.close(); return; }
 
         const description = document.getElementById('description').value;
