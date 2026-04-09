@@ -38,11 +38,10 @@ class ManuscriptService(
         val accountId = authorizationService.account!!.id
         return@let buildMap {
             put("id", manuscript.id)
+            put("title", manuscript.title)
             put("roles", jacksonObjectMapper().writeValueAsString(
                 accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, accountId = accountId).map { it.accountRole }
             ))
-            put("title", manuscript.title)
-            put("category", categoryRepository.nameById(manuscript.categoryId))
             put("registeredAuthors", jacksonObjectMapper().writeValueAsString(
                 registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) }
             ))
@@ -60,7 +59,6 @@ class ManuscriptService(
                             || authorizationService.isAdmin)
                             unregisteredAuthor.let { author -> mapOf(
                                 "type" to "unregistered",
-                                "manuscriptId" to author.id,
                                 "fullName" to author.fullName,
                                 "email" to author.email,
                                 "country" to author.country,
@@ -74,11 +72,13 @@ class ManuscriptService(
                 manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }
             ))
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
                     || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
                     || authorizationService.isAdmin)
             put("description", manuscript.description)
             put("state", manuscript.state)
+            put("category", categoryRepository.nameById(manuscript.categoryId))
         }
     }
     fun updateState(manuscriptId: Int, newState: ManuscriptState): ResponseEntity<String> {
