@@ -70,16 +70,25 @@
             <script>const manuscriptStateSelect = document.querySelector('select[name="manuscript-state"]');</script>
             {{>util/components/select/category}}
             {{>util/components/select/sorting}}
+            <input aria-label="from" type="date" max="9000-12-31" name="from">
+            <input aria-label="to" type="date" max="9000-12-31" name="to">
             <script>
+                const fromInput = document.querySelector('input[name="from"]');
+                const toInput =  document.querySelector('input[name="to"]');
+
                 const searchParams = new URLSearchParams(window.location.search);
                 manuscriptStateSelect.value = searchParams.get('manuscriptStateFilter') || 'PUBLISHED';
                 categorySelect.value = searchParams.get('category') || '';
                 sortingSelect.value = searchParams.get('sorting') || 'ALPHABETICAL_A_Z';
+                fromInput.value = searchParams.get('from') || '';
+                toInput.value = searchParams.get('to') || '';
 
                 const params = () => new URLSearchParams({
                     manuscriptStateFilter: manuscriptStateSelect.value,
-                    ...(categorySelect.value && { category: categorySelect.value }),
+                    ...(categorySelect.value  && { category: categorySelect.value }),
                     sorting: sortingSelect.value,
+                    ...(fromInput.value       && { from: fromInput.value }),
+                    ...(toInput.value         && { to: toInput.value })
                 });
                 async function loadManuscripts() {
                     const response = await fetch(`/api/manuscripts?${params()}&role=AUTHOR&accountId=${window.location.pathname.replace('/profiles/', '')}`, { method: 'GET' });
@@ -87,7 +96,7 @@
                     renderManuscripts(await response.json(), 'manuscripts-container');
                     history.replaceState(null, '', `${window.location.pathname}?${params()}`);
                 }
-                [manuscriptStateSelect, categorySelect, sortingSelect].forEach(select => select.addEventListener('change', loadManuscripts));
+                [manuscriptStateSelect, categorySelect, sortingSelect, fromInput, toInput].forEach(select => select.addEventListener('change', loadManuscripts));
                 loadManuscripts();
             </script>
         </div>
