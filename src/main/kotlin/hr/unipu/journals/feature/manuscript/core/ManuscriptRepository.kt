@@ -127,6 +127,24 @@ interface ManuscriptRepository: Repository<Manuscript, Int> {
         @Param("corresponding_author_email") correspondingAuthorEmail: String
     ): Manuscript
 
+    @Modifying
+    @Query("""
+        UPDATE manuscript SET
+        title = :title,
+        description = :description,
+        category_id = :category_id,
+        corresponding_author_email = :corresponding_author_email
+        WHERE id = :id
+    """)
+    fun update(
+        @Param("id") id: Int,
+        @Param("title") title: String,
+        @Param("description") description: String,
+        @Param("category_id") categoryId: Int,
+        @Param("section_id") sectionId: Int,
+        @Param("corresponding_author_email") correspondingAuthorEmail: String
+    ): Int
+
     @Query("""
         INSERT INTO manuscript (
             title,
