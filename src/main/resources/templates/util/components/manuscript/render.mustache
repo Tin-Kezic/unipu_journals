@@ -25,14 +25,14 @@ function renderManuscripts(manuscripts, containerId) {
         }
         newManuscript.setAttribute('title', manuscript.title);
         newManuscript.setAttribute('description', manuscript.description);
-        newManuscript.setAttribute('corresponding-author', run(manuscript.correspondingAuthor, JSON.stringify));
-        newManuscript.setAttribute('registered-authors', run(manuscript.registeredAuthors, JSON.stringify));
-        newManuscript.setAttribute('unregistered-authors', run(manuscript.unregisteredAuthors, JSON.stringify));
+        newManuscript.setAttribute('corresponding-author', manuscript.correspondingAuthor ?? null);
+        newManuscript.setAttribute('registered-authors', manuscript.registeredAuthors ?? null);
+        newManuscript.setAttribute('unregistered-authors', manuscript.unregisteredAuthors ?? null);
         newManuscript.setAttribute('submission-date', manuscript.submissionDate);
         newManuscript.setAttribute('publication-date', manuscript.publicationDate);
-        newManuscript.setAttribute('files', run(manuscript.files, JSON.stringify));
+        newManuscript.setAttribute('files', manuscript.files ?? null);
         newManuscript.setAttribute('is-overseeing', manuscript.isOverseeing);
-        newManuscript.setAttribute('roles', run(manuscript.roles, JSON.stringify));
+        newManuscript.setAttribute('roles', manuscript.roles ?? null);
         newManuscript.setAttribute('category', manuscript.category);
         newManuscript.setAttribute('state', manuscript.state);
         switch(manuscriptStateSelect.value) {
@@ -48,7 +48,7 @@ function renderManuscripts(manuscripts, containerId) {
                     `);
                     manuscriptsContainerInvited().appendChild(newManuscript);
                 } else { // pending
-                    const nonAuthorRoles = manuscript.roles.filter(role => !role.includes('AUTHOR'));
+                    const nonAuthorRoles = JSON.parse(manuscript.roles).filter(role => !role.includes('AUTHOR'));
                     if(nonAuthorRoles.length > 0) newManuscript.setAttribute('options', /*html*/`
                         <button onclick="event.stopPropagation(); window.location='/manuscripts/${manuscript.id}/review'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Review</button>
                     `);
