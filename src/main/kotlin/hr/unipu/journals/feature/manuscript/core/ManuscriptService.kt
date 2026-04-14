@@ -28,7 +28,7 @@ class ManuscriptService(
     private val authorizationService: AuthorizationService,
     private val emailService: EmailService
 ) {
-    fun toManuscriptDto(manuscript: Manuscript, accountId: Int? = null) = Triple(
+    fun toManuscriptDto(manuscript: Manuscript) = Triple(
         manuscript,
         accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId = manuscript.id).map { accountRepository.byId(it.accountId)!! },
         unregisteredAuthorRepository.authors(manuscript.id)
@@ -38,7 +38,7 @@ class ManuscriptService(
         return@let buildMap {
             put("id", manuscript.id)
             put("title", manuscript.title)
-            (accountId ?: authorizationService.account?.id)?.let { id ->
+            authorizationService.account?.id?.let { id ->
                 put("roles", jacksonObjectMapper().writeValueAsString(
                     accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, accountId = id).map { it.accountRole }
                 ))
