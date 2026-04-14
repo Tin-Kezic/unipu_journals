@@ -68,8 +68,8 @@ class ManuscriptController(
         val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
         require(
             manuscriptStateFilter in setOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
-                    || account?.id != null
-                    || authorizationService.isAdmin
+                    || accountId == null
+                    || authorizationService.isAccountOwnerOrAdmin(accountId)
         )
         val manuscripts = manuscriptRepository.all(
             accountId = account?.id,
