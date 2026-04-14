@@ -3,153 +3,269 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Technical Processing Page</title>
-
+    <title>Submit Page</title>
     <link rel="stylesheet" href="/util.css" />
-
-    <script>
-        function showSnackbar() {
-            var x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function(){
-                x.className = x.className.replace("show", "");
-            }, 3000);
-        }
-    </script>
 </head>
-
+{{#manuscript}}
 <body>
 {{>util/header}}
+{{>util/components/manuscript/element}}
+{{>util/dialog/boolean}}
+{{>util/dialog/info}}
 
 <div style="margin: 2rem; padding: 2rem; background-color: white; border: 1.3px solid var(--beige); border-radius: 0.4rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; font-weight: 100; font-size: 0.8rem;">
-            {{#manuscripts}}
-                <div>
-                    <p style="font-weight: bold; font-size: 1rem;">{{title}}</p>
-                    <div class="authors" style="display: flex; flex-wrap: wrap;">{{#authors}} <button>{{.}}</button> {{/authors}}</div>
-                </div>
-            {{/manuscripts}}
-        </div>
-
-        <button class="m3-button outlined-button download-button" style="padding: 0.3rem 2rem; font-size: 1rem; color: var(--beige); border-color: var(--beige); border-radius: 0.8rem; border-width: 1.2px; font-weight: bold">Download</button>
-    </div>
-    <br>
-    <br>
-
+    <manuscript-element
+        style="width: 100%;"
+        id = '{{id}}'
+        title = '{{title}}'
+        description = '{{description}}'
+        corresponding-author = '{{{correspondingAuthor}}}'
+        registered-authors = '{{{registeredAuthors}}}'
+        unregistered-authors = '{{{unregisteredAuthors}}}'
+        submission-date = '{{submissionDate}}'
+        files = '{{{files}}}'
+        is-overseeing = '{{isOverseeing}}'
+        roles = '{{{roles}}}'
+        category = '{{category}}'
+        state = '{{state}}'
+    ></manuscript-element>
     <form>
-        <div class="text-field" style="width: 74.5%; margin-top: -0.5rem;">
+        <br>
+        <div class="text-field" style="width: 100%; margin-top: -0.5rem;">
             <label>title</label>
-            <input type="text" required>
+            <input name="title" value="{{title}}" type="text" required>
         </div>
 
         <div style="display: flex; gap: 0.3rem;">
-            <select name="category" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-grey); border-radius: 0.3rem;">
-                <option value="category">Category</option>
+            <select name="category" class="dropdown">
                 {{#categories}}<option value="{{.}}">{{.}}</option>{{/categories}}
             </select>
+            <script>document.querySelector('select[name="category"]').value = '{{category}}';</script>
 
-            <a href="/categories" type="button" class="m3-button primary-button" style="box-shadow: none; padding: 0.79rem 2rem; border-radius: 0.5rem; margin-left: 0.3rem; margin-right: 1rem; text-decoration: none;">Edit</a>
-
-            <select name="publication" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-grey); border-radius: 0.3rem;">
-                <option value="publication">Publication</option>
+            <select name="publication" class="dropdown">
                 {{#publications}}<option value="{{.}}">{{.}}</option>{{/publications}}
             </select>
+            <script>document.querySelector('select[name="publication"]').value = '{{publication}}';</script>
 
-            <select name="section" class="dropdown" style="width: 100%; height: 2.7rem; font-size: 1rem; background: inherit; border: 1.2px solid var(--light-grey); border-radius: 0.3rem;">
-                <option value="section">Section</option>
+            <select name="section" class="dropdown">
                 {{#sections}}<option value="{{.}}">{{.}}</option>{{/sections}}
             </select>
+            <script>
+                const publicationSelect = document.querySelector('select[name="publication"]')
+                const sectionSelect = document.querySelector('select[name="section"]')
+                publicationSelect.addEventListener('change', async (event) => {
+                    const response = await fetch(`/api/publications/${publicationSelect.value}/sections/titles`, { method: 'GET' });
+                    if(!response.ok) { alert(await response.text()); return; }
+                    sectionSelect.innerHTML = '';
+                    const sectionTitles = await response.json();
+                    sectionTitles.forEach(sectionTitle => {
+                        newOption = document.createElement('option');
+                        newOption.value = sectionTitle;
+                        newOption.innerHTML = sectionTitle;
+                        sectionSelect.appendChild(newOption);
+                    });
+                });
+            </script>
+            <script>document.querySelector('select[name="section"]').value = '{{section}}';</script>
         </div>
-
         <br><br>
 
-        <p style="font-size: 0.8rem; color: var(--light-grey); margin-left: 0.5rem; margin-bottom: 0.3rem;">Author</p>
-        <div class="author-container">
-            <div class="text-field">
-                <label>full name</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>institutional email</label>
-                <input type="email" required>
-            </div>
-            <div class="text-field">
-                <label>country</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>affiliation/institution</label>
-                <input type="text" required>
-            </div>
-            <button type="button" class="m3-button yellow-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">+ Add author</button>
+        <p id="registered-authors-p" style="font-size: 0.8rem; color: var(--light-grey); margin-left: 0.5rem; margin-bottom: 0.3rem;" hidden>Registered authors</p>
+        <div id="registered-authors"></div>
+        <p id="unregistered-authors-p" style="font-size: 0.8rem; color: var(--light-grey); margin-left: 0.5rem; margin-bottom: 0.3rem;" hidden>Unregistered authors</p>
+        <div id="unregistered-authors"></div>
+        <script>
+            JSON.parse('{{{registeredAuthors}}}').forEach(author => {
+                document.getElementById('registered-authors-p').hidden = false;
+                newAuthorContainer = document.createElement('div');
+                newAuthorContainer.className = 'author-container';
+                newAuthorContainer.innerHTML = `
+                    <div class="text-field">
+                        <label>id</label>
+                        <input name="registered-author-id" type="text" disabled value="${author.id}">
+                    </div>
+                    <div class="text-field">
+                        <label>full name</label>
+                        <input name="registered-author-full-name" type="text" disabled value="${author.fullName}">
+                    </div>
+                    <button type="button" onclick="window.location='/profiles/${author.id}'" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">View profile</button>
+                    <button onclick="this.parentNode.remove()" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Remove</button>
 
-            <label class="pale-yellow-checkbox-button">
-                <input type="radio" name="corresponding-author" value="corresponding-author">
-                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
-            </label>
-        </div>
+                    <label class="pale-yellow-checkbox-button">
+                        <input type="radio" name="corresponding-author" hidden ${author.id == JSON.parse('{{{correspondingAuthor}}}').id ? 'checked' : ''}>
+                        <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+                    </label>
+                `;
+                document.getElementById('registered-authors').appendChild(newAuthorContainer);
+            });
+            JSON.parse('{{{unregisteredAuthors}}}').forEach(author => {
+                document.getElementById('unregistered-authors-p').hidden = false;
+                newAuthorContainer = document.createElement('div');
+                newAuthorContainer.className = 'author-container';
+                newAuthorContainer.innerHTML = `
+                    <div class="text-field">
+                        <label>full name</label>
+                        <input name="author-full-name" type="text" value="${author.fullName}" required>
+                    </div>
+                    <div class="text-field">
+                        <label>institutional email</label>
+                        <input name="author-institutional-email" type="email" value="${author.email}" required>
+                    </div>
+                    <div class="text-field">
+                        <label>country</label>
+                        <input name="author-country" type="text" value="${author.country}" required>
+                    </div>
+                    <div class="text-field">
+                        <label>affiliation/institution</label>
+                        <input name="author-affiliation" type="text" value="${author.affiliation}" required>
+                    </div>
 
-        <div class="author-container">
-            <div class="text-field">
-                <label>full name</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>institutional email</label>
-                <input type="email" required>
-            </div>
-            <div class="text-field">
-                <label>country</label>
-                <input type="text" required>
-            </div>
-            <div class="text-field">
-                <label>affiliation/institution</label>
-                <input type="text" required>
-            </div>
-            <button type="button" class="m3-button yellow-button remove-author" style="box-shadow: none; padding-inline: 0rem; font-size: 1.5rem; font-weight: lighter; border-radius: 0.5rem; margin-right: 5.6rem;">-</button>
+                    <button onclick="this.parentNode.remove()" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Remove</button>
 
-            <label class="pale-yellow-checkbox-button">
-                <input type="radio" name="corresponding-author" value="corresponding-author">
-                <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
-            </label>
-        </div>
+                    <label class="pale-yellow-checkbox-button">
+                        <input type="radio" name="corresponding-author" hidden ${author.email == JSON.parse('{{{correspondingAuthor}}}').email ? 'checked' : ''}>
+                        <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+                    </label>
+                `;
+                document.getElementById('unregistered-authors').appendChild(newAuthorContainer);
+            });
+        </script>
+        <button id="additional-author-add-author" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem; border-color: black;">+ Add author</button>
+        <div id="additional-authors"></div>
+        <script>
+            document.getElementById('additional-author-add-author').addEventListener('click', () => {
+                newAuthorContainer = document.createElement('div');
+                newAuthorContainer.className = 'author-container';
+                newAuthorContainer.innerHTML = `
+                    <div class="text-field">
+                        <label>full name</label>
+                        <input name="author-full-name" type="text" required>
+                    </div>
+                    <div class="text-field">
+                        <label>institutional email</label>
+                        <input name="author-institutional-email" type="email" required>
+                    </div>
+                    <div class="text-field">
+                        <label>country</label>
+                        <input name="author-country" type="text" required>
+                    </div>
+                    <div class="text-field">
+                        <label>affiliation/institution</label>
+                        <input name="author-affiliation" type="text" required>
+                    </div>
+
+                    <button onclick="this.parentNode.remove()" type="button" class="m3-button add-author" style="box-shadow: none; padding-inline: 1rem; border-radius: 0.5rem;">Remove</button>
+
+                    <label class="pale-yellow-checkbox-button">
+                        <input type="radio" name="corresponding-author" hidden>
+                        <span class="checkbox" style="width: 11rem; text-align: center; padding-block: 1.3rem; text-wrap: nowrap;">Corresponding author</span>
+                    </label>
+                `;
+                document.getElementById('additional-authors').appendChild(newAuthorContainer);
+            });
+        </script>
 
         <div class="text-field">
-            <label for="abstract">Abstract</label>
-            <textarea id="abstract" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;"></textarea>
+            <label for="description">Description</label>
+            <textarea id="description" required style="width:100%; resize:vertical; min-height: 20rem; padding: 1rem 2rem; font-size: 1rem; background-color: inherit;">{{description}}</textarea>
         </div>
-        <button type="button" class="m3-button primary-button" style="box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;">Upload files</button>
-        <div style="background-color:white;">AnnouncementFlyer.pdf <button>-</button></div>
-        <div style="background-color:white;">AnnouncementFlyer.pdf <button>-</button></div>
-        <div style="background-color:white; margin-bottom: 1rem;">AnnouncementFlyer.pdf <button>-</button></div>
-        <button type="submit" class="m3-button yellow-button" onclick="showSnackbar()">Submit</button>
+        <div style="display: flex; justify-content: space-between;">
+            <label class="m3-button">
+                <span id="file-input-span">Replace files</span>
+                <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
+            </label>
+            <button id="submit" class="m3-button primary-button">Submit</button>
+        </div>
+        <br> <br>
+        <div id="file-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
     </form>
 </div>
+<dialog id="submitting-dialog"><p>Submitting...</p></dialog>
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+    const fileList = document.getElementById('file-list');
+    const submittingDialog = document.getElementById('submitting-dialog');
+    submittingDialog.addEventListener('cancel', (e) => e.preventDefault());
+    document.querySelector('form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        submittingDialog.showModal();
 
-<div id="snackbar"><span class="material-symbols-outlined" style="color: var(--green)">check_circle</span> Successfully submitted</div>
+        const category = document.querySelector('select[name="category"]').value;
+        if(category == 'category') { alert('select a category'); submittingDialog.close(); return; }
+
+        const publicationTitle = document.querySelector('select[name="publication"]').value;
+        if(publicationTitle == 'publication') { alert('select a publication'); submittingDialog.close(); return; }
+
+        const sectionName = document.querySelector('select[name="section"]').value;
+        const title = document.querySelector('input[name="title"]').value;
+        
+        const fullNames = [...document.querySelectorAll('input[name="author-full-name"]')];
+        const emails = [...document.querySelectorAll('input[name="author-institutional-email"]')];
+        const countries = [...document.querySelectorAll('input[name="author-country"]')];
+        const affiliations = [...document.querySelectorAll('input[name="author-affiliation"]')];
+
+        const authors = Array.from(fullNames).map((_, index) => ({
+            fullName: fullNames[index].value,
+            email: emails[index].value,
+            country: countries[index].value,
+            affiliation: affiliations[index].value,
+        }));
+
+        let correspondingAuthor;
+        const correspondingAuthorInput = document.querySelector('input[name="corresponding-author"]:checked');
+        if(!correspondingAuthorInput) { alert('select corresponding author'); submittingDialog.close(); return; }
+        const parent = correspondingAuthorInput.parentElement.parentElement;
+        correspondingAuthor = (parent.querySelector('input[name="registered-author-id"]') ?? parent.querySelector('input[name="author-institutional-email"]')).value;
+        if (!correspondingAuthor) { alert('select corresponding author'); submittingDialog.close(); return; author}
+
+        const description = document.getElementById('description').value;
+
+        const formData = new FormData();
+        const registeredAuthorIds = Array.from(document.querySelectorAll('input[name="registered-author-id"]')).map(input => Number(input.value));
+        formData.append("registeredAuthorIds", new Blob([JSON.stringify(registeredAuthorIds)], { type: "application/json" }));
+        formData.append('manuscriptSubmission', new Blob([JSON.stringify({
+            title,
+            category,
+            publicationTitle,
+            sectionName,
+            authors,
+            description
+        })], { type: "application/json" }));
+        formData.append("correspondingAuthor", correspondingAuthor)
+        Array.from(fileInput.files).forEach(file => formData.append("files", file));
+
+        const response = await fetch('/api/manuscripts/{{id}}/technical-processing', { method: 'PUT', body: formData });
+        if(!response.ok) { alert(await response.text()); submittingDialog.close(); return; }
+        window.location = '/';
+    });
+    fileInput.addEventListener('change', () => {
+        fileList.innerHTML = '';
+        const forbiddenExtensions = [
+            'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
+            'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx', 'psd', 'indd', 'cdr', 'sketch', 'key',
+            'gif', 'webp', 'heic', 'heif', 'raw', 'hdf', 'h5', 'sav', 'dta', 'mat', 'rar', '7z', 'ace',
+            'tmp', 'bak', '~doc', 'swp', 'ttf', 'otf', 'fon'
+        ];
+        Array.from(fileInput.files).forEach(file => {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if(forbiddenExtensions.includes(fileExtension)) {
+                alert(`files of type .${fileExtension} are not allowed`);
+                fileInput.value = '';
+                submittingDialog.close();
+                return;
+            }
+        });
+        Array.from(fileInput.files).forEach(file => {
+            const p = document.createElement('p');
+            p.innerHTML = file.name;
+            fileList.appendChild(p);
+        });
+    });
+</script>
 </body>
-
+{{/manuscript}}
 <style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-    .dropdown:hover {
-        display: block;
-    }
-    p {
-        display: block;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        margin: 0;
-        box-sizing: border-box;
-        transition: background 0.2s;
-    }
-    p:hover {
-        background-color: #f0f0f0;
-        cursor: pointer;
-    }
+    select { width: 100%; }
     .author-container {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -158,7 +274,6 @@
         padding-inline: 1rem;
         border: 1.3px solid var(--beige);
         border-radius: 0.4rem;
-
         margin: 1rem 0;
     }
     .author-container .text-field {
@@ -174,18 +289,17 @@
         min-width: 2.5rem;
         padding: 0.3rem 0.5rem;
     }
-    .download-button:hover {
-        color: var(--primary) !important;
-    }
     @media (max-width: 480px) {
         .author-container .m3-button {
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
         }
     }
-    .m3-button.primary-button.corresponding-author:active {
-        background-color: var(--primary) !important;
-        color: white !important;
+    @media (max-width: 768px) {
+        .category-list {
+            grid-template-columns: 1fr !important;
+            justify-items: center;
+        }
     }
 </style>
 </html>
