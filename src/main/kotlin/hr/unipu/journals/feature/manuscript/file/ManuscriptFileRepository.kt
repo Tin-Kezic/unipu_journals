@@ -30,4 +30,8 @@ interface ManuscriptFileRepository: Repository<ManuscriptFile, Int> {
         @Param("path") path: String,
         @Param("manuscript_id") manuscriptId: Int
     ): Int
+
+    @Modifying
+    @Query("DELETE FROM manuscript_file WHERE manuscript_id = :manuscript_id")
+    fun delete(@Param("manuscript_id") manuscriptId: Int): Int
 }
