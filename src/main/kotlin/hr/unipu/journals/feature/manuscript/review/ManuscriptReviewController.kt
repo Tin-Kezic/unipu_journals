@@ -83,7 +83,7 @@ class ManuscriptReviewController(
             tempFiles.forEach { (name, file) ->
                 val extension = file.name.substringAfterLast('.', "").lowercase()
                 if(extension in clamAv.forbiddenExtensions)
-                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed.")
+                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed")
                 if(extension == "zip" && zipService.isEncrypted(file))
                     return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
                 if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)

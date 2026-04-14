@@ -43,7 +43,7 @@ class EmailVerificationController(
         unregisteredAuthorRepository.allAffiliatedManuscriptIds(pending.email).forEach { id ->
             accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, id)
         }
-        unregisteredAuthorRepository.delete(account.email)
+        unregisteredAuthorRepository.delete(email = account.email)
 
         inviteRepository.all(email = pending.email).forEach { (id, email, target, targetId) -> when(target) {
             InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(account.email, true)
@@ -96,7 +96,7 @@ class EmailVerificationController(
         unregisteredAuthorRepository.allAffiliatedManuscriptIds(pending.newEmail).forEach { id ->
             accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, pending.account.id, id)
         }
-        unregisteredAuthorRepository.delete(pending.newEmail)
+        unregisteredAuthorRepository.delete(email = pending.newEmail)
         inviteRepository.all(email = pending.newEmail).forEach { (id, email, target, targetId) -> when(target) {
             InvitationTarget.ADMIN -> accountRepository.updateIsAdmin(pending.newEmail, true)
             InvitationTarget.EIC_ON_PUBLICATION -> eicOnPublicationRepository.assign(pending.account.id, targetId)
