@@ -28,23 +28,22 @@ class ManuscriptService(
     private val authorizationService: AuthorizationService,
     private val emailService: EmailService
 ) {
-    fun toManuscriptDto(manuscript: Manuscript) = Triple(
+    fun toManuscriptDto(manuscript: Manuscript, accountId: Int? = null) = Triple(
         manuscript,
         accountRoleOnManuscriptRepository.all(role = ManuscriptRole.AUTHOR, manuscriptId = manuscript.id).map { accountRepository.byId(it.accountId)!! },
         unregisteredAuthorRepository.authors(manuscript.id)
     ).let { (manuscript, registeredAuthors, unregisteredAuthors) ->
         val section = sectionRepository.byId(manuscript.sectionId)!!
         val publication = publicationRepository.by(id = section.publicationId)!!
-        val accountId = authorizationService.account!!.id
         return@let buildMap {
             put("id", manuscript.id)
             put("title", manuscript.title)
-            put("roles", jacksonObjectMapper().writeValueAsString(
-                accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, accountId = accountId).map { it.accountRole }
-            ))
-            put("registeredAuthors", jacksonObjectMapper().writeValueAsString(
-                registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) }
-            ))
+            (accountId ?: authorizationService.account?.id)?.let { id ->
+                put("roles", jacksonObjectMapper().writeValueAsString(
+                    accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, accountId = id).map { it.accountRole }
+                ))
+            }
+            put("registeredAuthors", jacksonObjectMapper().writeValueAsString(registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) }))
             put("unregisteredAuthors", jacksonObjectMapper().writeValueAsString(
                 if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
                     || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
@@ -59,6 +58,7 @@ class ManuscriptService(
                             || authorizationService.isAdmin)
                             unregisteredAuthor.let { author -> mapOf(
                                 "type" to "unregistered",
+                                "id" to author.id,
                                 "fullName" to author.fullName,
                                 "email" to author.email,
                                 "country" to author.country,
@@ -68,14 +68,12 @@ class ManuscriptService(
                         else unregisteredAuthor.fullName
                     }
             ))
-            put("files", jacksonObjectMapper().writeValueAsString(
-                manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }
-            ))
+            put("files", jacksonObjectMapper().writeValueAsString(manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }))
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
             put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
-                    || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
-                    || authorizationService.isAdmin)
+                || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
+                || authorizationService.isAdmin)
             put("description", manuscript.description)
             put("state", manuscript.state)
             put("category", categoryRepository.nameById(manuscript.categoryId))
