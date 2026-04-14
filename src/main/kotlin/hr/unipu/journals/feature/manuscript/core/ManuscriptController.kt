@@ -234,16 +234,53 @@ class ManuscriptController(
     ): ResponseEntity<String> = manuscriptService.updateState(manuscriptId = manuscriptId, newState = newState)
 
     @PutMapping("/{manuscriptId}/technical-processing")
+    @PreAuthorize(AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR)
     fun technicalProcessing(
         @PathVariable manuscriptId: Int,
         @RequestPart registeredAuthorIds: List<Int>,
-        @RequestPart manuscriptSubmission: ManuscriptSubmission,
-        @RequestPart files: List<MultipartFile>,
+        @RequestPart manuscriptSubmission: ManuscriptTechnicalProcessingSubmission,
+        @RequestPart correspondingAuthor: String, // if(registered) id else email
+        @RequestPart files: List<MultipartFile>?,
     ): ResponseEntity<String> {
-        println("manuscript id: $manuscriptId")
-        println("registered author ids: $registeredAuthorIds")
-        println("manuscript submission: $manuscriptSubmission")
-        println("files: $files")
-        return ResponseEntity.ok("")
+        if(manuscriptRepository.byId(manuscriptId) == null) return ResponseEntity.badRequest().body("failed to find manuscript")
+        if(manuscriptSubmission.authors.distinctBy { it.email }.size != manuscriptSubmission.authors.size) return ResponseEntity.badRequest().body("duplicate author email")
+        val correspondingAuthorId = correspondingAuthor.toIntOrNull()
+        val email = (if(correspondingAuthorId != null) accountRepository.byId(correspondingAuthorId)?.email else correspondingAuthor)
+            ?: return ResponseEntity.internalServerError().body("failed to find corresponding author account")
+        manuscriptRepository.update(
+            id = manuscriptId,
+            title = manuscriptSubmission.title,
+            description = manuscriptSubmission.description,
+            categoryId = categoryRepository.idByName(manuscriptSubmission.category),
+            sectionId = sectionRepository.idByName(publicationTitle = manuscriptSubmission.publicationTitle, sectionTitle = manuscriptSubmission.sectionName),
+            correspondingAuthorEmail = email
+        )
+        val oldRegisteredAuthorsIds = accountRoleOnManuscriptRepository.all(
+            manuscriptId = manuscriptId,
+            role = ManuscriptRole.AUTHOR
+        ).map { it.accountId }.toSet()
+        val newRegisteredAuthorsIds = registeredAuthorIds.toSet()
+        val toInsert = newRegisteredAuthorsIds - oldRegisteredAuthorsIds
+        val toRemove = oldRegisteredAuthorsIds - newRegisteredAuthorsIds
+        toInsert.forEach { authorId -> accountRoleOnManuscriptRepository.assign(manuscriptId = manuscriptId, accountId = authorId, accountRole = ManuscriptRole.AUTHOR) }
+        toRemove.forEach { authorId -> accountRoleOnManuscriptRepository.revoke(manuscriptId = manuscriptId, accountId = authorId, accountRole = ManuscriptRole.AUTHOR) }
+        unregisteredAuthorRepository.delete(manuscriptId = manuscriptId)
+        manuscriptSubmission.authors.forEach { authorDTO ->
+            accountRepository.byEmail(authorDTO.email)?.let { account ->
+                accountRoleOnManuscriptRepository.assign(manuscriptId = manuscriptId, accountId = account.id, accountRole = ManuscriptRole.AUTHOR)
+            } ?: unregisteredAuthorRepository.insert(
+                fullName = authorDTO.fullName,
+                email = authorDTO.email,
+                country = authorDTO.country,
+                affiliation = authorDTO.affiliation,
+                manuscriptId = manuscriptId
+            )
+        }
+        if(files != null) {
+            manuscriptFileRepository.delete(manuscriptId = manuscriptId)
+            val response = manuscriptFileService.insert(files = files, manuscriptId = manuscriptId)
+            if(response.statusCode != HttpStatus.OK) return response
+        }
+        return ResponseEntity.ok("successfully completed technical processing")
     }
 }
