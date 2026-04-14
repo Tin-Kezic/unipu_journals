@@ -1,6 +1,5 @@
 package hr.unipu.journals.feature.manuscript.core
 
-import hr.unipu.journals.feature.account.Account
 import hr.unipu.journals.feature.account.AccountRepository
 import hr.unipu.journals.feature.invite.InvitationTarget
 import hr.unipu.journals.feature.invite.InviteRepository
@@ -8,25 +7,23 @@ import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRo
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.ManuscriptRole
 import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
+import hr.unipu.journals.feature.manuscript.file.ManuscriptFileService
 import hr.unipu.journals.feature.publication.core.PublicationRepository
 import hr.unipu.journals.feature.publication.core.Role
 import hr.unipu.journals.feature.publication.core.Sorting
 import hr.unipu.journals.feature.publication.eic_on_publication.EicOnPublicationRepository
 import hr.unipu.journals.feature.section.core.SectionRepository
-import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthor
 import hr.unipu.journals.feature.unregistered_author.UnregisteredAuthorRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
+import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EIC_ON_MANUSCRIPT_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
-import hr.unipu.journals.security.ClamAv
-import hr.unipu.journals.security.ScanResult
-import hr.unipu.journals.util.AppProperties
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -36,10 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 @RestController
 @RequestMapping("/api/manuscripts")
@@ -48,6 +42,7 @@ class ManuscriptController(
     private val sectionRepository: SectionRepository,
     private val manuscriptService: ManuscriptService,
     private val manuscriptRepository: ManuscriptRepository,
+    private val manuscriptFileService: ManuscriptFileService,
     private val manuscriptFileRepository: ManuscriptFileRepository,
     private val accountRepository: AccountRepository,
     private val inviteRepository: InviteRepository,
@@ -56,9 +51,6 @@ class ManuscriptController(
     private val accountRoleOnManuscriptRepository: AccountRoleOnManuscriptRepository,
     private val unregisteredAuthorRepository: UnregisteredAuthorRepository,
     private val categoryRepository: CategoryRepository,
-    private val zipService: ZipService,
-    private val clamAv: ClamAv,
-    private val appProperties: AppProperties
 ) {
     @GetMapping
     fun all(
@@ -73,51 +65,12 @@ class ManuscriptController(
         @RequestParam accountId: Int?,
         @RequestParam query: String?
     ): List<Map<String, Any?>> {
+        val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
         require(
             manuscriptStateFilter in setOf(ManuscriptStateFilter.PUBLISHED, ManuscriptStateFilter.ARCHIVED)
-                || accountId == null
-                || with(authorizationService) { this.isAccountOwner(accountId) || this.isAdmin }
+                    || account?.id != null
+                    || authorizationService.isAdmin
         )
-        fun List<Triple<Manuscript, List<Account>, List<UnregisteredAuthor>>>.toManuscriptMap(): List<Map<String, Any?>> =
-            this.map { (manuscript, registeredAuthors, unregisteredAuthors) -> buildMap {
-                put("id", manuscript.id)
-                put("title", manuscript.title)
-                put("registeredAuthors", registeredAuthors.map { author -> mapOf("id" to author.id, "fullName" to author.fullName) })
-                put("unregisteredAuthors",
-                    if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                        || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                        || authorizationService.isAdmin)
-                        unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
-                )
-                put("correspondingAuthor",
-                    accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                        ?: unregisteredAuthorRepository.byEmail(email = manuscript.correspondingAuthorEmail, manuscriptId = manuscript.id)?.let { unregisteredAuthor ->
-                            if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                                || authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                                || authorizationService.isAdmin)
-                                unregisteredAuthor.let { author -> mapOf(
-                                    "type" to "unregistered",
-                                    "id" to author.id,
-                                    "fullName" to author.fullName,
-                                    "email" to author.email,
-                                    "country" to author.country,
-                                    "affiliation" to author.affiliation,
-                                    "manuscriptId" to author.manuscriptId
-                                )}
-                            else unregisteredAuthor.fullName
-                        }
-                )
-                put("files", manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) })
-                put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("publicationDate", manuscript.publicationDate?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                put("isOverseeing", (authorizationService.isSectionEditorOnSectionOrSuperior(publicationId, sectionId)
-                    || authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id))
-                    || authorizationService.isAdmin)
-                put("description", manuscript.description)
-                put("state", manuscript.state)
-                put("category", categoryRepository.nameById(manuscript.categoryId))
-            }}
-        val account = accountId?.let { accountRepository.byId(it) } ?: authorizationService.account
         val manuscripts = manuscriptRepository.all(
             accountId = account?.id,
             manuscriptStateFilter = manuscriptStateFilter,
@@ -128,17 +81,10 @@ class ManuscriptController(
             from = from,
             to = to,
             query = query
-        ).map { manuscript -> Triple(
-            manuscript,
-            accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, role = ManuscriptRole.AUTHOR).map { accountRepository.byId(it.accountId)!! },
-            unregisteredAuthorRepository.authors(manuscript.id)
-        )}.toManuscriptMap()
+        ).map { manuscriptService.toManuscriptDto(manuscript = it) }
         if(manuscriptStateFilter.name.contains("AWAITING")) {
             require(account != null)
-            val pending = manuscripts.map { manuscript -> manuscript + mapOf(
-                "type" to "pending",
-                "roles" to accountRoleOnManuscriptRepository.all(manuscriptId = manuscript["id"] as Int, accountId = account.id).map { it.accountRole }
-            )}
+            val pending = manuscripts.map { manuscript -> manuscript + ("type" to "pending")}
             val invites = inviteRepository.invitedManuscripts(
                 email = account.email,
                 manuscriptStateFilter = manuscriptStateFilter,
@@ -150,11 +96,7 @@ class ManuscriptController(
             )
             val invited = invites.map {
                 manuscriptRepository.byId(it.targetId)!!
-            }.map { manuscript -> Triple(
-                manuscript,
-                accountRoleOnManuscriptRepository.all(manuscriptId = manuscript.id, role = ManuscriptRole.AUTHOR).map { accountRepository.byId(it.accountId)!! },
-                unregisteredAuthorRepository.authors(manuscript.id)
-            )}.toManuscriptMap().zip(invites).map { (map, invite) -> map + mapOf(
+            }.map { manuscriptService.toManuscriptDto(it) }.zip(invites).map { (map, invite) -> (map - "roles") + mapOf(
                 "type" to "invited",
                 "role" to invite.target
             )}
@@ -170,62 +112,36 @@ class ManuscriptController(
     ): ResponseEntity<String> {
         if(manuscriptSubmission.authors.size != manuscriptSubmission.authors.distinctBy { it.email }.size)
             return ResponseEntity.badRequest().body("duplicate author email")
-        files.forEach { file ->
-            if(file.originalFilename == null)
-                return ResponseEntity.badRequest().body("submitted unnamed files")
-        }
-        val tempFiles = files.map { file ->
-            val cleanFileName = Jsoup.clean(file.originalFilename!!, Safelist.none())
-            cleanFileName to File.createTempFile(
-                UUID.randomUUID().toString(),
-                "." + cleanFileName.substringAfter(".")
-            ).apply { deleteOnExit() }
-        }
-        files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp.second) }
-        try {
-            tempFiles.forEach { (name, file) ->
-                val extension = file.name.substringAfterLast('.', "").lowercase()
-                if(extension in clamAv.forbiddenExtensions)
-                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed")
-                if(extension == "zip" && zipService.isEncrypted(file))
-                    return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
-                if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
-                    return ResponseEntity.badRequest().body("submitted files contain malware")
-            }
-            val insertedManuscript = manuscriptRepository.insert(
-                title = Jsoup.clean(manuscriptSubmission.title, Safelist.none()),
-                description = Jsoup.clean(manuscriptSubmission.description, Safelist.none()),
-                categoryId = categoryRepository.idByName(Jsoup.clean(manuscriptSubmission.category, Safelist.none())),
-                sectionId = sectionRepository.idByName(
-                    publicationTitle = Jsoup.clean(manuscriptSubmission.publicationTitle, Safelist.none()),
-                    sectionTitle = Jsoup.clean(manuscriptSubmission.sectionName, Safelist.none())
-                ),
-                correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
+        val insertedManuscript = manuscriptRepository.insert(
+            title = Jsoup.clean(manuscriptSubmission.title, Safelist.none()),
+            description = Jsoup.clean(manuscriptSubmission.description, Safelist.none()),
+            categoryId = categoryRepository.idByName(Jsoup.clean(manuscriptSubmission.category, Safelist.none())),
+            sectionId = sectionRepository.idByName(
+                publicationTitle = Jsoup.clean(manuscriptSubmission.publicationTitle, Safelist.none()),
+                sectionTitle = Jsoup.clean(manuscriptSubmission.sectionName, Safelist.none())
+            ),
+            correspondingAuthorEmail = Jsoup.clean(manuscriptSubmission.correspondingAuthorEmail, Safelist.none())
+        )
+        val response = manuscriptFileService.insert(files = files, manuscriptId = insertedManuscript.id)
+        if(response.statusCode != HttpStatus.OK) return response
+        manuscriptSubmission.authors.forEach { authorDTO ->
+            val account = accountRepository.byEmail(authorDTO.email)
+            if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
+            else unregisteredAuthorRepository.insert(
+                fullName = authorDTO.fullName,
+                email = authorDTO.email,
+                country = authorDTO.country,
+                affiliation = authorDTO.affiliation,
+                manuscriptId = insertedManuscript.id
             )
-            tempFiles.forEach { (name, file) ->
-                val path = "${appProperties.fileStoragePath}/${file.name}"
-                file.copyTo(File(path), true)
-                manuscriptFileRepository.insert(name = name, path = path, manuscriptId = insertedManuscript.id)
-            }
-            manuscriptSubmission.authors.forEach { authorDTO ->
-                val account = accountRepository.byEmail(authorDTO.email)
-                if(account != null) accountRoleOnManuscriptRepository.assign(ManuscriptRole.AUTHOR, account.id, insertedManuscript.id)
-                else unregisteredAuthorRepository.insert(
-                    fullName = authorDTO.fullName,
-                    email = authorDTO.email,
-                    country = authorDTO.country,
-                    affiliation = authorDTO.affiliation,
-                    manuscriptId = insertedManuscript.id
-                )
-            }
-            eicOnPublicationRepository.eicEmailsByPublicationId(
-                publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
-                    ?: return ResponseEntity.internalServerError().body("failed to find publication")
-            ).forEach { eicEmail ->
-                inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
-            }
-            return ResponseEntity.ok("manuscript successfully added")
-        } finally { tempFiles.forEach { (name, file) -> file.delete() } }
+        }
+        eicOnPublicationRepository.eicEmailsByPublicationId(
+            publicationRepository.by(title = manuscriptSubmission.publicationTitle)?.id
+                ?: return ResponseEntity.internalServerError().body("failed to find publication")
+        ).forEach { eicEmail ->
+            inviteRepository.invite(eicEmail, InvitationTarget.EIC_ON_MANUSCRIPT, insertedManuscript.id)
+        }
+        return ResponseEntity.ok("manuscript successfully added")
     }
     @PutMapping("/{manuscriptId}")
     fun updateState(
