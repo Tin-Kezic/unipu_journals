@@ -26,6 +26,9 @@ interface UnregisteredAuthorRepository: Repository<UnregisteredAuthor, Int> {
     ): Int
 
     @Modifying
-    @Query("DELETE FROM unregistered_author WHERE email = :email")
-    fun delete(@Param("email") email: String): Int
+    @Query("DELETE FROM unregistered_author WHERE (email = :email OR :email IS NULL) AND (manuscript_id = :manuscript_id OR :manuscript_id IS NULL)")
+    fun delete(
+        @Param("email") email: String? = null,
+        @Param("manuscript_id") manuscriptId: Int? = null
+    ): Int
 }
