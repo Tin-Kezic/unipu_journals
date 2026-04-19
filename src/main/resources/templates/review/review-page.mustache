@@ -133,6 +133,7 @@
     </main>
 </div>
 </body>
+<dialog id="submitting-dialog"><p>Submitting...</p></dialog>
 <script>
     let reviewerCommentFiles, authorResponseFiles;
     document.getElementById('reviewer-comment-files').addEventListener('click', () => openInfoDialog(JSON.stringify(reviewerCommentFiles)));
@@ -277,9 +278,11 @@
             }
         });
     });
+    const submittingDialog = document.getElementById('submitting-dialog');
     const form = document.getElementById('form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        submittingDialog.showModal();
 
         const formData = new FormData(form);
         const body = new FormData();
@@ -313,7 +316,7 @@
         })], { type: 'application/json' }));
         for(const file of fileInput.files) body.append('files', file);
         const response = await fetch(`/api/manuscripts/{{manuscriptId}}/reviews`, { method: 'POST', body});
-        if(!response.ok) { alert(await response.text()); return; }
+        if(!response.ok) { alert(await response.text()); submittingDialog.close(); return; }
         history.back();
     });
 </script>
