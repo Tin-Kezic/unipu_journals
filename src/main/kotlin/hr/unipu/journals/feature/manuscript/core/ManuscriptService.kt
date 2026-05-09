@@ -51,22 +51,26 @@ class ManuscriptService(
                     unregisteredAuthors else unregisteredAuthors.map { author -> author.fullName }
             ))
             put("correspondingAuthor", jacksonObjectMapper().writeValueAsString(
-                accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let { mapOf("type" to "registered", "id" to it.id, "fullName" to it.fullName) }
-                    ?: unregisteredAuthorRepository.byEmail(email = manuscript.correspondingAuthorEmail, manuscriptId = manuscript.id)?.let { unregisteredAuthor ->
-                        if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
-                            || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
-                            || authorizationService.isAdmin)
-                            unregisteredAuthor.let { author -> mapOf(
-                                "type" to "unregistered",
-                                "id" to author.id,
-                                "fullName" to author.fullName,
-                                "email" to author.email,
-                                "country" to author.country,
-                                "affiliation" to author.affiliation,
-                                "manuscriptId" to author.manuscriptId
-                            )}
-                        else unregisteredAuthor.fullName
+                (authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscript.id)
+                    || authorizationService.isSectionEditorOnSectionOrSuperior(publication.id, section.id)
+                    || authorizationService.isAdmin).let { isAuthorized ->
+                    accountRepository.byEmail(manuscript.correspondingAuthorEmail)?.let {
+                        buildMap {
+                            put("type", "registered")
+                            put("id", it.id)
+                            if(isAuthorized) put("email", it.email)
+                            put("fullName", it.fullName)
+                        }
+                    } ?: unregisteredAuthorRepository.byEmail(email = manuscript.correspondingAuthorEmail, manuscriptId = manuscript.id)?.let { unregisteredAuthor ->
+                        if(isAuthorized) unregisteredAuthor.let { author -> mapOf(
+                            "type" to "unregistered",
+                            "fullName" to author.fullName,
+                            "email" to author.email,
+                            "country" to author.country,
+                            "affiliation" to author.affiliation,
+                        )} else unregisteredAuthor.fullName
                     }
+                }
             ))
             put("files", jacksonObjectMapper().writeValueAsString(manuscriptFileRepository.allFilesByManuscriptId(manuscript.id).map { mapOf("id" to it.id, "name" to it.name) }))
             put("submissionDate", manuscript.submissionDate.format(DateTimeFormatter.ISO_LOCAL_DATE))

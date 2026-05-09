@@ -58,7 +58,9 @@ function renderManuscripts(manuscripts, containerId) {
             case 'MINOR_MAJOR':
                 newManuscript.setAttribute('options', /*html*/`
                     <button onclick="event.stopPropagation(); window.location='/manuscripts/${manuscript.id}/review-history'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">See review</button>
-                    <button onclick="event.stopPropagation(); window.location='/resubmit/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Resubmit</button>
+                    ${localStorage.email == JSON.parse(manuscript.correspondingAuthor).email ? `
+                        <button onclick="event.stopPropagation(); window.location='/resubmit/${manuscript.id}'" class="m3-button outlined-button" style="width: auto; border-radius: 10rem; box-shadow: none; padding-inline: 1.7rem;">Resubmit</button>
+                    ` : ''}
                 `);
                 container.appendChild(newManuscript);
                 break;

@@ -17,7 +17,7 @@
     <aside style="width: 25vw; height: 100%; justify-content: center; display: flex; flex-direction: column; align-items: center; gap: 2rem; padding: 2rem;">
         <p style="font-size: 3rem; font-weight: lighter; max-width: 20rem; text-align: center;">{{fullName}}</p>
         {{#author}}
-        <button onclick="window.location='/logout'" class="m3-button" style="width: 100%;">Log out</button>
+        <button onclick="localStorage.removeItem('email');window.location='/logout'" class="m3-button" style="width: 100%;">Log out</button>
         <button onclick='openInfoDialog(`{{{author}}}`)' class="m3-button" style="width: 100%; background-color: var(--frost-blue);">View profile</button>
         <button id="edit-profile" class="m3-button" style="width: 100%; background-color: var(--dark-grey); color: white;">Edit profile</button>
         <button id="delete-account" class="m3-button" style="width: 100%; background-color: var(--red); color: white;">Delete account</button>

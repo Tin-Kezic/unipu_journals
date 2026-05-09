@@ -33,7 +33,7 @@
     </form>
     <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-top: 0.8rem; width: 100%;">
         <a style="color: var(--blue); text-decoration: none;" href="/logout">Continue as guest</a>
-        <a style="color: var(--blue); text-decoration: none;" href="register.html">Register</a>
+        <a style="color: var(--blue); text-decoration: none;" href="/register.html">Register</a>
     </div>
     <p id="failure" style="color: var(--red); margin-top: 1rem; display: none; text-decoration: underline;">
         Incorrect email or password.
@@ -41,10 +41,12 @@
 </div>
 </body>
 <script>
+    localStorage.removeItem('email', null);
     const params = new URLSearchParams(window.location.search);
     if(params.has('failure')) {
         document.getElementById('failure').style.display = 'block';
     }
+    document.querySelector('form').addEventListener('submit', async (e) => localStorage.setItem('email', document.querySelector('input[name="username"]').value));
 </script>
 <style>
     .text-field input {
