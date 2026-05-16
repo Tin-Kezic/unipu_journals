@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Submit Page</title>
+    <link rel="stylesheet" href="/util.css" />
+</head>
+{{#manuscript}}
+    <body>
+    {{>util/header}}
+    {{>util/components/manuscript/element}}
+    {{>util/dialog/boolean}}
+    {{>util/dialog/info}}
+
+    <div style="margin: 2rem; padding: 2rem; background-color: white; border: 1.3px solid var(--beige); border-radius: 0.4rem;">
+        <manuscript-element
+                id = '{{id}}'
+                title = '{{title}}'
+                description = '{{description}}'
+                corresponding-author = '{{{correspondingAuthor}}}'
+                registered-authors = '{{{registeredAuthors}}}'
+                unregistered-authors = '{{{unregisteredAuthors}}}'
+                submission-date = '{{submissionDate}}'
+                files = '{{{files}}}'
+                is-overseeing = '{{isOverseeing}}'
+                roles = '{{{roles}}}'
+                category = '{{category}}'
+                state = '{{state}}'
+        ></manuscript-element>
+        <form>
+            <div style="display: flex; gap: 2rem; margin-top: 2rem;">
+                <label class="m3-button">
+                    <span id="file-input-span">Replace files</span>
+                    <input type="file" multiple style="display: none; box-shadow: none; padding-inline: 1.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem;"/>
+                </label>
+                <button id="submit" class="m3-button primary-button">Resubmit</button>
+            </div>
+            <br> <br>
+            <div id="file-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        </form>
+    </div>
+    <dialog id="submitting-dialog"><p>Submitting...</p></dialog>
+    <script>
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileList = document.getElementById('file-list');
+        const submittingDialog = document.getElementById('submitting-dialog');
+        submittingDialog.addEventListener('cancel', (e) => e.preventDefault());
+        document.querySelector('form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            submittingDialog.showModal();
+            const formData = new FormData();
+            Array.from(fileInput.files).forEach(file => formData.append("files", file));
+            const response = await fetch('/api/manuscripts/{{id}}/resubmit', { method: 'PUT', body: formData });
+            if(!response.ok) { alert(await response.text()); submittingDialog.close(); return; }
+            window.location = '/';
+        });
+        fileInput.addEventListener('change', () => {
+            fileList.innerHTML = '';
+            const forbiddenExtensions = [
+                'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
+                'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx', 'psd', 'indd', 'cdr', 'sketch', 'key',
+                'gif', 'webp', 'heic', 'heif', 'raw', 'hdf', 'h5', 'sav', 'dta', 'mat', 'rar', '7z', 'ace',
+                'tmp', 'bak', '~doc', 'swp', 'ttf', 'otf', 'fon'
+            ];
+            Array.from(fileInput.files).forEach(file => {
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                if(forbiddenExtensions.includes(fileExtension)) {
+                    alert(`files of type .${fileExtension} are not allowed`);
+                    fileInput.value = '';
+                    submittingDialog.close();
+                    return;
+                }
+            });
+            Array.from(fileInput.files).forEach(file => {
+                const p = document.createElement('p');
+                p.innerHTML = file.name;
+                fileList.appendChild(p);
+            });
+        });
+    </script>
+    </body>
+{{/manuscript}}
+</html>

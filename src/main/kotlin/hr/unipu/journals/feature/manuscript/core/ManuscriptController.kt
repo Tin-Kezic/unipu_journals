@@ -199,4 +199,18 @@ class ManuscriptController(
         }
         return ResponseEntity.ok("successfully completed technical processing")
     }
+    @PutMapping("/{manuscriptId}/resubmit")
+    fun resubmit(
+        @PathVariable manuscriptId: Int,
+        @RequestPart files: List<MultipartFile>?
+    ): ResponseEntity<String> {
+        if(files != null) {
+            manuscriptFileRepository.delete(manuscriptId = manuscriptId)
+            val insertResponse = manuscriptFileService.insert(files = files, manuscriptId = manuscriptId)
+            if(insertResponse.statusCode != HttpStatus.OK) return insertResponse
+            val stateUpdateResponse = manuscriptService.updateState(manuscriptId = manuscriptId, newState = ManuscriptState.AWAITING_ROUND_INITIALIZATION)
+            if(stateUpdateResponse.statusCode != HttpStatus.OK) return stateUpdateResponse
+        }
+        return ResponseEntity.ok("successfully resubmitted manuscript")
+    }
 }
