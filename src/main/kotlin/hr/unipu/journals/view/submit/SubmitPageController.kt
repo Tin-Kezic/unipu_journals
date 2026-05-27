@@ -3,8 +3,6 @@ package hr.unipu.journals.view.submit
 import hr.unipu.journals.feature.manuscript.category.CategoryRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptStateFilter
 import hr.unipu.journals.feature.publication.core.PublicationRepository
-import hr.unipu.journals.feature.publication.core.PublicationType
-import hr.unipu.journals.feature.section.core.SectionRepository
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_AUTHENTICATED
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.security.access.prepost.PreAuthorize
