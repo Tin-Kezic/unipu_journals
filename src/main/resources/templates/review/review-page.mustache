@@ -324,7 +324,7 @@
     /* {
         openOptionsDialog('Decide', [
             {name: 'Accept', onClick: async () => {
-                if('{{type}}' == 'EIC') window.location = `/manuscripts/${manuscriptId}/technical-processing`;
+                if('{.{type}}' == 'EIC') window.location = `/manuscripts/${manuscriptId}/technical-processing`;
                 else {
                     updateEditorRecommendation(manuscriptId, 'ACCEPT');
                     alert("successfully updated editor recommendation to: accept");
@@ -333,7 +333,7 @@
             {name: 'Minor', onClick: async () => updateManuscriptState(manuscriptId, 'MINOR')},
             {name: 'Major', onClick: async () => updateManuscriptState(manuscriptId, 'MAJOR')},
             {name: 'Reject', onClick: async () => {
-                if('{{type}}' == 'EIC') {
+                if('{.{type}}' == 'EIC') {
                     const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
                     if(!response.ok) { alert(await response.text()); return; }
                     history.back();
