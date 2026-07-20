@@ -46,14 +46,11 @@ class ManuscriptReviewRoundController(
             newState = ManuscriptState.AWAITING_REVIEWER_REVIEW
         )
         if(response.statusCode != HttpStatus.OK) return response
-        val rounds = manuscriptReviewRoundRepository.all(manuscriptId = manuscriptId)
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript")
-        val snapshotId = if(rounds.isEmpty() || rounds.last().manuscriptId != manuscriptId) let {
-            val snapshot = manuscriptRepository.snapshot(manuscript)
-            manuscriptFileRepository.copyFiles(from = manuscriptId, to = snapshot.id)
-            return@let snapshot.id
-        } else rounds.last().snapshotId
-        val round = manuscriptReviewRoundRepository.startRound(manuscriptId, snapshotId)
+        val snapshot = manuscriptRepository.snapshot(manuscript)
+        manuscriptFileRepository.copyFiles(from = manuscriptId, to = snapshot.id)
+        accountRoleOnManuscriptRepository.copyRoles(from = manuscriptId, to = snapshot.id)
+        val round = manuscriptReviewRoundRepository.startRound(manuscriptId, snapshot.id)
             ?: return ResponseEntity.internalServerError().body("failed to find round")
         val eicId = accountRoleOnManuscriptRepository.eicOnManuscript(manuscriptId).accountId
         val editorId = accountRoleOnManuscriptRepository.editorOnManuscript(manuscriptId).accountId
