@@ -25,13 +25,13 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
 
     @Query("""
         SELECT EXISTS (SELECT 1 FROM account_role_on_manuscript
-        WHERE account_role_on_manuscript.account_role = :account_role::manuscript_role
+        WHERE (account_role_on_manuscript.account_role = :account_role::manuscript_role OR :account_role IS NULL)
         AND account_role_on_manuscript.account_id = :account_id
         AND account_role_on_manuscript.manuscript_id = :manuscript_id
         )
     """)
     fun isRoleOnManuscript(
-        @Param("account_role") accountRole: ManuscriptRole,
+        @Param("account_role") accountRole: ManuscriptRole? = null,
         @Param("account_id") accountId: Int,
         @Param("manuscript_id") manuscriptId: Int,
     ): Boolean
@@ -58,6 +58,16 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         @Param("manuscript_id") manuscriptId: Int? = null,
         @Param("account_id") accountId: Int,
         @Param("account_role") accountRole: ManuscriptRole? = null
+    ): Int
+
+    @Modifying
+    @Query("""
+        INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
+        SELECT :to, account_id, account_role FROM account_role_on_manuscript WHERE manuscript_id = :from
+    """)
+    fun copyRoles(
+        @Param("from") from: Int,
+        @Param("to") to: Int
     ): Int
 }
 
