@@ -9,12 +9,14 @@ interface ManuscriptReviewRepository: Repository<ManuscriptReview, Int> {
     @Query("""
         SELECT manuscript_review.* FROM manuscript_review
         JOIN manuscript_review_round ON manuscript_review.manuscript_review_round_id = manuscript_review_round.id
-        WHERE (manuscript_review_round.manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
+        WHERE (manuscript_review_round.id = :manuscript_review_round_id OR :manuscript_review_round_id IS NULL)
+        AND (manuscript_review_round.manuscript_id = :manuscript_id OR :manuscript_id IS NULL)
         AND (manuscript_review_round.round = :round OR :round IS NULL)
         AND (manuscript_review.reviewer_id = :reviewer_id OR :reviewer_id IS NULL)
     """)
     fun all(
         @Param("manuscript_id") manuscriptId: Int? = null,
+        @Param("manuscript_review_round_id") manuscriptReviewRoundId: Int? = null,
         @Param("reviewer_id") reviewerId: Int? = null,
         @Param("round") round: Int? = null
     ): List<ManuscriptReview>

@@ -63,6 +63,16 @@ class ReviewPagesController(
                 "/review/round-initialization-page"
             }
             ManuscriptState.AWAITING_REVIEWER_REVIEW -> {
+                val latestRound = manuscriptReviewRoundRepository.latest(manuscript.id)
+                val reviews = manuscriptReviewRepository.all(
+                    manuscriptReviewRoundId = latestRound?.id,
+                    reviewerId = authorizationService.account?.id
+                )
+                require(reviews.size == 1)
+                if(reviews.first().overallMark != null) { // a review is inserted for each reviewer with null as default, therefor if the reviewer hasn't left a review it's (any-field != null)
+                    latestRound?.let { if(it.isComplete.not()) model["ongoingRound"] = true }
+                    return "/review/review-history"
+                }
                 require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
                 val type = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) "EDITOR" else null
                 model["type"] = type
