@@ -14,5 +14,5 @@ data class ManuscriptReviewRound(
     val editorComment: String?
 ) {
     val isComplete: Boolean
-        get() = editorRecommendation == null
+        get() = editorRecommendation != null
 }
