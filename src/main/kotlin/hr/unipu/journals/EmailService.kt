@@ -1,6 +1,7 @@
 package hr.unipu.journals
 
 import jakarta.mail.internet.MimeMessage
+import org.eclipse.angus.mail.smtp.SMTPAddressFailedException
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
@@ -53,6 +54,6 @@ class EmailService(private val mailSender: JavaMailSender) {
             </body>
             </html>
         """.trimIndent(), true)
-        mailSender.send(message)
+        try { mailSender.send(message) } catch (e: SMTPAddressFailedException) { println(e); println("invalid email $to") }
     }
 }
