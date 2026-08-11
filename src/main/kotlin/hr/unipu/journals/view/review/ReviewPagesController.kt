@@ -8,7 +8,7 @@ import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.Manuscrip
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptService
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
-import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.core.ManuscriptReviewRepository
 import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRepository
 import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRole
 import hr.unipu.journals.feature.manuscript.review.round.ManuscriptReviewRoundRepository
@@ -69,10 +69,8 @@ class ReviewPagesController(
                     reviewerId = authorizationService.account?.id
                 )
                 require(reviews.size == 1)
-                if(reviews.first().overallMark != null) { // a review is inserted for each reviewer with null as default, therefor if the reviewer hasn't left a review it's (any-field != null)
-                    latestRound?.let { if(it.isComplete.not()) model["ongoingRound"] = true }
-                    return "/review/review-history"
-                }
+                // a review is inserted for each reviewer with null as default, therefor if the reviewer hasn't left a review it's (any-field != null)
+                if(reviews.first().overallMark != null) return "redirect:/manuscripts/$manuscriptId/review-history"
                 require(authorizationService.isReviewerOnManuscriptOrAffiliatedSuperior(manuscriptId))
                 val type = if(authorizationService.isEicOnManuscript(manuscriptId)) "EIC" else if(authorizationService.isEditorOnManuscriptOrAffiliatedSuperior(manuscriptId)) "EDITOR" else null
                 model["type"] = type
