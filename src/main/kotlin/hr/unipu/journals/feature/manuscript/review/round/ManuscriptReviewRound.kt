@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript.review.round
 
-import hr.unipu.journals.feature.manuscript.review.Recommendation
+import hr.unipu.journals.feature.manuscript.review.core.Recommendation
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
