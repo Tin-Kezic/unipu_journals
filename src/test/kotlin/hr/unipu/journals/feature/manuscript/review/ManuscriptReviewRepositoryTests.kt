@@ -1,5 +1,10 @@
 package hr.unipu.journals.feature.manuscript.review
 
+import hr.unipu.journals.feature.manuscript.review.core.ManuscriptReview
+import hr.unipu.journals.feature.manuscript.review.core.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.core.OneToFive
+import hr.unipu.journals.feature.manuscript.review.core.Recommendation
+import hr.unipu.journals.feature.manuscript.review.core.ReviewQuestion
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
