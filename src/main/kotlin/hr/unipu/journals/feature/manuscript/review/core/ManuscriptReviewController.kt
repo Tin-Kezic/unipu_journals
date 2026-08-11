@@ -133,14 +133,46 @@ class ManuscriptReviewController(
     }
     @PostMapping("/author-response")
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR)
-    fun authorResponse(@PathVariable manuscriptId: Int, @RequestParam response: String): ResponseEntity<String> {
+    fun authorResponse(@PathVariable manuscriptId: Int, @RequestParam response: String, @RequestParam id: Int, @RequestPart files: List<MultipartFile>): ResponseEntity<String> {
         val round = manuscriptReviewRoundRepositor.latest(manuscriptId = manuscriptId)
+        val review = manuscriptReviewRepository.byId(id) ?: return ResponseEntity.badRequest().body("review does not exist")
         if(round == null || round.isComplete) return ResponseEntity.badRequest().body("manuscript has no ongoing round")
-        val rowsAffected = manuscriptReviewRepository.authorRespond(
-            manuscriptReviewRoundId = round.id,
-            response = response
-        )
-        return if(rowsAffected == 1) ResponseEntity.ok("successfully responded")
-        else ResponseEntity.internalServerError().body("failed to respond")
+        if(round.id != review.manuscriptReviewRoundId) return ResponseEntity.badRequest().body("review not part of active round")
+        files.forEach { file ->
+            if(file.originalFilename == null)
+                return ResponseEntity.badRequest().body("submitted unnamed files")
+        }
+        val tempFiles = files.map { file ->
+            val cleanFileName = Jsoup.clean(file.originalFilename!!, Safelist.none())
+            cleanFileName to File.createTempFile(
+                UUID.randomUUID().toString(),
+                "." + cleanFileName.substringAfter(".")
+            ).apply { deleteOnExit() }
+        }
+        files.zip(tempFiles).forEach { (file, temp) -> file.transferTo(temp.second) }
+        try {
+            tempFiles.forEach { (name, file) ->
+                val extension = file.name.substringAfterLast('.', "").lowercase()
+                if(extension in clamAv.forbiddenExtensions)
+                    return ResponseEntity.badRequest().body("files of type .$extension are not allowed")
+                if(extension == "zip" && zipService.isEncrypted(file))
+                    return ResponseEntity.badRequest().body("submitted zip files are encrypted, corrupted or malformed")
+                if(clamAv.scanMultipartFile(file) == ScanResult.FOUND)
+                    return ResponseEntity.badRequest().body("submitted files contain malware")
+            }
+            tempFiles.forEach { (name, file) ->
+                val path = "${appProperties.fileStoragePath}/${file.name}"
+                file.copyTo(File(path), true)
+                manuscriptReviewFileRepository.insert(
+                    name = name,
+                    path = path,
+                    reviewId = review.id,
+                    fileRole = ManuscriptReviewFileRole.AUTHOR_RESPONSE
+                )
+            }
+            val rowsAffected = manuscriptReviewRepository.authorRespond(id = id, response = Jsoup.clean(response, Safelist.none()))
+            return if(rowsAffected == 1) ResponseEntity.ok("successfully responded")
+            else ResponseEntity.internalServerError().body("failed to respond")
+        } finally { tempFiles.forEach { (name, file) -> file.delete() } }
     }
 }
