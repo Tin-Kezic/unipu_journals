@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.manuscript.review
+package hr.unipu.journals.feature.manuscript.review.core
 
 import hr.unipu.journals.EmailService
 import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
