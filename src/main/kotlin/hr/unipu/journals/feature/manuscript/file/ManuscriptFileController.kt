@@ -1,7 +1,9 @@
 package hr.unipu.journals.feature.manuscript.file
 
 import hr.unipu.journals.feature.manuscript.account_role_on_manuscript.AccountRoleOnManuscriptRepository
+import hr.unipu.journals.feature.manuscript.review.core.ManuscriptReviewRepository
 import hr.unipu.journals.feature.manuscript.review.file.ManuscriptReviewFileRepository
+import hr.unipu.journals.feature.manuscript.review.round.ManuscriptReviewRoundRepository
 import hr.unipu.journals.security.AuthorizationService
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.HttpHeaders
@@ -17,6 +19,8 @@ import java.io.File
 @RestController
 @RequestMapping("/files")
 class ManuscriptFileController(
+    private val manuscriptReviewRoundRepository: ManuscriptReviewRoundRepository,
+    private val manuscriptReviewRepository: ManuscriptReviewRepository,
     private val manuscriptFileRepository: ManuscriptFileRepository,
     private val manuscriptReviewFileRepository: ManuscriptReviewFileRepository,
     private val authorizationService: AuthorizationService,
@@ -30,15 +34,21 @@ class ManuscriptFileController(
     ): ResponseEntity<FileSystemResource> {
         val accountId = authorizationService.account?.id
         require(accountId != null)
-        require(accountRoleOnManuscriptRepository.isRoleOnManuscript(
-            accountId = accountId,
-            manuscriptId = id
-        ))
         val (name, path) = when(fileType) {
             ManuscriptFileType.MANUSCRIPT -> manuscriptFileRepository.byId(id)?.let {
+                require(accountRoleOnManuscriptRepository.isRoleOnManuscript(
+                    accountId = accountId,
+                    manuscriptId = it.manuscriptId
+                ) || authorizationService.isAdmin)
                 Pair(it.name, it.path)
             } ?: throw IllegalArgumentException("failed to find file $id")
             ManuscriptFileType.REVIEW -> manuscriptReviewFileRepository.byId(id)?.let {
+                val review = manuscriptReviewRepository.byId(it.reviewId)
+                val round = manuscriptReviewRoundRepository.byId(review?.manuscriptReviewRoundId)
+                require(accountRoleOnManuscriptRepository.isRoleOnManuscript(
+                    accountId = accountId,
+                    manuscriptId = round?.manuscriptId ?: -1
+                ) || authorizationService.isAdmin)
                 Pair(it.name, it.path)
             } ?: throw IllegalArgumentException("failed to find file $id")
         }
