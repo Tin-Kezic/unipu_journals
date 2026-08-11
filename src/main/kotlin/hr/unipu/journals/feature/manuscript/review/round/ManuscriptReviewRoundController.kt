@@ -8,8 +8,8 @@ import hr.unipu.journals.feature.manuscript.core.ManuscriptRepository
 import hr.unipu.journals.feature.manuscript.core.ManuscriptService
 import hr.unipu.journals.feature.manuscript.core.ManuscriptState
 import hr.unipu.journals.feature.manuscript.file.ManuscriptFileRepository
-import hr.unipu.journals.feature.manuscript.review.ManuscriptReviewRepository
-import hr.unipu.journals.feature.manuscript.review.Recommendation
+import hr.unipu.journals.feature.manuscript.review.core.ManuscriptReviewRepository
+import hr.unipu.journals.feature.manuscript.review.core.Recommendation
 import hr.unipu.journals.security.AUTHORIZATION_SERVICE_IS_EDITOR_ON_MANUSCRIPT_OR_SUPERIOR
 import hr.unipu.journals.security.AuthorizationService
 import hr.unipu.journals.util.AppProperties
@@ -49,7 +49,6 @@ class ManuscriptReviewRoundController(
         val manuscript = manuscriptRepository.byId(manuscriptId) ?: return ResponseEntity.badRequest().body("failed to find manuscript")
         val snapshot = manuscriptRepository.snapshot(manuscript)
         manuscriptFileRepository.copyFiles(from = manuscriptId, to = snapshot.id)
-        accountRoleOnManuscriptRepository.copyRoles(from = manuscriptId, to = snapshot.id)
         val round = manuscriptReviewRoundRepository.startRound(manuscriptId, snapshot.id)
             ?: return ResponseEntity.internalServerError().body("failed to find round")
         val eicId = accountRoleOnManuscriptRepository.eicOnManuscript(manuscriptId).accountId
