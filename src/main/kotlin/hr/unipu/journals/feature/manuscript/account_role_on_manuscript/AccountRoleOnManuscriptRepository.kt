@@ -59,15 +59,5 @@ interface AccountRoleOnManuscriptRepository : Repository<AccountRoleOnManuscript
         @Param("account_id") accountId: Int,
         @Param("account_role") accountRole: ManuscriptRole? = null
     ): Int
-
-    @Modifying
-    @Query("""
-        INSERT INTO account_role_on_manuscript (manuscript_id, account_id, account_role)
-        SELECT :to, account_id, account_role FROM account_role_on_manuscript WHERE manuscript_id = :from
-    """)
-    fun copyRoles(
-        @Param("from") from: Int,
-        @Param("to") to: Int
-    ): Int
 }
 
