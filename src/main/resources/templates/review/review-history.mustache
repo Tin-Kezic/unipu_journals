@@ -28,113 +28,97 @@
                 <p>Reviewer's comment</p>
                 <button id="reviewer-comment-files" style="background: none; border: none; color: blue; text-decoration: underline; font-size: medium; cursor: pointer; padding-inline-end: 1rem;">files</button>
             </div>
-            <section id="reviewer-comment" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
-            <br>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <p>Author's reply</p>
-                <button id="author-response-files" style="background: none; border: none; color: blue; text-decoration: underline; font-size: medium; cursor: pointer; padding-inline-end: 1rem;">files</button>
+                <section id="reviewer-comment" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
+                <br>
+            <div id="author-response-container">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p>Author's response</p>
+                    <button id="author-response-files" style="background: none; border: none; color: blue; text-decoration: underline; font-size: medium; cursor: pointer; padding-inline-end: 1rem;">files</button>
+                </div>
+                <section id="author-response" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
             </div>
-            <section id="author-response" class="container" style="margin: 0.5rem; min-height: 15rem; max-height: 15rem; cursor: default;"></section>
-            <button id="view-full-review" class="m3-button yellow-button" style="margin: 0.5rem; white-space: nowrap;">View full review</button>
+            {{#awaitingResponse}}<button id="respond" class="m3-button primary-button" style="margin: 0.5rem; white-space: nowrap;" hidden>Respond</button>{{/awaitingResponse}}
+            {{#ongoingRound}}<button id="end-round" type="button" class="m3-button primary-button" style="margin: 0.5rem; white-space: nowrap;">End round</button>{{/ongoingRound}}
         </section>
     </aside>
     <main style="flex: 1;">
-        <form id="form">
-            <div class="main-container" style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                {{#manuscript}}
-                    <manuscript-element
-                            style="width: 100%;"
-                            id = '{{id}}'
-                            title = '{{title}}'
-                            description = '{{description}}'
-                            corresponding-author = '{{{correspondingAuthor}}}'
-                            registered-authors = '{{{registeredAuthors}}}'
-                            unregistered-authors = '{{{unregisteredAuthors}}}'
-                            submission-date = '{{submissionDate}}'
-                            files = '{{{files}}}'
-                            is-overseeing = '{{isOverseeing}}'
-                            roles = '{{{roles}}}'
-                            category = '{{category}}'
-                            state = '{{state}}'
-                    ></manuscript-element>
-                {{/manuscript}}
-
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <button class="m3-button green-button" style="box-shadow: none;">Submit Review</button>
-                    <button type="button" onclick="window.location=`${window.location.pathname}-history`" class="m3-button primary-button" style="background-color: var(--periwinkle); text-wrap: nowrap;">Review history</button>
-                    <button id="end-round" type="button" class="m3-button primary-button">End round</button>
-                </div>
-            </div>
-            <fieldset style="border: none;">
-                <section class="Recommendations">
-                    <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
-                        <div class="container rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100;">
-                            <table class="rating-table">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th style="padding-left: 0.2rem;">1</th>
-                                    <th style="padding-left: 0.3rem;">2</th>
-                                    <th style="padding-left: 0.3rem;">3</th>
-                                    <th style="padding-left: 0.3rem;">4</th>
-                                    <th style="padding-left: 0.3rem;">5</th>
-                                </tr>
-                                </thead>
-                                <tbody id="rating-tbody"></tbody>
-                            </table>
-                        </div>
-                        <div id="check-questions-container" class="container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 42rem; padding-inline: 1rem; font-weight: 100;"></div>
-                        <div class="container" style="display: flex; flex-direction: column; gap: 0.7rem; justify-content: center; width: 5rem;">
-                            <b style="text-align: center;">Recommendation</b> <br>
-                            <label for="accept" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Accept</label>
-                            <label for="minor" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Minor</label>
-                            <label for="major" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Major</label>
-                            <label for="reject" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Reject</label>
-                            <div style="display: flex; justify-content: center;">
-                                <input type="radio" id="major" name="recommendation" value="MAJOR" style="width: 1px; opacity: 0.01;" >
-                                <input type="radio" id="accept" name="recommendation" value="ACCEPT" style="width: 1px; opacity: 0.01;">
-                                <input type="radio" id="minor" name="recommendation" value="MINOR" style="width: 1px; opacity: 0.01;">
-                                <input type="radio" id="reject" name="recommendation" value="REJECT" style="width: 1px; opacity: 0.01;" required>
-                            </div>
-                        </div>
-                        <style>
-                            .sidebar-button.selected {
-                                background-color: var(--primary);
-                                color: white;
-                            }
-                        </style>
-                        <script>
-                            document.querySelectorAll('input[name="recommendation"]').forEach(radio => {
-                                radio.addEventListener('change', () => {
-                                    document.querySelectorAll('.sidebar-button').forEach(label => {
-                                    label.classList.remove('selected');
-                                    });
-                                    const selectedLabel = document.querySelector(`label[for="${radio.id}"]`);
-                                    if(selectedLabel) selectedLabel.classList.add('selected');
-                                });
-                            });
-                        </script>
+        <div class="main-container" style="display: flex; align-items: flex-start; gap: 0.5rem;">
+            {{#manuscript}}
+                <manuscript-element
+                    style="width: 100%;"
+                    id = '{{id}}'
+                    title = '{{title}}'
+                    description = '{{description}}'
+                    corresponding-author = '{{{correspondingAuthor}}}'
+                    registered-authors = '{{{registeredAuthors}}}'
+                    unregistered-authors = '{{{unregisteredAuthors}}}'
+                    submission-date = '{{submissionDate}}'
+                    files = '{{{files}}}'
+                    is-overseeing = '{{isOverseeing}}'
+                    roles = '{{{roles}}}'
+                    category = '{{category}}'
+                    state = '{{state}}'
+                ></manuscript-element>
+            {{/manuscript}}
+        </div>
+        <fieldset style="border: none;">
+            <section class="Recommendations">
+                <div class="recommendations-tables" style="display: flex; gap: 1rem; align-items: stretch;">
+                    <div class="container rating-table-container" style="min-width: 22rem; padding-right: 1rem; font-weight: 100; cursor: default;">
+                        <table class="rating-table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th style="padding-left: 0.2rem;">1</th>
+                                <th style="padding-left: 0.3rem;">2</th>
+                                <th style="padding-left: 0.3rem;">3</th>
+                                <th style="padding-left: 0.3rem;">4</th>
+                                <th style="padding-left: 0.3rem;">5</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rating-tbody"></tbody>
+                        </table>
                     </div>
-                    <section>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <div class="text-field" style="margin: 0;">
-                                <label for="comment">Comments and suggestions for author</label>
-                                <textarea id="comment" name="reviewerComment" required style="width: 100%; resize: vertical; max-height: fit-content; min-height: 20rem; padding: 1rem 2rem 3rem 2rem; font-size: 1rem;"></textarea>
-                                <input type="file" name="reviewerCommentFiles" multiple/>
-                            </div>
-                            <div style="display: flex; gap: 5rem; align-items: flex-start;">
-                                <div id="boolean-questions-container" class="container" style="padding: 0.7rem 1.5rem; font-weight: 100;"></div>
-                            </div>
+                    <div id="check-questions-container" class="container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 42rem; padding-inline: 1rem; font-weight: 100; cursor: default;"></div>
+                    <div class="container" style="display: flex; flex-direction: column; gap: 0.7rem; justify-content: center; width: 5rem;">
+                        <b style="text-align: center;">Recommendation</b> <br>
+                        <label for="accept" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Accept</label>
+                        <label for="minor" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Minor</label>
+                        <label for="major" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Major</label>
+                        <label for="reject" class="sidebar-button" style="display: flex; justify-content: center; max-width: 100%;">Reject</label>
+                        <div style="display: flex; justify-content: center;">
+                            <input type="radio" id="major" name="recommendation" value="MAJOR" style="width: 1px; opacity: 0.01;" disabled>
+                            <input type="radio" id="accept" name="recommendation" value="ACCEPT" style="width: 1px; opacity: 0.01;" disabled>
+                            <input type="radio" id="minor" name="recommendation" value="MINOR" style="width: 1px; opacity: 0.01;" disabled>
+                            <input type="radio" id="reject" name="recommendation" value="REJECT" style="width: 1px; opacity: 0.01;" disabled>
                         </div>
-                    </section>
-                </section>
-            </fieldset>
-        </form>
+                    </div>
+                    <style>
+                        .sidebar-button.selected {
+                            background-color: var(--primary);
+                            color: white;
+                        }
+                    </style>
+                    <script>
+                        document.querySelectorAll('input[name="recommendation"]').forEach(radio => {
+                            radio.addEventListener('change', () => {
+                                document.querySelectorAll('.sidebar-button').forEach(label => {
+                                label.classList.remove('selected');
+                                });
+                                const selectedLabel = document.querySelector(`label[for="${radio.id}"]`);
+                                if(selectedLabel) selectedLabel.classList.add('selected');
+                            });
+                        });
+                    </script>
+                </div>
+                <div id="boolean-questions-container" class="container" style="padding: 0.7rem 1.5rem; font-weight: 100; display: inline-block"></div>
+            </section>
+        </fieldset>
     </main>
 </div>
 </body>
 <script>
-    let reviewerCommentFiles, authorResponseFiles;
+    let reviewerCommentFiles, authorResponseFiles, currentReviewId;
     document.getElementById('reviewer-comment-files').addEventListener('click', () => openInfoDialog(JSON.stringify(reviewerCommentFiles)));
     document.getElementById('author-response-files').addEventListener('click', () => openInfoDialog(JSON.stringify(authorResponseFiles)));
     (async () => {
@@ -143,6 +127,8 @@
         const reviewsAndFiles = Object.entries(reviewerIdAndReviews).map(([reviewerId, reviewsAndFiles]) => reviewsAndFiles).flat();
         const reviews = Object.entries(reviewerIdAndReviews).map(([reviewerId, reviewsAndFiles]) => Object.entries(reviewsAndFiles).map(([key, value]) => value.first)).flat(); // value.second is files
         const roundMap = new Map([...new Set(reviews.map(r => r.manuscriptReviewRoundId))].map((id, index) => [id, index + 1]));
+        const maxRoundMapValue = Math.max(...roundMap.values());
+        const respondButton = document.getElementById('respond')
         Object.entries(reviewerIdAndReviews).forEach(([reviewerId, reviewsAndFiles]) => {
             const div = document.createElement('div');
             div.style = 'display: flex; flex-direction: column; align-items: center; margin-left: 0.8rem;';
@@ -151,22 +137,29 @@
                 <div style="display: flex; flex-direction: column;">
                     ${Object.entries(reviewsAndFiles).map(([key, value]) => value.first) // reviews
                         .sort((a, b) => a.manuscriptReviewRoundId - b.manuscriptReviewRoundId)
-                        .map((review, index) => /*html*/`
+                        .map((review, index) => {
+                            const roundNumber = roundMap.get(review.manuscriptReviewRoundId);
+                            if(respondButton) respondButton.hidden = roundNumber != maxRoundMapValue;
+                            return /*html*/`
                             <input id="review-${review.id}" name="review" value="${review.id}" type="radio" hidden>
-                            <label for="review-${review.id}">round_${roundMap.get(review.manuscriptReviewRoundId)}</label>
-                        `).join('')}
+                            <label for="review-${review.id}">round_${roundNumber}</label>
+                        ` }).join('')
+                    }
                 </div>
             `;
             document.getElementById('reviews-container').appendChild(div);
         });
-
         const inlineDisplayableTypes = ["txt", "log", "md", "markdown", "csv", "tsv", "json", "jsonl", "jsonld", "xml", "yaml", "yml", "toml", "ini", "cfg", "conf", "env", "sql", "svg", "xhtml", "webmanifest", "ts", "jsx", "tsx", "py", "java", "c", "cpp", "h", "hpp", "cs", "go", "rs", "rb", "swift", "kt", "scala", "lua", "r", "pl", "dart", "png", "jpg", "jpeg", "bmp", "ico", "avif", "tif", "tiff", "jfif", "mp3", "wav", "ogg", "opus", "m4a", "aac", "flac", "mp4", "m4v", "webm", "ogv", "3gp", "pdf", "epub", "woff", "woff2", "eot", "geojson", "ndjson", "fasta", "fastq", "vcf", "bed", "gff", "wasm"];
+        const params = new URLSearchParams(window.location.search);
+        const review = document.getElementById(`review-${params.get('review')}`);
+        const lastReview = document.querySelector('input[name="review"]:last-of-type');
+        if(respondButton) respondButton.hidden = review != lastReview;
         document.querySelectorAll('input[name="review"]').forEach(input => input.addEventListener('change', () => {
             const review = reviews.find(r => r.id == input.value);
+            currentReviewId = input.value;
             document.getElementById('reviewer-and-round').innerHTML = `Reviewer: ${review.reviewerId}, round: ${roundMap.get(review.manuscriptReviewRoundId)}`;
             document.getElementById('review-recommendation').innerHTML = `Recommendation: <b>${review.recommendation}</b>`;
             document.getElementById('reviewer-comment').innerHTML = review.reviewerComment;
-            document.getElementById('author-response').innerHTML = review.authorResponse;
             const files = Object.entries(reviewsAndFiles).find(([key, value]) => value.first.id == input.value)[1].second; // ["n", {first: review, second: files}]
             const helper = (files) => Object.fromEntries(files.map(file => {
                 const fileType = file.name.slice(file.name.lastIndexOf('.') + 1);
@@ -175,17 +168,57 @@
             }));
             reviewerCommentFiles = helper(files.filter(f => f.fileRole === 'REVIEW'));
             authorResponseFiles = helper(files.filter(f => f.fileRole === 'AUTHOR_RESPONSE'));
+            document.getElementById('author-response').innerHTML = review.authorResponse;
+            const isAuthorResponsePresent = Object.keys(authorResponseFiles).length || review.authorResponse
+            document.getElementById('author-response-container').hidden = !isAuthorResponsePresent;
+            const e = document.getElementById('respond'); e && (e.hidden = !isAuthorResponsePresent);
+            [
+                { name: 'novelty', value: review.novelty },
+                { name: 'significance', value: review.significance },
+                { name: 'technicalQuality', value: review.technicalQuality },
+                { name: 'clarity', value: review.clarity },
+                { name: 'methodology', value: review.methodology },
+                { name: 'relevanceToThePublication', value: review.relevanceToThePublication },
+                { name: 'languageQuality', value: review.languageQuality },
+                { name: 'overallMark', value: review.overallMark },
+                { name: 'sufficientBackground', value: review.sufficientBackground },
+                { name: 'appropriateResearchDesign', value: review.appropriateResearchDesign },
+                { name: 'adequatelyDescribed', value: review.adequatelyDescribed },
+                { name: 'clearlyPresented', value: review.clearlyPresented },
+                { name: 'supportedConclusions', value: review.supportedConclusions },
+                { name: 'conflictOfInterest', value: review.conflict },
+                { name: 'plagiarism', value: review.plagiarism },
+                { name: 'llmUsed', value: review.llm },
+                { name: 'selfCitation', value: review.selfCitation },
+                { name: 'appropriateReferences', value: review.appropriateReferences },
+                { name: 'ethicalConcerns', value: review.ethicalConcerns },
+                { name: 'recommendation', value: review.recommendation }
+            ].forEach((it) => { document
+                .querySelector(`input[name="${it.name}"][value="${it.value}"]`)
+                .checked = true;
+            });
+            document.querySelector(`input[name="recommendation"][value="${review.recommendation}"]`).dispatchEvent(new Event('change'));
+            const element = document.getElementById(`review-${review.id}`);
+            if(element) {
+                element.checked = true;
+                history.replaceState(null, '', `/manuscripts/{{manuscriptId}}/review-history?review=${input.value}`);
+                const respond = document.getElementById('respond');
+                if(respond) {
+                    respond.hidden = element != lastReview;
+                    respond.onclick = async () => openTextareaDialog('Respond to reviewer\'s comment', 'Next', '', () =>
+                        document.getElementById('select-files-dialog')?.showModal()
+                    );
+                }
+            }
         }));
-        const firstReview = document.querySelector('input[name="review"]');
-        if(firstReview) {
-            firstReview.checked = true;
-            firstReview.dispatchEvent(new Event('change'));
+        const element = params.get('review') ? document.getElementById(`review-${params.get('review')}`) : lastReview;
+        if(element) {
+            element.checked = true;
+            element.dispatchEvent(new Event('change'));
+            history.replaceState(null, '', `/manuscripts/{{manuscriptId}}/review-history?review=${element.value}`);
+            const e = document.getElementById('respond'); if(e) e.hidden = element != lastReview;
         }
     })();
-    document.getElementById('view-full-review').addEventListener('click', () => {
-        window.location = `${window.location.pathname}-history?id=${document.querySelector('input[name="review"]:checked').value}`;
-    });
-
     const ratingTbody = document.getElementById('rating-tbody');
     [
         { label: 'Novelty', name: 'novelty' },
@@ -196,13 +229,12 @@
         { label: 'Relevance to the Publication', name: 'relevanceToThePublication' },
         { label: 'Language Quality', name: 'languageQuality' },
         { label: 'Overall Mark', name: 'overallMark' }
-
     ].forEach(rating => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${rating.label}</td>
             ${['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE'].map(n => `
-                <td><input type="radio" class="blue-checkbox" name="${rating.name}" value="${n}" ${n == 'ONE' ? 'required' : ''}></td>
+                <td><input disabled type="radio" class="blue-checkbox" name="${rating.name}" value="${n}" ${n == 'ONE' ? 'required' : ''}></td>
             `).join('')}
         `;
         ratingTbody.appendChild(row);
@@ -221,13 +253,13 @@
         div.innerHTML = `
             <p style="flex: 1;">${question.label}</p>
             <div class="pale-yellow-checkbox-button" style="display: flex; gap: 0.5rem;">
-                <input type="radio" id="${question.name}-yes" name="${question.name}" value="YES"  required>
+                <input disabled type="radio" name="${question.name}" value="YES" required>
                 <label for="${question.name}-yes" class="checkbox">Yes</label>
 
-                <input type="radio" id="${question.name}-impr" name="${question.name}" value="CAN_BE_IMPROVED" >
+                <input disabled type="radio" name="${question.name}" value="CAN_BE_IMPROVED" >
                 <label for="${question.name}-impr" class="checkbox">Can be improved</label>
 
-                <input type="radio" id="${question.name}-must" name="${question.name}" value="MUST_BE_IMPROVED" >
+                <input disabled type="radio" name="${question.name}" value="MUST_BE_IMPROVED" >
                 <label for="${question.name}-must" class="checkbox">Must be improved</label>
             </div>
         `;
@@ -249,100 +281,19 @@
             <span>${question.label}</span>
             <div style="display: flex; gap: 0.5rem;">
                 <label class="pale-yellow-checkbox-button" style="display: flex;">
-                    <input type="radio" name="${question.name}" value="true" required style="height: 1px;">
+                    <input disabled type="radio" name="${question.name}" value="true" required style="height: 1px;">
                     <span class="checkbox" style="width: 3rem; text-align: center;">Yes</span>
                 </label>
                 <label class="pale-yellow-checkbox-button" style="display: flex;">
-                    <input type="radio" name="${question.name}" value="false" style="height: 1px;">
+                    <input disabled type="radio" name="${question.name}" value="false" style="height: 1px;">
                     <span class="checkbox" style="width: 3rem; text-align: center;">No</span>
                 </label>
             </div>
         `;
         booleanQuestionsContainer.appendChild(div);
     });
-    const fileInput = document.querySelector('input[type="file"]');
-    fileInput.addEventListener('change', () => {
-        const forbiddenExtensions = [
-            'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
-            'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx', 'psd', 'indd', 'cdr', 'sketch', 'key',
-            'gif', 'webp', 'heic', 'heif', 'raw', 'hdf', 'h5', 'sav', 'dta', 'mat', 'rar', '7z', 'ace',
-            'tmp', 'bak', '~doc', 'swp', 'ttf', 'otf', 'fon'
-        ];
-        Array.from(fileInput.files).forEach(file => {
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if(forbiddenExtensions.includes(fileExtension)) {
-                alert(`files of type .${fileExtension} are not allowed`);
-                fileInput.value = '';
-                return;
-            }
-        });
-    });
-    const form = document.getElementById('form');
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const body = new FormData();
-
-        body.append('review', new Blob([JSON.stringify({
-            novelty: formData.get('novelty'),
-            significance: formData.get('significance'),
-            technicalQuality: formData.get('technicalQuality'),
-            clarity: formData.get('clarity'),
-            methodology: formData.get('methodology'),
-            relevanceToThePublication: formData.get('relevanceToThePublication'),
-            languageQuality: formData.get('languageQuality'),
-            overallMark: formData.get('overallMark'),
-
-            sufficientBackground: formData.get('sufficientBackground'),
-            appropriateResearchDesign: formData.get('appropriateResearchDesign'),
-            adequatelyDescribed: formData.get('adequatelyDescribed'),
-            clearlyPresented: formData.get('clearlyPresented'),
-            supportedConclusions: formData.get('supportedConclusions'),
-
-            recommendation: formData.get('recommendation'),
-
-            conflictOfInterest: formData.get('conflictOfInterest'),
-            plagiarism: formData.get('plagiarism'),
-            llmUsed: formData.get('llmUsed'),
-            selfCitation: formData.get('selfCitation'),
-            appropriateReferences: formData.get('appropriateReferences'),
-            ethicalConcerns: formData.get('ethicalConcerns'),
-
-            reviewerComment: formData.get('reviewerComment')
-        })], { type: 'application/json' }));
-        for(const file of fileInput.files) body.append('files', file);
-
-        const response = await fetch(`/api${window.location.pathname}s`, { method: 'POST', body});
-        if(!response.ok) { alert(await response.text()); return; }
-        history.back();
-    });
 </script>
-<!-- ||||||||||||| MOVE TO REVIEW PAGE FOR EDITOR TO END ROUND AND USE API TO END ROUND INSTEAD OF NON-EXISTANT>UPDATE-EDITOR-RECOMMENDATION todo
-    /* {
-        openOptionsDialog('Decide', [
-            {name: 'Accept', onClick: async () => {
-                if('{{type}}' == 'EIC') window.location = `/manuscripts/${manuscriptId}/technical-processing`;
-                else {
-                    updateEditorRecommendation(manuscriptId, 'ACCEPT');
-                    alert("successfully updated editor recommendation to: accept");
-                }
-            }},
-            {name: 'Minor', onClick: async () => updateManuscriptState(manuscriptId, 'MINOR')},
-            {name: 'Major', onClick: async () => updateManuscriptState(manuscriptId, 'MAJOR')},
-            {name: 'Reject', onClick: async () => {
-                if('{{type}}' == 'EIC') {
-                    const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
-                    if(!response.ok) { alert(await response.text()); return; }
-                    history.back();
-                } else {
-                    updateEditorRecommendation(manuscriptId, 'REJECT');
-                    alert("successfully updated editor recommendation to: reject");
-                }
-            }}
-        ]);
-    } */
--->
+{{#ongoingRound}}
 <dialog id="end-round-dialog" closedby="any">
     <form id="end-round-dialog-form" style="display: flex; flex-direction: column; gap: 0.5rem;">
         <div style="display: flex; gap: 0.5rem;">
@@ -376,7 +327,7 @@
     document.getElementById('end-round-dialog-negative').addEventListener('click', () => endRoundDialog.close());
     document.getElementById('end-round-dialog-form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const response = await fetch(`/api${window.location.pathname}-rounds/end`, { method: 'POST', body: new URLSearchParams({
+        const response = await fetch(`/api/manuscripts/{{manuscriptId}}/review-rounds/end`, { method: 'POST', body: new URLSearchParams({
             recommendation: document.querySelector('input[name="editor-recommendation"]:checked').value,
             editorComment: document.getElementById('end-round-dialog-textarea').value
         })});
@@ -384,7 +335,54 @@
         history.back();
     });
 </script>
+<dialog id="select-files-dialog">
+    Select files (optional) <br>
+    <input type="file" multiple/>
+    <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+        <button id="select-files-dialog-negative" type="button" class="m3-button outlined-button">Back</button>
+        <button id="select-files-dialog-positive" class="m3-button primary-button" style="margin-left: 1rem; padding-inline: 1.7rem;">Respond</button>
+    </div>
+</dialog>
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+    fileInput.addEventListener('change', () => {
+        const forbiddenExtensions = [
+            'exe', 'msi', 'bat', 'cmd', 'sh', 'app', 'apk', 'dll', 'so', 'bin', 'iso', 'dmg', 'img', 'pkg',
+            'html', 'htm', 'css', 'js', 'php', 'asp', 'aspx', 'psd', 'indd', 'cdr', 'sketch', 'key',
+            'gif', 'webp', 'heic', 'heif', 'raw', 'hdf', 'h5', 'sav', 'dta', 'mat', 'rar', '7z', 'ace',
+            'tmp', 'bak', '~doc', 'swp', 'ttf', 'otf', 'fon'
+        ];
+        Array.from(fileInput.files).forEach(file => {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if(forbiddenExtensions.includes(fileExtension)) {
+                alert(`files of type .${fileExtension} are not allowed`);
+                fileInput.value = '';
+                return;
+            }
+        });
+    });
+    const selectFilesDialog = document.getElementById('select-files-dialog');
+    document.getElementById('select-files-dialog-negative').addEventListener('click', () => selectFilesDialog.close());
+    document.getElementById('select-files-dialog-positive').addEventListener('click', async () => {
+        const fileInput = document.querySelector('input[type="file"]');
+        const body = new FormData();
+        body.append('response', document.getElementById('textarea-dialog-textarea').value);
+        body.append('id', currentReviewId);
+        for(const file of fileInput.files) body.append('files', file);
+        const response = await fetch(`/api/manuscripts/{{manuscriptId}}/reviews/author-response`, { method: 'POST', body: body });
+        if(!response.ok) { alert(await response.text()); return; }
+        else location.reload();
+    });
+</script>
+{{/ongoingRound}}
 <style>
+    input:hover, label:hover {
+        background: inherit;
+        border-color: inherit;
+        box-shadow: none;
+        color: inherit;
+        cursor: default
+    }
     .content {
         display: flex;
         align-items: flex-start;
