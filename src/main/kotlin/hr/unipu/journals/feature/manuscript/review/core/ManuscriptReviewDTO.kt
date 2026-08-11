@@ -1,4 +1,4 @@
-package hr.unipu.journals.feature.manuscript.review
+package hr.unipu.journals.feature.manuscript.review.core
 
 data class ManuscriptReviewDTO(
     val novelty: OneToFive?,
