@@ -15,6 +15,7 @@ import hr.unipu.journals.security.ScanResult
 import hr.unipu.journals.util.AppProperties
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
@@ -60,7 +61,7 @@ class ManuscriptReviewController(
             }
             .groupBy { it.first.reviewerId }
     }
-    @PostMapping
+    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_REVIEWER_ON_MANUSCRIPT_OR_SUPERIOR)
     fun review(
         @PathVariable manuscriptId: Int,
@@ -131,7 +132,7 @@ class ManuscriptReviewController(
             return ResponseEntity.ok("manuscript successfully added")
         } finally { tempFiles.forEach { (name, file) -> file.delete() } }
     }
-    @PostMapping("/author-response")
+    @PostMapping("/author-response", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @PreAuthorize(AUTHORIZATION_SERVICE_IS_AUTHOR_ON_MANUSCRIPT_OR_SUPERIOR)
     fun authorResponse(@PathVariable manuscriptId: Int, @RequestParam response: String, @RequestParam id: Int, @RequestPart files: List<MultipartFile>): ResponseEntity<String> {
         val round = manuscriptReviewRoundRepositor.latest(manuscriptId = manuscriptId)
