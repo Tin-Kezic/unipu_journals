@@ -1,6 +1,6 @@
 package hr.unipu.journals.feature.manuscript.review.round
 
-import hr.unipu.journals.feature.manuscript.review.Recommendation
+import hr.unipu.journals.feature.manuscript.review.core.Recommendation
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.Repository
@@ -13,7 +13,7 @@ interface ManuscriptReviewRoundRepository: Repository<ManuscriptReviewRound, Int
     fun latest(@Param("manuscript_id") manuscriptId: Int): ManuscriptReviewRound?
 
     @Query("SELECT * FROM manuscript_review_round WHERE id = :id")
-    fun byId(@Param("id") id: Int): ManuscriptReviewRound?
+    fun byId(@Param("id") id: Int?): ManuscriptReviewRound?
 
     @Query("SELECT * FROM manuscript_review_round WHERE manuscript_id = :manuscript_id")
     fun all(@Param("manuscript_id") manuscriptId: Int): List<ManuscriptReviewRound>
