@@ -160,7 +160,6 @@
             `;
             document.getElementById('reviews-container').appendChild(div);
         });
-
         const inlineDisplayableTypes = ["txt", "log", "md", "markdown", "csv", "tsv", "json", "jsonl", "jsonld", "xml", "yaml", "yml", "toml", "ini", "cfg", "conf", "env", "sql", "svg", "xhtml", "webmanifest", "ts", "jsx", "tsx", "py", "java", "c", "cpp", "h", "hpp", "cs", "go", "rs", "rb", "swift", "kt", "scala", "lua", "r", "pl", "dart", "png", "jpg", "jpeg", "bmp", "ico", "avif", "tif", "tiff", "jfif", "mp3", "wav", "ogg", "opus", "m4a", "aac", "flac", "mp4", "m4v", "webm", "ogv", "3gp", "pdf", "epub", "woff", "woff2", "eot", "geojson", "ndjson", "fasta", "fastq", "vcf", "bed", "gff", "wasm"];
         document.querySelectorAll('input[name="review"]').forEach(input => input.addEventListener('change', () => {
             const review = reviews.find(r => r.id == input.value);
@@ -186,7 +185,6 @@
     document.getElementById('view-full-review').addEventListener('click', () => {
         window.location = `/manuscripts/{{manuscriptId}}/review-history?id=${document.querySelector('input[name="review"]:checked').value}`;
     });
-
     const ratingTbody = document.getElementById('rating-tbody');
     [
         { label: 'Novelty', name: 'novelty' },
@@ -320,31 +318,6 @@
         history.back();
     });
 </script>
-<!-- ||||||||||||| MOVE TO REVIEW PAGE FOR EDITOR TO END ROUND AND USE API TO END ROUND INSTEAD OF NON-EXISTANT>UPDATE-EDITOR-RECOMMENDATION todo
-    /* {
-        openOptionsDialog('Decide', [
-            {name: 'Accept', onClick: async () => {
-                if('{.{type}}' == 'EIC') window.location = `/manuscripts/${manuscriptId}/technical-processing`;
-                else {
-                    updateEditorRecommendation(manuscriptId, 'ACCEPT');
-                    alert("successfully updated editor recommendation to: accept");
-                }
-            }},
-            {name: 'Minor', onClick: async () => updateManuscriptState(manuscriptId, 'MINOR')},
-            {name: 'Major', onClick: async () => updateManuscriptState(manuscriptId, 'MAJOR')},
-            {name: 'Reject', onClick: async () => {
-                if('{.{type}}' == 'EIC') {
-                    const response = await fetch(`/api/manuscripts/${manuscriptId}?newState=REJECTED`, { method: 'PUT' });
-                    if(!response.ok) { alert(await response.text()); return; }
-                    history.back();
-                } else {
-                    updateEditorRecommendation(manuscriptId, 'REJECT');
-                    alert("successfully updated editor recommendation to: reject");
-                }
-            }}
-        ]);
-    } */
--->
 <dialog id="end-round-dialog" closedby="any">
     <form id="end-round-dialog-form" style="display: flex; flex-direction: column; gap: 0.5rem;">
         <div style="display: flex; gap: 0.5rem;">
