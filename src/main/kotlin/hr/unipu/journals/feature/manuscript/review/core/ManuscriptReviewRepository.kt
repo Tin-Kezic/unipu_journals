@@ -78,9 +78,6 @@ interface ManuscriptReviewRepository: Repository<ManuscriptReview, Int> {
     ): ManuscriptReview
 
     @Modifying
-    @Query("UPDATE manuscript_review SET author_response = :response, author_response_date = CURRENT_TIMESTAMP")
-    fun authorRespond(
-        @Param("manuscript_review_round_id") manuscriptReviewRoundId: Int,
-        @Param("response") response: String
-    ): Int
+    @Query("UPDATE manuscript_review SET author_response = :response, author_response_date = CURRENT_TIMESTAMP WHERE id = :id")
+    fun authorRespond(@Param("id") id: Int, @Param("response") response: String): Int
 }
