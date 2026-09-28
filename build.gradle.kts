@@ -36,3 +36,7 @@ tasks.test {
 	useJUnitPlatform()
     jvmArgs("-Xshare:off", "-javaagent:${byteBuddyAgent.singleFile}")
 }
+tasks.jar {
+    archiveBaseName.set("unipu_journals")
+    archiveVersion.set("0.0.1")
+}
