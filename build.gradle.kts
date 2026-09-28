@@ -5,7 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 repositories { mavenCentral() }
-java.toolchain.languageVersion = JavaLanguageVersion.of(24)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 val byteBuddyAgent: Configuration by configurations.creating
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
